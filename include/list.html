@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>List Tool</title>
+	<link rel="stylesheet" href="list.css">
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script>	
+		var tmpIndent = 0;	//현재 인덴트 상태
+
+		//input 마우스로 클릭시 호출되는 함수
+		function mouseFocus(){
+			//alert("Mouse focus");
+
+			//현재의 인덴트 상태 얻어오기
+			var parentClass = $('input:focus').parent();	 
+			var splitClass = parentClass.attr('class').split(" ");
+			var classIndent = splitClass[1];
+			tmpIndent = classIndent;
+			
+			//현재 입력 상태였던 부분 해제
+			var tmpClass = "input_task " + tmpIndent;
+			$('.input_open').attr('class', tmpClass);
+	
+			//현재 포커싱된 부분 입력 상태로 클래스 변경
+			tmpClass = "input_open " + tmpIndent;
+			parentClass.attr('class', tmpClass);
+		}
+
+		//인덴트 설정해주는 함수
+		function setIndent() {
+			var tmpInput = $('.input_open > .tmp_editing');
+			var tmpBullet = $('.input_open > .bullet');
+			var tmpLeft = tmpInput.css('margin-left');
+			var tmpBulletLeft = tmpBullet.css('margin-left');
+			var tmpWidth = tmpInput.width();
+			tmpBullet.css({"margin-left": parseInt(5) + (20*parseInt(tmpIndent)) });
+			tmpInput.css({ "margin-left": 10 });
+			tmpInput.css({ "width": parseInt(tmpWidth) - (20*parseInt(tmpIndent)) });
+			tmpInput.trigger('focus');
+		}
+	
+		//input 키보드 입력시 호출되는 함수
+		function keyInput() {
+			var inputKey = event.keyCode;
+			if ( inputKey == 13 )	//Input Enter
+			{
+				//alert("Enter");
+				if ( tmpIndent == 0 )
+				{
+					$('.input_open').attr('class', 'input_tmp');
+					
+					var nextLine = "<div class='edit_task'><div class='input_open 0'><a class='bullet'>•</a><input type='text' class='tmp_editing' OnClick='mouseFocus()' OnKeyDown='keyInput()' tabindex='0' /></div></div>";
+	
+					var inputTmp = $('.input_tmp').parent();
+					if( inputTmp.attr('class') == "edit_open" )
+					{
+						inputTmp.children('.children:first').prepend(nextLine);
+					}
+					else
+					{
+						inputTmp.after(nextLine);
+					}
+					$('.input_open input').css({ "margin-left": 10 }).trigger('focus');	
+					$('.input_tmp').attr('class', 'input_task 0');
+				}
+				else	//탭 두번 누를 시 막는 부분 코드 작성 필요
+				{
+					$('.input_open').attr('class', 'input_tmp');
+
+					var nextLine = "<div class='edit_task'><div class='input_open "+tmpIndent+"'><a class='bullet'>•</a><input type='text' class='tmp_editing' OnClick='mouseFocus()' OnKeyDown='keyInput()' tabindex='0' /></div></div>";
+					
+					var inputTmp = $('.input_tmp').parent();
+					if( inputTmp.attr('class') == "edit_open" )
+					{
+						inputTmp.children('.children:first').prepend(nextLine);
+					}
+					else
+					{
+						inputTmp.after(nextLine);
+					}
+
+					$('.input_open input').trigger('focus');	
+					var tmpClass = "input_task " + tmpIndent;
+					$('.input_tmp').attr('class', tmpClass);
+					setIndent();	//인덴트 설정 함수 호출
+				}
+				
+			}
+			else if ( inputKey == 9 && event.shiftKey ) //Input Shift + Tab
+			{
+				//alert("Shift+Tab");
+				event.returnValue = false;
+				
+				if(tmpIndent > 0) {
+					tmpIndent = parseInt(tmpIndent)-1;
+					var tmpVal = $('.input_open > .tmp_editing').val();
+					var inputTmp = $('.input_open').parent();
+					var tmpAppend = "<div class=edit_task><div class='input_open "+tmpIndent+"'><a class='bullet'>•</a><input type='text' class='tmp_editing' OnClick='mouseFocus()' OnKeyDown='keyInput()' tabindex='0' value="+tmpVal+"></div></div>";		
+
+					if( inputTmp.attr('class') == "edit_task" )
+					{
+						inputTmp.parent().after(tmpAppend);
+						inputTmp.remove();
+					}
+					setIndent();	//인덴트 설정 함수 호출
+				}	
+				
+			}
+			else if ( inputKey == 9 )	//Input Tab
+			{
+				//alert("Tab");
+				event.returnValue = false;
+				
+				tmpIndent = parseInt(tmpIndent)+1;
+
+				var tmpEditing = $('.input_open').parent().parent();
+				var tmpVal = $('.input_open > .tmp_editing').val();
+				
+				$('.input_open').parent().remove();
+				
+				tmpEditing = tmpEditing.children('.edit_task:last');
+				tmpEditing.attr('class', 'edit_open');
+				//alert(tmpEditing.attr('class'));
+						
+				var tmpAppend = "<div class='children'><div class=edit_task><div class='input_open "+tmpIndent+"'><a class='bullet'>•</a><input type='text' class='tmp_editing' OnClick='mouseFocus()' OnKeyDown='keyInput()' tabindex='0' value="+tmpVal+"></div></div></div>";
+				tmpEditing.append(tmpAppend);
+
+				setIndent();	//인덴트 설정 함수 호출
+
+			}	
+			else if ( inputKey == 8 )	//Input BackSpaceKey
+			{
+				//alert("BackSpace");
+				
+			}
+		}
+
+	</script>
+</head>
+<body>
+<div id="wrapper">
+	<header id="main_header">
+		<h1>List Tool</h1>
+	</header>
+	<div id="container">
+    <section id="main_section">
+		<article>
+			<header>
+				<div class="home_line">
+					<h2>Home</h2>
+				</div>
+			</header>
+			<div class="list_space">
+				<div class="children">
+
+					<div class="edit_task">
+						<div class="input_open 0">
+							<a class="bullet">•</a>
+							<input type="text" class="tmp_editing" OnClick="mouseFocus()" OnKeyDown="keyInput()" tabindex="0" />
+						</div>
+						
+					</div>
+
+				</div>
+			
+
+			</div>
+		</article>
+    </section>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+Change Log:
+
+Version 1.0.1:
+------------
+Fixed HTML5 validation errors
+
+
+Version 1.0:
+------------
+Initial Release.

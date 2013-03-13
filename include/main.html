@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Ohcastra</title>
+  <title>Orchestra</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="" />
   <meta name="author" content="" />
@@ -95,7 +95,7 @@
       <i class="icon-cogs"></i>
       <!-- <i class="icon-icomoon-grid-view"></i> -->
       <!-- <span aria-hidden="true" class="icon-icomoon-grid-view"></span> -->
-      <a href="/">Ohcastra</a>
+      <a href="/">Orchestra</a>
     </h1>
   </li>
   <li>
@@ -103,7 +103,7 @@
       <i class="icon-book"></i>
       <!-- <i class="icon-icomoon-grid-view"></i> -->
       <!-- <span aria-hidden="true" class="icon-icomoon-grid-view"></span> -->
-      <span>Theme Docs</span>
+      <span>Orchestra Project</span>
     </a>
   </li>
   <li class="parent pull-right">
@@ -162,22 +162,22 @@
             </a>
           </div>
         </li>
-		<li class="active">
-          <div class="sidebar-menu-item-wrapper">
-            <a href="#" data-target-page="metting-list">
-              <i class="icon-list-ul"></i>
-              <span>회의 목록</span>
-            </a>
-          </div>
-        </li>
 		<li class="inactive">
           <div class="sidebar-menu-item-wrapper">
-            <a href="#" data-target-page="metting-planning">
+            <a href="#" id="meeting-planning">
               <i class="icon-edit"></i>
               <span>회의 기획</span>
             </a>
           </div>
         </li>		
+		<li class="active">
+          <div class="sidebar-menu-item-wrapper">
+            <a href="#" data-target-page="meeting-list">
+              <i class="icon-list-ul"></i>
+              <span>회의 목록</span>
+            </a>
+          </div>
+        </li>
 		<li class="inactive">
           <div class="sidebar-menu-item-wrapper">
             <a href="#" data-target-page="group-info">
@@ -218,17 +218,44 @@
 			<div class="hero-unit hero-special">
 				<h1>빠른 시작</h1>
 			</div>
-		<!-- /Panel Page Dashboard Content -->
+		<!-- /Panel Page quick-start Content -->
 		</div>
 
-		<div class="page" id="metting-list">
-		<!-- Panel Page metting-list Content: -->
-			<section id="widget-grid" class="">
+		<div class="page" id="meeting-list">
+		<!-- Panel Page meeting-list Content: -->
+			<section id="widget-grid-1" class="">
 			<div class="row-fluid">
-			  <div class="span6">
+			  <div class="span12">
 				<div class="panel" id="panel-101">
 					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-1" data-widget-deletebutton="false">
+					<div class="jarviswidget" id="widget-id-1">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Chart</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content goes here -->
+								<div id="bar-chart" class="chart width-23"></div>
+								<div id="fill-chart" class="chart width-23"></div>
+								<div id="site-stats" class="chart width-23"></div>
+								<div id="saleschart" class="chart width-23"></div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			</div>
+
+			<div class="row-fluid">
+			  <div class="span6">
+				<div class="panel" id="panel-102">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-2" data-widget-deletebutton="false" data-widget-editbutton="false">
 						<header>
 							<i class="icon-calendar"></i>
 							<span>Calendar</span>
@@ -236,23 +263,6 @@
 						
 						<!-- widget div-->
 						<div>
-							<!-- widget edit box -->
-							<div class="jarviswidget-editbox">
-								<div>
-									<label>Styles:</label>
-									<span data-widget-setstyle="purple" class="purple-btn"></span>
-									<span data-widget-setstyle="navyblue" class="navyblue-btn"></span>
-									<span data-widget-sets tyle="green" class="green-btn"></span>
-									<span data-widget-setstyle="yellow" class="yellow-btn"></span>
-									<span data-widget-setstyle="orange" class="orange-btn"></span>
-									<span data-widget-setstyle="pink" class="pink-btn"></span>
-									<span data-widget-setstyle="red" class="red-btn"></span>
-									<span data-widget-setstyle="darkgrey" class="darkgrey-btn"></span>
-									<span data-widget-setstyle="black" class="black-btn"></span>
-								</div>
-							</div>
-							<!-- end widget edit box -->
-
 							<div class="inner-spacer"> 
 							<!-- content goes here -->
 								<!-- calnedar container -->
@@ -283,7 +293,6 @@
 								</div>
 								<!-- end calendar container -->
 							</div>
-							
 						</div>
 						<!-- end widget div -->
 					</div>
@@ -292,9 +301,9 @@
 			  </div>
 
 			  <div class="span6">
-				<div class="panel" id="panel-102">
+				<div class="panel" id="panel-103">
 					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-2" data-widget-deletebutton="false">
+					<div class="jarviswidget" id="widget-id-2" data-widget-deletebutton="false" data-widget-editbutton="false">
 						<header>
 							<i class="icon-list-ul"></i>
 							<span>Meeting List</span>
@@ -302,22 +311,6 @@
 												
 						<!-- widget div-->
 						<div>
-							<!-- widget edit box -->
-							<div class="jarviswidget-editbox">
-								<div>
-									<label>Styles:</label>
-									<span data-widget-setstyle="purple" class="purple-btn"></span>
-									<span data-widget-setstyle="navyblue" class="navyblue-btn"></span>
-									<span data-widget-setstyle="green" class="green-btn"></span>
-									<span data-widget-setstyle="yellow" class="yellow-btn"></span>
-									<span data-widget-setstyle="orange" class="orange-btn"></span>
-									<span data-widget-setstyle="pink" class="pink-btn"></span>
-									<span data-widget-setstyle="red" class="red-btn"></span>
-									<span data-widget-setstyle="darkgrey" class="darkgrey-btn"></span>
-									<span data-widget-setstyle="black" class="black-btn"></span>
-								</div>
-							</div>
-							<!-- end widget edit box -->
 							<div class="inner-spacer"> 
 							<!-- content -->	
 								<div class="accordion" id="accordion1">
@@ -328,7 +321,11 @@
 										</div>
 										<div id="collapse1" class="accordion-body collapse" style="height: 0px; ">
 											<div class="accordion-inner">
-												Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+												회의 주제 - 형성평가 준비 회의
+												회의 날짜 - 2013.03.08
+												회의 시간 - 08:00 - 13:00
+												회의 참가자 - 고동현, 임종혁, 정용기
+												회의 역할 - 진행자: 정용기, 서기: 임종혁
 											</div>
 										</div>
 									</div>
@@ -339,7 +336,6 @@
 										</div>
 										<div id="collapse2" class="accordion-body collapse" style="height: 0px; ">
 											<div class="accordion-inner">
-												Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 											</div>
 										</div>
 									</div>
@@ -350,7 +346,6 @@
 										</div>
 										<div id="collapse3" class="accordion-body collapse" style="height: 0px; ">
 											<div class="accordion-inner">
-												Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 											</div>
 										</div>
 									</div>
@@ -364,74 +359,129 @@
 					<!-- end widget -->
 				</div>
 			  </div>
-
-			  <!--div class="span6">
-				<div class="panel" id="panel-102">
-				  <header>
-					<i class="icon-list-ul"></i>
-					<span>Meeting List</span>
-				  </header>
-				  <div class="content tiles-container">
-					<table id="table0" class="tablesorter">
-					  <thead>
-						<tr>
-						  <th class="header">Service Name</th>
-						  <th class="header">Category</th>
-						  <th class="header">Price</th>
-						  <th class="header headerSortDown"># Sold</th>
-						</tr>
-					  </thead>
-					  <tbody>             
-						<tr class="odd">
-						  <td>Super Foo Service</td>
-						  <td>Cloud Management</td>
-						  <td>$987</td>
-						  <td>25</td>
-						</tr><tr class="even">
-						  <td>Super Bar Service</td>
-						  <td>Remote Monitoring</td>
-						  <td>$765</td>
-						  <td>23</td>
-						</tr><tr class="odd">
-						  <td>Standard Services</td>
-						  <td>Cloud Management</td>
-						  <td>$432</td>
-						  <td>12</td>
-						</tr><tr class="even">
-						  <td>Enterprise All Inclusive</td>
-						  <td>Integrated Services</td>
-						  <td>$6987</td>
-						  <td>11</td>
-						</tr><tr class="odd">
-						  <td>Royal Deluxe</td>
-						  <td>Integrated Services</td>
-						  <td>$9000</td>
-						  <td>10</td>
-						</tr>
-					  </tbody>
-					</table>
-				  </div>
-				</div>
-			  </div-->
 			</div>
 			</section>
-		<!-- /Panel Page Dashboard Content -->
+		<!-- /Panel Page meeting-list Content -->
 		</div>
 
-		<div class="page hidden" id="metting-planning">
-		<!-- Panel Page Dashboard Content: -->
-			<div class="hero-unit hero-special">
-				<h1>회의 기획</h1>
+		<div class="page hidden" id="meeting-planning-1">
+		<!-- Panel Page meeting-planning Content: -->
+			<section id="widget-grid-2" class="">
+			<div class="row-fluid">
+			  <div class="span12">
+				<div class="panel" id="panel-201">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-3" data-widget-deletebutton="false" data-widget-editbutton="false">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Meeting Template</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer meeting-template"> 
+							<!-- content goes here -->
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+								<div><a class="btn btn-primary btn-large" title="" href="javascript:void(0);">Create an Invoice</a></div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
 			</div>
-		<!-- /Panel Page Dashboard Content -->
+			</section>
+		<!-- /Panel Page meeting-planning Content -->
+		</div>
+
+		<div class="page hidden" id="meeting-planning-2">
+		<!-- Panel Page meeting-planning Content: -->
+			<section id="widget-grid-3" class="">
+			<div class="row-fluid">
+			  <div class="span12">
+				<div class="panel" id="panel-201">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-3" data-widget-deletebutton="false" data-widget-editbutton="false">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Meeting Process</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content goes here -->
+								<div class="span3">
+									<div class="panel margin-5">
+										<!-- new widget -->
+										<div class="jarviswidget margin-5" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-fullscreenbutton="false">
+											<header>
+											<i class="icon-calendar"></i>
+											<span>Options</span>
+											</header>
+
+											<!-- widget div-->
+											<div>
+												<div class="inner-spacer"> 
+												<!-- content goes here -->
+												</div>
+											</div>
+											<!-- end widget div -->
+										</div>
+										<!-- end widget -->
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			</div>
+			
+			<div class="row-fluid">
+			  <div class="span12">
+				<div class="panel" id="panel-104">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-4" data-widget-deletebutton="false" data-widget-editbutton="false">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Options</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content goes here -->
+
+							</div>
+							
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			</div>
+			</section>
+		<!-- /Panel Page meeting-planning Content -->
 		</div>
 
 		<div class="page hidden" id="group-info">
-		<!-- Panel Page Dashboard Content: -->
+		<!-- Panel Page group-info Content: -->
 			<div class="hero-unit hero-special">
 				<h1>그룹정보</h1>
 			</div>
-		<!-- /Panel Page Dashboard Content -->
+		<!-- /Panel Page group-info Content -->
 		</div>
     </div>
     <!-- /#content: The Main Content Section -->
@@ -471,11 +521,16 @@
   <script src="/js/ohcastra.js"></script>
   <script src="/js/application.js"></script>
 
-  <!-- Flot Plotting -->
-  <script src="/js/libs/flot/excanvas.min.js"></script>
-  <script src="/js/libs/flot/jquery.flot.js"></script>
-  <script src="/js/libs/flot/jquery.flot.resize.min.js"></script>
-  <script src="/js/libs/flot/jquery.flot.pie.min.js"></script>
+	<!-- Flot Plotting -->
+	<script src="/js/libs/flot/excanvas.min.js"></script>
+	<script src="/js/libs/flot/jquery.flot.js"></script>
+	<!-- REQUIRED: Flot Chart Engine -->
+	<script src="/js/libs/flot/jquery.flot.cust.min.js"></script>			
+	<script src="/js/libs/flot/jquery.flot.resize.min.js"></script>		
+	<script src="/js/libs/flot/jquery.flot.tooltip.min.js"></script>		
+	<script src="/js/libs/flot/jquery.flot.orderBar.min.js"></script>	
+	<script src="/js/libs/flot/jquery.flot.fillbetween.min.js"></script>	
+	<script src="/js/libs/flot/jquery.flot.pie.min.js"></script>
 
   <!-- Google Code Prettyfy - source-code highlighter -->
   <script src="/js/libs/google-code-prettify/prettify.js"></script>
@@ -497,9 +552,15 @@
 	<script src="/js/mobiledevices.min.js"></script>
 	<!-- DISABLED (only needed for IE7 <script src="js/include/json2.js"></script> -->
 	<!-- REQUIRED: Full Calendar -->
-  <script src="/js/jquery.fullcalendar.min.js"></script>	
+	<script src="/js/jquery.fullcalendar.min.js"></script>	
+	<!-- REQUIRED: Bootstrap Prompt -->
+	<script src="/js/bootbox.min.js"></script>
+	<!-- REQUIRED: Bootstrap Wizard -->
+	<script src="/js/bootstrap.wizard.min.js"></script>
+	<!-- REQUIRED: Bootstrap Timepicker -->
+	<script src="/js/bootstrap.timepicker.min.js"></script>
 
-  <script src="/js/config.js"></script>	
+	<script src="/js/config.js"></script>	
 
 <!-- /Javascript -->
 

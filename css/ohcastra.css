@@ -1189,3 +1189,163 @@ h6 small {
 		background-color: #FAFCFD;
 		background-size: 16px 16px;
 	}
+
+
+	/* ---------------------------------------------------------------------- */
+	/*	bootstrap form wizzard
+	/* ---------------------------------------------------------------------- */
+	.bwizard {
+	    position: relative; }
+	    .bwizard div.well {
+	    	border-left: none;
+			border-right: none;
+			border-radius: 0px;
+			padding: 0; }
+	.bwizard .well {
+	    margin: 3px 0 }
+	    
+	.bwizard-steps {
+		margin:0;
+		width:100%;
+		border-bottom: 1px solid #D5D5D5;
+		padding: 0px 0px 15px 0px;
+		display: inline-block;
+		background: #fff;}
+		.bwizard-steps li {
+		    display: inline-block;
+		    position: relative;
+		    margin-top:5px;
+		    margin-right: 5px;
+		    line-height: 18px;
+		    list-style: none;
+		    padding: 12px 17px 10px 30px;
+		    background: #efefef;
+		    zoom:1; *display: inline; *padding-left: 17px; }
+		    .bwizard-steps li a {
+				display: inline-block; background:transparent!important}
+			.bwizard-steps li:first-child {
+			    -moz-border-radius: 4px 0 0 4px;
+			    -webkit-border-radius: 4px 0 0 4px;
+			    border-radius: 4px 0 0 4px;
+			    padding-left: 12px; }
+			.bwizard-steps li:first-child:before {
+			    border: none; }
+			.bwizard-steps li:last-child {
+			    -moz-border-radius: 0 4px 4px 0;
+			    -webkit-border-radius: 0 4px 4px 0;
+			    border-radius: 0 4px 4px 0;
+			    margin-right: 0; }
+			.bwizard-steps li:last-child:after {
+			    border: none; }
+			.bwizard-steps li:before {
+			    position: absolute;
+			    left: 0; top: 0;
+			    height: 0; width: 0;
+			    border-bottom: 20px inset transparent; border-left: 20px solid #fff; border-top: 20px inset transparent;
+			    content: ""; }
+			.bwizard-steps li:after {
+			    position: absolute;
+			    right: -20px; top: 0;
+			    height: 0; width: 0;
+			    border-bottom: 20px inset transparent; border-left: 20px solid #efefef; border-top: 20px inset transparent;
+			    content: "";
+			    z-index: 2; }
+		.bwizard-steps .label {
+			margin: 0 5px 0 0;
+			padding: 1px 5px 2px;
+			position: relative;
+			-webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+			-moz-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+			box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+			top: -1px;}
+		.bwizard-steps .active {
+		    color: #fff;
+		    background: #006AAC; }
+			.bwizard-steps .active:after {
+			    border-left-color: #006AAC; }
+	
+		.bwizard-steps a {
+			color: #333;}
+		.bwizard-steps .active a {
+		    color: #fff;
+			cursor: default;}
+		.bwizard-steps a:hover {
+			text-decoration: none; background:transparent}
+		.bwizard-steps.clickable li:not(.active) {
+			cursor: pointer;}
+		.bwizard-steps.clickable li:hover:not(.active) {
+			background: transparent;}
+		.bwizard-steps.clickable li:hover:not(.active) a {
+			color: #08c;}
+		.bwizard-steps.clickable li:hover:not(.active):after {
+			border-left-color: #ccc;}
+
+	#wizard .navbar-inner {
+		margin-left: -20px;
+		border-left: none;
+		border-right: none;
+		margin-right: -20px;
+		margin-top: -20px;
+		border-top: none;
+		border-radius: 0px;
+		-webkit-border-radius: 0px;
+		-moz-border-radius: 0px;
+	}
+	
+	#wizard .wizard ul {
+		list-style:none;
+		margin:0;
+	}
+	#wizard .wizard ul li {
+		display:inline-block;
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	bootstrap form wizzard END
+	/* ---------------------------------------------------------------------- */
+
+	/* ---------------------------------------------------------------------- */
+	/*icon
+	/* ---------------------------------------------------------------------- */
+	[class^="cus-"], [class*=" cus-"] {
+		background-image: url("/images/sprite-compressed.png");
+		background-position: 14px 14px;
+		background-repeat: no-repeat;
+		display: inline-block;
+		height: 16px;
+		line-height: 14px;
+		vertical-align: text-top;
+		width: 16px;
+	}
+
+	.cus-clock {
+		background-position: -187px -238px;
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	icon
+	/* ---------------------------------------------------------------------- */
+
+	.chart {
+		height: 250px;
+	}
+	.width-23{
+		float:left;
+		width:23%;
+		margin: 1%
+	}
+	.margin-5{
+		margin: 5% !important;
+	}
+
+	.meeting-template {
+		text-align:center;
+	}
+	.meeting-template div{
+		margin:5px 0;
+	}
+	.meeting-template .btn{
+		width:96%;
+		padding:2% !important;
+		border:0 none !important;
+		border-radius:8px;
+	}
+

@@ -12,7 +12,8 @@
 	var $chrt_mono = "#000";
 	
 	$(document).ready( function() {   
-		/* draw calendar */
+		setup_timepicker();
+
 		setup_calendar();
 
 		setup_all_buttons();
@@ -783,11 +784,7 @@
 	
 	function setup_timepicker() {
 		if ($('.timepicker-input').length) {
-			
-			/* default */
-			$('#timepicker1').timepicker();
-			console.log( $('.timepicker-input') );
-			console.log( $('.timepicker-input').size() );
+			$('.timepicker-input').timepicker();
 		}
 	}
 	

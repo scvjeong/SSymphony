@@ -1,0 +1,22 @@
+#meeting_process_bar {
+	height: 35px;
+	margin: 0;
+	
+	border-bottom: 2px solid #0f5e9a;
+	background-color: #2a6dba;
+	list-style: none;
+	
+	-moz-box-shadow: 0 4px 19px #888888;
+	-webkit-box-shadow: 0 4px 19px #888888;
+	box-shadow: 0 4px 19px #888888;
+}
+
+#meeting_process_bar .process {
+	display: inline-block;
+	height: 35px;
+	padding: 0 15px 0 15px;
+	
+	line-height: 35px;
+	background-color: #77c2fa;
+	color: white;
+}

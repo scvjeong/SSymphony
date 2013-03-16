@@ -8,10 +8,9 @@
 	<script>	
 		
 		var tmpIndent = 0;	//현재 들여쓰기 상태 
-		var lastId = 100;		//현재 ID 상태
+		var tmpLastId = 100;
 		var preWindowWidth = 0;	//이전 창 사이즈
-		var socket = io.connect('http://61.43.139.159:8000');	//socket.io 서버에 접속
-		var tmpParentInfo = 0;		//현재 Parent 정보
+		var socket = io.connect('http://61.43.139.159:8000/meeting');	//socket.io 서버에 접속
 
 		//처음 창 로딩시 호출
 		$(document).ready(function() {
@@ -23,8 +22,7 @@
 				{
 					var tmpChildren = tmpSelectEdit.children('.children');
 					tmpChildren.toggle(100);
-				}
-				
+				}			
 				var tmpSelectId = $(this).parent().attr('taskid');
 				socket.emit('click_child',  { selectId: tmpSelectId }); 
 			});
@@ -67,7 +65,6 @@
 					for ( i=0; i<numBox; i++ )
 					{
 						var tmpBox = $('.tmp_editing:nth('+i+')');
-		
 						var tmpBoxParent = tmpBox.parent();
 						var tmpBoxWidth = tmpBox.width();
 						var tmpWidth = parseInt(tmpWindowWidth) -  80;
@@ -75,12 +72,12 @@
 
 						if ( tmpBoxParent.attr('indent') == 0 )
 						{
-							tmpBox.css({ "width": parseInt(tmpBoxWidth) - parseInt(decreaseNum) });
+							tmpBox.css({ "width": ( parseInt(tmpBoxWidth) - parseInt(decreaseNum) ) +"px" });
 						}
 						else
 						{
 							var tmpBoxIndent = tmpBoxParent.attr('indent');											
-							tmpBox.css({ "width": parseInt(tmpBoxWidth) - (20*parseInt(tmpBoxIndent)) - parseInt(decreaseNum) });
+							tmpBox.css({ "width": ( parseInt(tmpBoxWidth) - (20*parseInt(tmpBoxIndent)) - parseInt(decreaseNum) ) + "px" });
 						}
 					}
 				}		
@@ -88,8 +85,7 @@
 				{	
 					for ( i=0; i<numBox; i++ )
 					{
-						var tmpBox = $('.tmp_editing:nth('+i+')');
-		
+						var tmpBox = $('.tmp_editing:nth('+i+')');	
 						var tmpBoxParent = tmpBox.parent();
 						var tmpBoxWidth = tmpBox.width();
 						var tmpWidth = parseInt(tmpWindowWidth) -  80;
@@ -97,12 +93,12 @@
 
 						if ( tmpBoxParent.attr('indent') == 0 )
 						{
-							tmpBox.css({ "width": parseInt(tmpBoxWidth) + parseInt(increaseNum) });
+							tmpBox.css({ "width": ( parseInt(tmpBoxWidth) + parseInt(increaseNum) ) + "px" });
 						}
 						else
 						{						
-							var tmpBoxIndent = tmpBoxParent.attr('indent');																		
-							tmpBox.css({ "width": parseInt(tmpBoxWidth) + parseInt(increaseNum) });
+							var tmpBoxIndent = tmpBoxParent.attr('indent');											
+							tmpBox.css({ "width": ( parseInt(tmpBoxWidth) + parseInt(increaseNum) ) + "px" });
 						}
 					}
 				}					
@@ -112,59 +108,97 @@
 	
 		//socket 오픈. 초기 리스트 데이터 가져옴
 		socket.on('open', function (data) {
-			if ( data.parent )	//부모 정보일 경우
+			var tmpId = data.id;
+			var tmpParent = data.parent;
+			var tmpVal = data.val;			
+			console.log("id: "+tmpId+"// parent: "+tmpParent+"// val: "+tmpVal);
+			if ( tmpParent == "0" )
 			{
-				console.log("Parent: "+data.parent);
-				tmpParentInfo = data.parent;
+				var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div>";
+				$('.list_space > .children').append(rootTag);
 			}
-			else	//자식 정보일 경우
+			else
 			{
-				if ( tmpParentInfo == "root" )
+				var childParentInput = $('[taskid='+tmpParent+']');
+				var childParent = childParentInput.parent();
+				var parentIndent = childParentInput.attr('indent');
+				var childIndent = parseInt(parentIndent) +1;
+				var childTag = "<div class='edit_task'><div class='input_add' indent="+childIndent+" taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div>";
+				if ( childParent.children('.children').length > 0 )
 				{
-					//var childArray = new Array();
-					for(var i in data) {
-						var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+i+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+data[i]+"><input type='checkbox' class='check_box'></div></div>";
-						$('.list_space > .children').append(rootTag);
-						lastId = parseInt(lastId) + 1;
-					}
-			
+					childParent.children('.children').append(childTag);		
 				}
 				else
-				{
-					var checkFirst = 1;		//첫번째 자식인지 확인하기 위한 변수
-					for(var i in data) {
-						var childParentInput = $('[taskid='+tmpParentInfo+']');
-						var childParent = childParentInput.parent();
-						var parentIndent = childParentInput.attr('indent');
-						var childIndent = parseInt(parentIndent) +1;
-						var childTag = "<div class='edit_task'><div class='input_add' indent="+childIndent+" taskId="+i+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+data[i]+"><input type='checkbox' class='check_box'></div></div>";
-						if ( checkFirst == 1 )
-						{
-							childParent.attr('class', 'edit_open');
-							childTag = "<div class='children'>"+childTag+"</div>";
-							childParent.append(childTag);	
-							checkFirst = 0;
-						}
-						else
-						{
-							childParent.children('.children').append(childTag);
-						}
-						setIndent(childIndent);	 //들여쓰기 설정
-						lastId = parseInt(lastId) + 1;
-					}				
-					//$('.input_open').attr('taskId', lastId);	//현재 입력중인 창 ID 갱신
+				{	
+					childParent.attr('class', 'edit_open');
+					childTag = "<div class='children'>"+childTag+"</div>";
+					childParent.append(childTag);			
 				}
-				var lastInput = $('.input_task:last');
-				lastInput.attr('class', 'input_open');
-				$('.input_open > .tmp_editing').trigger('focus'); 
-				//	console.log($('.input_open > .tmp_editing').attr('class'));
-				resizeWindow();
+				setIndent(childIndent);	 //들여쓰기 설정			
 			}
+			//lastId = parseInt(lastId) + 1;
+			$('.input_open').attr('class', 'input_task');
+			var lastInput = $('.input_task:last');
+			lastInput.attr('class', 'input_open');
+			$('.input_open > .tmp_editing').trigger('focus'); 
+			//	console.log($('.input_open > .tmp_editing').attr('class'));
+			resizeWindow();
 		});
 
+		//lastId 얻어오는 부분
+		socket.on('last_id', function (data) {
+			tmpLastId = data.id;
+			addInputBox();
+		});
+
+		//변경된 들여쓰기 얻어오는 부분
+		socket.on('change_indent', function (data) {
+			var tmpChangeId = data.id;
+			var tmpChangeIndent = data.indent;
+			console.log("id: "+tmpChangeId+" // indent: "+tmpChangeIndent);
+			var tmpInput = $('[taskid='+tmpChangeId+']');
+			var tmpVal = tmpInput.children('.tmp_editing').val();	
+
+			var tmpInputParent = tmpInput.parent();
+			var preClass = tmpInputParent.prev();
+			var preInput = preClass.children();
+			
+			var preInputIndent = preInput.attr('indent');
+			//인덴트 적용하는 부분 상황별로 추가
+			if ( tmpInput.length > 0 )		//인덴트 설정하려는 Id 존재할 경우
+			{	
+				if ( parseInt(tmpChangeIndent) > parseInt(preInputIndent) )
+				{
+					if ( preClass.attr('class') == "edit_task" )
+					{
+						tmpInput.parent().remove();			
+						preClass.attr('class', "edit_open");
+						var addTag = "<div class='children'><div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div></div>";
+						preClass.append(addTag);
+					}
+					//직전 클래스가 edit_open인 경우 태그만 추가
+					else if ( preClass.attr('class') == "edit_open" )	
+					{
+						tmpInput.parent().remove();
+						var addTag = "<div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div>";
+						preClass.children('.children').append(addTag);
+					}
+
+				}
+				else 
+				{
+					var addTag = "<div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div>";		
+					tmpInputParent.parent().parent().after(addTag);
+					tmpInputParent.remove();
+				}
+
+				setIndent(tmpChangeIndent);
+			}
+		});
+	
 		//get_data 함수 - data 서버에서 가져옴
 		socket.on('get_data', function (data) {
-			console.log(data);
+			//console.log(data);
 
 			var addId = data.id;
 			var addParent = data.parent;
@@ -175,14 +209,11 @@
 			var preInput = $('.bullet:eq('+addIndex+')');
 			var preInputParent = preInput.parent();
 			var preEdit = preInputParent.parent();
-
-			lastId = parseInt(lastId) + 1;
-		//	$('.input_open').attr('taskId', lastId);	//현재 입력중인 곳 ID 업데이트
-
+			//lastId = parseInt(lastId) + 1;
+		
 			var tmpTask = $('[taskid='+addId+']');
 			if ( tmpTask.length > 0 )	//자신의 id 가진 객체 존재시
 			{	
-				console.log("1111111");
 				var changeInput = $('[taskid='+addId+']');
 				changeInput.children('.tmp_editing').val(addVal);	//값 업데이트
 			}
@@ -194,13 +225,11 @@
 					addTag = "<div class='edit_task'><div class='input_task' indent='0' taskid="+addId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+addVal+"><input type='checkbox' class='check_box'></div></div>";
 					if ( preEdit.length == 0 )	//정의 안 된경우
 					{
-						console.log("3333333333");
 						preEdit = $('.list_space > .children');
 						preEdit.append(addTag);
 					}
 					else
 					{
-						console.log("44444444");
 						preEdit.before(addTag);
 					}	
 				}
@@ -214,11 +243,10 @@
 					var addInputParent = $('[taskid='+addParent+']');
 					var addParentIndent = parseInt(addInputParent.attr('indent'));
 					var preInputIndent = parseInt(preInputParent.attr('indent'));
-
 					var tmpIndentStatus = parseInt(addInputParent.attr('indent')) + 1;	//부모보다 한칸 들여쓰기
 
-					console.log( "Index: "+addIndex+" // add: "+addParentIndent+" // pre: "+preInputIndent);
-
+					//console.log( "Index: "+addIndex+" // add: "+addParentIndent+" // pre: "+preInputIndent);
+			
 					addTag = "<div class='edit_task'><div class='input_add' indent="+tmpIndentStatus+" taskid="+addId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+addVal+"><input type='checkbox' class='check_box'></div></div>";
 								
 					if (addParentIndent == preInputIndent)	//첫번째 자식일 경우	
@@ -249,9 +277,39 @@
 				$('.input_open > .tmp_editing').trigger('focus'); 
 				setIndent(tmpIndentStatus);	//들여쓰기 설정		
 			}
+		});
+
+		socket.on('del_list', function (data) {
+			console.log(data);
+			var tmpDelId = data.id;
+			var delInput = $('[taskid='+tmpDelId+']');
+			var delInputParent = delInput.parent();
+		
+			if ( delInputParent.attr('class') != "edit_open" )
+			{
+				var preClass = delInputParent.prev();
+				if ( preClass.attr('class') == "edit_task" || preClass.attr('class') == "edit_open" )
+				{
+					delInputParent.remove();
+				}
+				else 
+				{
+					preClass = delInputParent.parent().parent();
+					var otherEditClass = delInputParent.next();			
+					if ( otherEditClass.attr('class') == "edit_task" || otherEditClass.attr('class') == "edit_open"  )
+					{
+						delInputParent.remove();
+					}
+					else
+					{
+						delInputParent.parent().parent().attr('class', 'edit_task');
+						delInputParent.parent().remove();
+					}			
+				}
+			}
 
 		});
-		
+
 		//데이터 DB에 데이터 요청 (Home 클릭시)
 		function requireData(idNum) {
 			var tmpSelectId = 0;
@@ -266,7 +324,7 @@
 			//alert("Mouse focus");
 
 			var focusClass = $('input:focus').parent();
-	
+			console.log(focusClass.attr('taskid'));
 			if( focusClass.attr('class') != "input_open" )
 			{
 				////이전에 작성 중이던 데이터 저장////		
@@ -277,8 +335,7 @@
 				if( preIndentStatus != 0 ) {
 					var parentChildrenClass = preInput.parent().parent();
 					parentId = parentChildrenClass.prev('.input_task').attr('taskid');	//부모 id 가져옴
-				}
-				
+				}		
 				var preBullet = $('.input_open a');
 				var preIndex = $('.bullet').index(preBullet);	 //이전 Index 구함
 				var preVal = $('.input_open > .tmp_editing').val();	//이전 값 구함
@@ -292,14 +349,13 @@
 				focusClass.parent('.input_task').attr('class', 'input_open');
 				
 				preInput.attr('class', 'input_task');
-
 			}		
 		}
 
 		//들여쓰기 공백 설정해주는 함수
 		function setIndent(indentStatus) {
 			var tmpInput = $('.input_add');	//추가된 태그인 경우
-			if ( tmpInput.attr('class') )
+			if ( tmpInput.length > 0 )
 			{
 				tmpInput = $('.input_add > .tmp_editing');
 				var tmpBullet = $('.input_add > .bullet');
@@ -322,109 +378,76 @@
 				tmpInput.trigger('focus');
 			}
 		}
-	
-		//input 키보드 입력시 호출되는 함수
-		function keyInput() {
-			var inputKey = event.keyCode;
-			if ( inputKey == 13 )	//Input Enter
-			{
-				//alert("Enter");
+		
+		//현재 값 서버로 전송해주고 inputbox 추가
+		function addInputBox(){
+			var preInput = $('.input_open');
 				
-				////이전에 작성 중이던 데이터 저장////		
-				var preInput = $('.input_open');
-				
-				var preId = preInput.attr('taskid');	//자신의 id 가져옴		
-				var parentId = 0;	 	
-				var preIndentStatus =  preInput.attr('indent');
-				if( preIndentStatus != 0 ) {
-					var parentChildrenClass = preInput.parent().parent();
-					parentId = parentChildrenClass.prev('.input_task').attr('taskid');	//부모 id 가져옴
-					//alert(parentId);
-				}
-				
-				var preBullet = $('.input_open a');
-				var preIndex = $('.bullet').index(preBullet);		//이전 Index 구함			
-				var preVal = $('.input_open > .tmp_editing').val();	//이전 값 구함
-				
-				//서버 소켓으로 데이터 전송
-				socket.emit('set_data', { id: preId, parent: parentId, index: preIndex, val: preVal } );
-				
-				preInput.attr('class', 'input_task');		
-					
-				lastId = parseInt(lastId)+1;	//id 1 증가
-
-				var addTag = "<div class='edit_task'><div class='input_open' indent="+tmpIndent+" taskid="+lastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
-
-				var preInputParent = preInput.parent(); 
-
-				//자식 노드 존재하는 경우 자식노드로 추가
-				if( preInputParent.attr('class') == "edit_open" )
-				{
-					tmpIndent = parseInt(tmpIndent) + 1;
-					preInputParent.children('.children').prepend(addTag);
-					$('.input_open').attr('indent', tmpIndent);
-				}
-				else
-				{
-					preInputParent.after(addTag);
-				}
-				$('.input_open > .tmp_editing').trigger('focus'); 
-				var tmpIndentStatus = $('.input_open').attr('indent'); 
-				setIndent(tmpIndentStatus);	//들여쓰기 설정
-				resizeWindow();
+			var preId = preInput.attr('taskid');	//자신의 id 가져옴		
+			var parentId = 0;	 	
+			var preIndentStatus =  preInput.attr('indent');
+			if( preIndentStatus != 0 ) {
+				var parentChildrenClass = preInput.parent().parent();
+				parentId = parentChildrenClass.prev('.input_task').attr('taskid');	//부모 id 가져옴
+				//alert(parentId);
 			}
-			else if ( inputKey == 9 && event.shiftKey ) //Input Shift + Tab
-			{
-				//alert("Shift+Tab");
-				event.returnValue = false;
-				
-				if(tmpIndent > 0) {	
-					tmpIndent = parseInt(tmpIndent)-1;
-					var tmpInput = $('.input_open');
-					var tmpId = tmpInput.attr('taskid');
-					var tmpVal = $('.input_open > .tmp_editing').val();
-					
-					var tmpInputParent = $('.input_open').parent();
-					
-					var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div>";		
+			
+			var preBullet = $('.input_open a');
+			var preIndex = $('.bullet').index(preBullet);		//이전 Index 구함			
+			var preVal = $('.input_open > .tmp_editing').val();	//이전 값 구함
+			
+			//서버 소켓으로 데이터 전송
+			socket.emit('set_data', { id: preId, parent: parentId, index: preIndex, val: preVal } );
 
-					if( tmpInputParent.parent().attr('class') == "children" )
-					{
-						tmpInputParent.parent().parent().after(addTag);
-						tmpInputParent.remove();
-					}
-					var tmpIndentStatus = $('.input_open').attr('indent');
-					setIndent(tmpIndentStatus);	//들여쓰기 설정 함수 호출
-				}			
-				
+			preInput.attr('class', 'input_task');					
+
+			var addTag = "<div class='edit_task'><div class='input_open' indent="+tmpIndent+" taskid="+tmpLastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
+			var preInputParent = preInput.parent(); 
+
+			//자식 노드 존재하는 경우 자식노드로 추가
+			if( preInputParent.attr('class') == "edit_open" )
+			{
+				tmpIndent = parseInt(tmpIndent) + 1;
+				preInputParent.children('.children').prepend(addTag);
+				$('.input_open').attr('indent', tmpIndent);
 			}
-			else if ( inputKey == 9 )	//Input Tab		
+			else
 			{
-				//alert("Tab");
-				event.returnValue = false;
-					
-				var tmpInput = $('.input_open');
-				var tmpId = tmpInput.attr('taskid');
-				var tmpVal = $('.input_open > .tmp_editing').val();
-								
-				var tmpInputParent = $('.input_open').parent();
+				preInputParent.after(addTag);
+			}
 
-				var preClass = tmpInputParent.prev();
-				//alert(preEditTask.attr('class'));
+			$('.input_open > .tmp_editing').trigger('focus'); 
+			var tmpIndentStatus = $('.input_open').attr('indent'); 
+			setIndent(tmpIndentStatus);	//들여쓰기 설정
+			resizeWindow();
+		}
+
+		//현재 탭 상태 확인해서 서버로 전송
+		function addIndent() {
+			
+			var tmpInput = $('.input_open');					
+			var tmpInputParent = tmpInput.parent();
+			var tmpId = tmpInput.attr('taskid');		
+			var tmpVal = tmpInput.children('.tmp_editing').val();	
+			
+			var preClass = tmpInputParent.prev();
+			//alert(preEditTask.attr('class'));
+
+			if ( tmpInputParent.attr('class') != "edit_open")	//자식노드가 없을 때만
+			{
 				//직전 클래스가 edit_task인 경우 추가하려는 children 태그 추가
 				if ( preClass.attr('class') == "edit_task" )
 				{
 					tmpIndent = parseInt(tmpIndent)+1;
-					tmpInput.parent().remove();
-				
+					tmpInput.parent().remove();			
 					preClass.attr('class', "edit_open");
 					
 					var addTag = "<div class='children'><div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div></div>";
 					preClass.append(addTag);
 
+					setIndent(tmpIndent);
 
-					var tmpIndentStatus = $('.input_open').attr('indent');
-					setIndent(tmpIndentStatus);
+					socket.emit('new_indent', { id: tmpId,  indent: tmpIndent });
 				}
 				//직전 클래스가 edit_open인 경우 태그만 추가
 				else if ( preClass.attr('class') == "edit_open" )	
@@ -434,78 +457,129 @@
 					var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div>";
 					preClass.children('.children').append(addTag);
 
-					var tmpIndentStatus = $('.input_open').attr('indent');
-					setIndent(tmpIndentStatus);
-
+					setIndent(tmpIndent);
+		
+					socket.emit('new_indent', { id: tmpId,  indent: tmpIndent });
 				}
+			}
+			
+		}
+
+		function removeIndent() {
+		
+			var tmpInput = $('.input_open');
+			var tmpId = tmpInput.attr('taskid');
+			var tmpVal = $('.input_open > .tmp_editing').val();					
+			var tmpInputParent = $('.input_open').parent();
+
+			if ( tmpIndent > 0 && tmpInputParent.attr('class') != "edit_open" ) 
+			{	
+				tmpIndent = parseInt(tmpIndent)-1;
+						
+				var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value="+tmpVal+"><input type='checkbox' class='check_box'></div></div>";		
+
+				if( tmpInputParent.parent().attr('class') == "children" )
+				{
+					tmpInputParent.parent().parent().after(addTag);
+					tmpInputParent.remove();
+				}
+				setIndent(tmpIndent);	//들여쓰기 설정 함수 호출
+
+				socket.emit('new_indent', { id: tmpId,  indent: tmpIndent });
+			}
+		}
+
+		
+		function delLine() {
+			var tmpInput = $('.input_open');
+			var tmpId = tmpInput.attr('taskid');
+			var tmpInputParent = $('.input_open').parent();
+
+			if ( tmpInputParent.attr('class') != "edit_open" )
+			{
+				var preClass = tmpInputParent.prev();
+				if ( preClass.attr('class') == "edit_task" )
+				{
+					preClass.children('.input_task').attr('class', 'input_open');
+					preClass.children('.input_open').children('.tmp_editing').trigger('focus');							
+					tmpIndent = preClass.children('.input_open').attr('indent');
+													
+					tmpInputParent.remove();
+				}
+				else if ( preClass.attr('class') == "edit_open" )
+				{
+					var preEditClass = preClass.children('.children').children('.edit_task:last');
+					preEditClass.children('.input_task').attr('class', 'input_open');
+					preEditClass.children('.input_open').children('.tmp_editing').trigger('focus');						
+					tmpIndent = preEditClass.children('.input_open').attr('indent');
+
+					tmpInputParent.remove();
+				}
+				else 
+				{
+					preClass = tmpInputParent.parent().parent();
+					var otherEditClass = tmpInputParent.next();
+					
+					var preInputClass = preClass.children('.input_task:last');
+					preInputClass.attr('class', 'input_open');				
+					tmpIndent = preInputClass.attr('indent');
+
+					preInputClass.children('.tmp_editing').trigger('focus');
+				
+					if ( otherEditClass.attr('class') == "edit_task" || otherEditClass.attr('class') == "edit_open"  )
+					{
+						tmpInputParent.remove();
+					}
+					else
+					{
+						tmpInputParent.parent().parent().attr('class', 'edit_task');
+						tmpInputParent.parent().remove();
+					}						
+				}						
+				var delId = tmpInput.attr('taskid');
+				socket.emit('del_data', { id: delId } );
+			}
+		}
+
+
+		//input 키보드 입력시 호출되는 함수
+		function keyInput() {
+			var inputKey = event.keyCode;
+			if ( inputKey == 13 )	//Input Enter
+			{
+				//alert("Enter");
+				socket.emit('get_id', 'Get ID');						
+			}
+			else if ( inputKey == 9 && event.shiftKey ) //Input Shift + Tab
+			{
+				//alert("Shift+Tab");
+				event.returnValue = false;
+	
+				removeIndent();
+
+			}
+			else if ( inputKey == 9 )	//Input Tab		
+			{
+				//alert("Tab");
+				event.returnValue = false;
+				
+				
+				addIndent();
+			
 			//	var tmpIndentStatus = $('.input_open').attr('indent');
 			//	setIndent(tmpIndentStatus);
 			}	
 			else if ( inputKey == 8 )	//Input BackSpaceKey
-			{
-				
+			{				
 				//alert("BackSpace");
-				
-				var tmpInput = $('.input_open');
-				var tmpId = tmpInput.attr('taskid');
+		
 				var tmpVal = $('.input_open > .tmp_editing').val();
-								
-				var tmpInputParent = $('.input_open').parent();
 								
 				if( tmpVal == "" )
 				{
-					event.returnValue = false;
-					
-					if ( tmpInputParent.attr('class') != "edit_open" )
-					{
-						var preClass = tmpInputParent.prev();
-						if ( preClass.attr('class') == "edit_task" )
-						{
-							preClass.children('.input_task').attr('class', 'input_open');
-							preClass.children('.input_open').children('.tmp_editing').trigger('focus');
-							
-							tmpIndent = preClass.children('.input_open').attr('indent');
-							
-							tmpInputParent.remove();
-						}
-						else if ( preClass.attr('class') == "edit_open" )
-						{
-							var preEditClass = preClass.children('.children').children('.edit_task:last');
-							preEditClass.children('.input_task').attr('class', 'input_open');
-							preEditClass.children('.input_open').children('.tmp_editing').trigger('focus');
-							
-							tmpIndent = preEditClass.children('.input_open').attr('indent');
-						
-							tmpInputParent.remove();
-						}
-						else 
-						{
-							preClass = tmpInputParent.parent().parent();
-							var otherEditClass = tmpInputParent.next();
-							
-							var preInputClass = preClass.children('.input_task:last');
-							preInputClass.attr('class', 'input_open');
-							
-							tmpIndent = preInputClass.attr('indent');
-
-							preInputClass.children('.tmp_editing').trigger('focus');
-						
-							if ( otherEditClass.attr('class') == "edit_task" || otherEditClass.attr('class') == "edit_open"  )
-							{
-								tmpInputParent.remove();
-							}
-							else
-							{
-								tmpInputParent.parent().parent().attr('class', 'edit_task');
-								tmpInputParent.parent().remove();
-							}
-							
-						}
-						
-					}
-				
-				}
-				
+					event.returnValue = false;			
+					delLine();			
+				}				
 			}
 		}
 
@@ -528,8 +602,6 @@
 				<div class="children">
 				
 				</div>
-			
-
 			</div>
 		</article>
     </section>

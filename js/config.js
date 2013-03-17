@@ -23,6 +23,8 @@
 		setup_charts();
 
 		setup_select_meeting_template();
+		
+		enable_select2();
 	}); 
 
 	/* ---------------------------------------------------------------------- */
@@ -69,13 +71,13 @@
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();
 			$(".modal-footer a.prev", dialog).hide();
-			setup_meeting_wizard();
+			//setup_meeting_wizard();
 		},"html");
 	}
 
-	function show_meeting_process(idx)
+	function show_setting_agenda(idx)
 	{
-		$.get("/include/meeting_process.html",
+		$.get("/include/setting_agenda.html",
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
@@ -83,7 +85,25 @@
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
+			enable_select2();
 		},"html");
+	}
+	
+	function add_agenda()
+	{
+		var len = $("#meeting-wizard ul li").length + 1;
+		if( len === 1 )
+			var active = "class='active'";
+		else
+			var active = "";
+			
+		var html = '<li '+active+'><span class="label badge-inverse">'+len+'</span><a href="#inverse-tab'+len+'" data-toggle="tab">Step '+len+'</a></li>';
+		$("#meeting-wizard ul").append(html);
+	}
+	
+	function del_agenda()
+	{
+		$("#meeting-wizard ul li:last").remove();
 	}
 
 	/* ---------------------------------------------------------------------- */
@@ -789,3 +809,27 @@
 	}
 	
 	/* end setup_timepicker */
+	
+	/* ---------------------------------------------------------------------- */
+	/*	Enable Select2
+	/* ---------------------------------------------------------------------- */
+	
+	function enable_select2() {
+		if ($('select.with-search').length) {
+			//$(".themed input[type='radio'], .themed input[type='checkbox'], .themed input[type='file'].file, .themed textarea").uniform();
+			$("select.with-search").select2();
+			
+			/* some demo buttons for select 2 */
+	
+			$("#disable-select-demo").click(function() {
+				$("#select-demo-js select").select2("disable");
+			});
+			
+			$("#enable-select-demo").click(function() {
+				$("#select-demo-js select.with-search").select2();
+			}); 
+
+		}// end if
+	}
+	
+	/* end select2 */

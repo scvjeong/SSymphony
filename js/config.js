@@ -77,6 +77,31 @@
 
 	function show_setting_agenda(idx)
 	{
+		$(dialog).on("blur", "#agenda_step input[name=title]", function(){
+			var idx = $(this).parent().parent().parent().attr("idx");
+			if( $(this).val() == "" )
+				$("#step-"+idx, dialog).html("Step "+idx);
+			else
+				$("#step-"+idx, dialog).html($(this).val());
+		});
+
+		$(dialog).on("click", "#agenda_step input[type=checkbox]", function(){
+			// step idx 
+			var idx = $(this).parent().parent().parent().parent().attr("idx");
+			var val = $(this).val();
+			// option 선택
+			var o = $("#inverse-tab"+idx+" select.with-search option[value="+val+"]", dialog);
+			// select2 방식의 데이터 형식
+			var data = {css:null, element:o, id:val, text:val};
+			// close 버튼의 selector
+			var close_selector = $("a.select2-search-choice-close."+val);
+			if( $(this).attr("checked") == "checked" )
+				$("#inverse-tab"+idx+" select.with-search", dialog).select2("onSelect",data);
+			else
+				$("#inverse-tab"+idx+" select.with-search", dialog).select2("unselect",close_selector);
+		});
+
+		// Load setting_agenda.html
 		$.get("/include/setting_agenda.html",
 		{	idx:idx	},
 		function(html){
@@ -85,11 +110,34 @@
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
-			enable_select2();
+			var step_cnt = $("#meeting-wizard li", dialog).length;
+			// Load setting_agenda_step.html
+			add_setting_agenda_step(1, step_cnt);
+
 		},"html");
 	}
 	
-	function add_agenda()
+	// start_step_idx : 시작 step idx
+	// step_cnt : step count
+	function add_setting_agenda_step(start_step_idx, step_cnt)
+	{
+		$.get("/include/setting_agenda_step.html", {},
+		function(step_html){
+			for( var i=0; i<step_cnt; i++)
+			{
+				// step 에 내용 추가 및 아이디 부여
+				$("#agenda_step .tab-content", dialog).append(step_html);
+				$("#agenda_step fieldset:last", dialog).attr("id", "inverse-tab"+(start_step_idx+i));
+				$("#agenda_step fieldset:last", dialog).attr("idx", (start_step_idx+i));
+			}
+			// 첫번째 step에 active (보여짐)
+			if( $("#agenda_step fieldset.active", dialog).length == 0 )
+				$("#agenda_step fieldset:first", dialog).addClass("active");
+			enable_select2();
+		},"html");
+	}
+
+	function add_process()
 	{
 		var len = $("#meeting-wizard ul li").length + 1;
 		if( len === 1 )
@@ -97,13 +145,26 @@
 		else
 			var active = "";
 			
-		var html = '<li '+active+'><span class="label badge-inverse">'+len+'</span><a href="#inverse-tab'+len+'" data-toggle="tab">Step '+len+'</a></li>';
+		var html = '<li '+active+'><span class="label badge-inverse">'+len+'</span><a id="step-'+len+'" href="#inverse-tab'+len+'" data-toggle="tab">Step '+len+'</a></li>';
 		$("#meeting-wizard ul").append(html);
+		add_setting_agenda_step(len, 1);
 	}
 	
-	function del_agenda()
+	function del_process()
 	{
-		$("#meeting-wizard ul li:last").remove();
+
+		if( $("#meeting-wizard ul li:last").attr("class") == "active" )
+		{
+			$("#meeting-wizard ul li:last").remove();
+			$("#meeting-wizard ul li:last").addClass("active");
+			$("#agenda_step fieldset:last", dialog).remove();
+			$("#agenda_step fieldset:last", dialog).addClass("active");
+		}
+		else
+		{
+			$("#meeting-wizard ul li:last").remove();
+			$("#agenda_step fieldset:last", dialog).remove();
+		}
 	}
 
 	/* ---------------------------------------------------------------------- */
@@ -817,18 +878,7 @@
 	function enable_select2() {
 		if ($('select.with-search').length) {
 			//$(".themed input[type='radio'], .themed input[type='checkbox'], .themed input[type='file'].file, .themed textarea").uniform();
-			$("select.with-search").select2();
-			
-			/* some demo buttons for select 2 */
-	
-			$("#disable-select-demo").click(function() {
-				$("#select-demo-js select").select2("disable");
-			});
-			
-			$("#enable-select-demo").click(function() {
-				$("#select-demo-js select.with-search").select2();
-			}); 
-
+			var s = $("select.with-search").select2();
 		}// end if
 	}
 	

@@ -2066,14 +2066,14 @@
 
         // multi
         addSelectedChoice: function (data) {
+            var id = this.id(data),
+                val = this.getVal(),
+                formatted;
             var choice=$(
                     "<li class='select2-search-choice'>" +
                     "    <div></div>" +
-                    "    <a href='#' onclick='return false;' class='select2-search-choice-close' tabindex='-1'></a>" +
-                    "</li>"),
-                id = this.id(data),
-                val = this.getVal(),
-                formatted;
+                    "    <a href='#' onclick='return false;' class='select2-search-choice-close "+id+"' tabindex='-1'></a>" +
+                    "</li>")
 
             formatted=this.opts.formatSelection(data, choice);
             choice.find("div").replaceWith("<div>"+this.opts.escapeMarkup(formatted)+"</div>");
@@ -2307,7 +2307,7 @@
         var args = Array.prototype.slice.call(arguments, 0),
             opts,
             select2,
-            value, multiple, allowedMethods = ["val", "destroy", "opened", "open", "close", "focus", "isFocused", "container", "onSortStart", "onSortEnd", "enable", "disable", "positionDropdown", "data"];
+            value, multiple, allowedMethods = ["val", "destroy", "opened", "open", "close", "focus", "isFocused", "container", "onSortStart", "onSortEnd", "enable", "disable", "positionDropdown", "data", "onSelect", "unselect"];
 
         this.each(function () {
             if (args.length === 0 || typeof(args[0]) === "object") {

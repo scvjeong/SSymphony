@@ -1,3 +1,4 @@
+<!-- 아젠다 설정 HTML 파일 -->
 <div class="row-fluid">
 	<div class="span12">
 		<div class="inner-spacer setting-agenda"> 
@@ -6,33 +7,33 @@
 				<ul class="bwizard-steps">
 					<li class="active">
 						<span class="label badge-inverse">1</span>
-						<a href="#inverse-tab1" data-toggle="tab">Step 1</a>
+						<a href="#inverse-tab1" data-toggle="tab" id="step-1">Step 1</a>
 					</li>
 					<li>
 						<span class="label badge-inverse">2</span>
-						<a href="#inverse-tab2" data-toggle="tab">Step 2</a>
+						<a href="#inverse-tab2" data-toggle="tab" id="step-2">Step 2</a>
 					</li>
 					<li>
 						<span class="label badge-inverse">3</span>
-						<a href="#inverse-tab3" data-toggle="tab">Step 3</a>
+						<a href="#inverse-tab3" data-toggle="tab" id="step-3">Step 3</a>
 					</li>
 					<li>
 						<span class="label badge-inverse">4</span>
-						<a href="#inverse-tab4" data-toggle="tab">Step 4</a>
+						<a href="#inverse-tab4" data-toggle="tab" id="step-4">Step 4</a>
 					</li>
 					<li>
 						<span class="label badge-inverse">5</span>
-						<a href="#inverse-tab5" data-toggle="tab">Step 5</a>
+						<a href="#inverse-tab5" data-toggle="tab" id="step-5">Step 5</a>
 					</li>
 					<li>
 						<span class="label badge-inverse">6</span>
-						<a href="#inverse-tab6" data-toggle="tab">Step 6</a>
+						<a href="#inverse-tab6" data-toggle="tab" id="step-6">Step 6</a>
 					</li>
 				</ul>
 				<!-- end wizard steps -->
 				<div class="btn-div">
-					<a href="javascript:add_agenda();"><i class="cus-add"></i>Process-Add</a>
-					<a href="javascript:del_agenda();"><i class="cus-add"></i>Process-Delete</a>
+					<a href="javascript:add_process();"><button class="btn medium btn-primary"><i class="cus-add"></i>Process-Add</button></a>
+					<a href="javascript:del_process();"><button class="btn medium btn-primary"><i class="cus-add"></i>Process-Delete</button></a>
 				</div>
 			</div>
 		</div>
@@ -41,157 +42,11 @@
 <div class="row-fluid">
 	<div class="span12">
 		<div class="inner-spacer setting-agenda"> 
-			<form id="wizard" class="themed">
-				<div id="wizard_name">
+			<form id="wizard" class="form-horizontal">
+				<div id="agenda_step">
 					<div class="tab-content">
-						<!-- step 1-->
-						<fieldset class="tab-pane active" id="inverse-tab1">
-							<div class="control-group">
-								<label class="control-label" for="name">주제 : </label>
-								<div class="controls">
-									<input type="text" class="span12" id="name" required="required">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="lname">목표 : </label>
-								<div class="controls">
-									<input type="text" class="span12" id="lname">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="input01">시작 시간 : </label>
-								<div class="input-append bootstrap-timepicker-component">
-									<input id="timepicker1" type="text" class="timepicker-input" value="05:30 PM" />
-									<span class="add-on"><i class="cus-clock"></i></span>
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="input01">끝 시간 : </label>
-								<div class="input-append bootstrap-timepicker-component">
-									<input id="timepicker1" type="text" class="timepicker-input" value="05:30 PM" />
-									<span class="add-on"><i class="cus-clock"></i></span>
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="multiSelect">사용 회의 도구</label>
-								<div class="controls">
-									<select multiple="multiple" id="multiSelect" class="span12 with-search">
-										<option value="list">List</option>
-						                <option value="mindmap">MindMap</option>
-						                <option value="postit">Postit</option>
-						                <option value="vote">Vote</option>
-						                <option value="matrix">Matrix</option>
-									</select>
-								</div>
-							</div>				
-						</fieldset>
-						<!-- step 2-->
-						<fieldset class="tab-pane" id="inverse-tab2">
-							<div class="control-group">
-								<label class="control-label" for="s1">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s1">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s2">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s2">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s3">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s3">
-								</div>
-							</div>
-						</fieldset>
-						<!-- step 3-->
-						<fieldset class="tab-pane" id="inverse-tab3">
-							<div class="control-group">
-								<label class="control-label" for="s4">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s4">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s5">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s5">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s6">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s6">
-								</div>
-							</div>
-						</fieldset>
-						<!-- step 4-->
-						<fieldset class="tab-pane" id="inverse-tab4">
-							<div class="control-group">
-								<label class="control-label" for="s7">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s7">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s8">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s8">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s9">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s9">
-								</div>
-							</div>
-						</fieldset>
-						<!-- step 5-->
-						<fieldset class="tab-pane" id="inverse-tab5">
-							<div class="control-group">
-								<label class="control-label" for="s10">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s10">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s11">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s11">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s12">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s12">
-								</div>
-							</div>
-						</fieldset>
-						<!-- step 6-->
-						<fieldset class="tab-pane" id="inverse-tab6">
-							<div class="control-group">
-								<label class="control-label" for="s13">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s13">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s14">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s14">
-								</div>
-							</div>
-							<div class="control-group">
-								<label class="control-label" for="s15">Sample Input</label>
-								<div class="controls">
-									<input type="text" class="span12" id="s15">
-								</div>
-							</div>
-						</fieldset>
 						<!-- wizard -->
-						<div class="form-actions wizard">
+						<!--div class="form-actions wizard">
 							<div class="span6 hidden-phone">
 								<strong class="" style="margin-right: 5px; line-height: 25px; float:left;">Start</strong>
 								<strong class="" style="margin-left: 5px; line-height: 25px;">Finish</strong>
@@ -214,7 +69,7 @@
 									</li>
 								</ul>
 							</div>
-						</div>
+						</div-->
 					</div>
 				</div>
 			</form>

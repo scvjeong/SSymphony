@@ -4,6 +4,9 @@
 /* }=== COLOR - AZURE === */
 /* === MADMIN MENU ==={ */
 /* general setup & list styles reset */
+.left{
+	float:left;
+}
 .sidebar-menu li > a,
 .sidebar-menu li > div > a {
   position: relative;
@@ -1389,6 +1392,10 @@ h6 small {
 	    text-align: center;
 	    width: 25px;
 	}
+	.bootstrap-timepicker-component{
+		float:none;
+		margin-right:10px;
+	}
 	.bootstrap-timepicker-component .add-on {
 	    cursor: pointer;
 	}
@@ -1396,6 +1403,9 @@ h6 small {
 	    display: block;
 	    height: 16px;
 	    width: 16px;
+	}
+	.timepicker-input{
+		float:none;
 	}
 	/* ---------------------------------------------------------------------- */
 	/*	Time picker
@@ -1420,6 +1430,7 @@ h6 small {
 	}
 	.cus-add {
 		background-position: -17px -51px;
+		margin:2px 5px 2px 2px;
 	}
 	/* ---------------------------------------------------------------------- */
 	/*	icon
@@ -1449,12 +1460,10 @@ h6 small {
 		border:0 none !important;
 		border-radius:8px;
 	}
-	
-	.setting-agenda #meeting-wizard .btn-div a{
-		padding: 5px;
-		border: 1px solid #000000;
-		
+
+	#agenda_step label{
+		margin:0 10px 5px 0;
+		line-height:30px;
+		text-align: left !important;
 	}
-
-
 

@@ -126,7 +126,7 @@
     </ul>
   </li>-->
   <li class="pull-right">
-  	<a href="javascript:alert('숨기기')">
+  	<a onclick="$('#topbar').hide()">
 		<span>____</span>
   	</a>
   </li>
@@ -139,23 +139,155 @@
 </ul>
 <!-- /#topbar: Top Bar Menu -->
 
-<!-- 회의 진행 단계 바 -->
-<ul id="meeting_process_bar">
-	<li class="process">부도 상황 정리</li>
-	<li class="process">부채 탕감 논의</li>
-	<li class="process">도주 실행</li>
-	<li class="process">잠적 계획 수립</li>
+<div id="rightpanel">
+<ul id="tabbar">
+	<li id="participants" onclick="setRightpanel('participants')">참가자</li>
+	<li id="tools" onclick="setRightpanel('tools')">회의 도구</li>
+	<li id="info" onclick="setRightpanel('info')">회의 정보</li>
 </ul>
-<!-- /회의 진행 단계 바 -->
-
-<div id="rightbar">
-	
+<div id="panelcontents">
+	<div id="participants">
+		<ul class="users-online">
+			<li class="first">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Go Dong Hyun <span>(3)</span>
+                        </strong>
+                        <b>Murderer</b>
+                    </span>
+                    <i class="online"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	SCV Jeong <span></span>
+                        </strong>
+                        <b>jeongjeong1</b>
+                    </span>
+                    <i class="online"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Angie Freemen <span></span>
+                        </strong>
+                        <b>CFO</b>
+                    </span>
+                    <i class="away"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Carol Lam <span></span>
+                        </strong>
+                        <b>Graphic Designer</b>
+                    </span>
+                    <i class="offline"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Julia Berry <span></span>
+                        </strong>
+                        <b>Human Resources</b>
+                    </span>
+                    <i class="online"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	David Simpson <span>(2)</span>
+                        </strong>
+                        <b>CEO</b>
+                    </span>
+                    <i class="away"></i>
+                </a>
+			</li>
+			<li class="last">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Brad Pitt <span></span>
+                        </strong>
+                        <b>Information Technology</b>
+                    </span>
+                    <i class="busy"></i>
+                </a>
+			</li>
+		</ul>
+	</div>
+	<div id="tools">
+		<ul>
+			<li onclick="addTool('list')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>리스트</span>
+			</li>
+			<li onclick="addTool('postit')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>포스트잇</span>
+			</li>
+			<li onclick="addTool('mindmap')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>마인드맵</span>
+			</li>
+			<li onclick="addTool('vote')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>투표도구</span>
+			</li>
+		</ul>
+		</ul>
+	</div>
+	<div id="info">
+		<ul id="meta">
+			<li>
+				<span>목적</span>
+				<span>정상적인 부도처리를 유도</span>
+			</li>
+			<li>
+				<span>시간</span>
+				<span>15:00 ~ 18:00</span>
+			</li>
+			<li>
+				<span>장소</span>
+				<span>3층 대회의실</span>
+			</li>
+			<li>
+				<span>규칙</span>
+				<ul>
+					<li>껌을 씹지 말 것</li>
+					<li>반말을 하지 말 것</li>
+				</ul>
+			</li>
+		</ul>
+		<ul id="process">
+			<li></li>
+		</ul>
+	</div>
 </div>
-    <div id="content">
+</div>
+
+<div id="content">
 
 
-    </div>
-</div><!-- /.container-fluid#container -->
+</div>
 
 
 
@@ -229,7 +361,8 @@
 	<!-- REQUIRED: Bootstrap Timepicker -->
 	<script src="/js/bootstrap.timepicker.min.js"></script>
 
-	<script src="/js/config.js"></script>	
+	<script src="/js/config.js"></script>
+	<script src="../js/meeting.js"></script>	
 
 <!-- /Javascript -->
 

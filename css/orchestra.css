@@ -1180,6 +1180,11 @@ h6 small {
 		right: 10px;
 		top: 9px;
 	}
+	#group-calendar-buttons {
+		position: absolute;
+		right: 10px;
+		top: 9px;
+	}
 	
 	/* other month */
 	td.fc-other-month {
@@ -1436,13 +1441,25 @@ h6 small {
 	/*	icon
 	/* ---------------------------------------------------------------------- */
 
+	/* ---------------------------------------------------------------------- */
+	/*	Accordion
+	/* ---------------------------------------------------------------------- */
+	
+	/* change plus icon to minus on toggle */
+	.accordion .active i::before {
+   		content: "\f056";
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Accordion
+	/* ---------------------------------------------------------------------- */
+
 	.chart {
 		height: 250px;
+		margin: 1%
 	}
 	.width-23{
 		float:left;
 		width:23%;
-		margin: 1%
 	}
 	.margin-5{
 		margin: 5% !important;

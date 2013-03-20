@@ -12,6 +12,10 @@
 	var $chrt_mono = "#000";
 	
 	$(document).ready( function() {   
+		init();
+
+		setup_group_info();
+
 		setup_timepicker();
 
 		setup_calendar();
@@ -26,6 +30,30 @@
 		
 		enable_select2();
 	}); 
+	/* ---------------------------------------------------------------------- */
+	/*	Init Start
+	/* ---------------------------------------------------------------------- */
+	function init()
+	{
+		$(window).resize(function(){
+			window_height = $(window).height();
+			$(".modal-body", dialog).css("max-height", window_height*0.7);
+		});
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Init End
+	/* ---------------------------------------------------------------------- */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Group Info Start
+	/* ---------------------------------------------------------------------- */
+	function setup_group_info()
+	{
+		$('#group-info .row-fluid [class*="span"]:nth-child(3)').css("margin-left","0");
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Group Info
+	/* ---------------------------------------------------------------------- */
 
 	/* ---------------------------------------------------------------------- */
 	/*	Meeting Planning
@@ -74,6 +102,24 @@
 			//setup_meeting_wizard();
 		},"html");
 	}
+	
+	// checkbox 와 muti selectbox 와 연동
+	function select_item(item)
+	{
+		// step idx 
+		var idx = $(item).parent().parent().parent().parent().parent().parent().attr("idx");
+		var val = $(item).val();
+		// option 선택
+		var o = $("#inverse-tab"+idx+" select.with-search option[value="+val+"]", dialog);
+		// select2 방식의 데이터 형식
+		var data = {css:null, element:o, id:val, text:val};
+		// close 버튼의 selector
+		var close_selector = $("a.select2-search-choice-close."+val);
+		if( $(item).attr("checked") == "checked" )
+			$("#inverse-tab"+idx+" select.with-search", dialog).select2("onSelect",data);
+		else if( $(item).attr("checked") != "checked" && close_selector.length !== 0 )
+			$("#inverse-tab"+idx+" select.with-search", dialog).select2("unselect",close_selector);
+	}
 
 	function show_setting_agenda(idx)
 	{
@@ -83,22 +129,6 @@
 				$("#step-"+idx, dialog).html("Step "+idx);
 			else
 				$("#step-"+idx, dialog).html($(this).val());
-		});
-
-		$(dialog).on("click", "#agenda_step input[type=checkbox]", function(){
-			// step idx 
-			var idx = $(this).parent().parent().parent().parent().attr("idx");
-			var val = $(this).val();
-			// option 선택
-			var o = $("#inverse-tab"+idx+" select.with-search option[value="+val+"]", dialog);
-			// select2 방식의 데이터 형식
-			var data = {css:null, element:o, id:val, text:val};
-			// close 버튼의 selector
-			var close_selector = $("a.select2-search-choice-close."+val);
-			if( $(this).attr("checked") == "checked" )
-				$("#inverse-tab"+idx+" select.with-search", dialog).select2("onSelect",data);
-			else
-				$("#inverse-tab"+idx+" select.with-search", dialog).select2("unselect",close_selector);
 		});
 
 		// Load setting_agenda.html
@@ -251,7 +281,46 @@
 					}
 				]
 			});
+		};
 
+		if ($("#group-calendar").length) {
+			var date = new Date();
+			var d = date.getDate();
+			var m = date.getMonth();
+			var y = date.getFullYear();
+			
+			var calendar = $('#group-calendar').fullCalendar({
+				header: {
+					left: 'title', //,today
+					center: 'prev, next, today',
+					right: 'month, agendaWeek, agenDay' //month, agendaDay, 
+				},
+				selectable: true,
+				selectHelper: true,
+				select: function(start, end, allDay) {
+					var title = prompt('Event Title:');
+					if (title) {
+						calendar.fullCalendar('renderEvent',
+							{
+								title: title,
+								start: start,
+								end: end,
+								allDay: allDay
+							},
+							true // make the event "stick"
+						);
+					}
+					calendar.fullCalendar('unselect');
+				},
+				
+				editable: true,
+				events: [
+					{
+						title: 'All Day Event',
+						start: new Date(y, m, 1)
+					}
+				]
+			});
 		};
 		
 		/* hide default buttons */
@@ -267,17 +336,17 @@
 		/* calendar buttons */
 
 		$('div#calendar-buttons #btn-prev').click(function(){
-		    $('.fc-button-prev').click();
+		    $('#calendar .fc-button-prev').click();
 		    return false;
 		});
 		
 		$('div#calendar-buttons #btn-next').click(function(){
-		    $('.fc-button-next').click();
+		    $('#calendar .fc-button-next').click();
 		    return false; 
 		});
 
 		$('div#calendar-buttons #btn-today').click(function(){
-		    $('.fc-button-today').click();
+		    $('#calendar .fc-button-today').click();
 		    return false; 
 		});
 		
@@ -291,6 +360,33 @@
 		
 		$('div#calendar-buttons #btn-day').click(function(){
 		   $('#calendar').fullCalendar('changeView', 'agendaDay');
+		});
+
+		$('div#group-calendar-buttons #group-cal-btn-prev').click(function(){
+		    $('#group-calendar .fc-button-prev').click();
+		    return false;
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-next').click(function(){
+		    $('#group-calendar .fc-button-next').click();
+		    return false; 
+		});
+
+		$('div#group-calendar-buttons #group-cal-btn-today').click(function(){
+		    $('#group-calendar .fc-button-today').click();
+		    return false; 
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-month').click(function(){
+		    $('#group-calendar').fullCalendar('changeView', 'month');
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-agenda').click(function(){
+		    $('#group-calendar').fullCalendar('changeView', 'agendaWeek');
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-day').click(function(){
+		   $('#group-calendar').fullCalendar('changeView', 'agendaDay');
 		});
 		
 		/* end calendar buttons */
@@ -646,7 +742,6 @@
         /* end fill chart */
 
 		/* site stats chart */
-	
 		if ($("#site-stats").length) {
 
 			var pageviews = [[1, 75], [3, 87], [4, 93], [5, 127], [6, 116]];
@@ -714,7 +809,79 @@
                 }
 			});
 		}
+		/* end site stats chart */
 
+				/* site stats chart */
+
+		if ($("#group-chart").length) {
+
+			var pageviews = [[1, 75], [3, 87], [4, 93], [5, 127], [6, 116]];
+			var visitors = [[1, 65], [3, 50], [4, 73], [5, 100], [6, 95]];
+
+			var plot = $.plot($("#group-chart"), [{
+				data : pageviews,
+				label : "Your pageviews"
+			}, {
+				data : visitors,
+				label : "Site visitors"
+			}], {
+				series : {
+					lines : {
+						show : true,
+						lineWidth : 1,
+						fill : true,
+						fillColor : {
+							colors : [{
+								opacity : 0.1
+							}, {
+								opacity : 0.15
+							}]
+						}
+					},
+					points : {
+						show : true
+					},
+					shadowSize : 0
+				},
+				xaxis : {
+					mode : "time",
+					tickLength : 10
+				},
+
+				yaxes : [{
+					min : 20,
+					tickLength : 5
+				}],
+				grid : {
+					hoverable : true,
+					clickable : true,
+					tickColor : $chrt_border_color,
+					borderWidth : 0,
+					borderColor : $chrt_border_color,
+				},
+				tooltip : true,
+				tooltipOpts : {
+					content : "%s for <b>%x:00 hrs</b> was %y",
+					dateFormat : "%y-%0m-%0d",
+					defaultTheme : false
+				},
+				colors : [$chrt_main, $chrt_second],
+				xaxis : {
+					ticks : 15,
+					tickDecimals : 2
+				},
+				yaxis : {
+					ticks : 5,
+					tickDecimals : 0
+				},
+				legend: {
+                    position: "ne", 
+                    margin: [-5, -17]
+                }
+			});
+		}
+		/* end site stats chart */
+		
 		/* sales chart */
 		
 		if ($("#saleschart").length) {
@@ -877,9 +1044,31 @@
 	
 	function enable_select2() {
 		if ($('select.with-search').length) {
-			//$(".themed input[type='radio'], .themed input[type='checkbox'], .themed input[type='file'].file, .themed textarea").uniform();
 			var s = $("select.with-search").select2();
-		}// end if
+		}
+		if ($('input[type="checkbox"]').length) {
+			$("input[type='checkbox']").uniform();
+		}
+		//$(".themed input[type='radio'], .themed input[type='checkbox'], .themed input[type='file'].file, .themed textarea").uniform();
 	}
 	
 	/* end select2 */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Activate_bt_accordion_hack
+	/* ---------------------------------------------------------------------- */	
+		
+	$(function() {
+		
+		// credit: http://stackoverflow.com/questions/10918801/twitter-bootstrap-adding-a-class-to-the-open-accordion-title
+	    $('.accordion').on('show', function (e) {
+	         $(e.target).prev('.accordion-heading').find('.accordion-toggle').addClass('active');
+	    });
+	    
+	    $('.accordion').on('hide', function (e) {
+	        $(this).find('.accordion-toggle').not($(e.target)).removeClass('active');
+	    });
+	        
+	});
+
+	/* end activate_bt_accordion_hack */

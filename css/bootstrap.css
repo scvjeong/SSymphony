@@ -1245,13 +1245,13 @@ textarea::-webkit-input-placeholder {
 
 .controls > .radio:first-child,
 .controls > .checkbox:first-child {
-  padding-top: 5px;
+  /*padding-top: 5px;*/
 }
 
 .radio.inline,
 .checkbox.inline {
   display: inline-block;
-  padding-top: 5px;
+/*padding-top: 5px;*/
   margin-bottom: 0;
   vertical-align: middle;
 }

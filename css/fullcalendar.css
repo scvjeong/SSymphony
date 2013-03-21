@@ -289,12 +289,12 @@ a.fc-event {
 	-moz-background-size: 100% 100%;
 	-o-background-size: 100% 100%;
 	background-size: 100% 100%;
-	background: url('../img/overlay-pattern.png'), -moz-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
-	background: url('../img/overlay-pattern.png'), -webkit-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
-	background: url('../img/overlay-pattern.png'), -webkit-gradient(linear, left top, left bottom, from(#65B2DD), to(#0A5DB8), color-stop(0.5, #045AB2), color-stop(0.5, #004995));
-	background: url('../img/overlay-pattern.png'), -ms-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
-	background: url('../img/overlay-pattern.png'), -o-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
-	background: url('../img/overlay-pattern.png'), linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
+	background: url('/images/overlay-pattern.png'), -moz-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
+	background: url('/images/overlay-pattern.png'), -webkit-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
+	background: url('/images/overlay-pattern.png'), -webkit-gradient(linear, left top, left bottom, from(#65B2DD), to(#0A5DB8), color-stop(0.5, #045AB2), color-stop(0.5, #004995));
+	background: url('/images/overlay-pattern.png'), -ms-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
+	background: url('/images/overlay-pattern.png'), -o-linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
+	background: url('/images/overlay-pattern.png'), linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
 	
 	cursor: move;
 }

@@ -10,9 +10,16 @@
 	var $chrt_fourth = "#87BA17";
 	var $chrt_fifth = "#BD362F";
 	var $chrt_mono = "#000";
+
+	var dialog = null;
 	
 	$(document).ready( function() {   
-		/* draw calendar */
+		init();
+
+		setup_group_info();
+
+		setup_timepicker();
+
 		setup_calendar();
 
 		setup_all_buttons();
@@ -22,12 +29,65 @@
 		setup_charts();
 
 		setup_select_meeting_template();
+
+		setup_quick_meeting();
+		
+		enable_select2();
 	}); 
+	/* ---------------------------------------------------------------------- */
+	/*	Init Start
+	/* ---------------------------------------------------------------------- */
+	function init()
+	{
+		$(window).resize(function(){
+			window_height = $(window).height();
+			$(".modal-body", dialog).css("max-height", window_height*0.7);
+		});
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Init End
+	/* ---------------------------------------------------------------------- */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Group Info Start
+	/* ---------------------------------------------------------------------- */
+	function setup_group_info()
+	{
+		$('#group-info .row-fluid [class*="span"]:nth-child(3)').css("margin-left","0");
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Group Info End
+	/* ---------------------------------------------------------------------- */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Quick Meeting End
+	/* ---------------------------------------------------------------------- */
+	function setup_quick_meeting()
+	{
+		if ($('#quick-meeting').length){
+
+			$('#quick-meeting').click(function(e) {
+				e.preventDefault();
+				$.get("/include/quick_meeting.html",null,function(html){
+					dialog = bootbox.dialog(html, [{
+						"label" : "Cancel",
+						"class" : "btn-primary medium",
+						"callback": function() {
+							return true;
+						}
+					}]);
+					$(".modal-body", dialog).css("max-height", window_height*0.7);
+				},"html");
+			});
+		}// end if
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Quick Meeting End
+	/* ---------------------------------------------------------------------- */
 
 	/* ---------------------------------------------------------------------- */
 	/*	Meeting Planning
 	/* ---------------------------------------------------------------------- */
-	var dialog = null;
 
 	function setup_select_meeting_template() {
 		if ($('#meeting-planning').length){
@@ -68,13 +128,40 @@
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();
 			$(".modal-footer a.prev", dialog).hide();
-			setup_meeting_wizard();
+			//setup_meeting_wizard();
 		},"html");
 	}
-
-	function show_meeting_process(idx)
+	
+	// checkbox 와 muti selectbox 와 연동
+	function select_item(item)
 	{
-		$.get("/include/meeting_process.html",
+		// step idx 
+		var idx = $(item).parent().parent().parent().parent().parent().parent().attr("idx");
+		var val = $(item).val();
+		// option 선택
+		var o = $("#inverse-tab"+idx+" select.with-search option[value="+val+"]", dialog);
+		// select2 방식의 데이터 형식
+		var data = {css:null, element:o, id:val, text:val};
+		// close 버튼의 selector
+		var close_selector = $("a.select2-search-choice-close."+val);
+		if( $(item).attr("checked") == "checked" )
+			$("#inverse-tab"+idx+" select.with-search", dialog).select2("onSelect",data);
+		else if( $(item).attr("checked") != "checked" && close_selector.length !== 0 )
+			$("#inverse-tab"+idx+" select.with-search", dialog).select2("unselect",close_selector);
+	}
+
+	function show_setting_agenda(idx)
+	{
+		$(dialog).on("blur", "#agenda_step input[name=title]", function(){
+			var idx = $(this).parent().parent().parent().attr("idx");
+			if( $(this).val() == "" )
+				$("#step-"+idx, dialog).html("Step "+idx);
+			else
+				$("#step-"+idx, dialog).html($(this).val());
+		});
+
+		// Load setting_agenda.html
+		$.get("/include/setting_agenda.html",
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
@@ -82,7 +169,61 @@
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
+			var step_cnt = $("#meeting-wizard li", dialog).length;
+			// Load setting_agenda_step.html
+			add_setting_agenda_step(1, step_cnt);
+
 		},"html");
+	}
+	
+	// start_step_idx : 시작 step idx
+	// step_cnt : step count
+	function add_setting_agenda_step(start_step_idx, step_cnt)
+	{
+		$.get("/include/setting_agenda_step.html", {},
+		function(step_html){
+			for( var i=0; i<step_cnt; i++)
+			{
+				// step 에 내용 추가 및 아이디 부여
+				$("#agenda_step .tab-content", dialog).append(step_html);
+				$("#agenda_step fieldset:last", dialog).attr("id", "inverse-tab"+(start_step_idx+i));
+				$("#agenda_step fieldset:last", dialog).attr("idx", (start_step_idx+i));
+			}
+			// 첫번째 step에 active (보여짐)
+			if( $("#agenda_step fieldset.active", dialog).length == 0 )
+				$("#agenda_step fieldset:first", dialog).addClass("active");
+			enable_select2();
+		},"html");
+	}
+
+	function add_process()
+	{
+		var len = $("#meeting-wizard ul li").length + 1;
+		if( len === 1 )
+			var active = "class='active'";
+		else
+			var active = "";
+			
+		var html = '<li '+active+'><span class="label badge-inverse">'+len+'</span><a id="step-'+len+'" href="#inverse-tab'+len+'" data-toggle="tab">Step '+len+'</a></li>';
+		$("#meeting-wizard ul").append(html);
+		add_setting_agenda_step(len, 1);
+	}
+	
+	function del_process()
+	{
+
+		if( $("#meeting-wizard ul li:last").attr("class") == "active" )
+		{
+			$("#meeting-wizard ul li:last").remove();
+			$("#meeting-wizard ul li:last").addClass("active");
+			$("#agenda_step fieldset:last", dialog).remove();
+			$("#agenda_step fieldset:last", dialog).addClass("active");
+		}
+		else
+		{
+			$("#meeting-wizard ul li:last").remove();
+			$("#agenda_step fieldset:last", dialog).remove();
+		}
 	}
 
 	/* ---------------------------------------------------------------------- */
@@ -169,7 +310,46 @@
 					}
 				]
 			});
+		};
 
+		if ($("#group-calendar").length) {
+			var date = new Date();
+			var d = date.getDate();
+			var m = date.getMonth();
+			var y = date.getFullYear();
+			
+			var calendar = $('#group-calendar').fullCalendar({
+				header: {
+					left: 'title', //,today
+					center: 'prev, next, today',
+					right: 'month, agendaWeek, agenDay' //month, agendaDay, 
+				},
+				selectable: true,
+				selectHelper: true,
+				select: function(start, end, allDay) {
+					var title = prompt('Event Title:');
+					if (title) {
+						calendar.fullCalendar('renderEvent',
+							{
+								title: title,
+								start: start,
+								end: end,
+								allDay: allDay
+							},
+							true // make the event "stick"
+						);
+					}
+					calendar.fullCalendar('unselect');
+				},
+				
+				editable: true,
+				events: [
+					{
+						title: 'All Day Event',
+						start: new Date(y, m, 1)
+					}
+				]
+			});
 		};
 		
 		/* hide default buttons */
@@ -185,17 +365,17 @@
 		/* calendar buttons */
 
 		$('div#calendar-buttons #btn-prev').click(function(){
-		    $('.fc-button-prev').click();
+		    $('#calendar .fc-button-prev').click();
 		    return false;
 		});
 		
 		$('div#calendar-buttons #btn-next').click(function(){
-		    $('.fc-button-next').click();
+		    $('#calendar .fc-button-next').click();
 		    return false; 
 		});
 
 		$('div#calendar-buttons #btn-today').click(function(){
-		    $('.fc-button-today').click();
+		    $('#calendar .fc-button-today').click();
 		    return false; 
 		});
 		
@@ -209,6 +389,33 @@
 		
 		$('div#calendar-buttons #btn-day').click(function(){
 		   $('#calendar').fullCalendar('changeView', 'agendaDay');
+		});
+
+		$('div#group-calendar-buttons #group-cal-btn-prev').click(function(){
+		    $('#group-calendar .fc-button-prev').click();
+		    return false;
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-next').click(function(){
+		    $('#group-calendar .fc-button-next').click();
+		    return false; 
+		});
+
+		$('div#group-calendar-buttons #group-cal-btn-today').click(function(){
+		    $('#group-calendar .fc-button-today').click();
+		    return false; 
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-month').click(function(){
+		    $('#group-calendar').fullCalendar('changeView', 'month');
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-agenda').click(function(){
+		    $('#group-calendar').fullCalendar('changeView', 'agendaWeek');
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-day').click(function(){
+		   $('#group-calendar').fullCalendar('changeView', 'agendaDay');
 		});
 		
 		/* end calendar buttons */
@@ -564,7 +771,6 @@
         /* end fill chart */
 
 		/* site stats chart */
-	
 		if ($("#site-stats").length) {
 
 			var pageviews = [[1, 75], [3, 87], [4, 93], [5, 127], [6, 116]];
@@ -632,7 +838,79 @@
                 }
 			});
 		}
+		/* end site stats chart */
 
+				/* site stats chart */
+
+		if ($("#group-chart").length) {
+
+			var pageviews = [[1, 75], [3, 87], [4, 93], [5, 127], [6, 116]];
+			var visitors = [[1, 65], [3, 50], [4, 73], [5, 100], [6, 95]];
+
+			var plot = $.plot($("#group-chart"), [{
+				data : pageviews,
+				label : "Your pageviews"
+			}, {
+				data : visitors,
+				label : "Site visitors"
+			}], {
+				series : {
+					lines : {
+						show : true,
+						lineWidth : 1,
+						fill : true,
+						fillColor : {
+							colors : [{
+								opacity : 0.1
+							}, {
+								opacity : 0.15
+							}]
+						}
+					},
+					points : {
+						show : true
+					},
+					shadowSize : 0
+				},
+				xaxis : {
+					mode : "time",
+					tickLength : 10
+				},
+
+				yaxes : [{
+					min : 20,
+					tickLength : 5
+				}],
+				grid : {
+					hoverable : true,
+					clickable : true,
+					tickColor : $chrt_border_color,
+					borderWidth : 0,
+					borderColor : $chrt_border_color,
+				},
+				tooltip : true,
+				tooltipOpts : {
+					content : "%s for <b>%x:00 hrs</b> was %y",
+					dateFormat : "%y-%0m-%0d",
+					defaultTheme : false
+				},
+				colors : [$chrt_main, $chrt_second],
+				xaxis : {
+					ticks : 15,
+					tickDecimals : 2
+				},
+				yaxis : {
+					ticks : 5,
+					tickDecimals : 0
+				},
+				legend: {
+                    position: "ne", 
+                    margin: [-5, -17]
+                }
+			});
+		}
+		/* end site stats chart */
+		
 		/* sales chart */
 		
 		if ($("#saleschart").length) {
@@ -783,12 +1061,43 @@
 	
 	function setup_timepicker() {
 		if ($('.timepicker-input').length) {
-			
-			/* default */
-			$('#timepicker1').timepicker();
-			console.log( $('.timepicker-input') );
-			console.log( $('.timepicker-input').size() );
+			$('.timepicker-input').timepicker();
 		}
 	}
 	
 	/* end setup_timepicker */
+	
+	/* ---------------------------------------------------------------------- */
+	/*	Enable Select2
+	/* ---------------------------------------------------------------------- */
+	
+	function enable_select2() {
+		if ($('select.with-search').length) {
+			var s = $("select.with-search").select2();
+		}
+		if ($('input[type="checkbox"]').length) {
+			$("input[type='checkbox']").uniform();
+		}
+		//$(".themed input[type='radio'], .themed input[type='checkbox'], .themed input[type='file'].file, .themed textarea").uniform();
+	}
+	
+	/* end select2 */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Activate_bt_accordion_hack
+	/* ---------------------------------------------------------------------- */	
+		
+	$(function() {
+		
+		// credit: http://stackoverflow.com/questions/10918801/twitter-bootstrap-adding-a-class-to-the-open-accordion-title
+	    $('.accordion').on('show', function (e) {
+	         $(e.target).prev('.accordion-heading').find('.accordion-toggle').addClass('active');
+	    });
+	    
+	    $('.accordion').on('hide', function (e) {
+	        $(this).find('.accordion-toggle').not($(e.target)).removeClass('active');
+	    });
+	        
+	});
+
+	/* end activate_bt_accordion_hack */

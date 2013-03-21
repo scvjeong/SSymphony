@@ -167,3 +167,11 @@ ul.users-online li a strong {
 }
 
 /* /도구 */
+
+.toolwindow {
+	position: absolute;
+	width: 500px;
+	max-height: 400px;
+	padding-top: 50px;
+	background-color: red;
+}

@@ -54,7 +54,26 @@ function addTool(type)
 		tool['height'] = list_window_height;
 		tool['left'] = 20;
 		tool['top'] = 20;
-		tool['source'] = ''; 	// 리스트 도구 소스 들어갈 부분
+		tool['source'] = '<div id="container">';
+			tool['source'] += '<section id="main_section">';
+				tool['source'] += '<article>';
+				tool['source'] += '<header>';
+					tool['source'] += '<div class="home_line">';
+						tool['source'] += '<div class="home_box">';
+							tool['source'] += '<div id="homeButton"><h2>Home</h2></div>';
+						tool['source'] += '</div>';
+						tool['source'] += '<div class="init_box">';
+							tool['source'] += '<div id="initButton" onClick="initData()"><h2>Clear</h2></div>';
+						tool['source'] += '</div>';
+					tool['source'] += '</div>';
+				tool['source'] += '</header>';
+				tool['source'] += '<div class="list_space">';
+					tool['source'] += '<div class="children">';
+					tool['source'] += '</div>';
+				tool['source'] += '</div>';
+				tool['source'] += '</article>';
+			tool['source'] += '</section>';
+		tool['source'] += '</div>'; 	// 리스트 도구 소스 들어갈 부분
 		break;
 	case "postit":
 		_tool_postit_count++;
@@ -98,7 +117,13 @@ function addTool(type)
 // 도구창 보여주는 함수
 function showToolWindow(idx)
 {
+	var toolname = _toolWindowList[idx]['name'];
+	var toolsource = '<div class="toolwindow" id="' + toolname + '">';
+	toolsource += _toolWindowList[idx]['source'];
+	$('#content').append(toolsource);
 	$('.' + _toolWindowList[idx]).show();
+	
+	$('#' + _toolWindowList[idx]['name']).draggable();
 }
 
 // 도구창 닫는 함수

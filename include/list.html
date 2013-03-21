@@ -18,11 +18,13 @@
 
 		////  socket.io 서버의 해당 그룹에 접속  ////
 		groupId = 1;
-		var tmpGroup = "http://61.43.139.69:8000/group"+groupId;
-		var socket = io.connect(tmpGroup);	// socket.io 서버에 접속
+		var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 
 		////  처음 창 오픈되었을 때 호출  ////
 		$(document).ready(function() {
+			var tmpGroup = "group"+groupId;
+			socket.emit('join_room', tmpGroup);
+
 			////  Bullet 클릭 이벤트 등록 - 자식 노드 숨김  ////
 			$('.list_space').delegate('.bullet', 'click', function() {
 				var tmpSelectEdit = $(this).parent().parent();
@@ -177,7 +179,7 @@
 			lastInput.attr('class', 'input_open');
 			$('.input_open > .tmp_editing').trigger('focus'); 
 			//	console.log($('.input_open > .tmp_editing').attr('class'));
-			resizeWindow();
+			//resizeWindow();
 		});
 
 		////  lastId 얻어오는 함수  ////
@@ -517,7 +519,7 @@
 			$('.input_open > .tmp_editing').trigger('focus'); 
 			var tmpIndentStatus = $('.input_open').attr('indent'); 
 			setIndent(tmpIndentStatus);	// 들여쓰기 설정
-			resizeWindow();
+			//resizeWindow();
 		}
 
 		////  들여쓰기 추가된 경우 호출되는 함수  ////
@@ -558,7 +560,7 @@
 					socket.emit('set_indent', { id: tmpId,  indent: tmpIndent });
 				}
 			}
-			resizeWindow();		
+			//resizeWindow();		
 		}
 	
 		////  들여쓰기 삭제했을 경우 호출되는 함수  ////
@@ -583,7 +585,7 @@
 
 				socket.emit('set_indent', { id: tmpId,  indent: tmpIndent });
 			}
-			resizeWindow();
+			//resizeWindow();
 		}
 
 		////  현재 노드 삭제할 경우 호출되는 함수  ////

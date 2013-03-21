@@ -54,7 +54,7 @@ function addTool(type)
 		tool['height'] = list_window_height;
 		tool['left'] = 20;
 		tool['top'] = 20;
-		tool['source'] = '';	// 리스트 도구 소스 들어갈 부분
+		tool['source'] = ''; 	// 리스트 도구 소스 들어갈 부분
 		break;
 	case "postit":
 		_tool_postit_count++;

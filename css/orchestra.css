@@ -1484,3 +1484,14 @@ h6 small {
 		text-align: left !important;
 	}
 
+	.quick-meeting .btn{
+		width:96%;
+		margin:5px 0;
+		padding:2% !important;
+		border:0 none !important;
+		border-radius:8px;
+	}
+
+	#manual .manual-contents{
+		padding:2%;
+	}

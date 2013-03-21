@@ -10,6 +10,8 @@
 	var $chrt_fourth = "#87BA17";
 	var $chrt_fifth = "#BD362F";
 	var $chrt_mono = "#000";
+
+	var dialog = null;
 	
 	$(document).ready( function() {   
 		init();
@@ -27,6 +29,8 @@
 		setup_charts();
 
 		setup_select_meeting_template();
+
+		setup_quick_meeting();
 		
 		enable_select2();
 	}); 
@@ -52,13 +56,38 @@
 		$('#group-info .row-fluid [class*="span"]:nth-child(3)').css("margin-left","0");
 	}
 	/* ---------------------------------------------------------------------- */
-	/*	Group Info
+	/*	Group Info End
+	/* ---------------------------------------------------------------------- */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Quick Meeting End
+	/* ---------------------------------------------------------------------- */
+	function setup_quick_meeting()
+	{
+		if ($('#quick-meeting').length){
+
+			$('#quick-meeting').click(function(e) {
+				e.preventDefault();
+				$.get("/include/quick_meeting.html",null,function(html){
+					dialog = bootbox.dialog(html, [{
+						"label" : "Cancel",
+						"class" : "btn-primary medium",
+						"callback": function() {
+							return true;
+						}
+					}]);
+					$(".modal-body", dialog).css("max-height", window_height*0.7);
+				},"html");
+			});
+		}// end if
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Quick Meeting End
 	/* ---------------------------------------------------------------------- */
 
 	/* ---------------------------------------------------------------------- */
 	/*	Meeting Planning
 	/* ---------------------------------------------------------------------- */
-	var dialog = null;
 
 	function setup_select_meeting_template() {
 		if ($('#meeting-planning').length){

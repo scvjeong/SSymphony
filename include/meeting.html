@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <title>Orchestra</title>
@@ -78,6 +78,42 @@
 
   <!-- LESS -->
   <!-- <script src="media/_tools/less-1.3.0.min.js"></script> -->
+  
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+	<!-- 리스트 도구 -->
+		<link rel="stylesheet" href="../css/list.css">
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+		<script src="../lib/socket.io.js"></script>	
+		<script src="../lib/tool_list.js"></script>
+	<!-- /리스트 도구 -->
+  
+	<!-- 마인드맵 도구 -->
+		<link rel="stylesheet" href="../mindmap/css/main.css" type="text/css">
+		<link rel="stylesheet" href="../mindmap/css/impromptu.css" type="text/css" media="screen">
+		
+		<!--<script src="./lib/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>-->
+		<script src="../mindmap/lib/raphael_v.1.5.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/browser.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/jquery-impromptu.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/hahms-textgrow.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/yui-3.2.0-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/json2.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/luasog-0.3.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/jquery.simplemodal.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/Base64.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/conversionfunctions.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/entities.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/jscolor/jscolor.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/lib/timeline.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/mayonnaise-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/extends/ExArray.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/extends/ExRaphael.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../mindmap/plugin/collabDocument.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="../lib/tool_mindmap.js" type="text/javascript" charset="utf-8"></script>
+	<!-- /마인드맵 도구 -->
 </head>
 
 <body class="sidebar-max">
@@ -126,51 +162,168 @@
     </ul>
   </li>-->
   <li class="pull-right">
-  	<a href="javascript:alert('숨기기')">
+  	<a onclick="$('#topbar').hide()">
 		<span>____</span>
   	</a>
   </li>
   <li class="pull-right">
     <a href="http://mma.go.kr/" target="_blank">
       <i class="icon-sign-blank"></i>
-      <span>병무청</span>
+      <span>00:00:00 / 03:00:00</span>
     </a>
   </li>
 </ul>
 <!-- /#topbar: Top Bar Menu -->
 
-<!-- 회의 진행 단계 바 -->
-<ul id="meeting_process_bar">
-	<li class="process">부도 상황 정리</li>
-	<li class="process">부채 탕감 논의</li>
-	<li class="process">도주</li>
-	<li class="process">잠적</li>
+<div id="rightpanel">
+<ul id="tabbar">
+	<li id="participants" onclick="setRightpanel('participants')">참가자</li>
+	<li id="tools" onclick="setRightpanel('tools')">회의 도구</li>
+	<li id="info" onclick="setRightpanel('info')">회의 정보</li>
 </ul>
-<!-- /회의 진행 단계 바 -->
-
-<div id="rightbar">
-	
+<div id="panelcontents">
+	<div id="participants">
+		<ul class="users-online">
+			<li class="first">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Go Dong Hyun <span>(3)</span>
+                        </strong>
+                        <b>Murderer</b>
+                    </span>
+                    <i class="online"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	SCV Jeong <span></span>
+                        </strong>
+                        <b>jeongjeong1</b>
+                    </span>
+                    <i class="online"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Angie Freemen <span></span>
+                        </strong>
+                        <b>CFO</b>
+                    </span>
+                    <i class="away"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Carol Lam <span></span>
+                        </strong>
+                        <b>Graphic Designer</b>
+                    </span>
+                    <i class="offline"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Julia Berry <span></span>
+                        </strong>
+                        <b>Human Resources</b>
+                    </span>
+                    <i class="online"></i>
+                </a>
+			</li>
+			<li class="">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	David Simpson <span>(2)</span>
+                        </strong>
+                        <b>CEO</b>
+                    </span>
+                    <i class="away"></i>
+                </a>
+			</li>
+			<li class="last">
+				<a href="javascript:void(0);" title="">
+                    <img src="" alt="" style="background-color:#eeeeee;" />
+                    <span class="user-name">
+                        <strong>
+                        	Brad Pitt <span></span>
+                        </strong>
+                        <b>Information Technology</b>
+                    </span>
+                    <i class="busy"></i>
+                </a>
+			</li>
+		</ul>
+	</div>
+	<div id="tools">
+		<ul>
+			<li onclick="addTool('list')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>리스트</span>
+			</li>
+			<li onclick="addTool('postit')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>포스트잇</span>
+			</li>
+			<li onclick="addTool('mindmap')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>마인드맵</span>
+			</li>
+			<li onclick="addTool('vote')">
+				<img src="" alt="" style="background-color:#eeeeee;" />
+				<span>투표도구</span>
+			</li>
+		</ul>
+		</ul>
+	</div>
+	<div id="info">
+		<ul id="meta"> 
+			<li>
+				<span>목적</span>
+				<span>정상적인 부도처리를 유도</span>
+			</li>
+			<li>
+				<span>시간</span>
+				<span>15:00 ~ 18:00</span>
+			</li>
+			<li>
+				<span>장소</span>
+				<span>3층 대회의실</span>
+			</li>
+			<li>
+				<span>규칙</span>
+				<ul>
+					<li>껌을 씹지 말 것</li>
+					<li>반말을 하지 말 것</li>
+				</ul>
+			</li>
+		</ul>
+		<ul id="process">
+			<li></li>
+		</ul>
+	</div>
+</div>
 </div>
 
+<div id="content">
 
-    <!-- #content: The Main Content Section
 
-      Just add the page content here for a regular page or use .page DIVs for panel pages.
-      Use Bootstrap fluid layout for best effect.
-
-    -->
-    <div id="content">
-		<div class="page hidden" id="quick-start">
-		<!-- Panel Page quick-start Content: -->
-			<div class="hero-unit hero-special">
-				<h1>빠른 시작</h1>
-			</div>
-		<!-- /Panel Page quick-start Content -->
-		</div>
-    </div>
-    <!-- /#content: The Main Content Section -->
-
-</div><!-- /.container-fluid#container -->
+</div>
 
 
 
@@ -244,7 +397,8 @@
 	<!-- REQUIRED: Bootstrap Timepicker -->
 	<script src="/js/bootstrap.timepicker.min.js"></script>
 
-	<script src="/js/config.js"></script>	
+	<script src="/js/config.js"></script>
+	<script src="../js/meeting.js"></script>	
 
 <!-- /Javascript -->
 

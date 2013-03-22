@@ -1,5 +1,5 @@
 body {
-	overflow: hidden;
+	overflow: scroll;
 }
 
 
@@ -32,7 +32,8 @@ body {
 }
 
 #rightpanel {
-	position: absolute;
+	position: fixed;
+	top: 30px;
 	right: 0;
 	border-left: 2px solid #ababab;
 	height: 100%;

@@ -29,14 +29,14 @@
 		<script src="./plugin/collabDocument.js" type="text/javascript" charset="utf-8"></script>
 
 		<script type="text/javascript">
-			function getSize() {
-				var myWidth = 0;
+			function getMindmapSize(mWidth, mHeight) {
+				/*var myWidth = 0;
 				var myHeight = 0;
 
 				if( typeof( window.innerWidth ) == 'number' ) {
 					//Non-IE
-					myWidth = window.innerWidth;
-					myHeight = window.innerHeight;
+					myWidth = 200; //window.innerWidth;
+					myHeight = 200; //window.innerHeight;
 				} else if( document.documentElement &&
 							( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
 					//IE 6+ in 'standards compliant mode'
@@ -46,13 +46,13 @@
 					//IE 4 compatible
 					myWidth = document.body.clientWidth;
 					myHeight = document.body.clientHeight;
-				}
+				}*/
 
-				return {"width": myWidth, "height": myHeight}
+				return {"width": mWidth, "height": mHeight}
 			}
 
-			function resize() {
-				var size = getSize();
+			function resizeMindmap() {
+				var size = getMindmapSize();
 				var w = size.width;
 				var h = size.height;
 
@@ -62,7 +62,7 @@
 				if(!bottomDiv) bottomDiv = 0;
 				var mapDiv = document.getElementById("jinomap");
 				mapDiv.style.width = w + "px";
-				mapDiv.style.height = (h - topDiv.offsetHeight - bottomDiv.offsetHeight) + "px";
+				mapDiv.style.height = h + "px"; //(h - topDiv.offsetHeight - bottomDiv.offsetHeight) + "px";
 			}
 
 			window.onresize = resize;
@@ -106,7 +106,7 @@
 
 		<!-- ----------- yui 메뉴 공통 끝 ----------- -->
 
-		<!-- /////////////////// ContextMenu ///////////////////////////// -->
+		<!-- /////////////////// ContextMenu /////////////////////////////
 		<script type="text/javascript">
 			var oOkmContextMenu = null;
 			YAHOO.util.Event.onContentReady("jinomap", function () {
@@ -123,13 +123,13 @@
 									}
 								);
 			});
-		</script>
+		</script>-->
 
 	</head>
 	<body>
 		<!-- OKMindmap View 시작 -->
 		<div id = "main">
-			<div id="jinomap" tabindex="-1" style="outline:none; border: none; width:100%; height:800px; position:relative; overflow:hidden; background:#f4f4f4;">
+			<div id="jinomap" tabindex="-1" style="outline:none; border: none; position:relative; overflow:hidden; background:#f4f4f4;">
 			</div>
 		</div>
 		<!-- OKMindmap View 끝 -->

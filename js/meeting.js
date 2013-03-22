@@ -33,7 +33,7 @@ function addTool(type)
 {
 	var tool = new Array();
 	
-	var list_window_width = 500;
+	var list_window_width = 600;
 	var list_window_height = 400;
 	var postit_window_width = 600;
 	var postit_window_height = 600;
@@ -54,7 +54,7 @@ function addTool(type)
 		tool['height'] = list_window_height;
 		tool['left'] = 20;
 		tool['top'] = 20;
-		tool['source'] = '<div id="container">';
+		tool['source'] = '<div id="container" class="listtool">';
 			tool['source'] += '<section id="main_section">';
 				tool['source'] += '<article>';
 				tool['source'] += '<header>';
@@ -95,7 +95,10 @@ function addTool(type)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = 20;
 		tool['top'] = 20;
-		tool['source'] = '';	// 마인드맵 도구 소스 들어갈 부분
+		tool['source'] = '<div id="main">';
+			tool['source'] += '<div id="jinomap" tabindex="-1" style="outline:none; border: none; position:relative; overflow:hidden; background:#f4f4f4;">';
+			tool['source'] += '</div>';
+		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분
 		break;
 	case "vote":
 		_tool_vote_count++;
@@ -110,6 +113,8 @@ function addTool(type)
 		break;
 	}
 	
+		console.log('addTool source : ', tool['source']);
+	
 	_toolWindowList.push(tool);
 	showToolWindow(_toolWindowList.length - 1);
 }
@@ -119,13 +124,32 @@ function showToolWindow(idx)
 {
 	var toolname = _toolWindowList[idx]['name'];
 	var toolsource = '<div class="toolwindow" id="' + toolname + '">';
-	toolsource += _toolWindowList[idx]['source'];
-	$('#content').append(toolsource);
-//	$('.' + _toolWindowList[idx]).show();
-
-	newListTool();
+	var toolwidth = _toolWindowList[idx]['width'];
+	var toolheight = _toolWindowList[idx]['height'];
 	
+	switch (_toolWindowList[idx]['type'])
+	{
+	case 'list':		
+		toolsource += _toolWindowList[idx]['source'];
+		$('#content').append(toolsource);
+	//	$('.' + _toolWindowList[idx]).show();
+	
+		newListTool();
+		$('#' + toolname).css('width', toolwidth);
+		$('#' + toolname).css('height', toolheight);
+		break;
+	case 'mindmap':
+		toolsource += _toolWindowList[idx]['source'];
+		$('#content').append(toolsource);
+		
+		newMindmapTool();
+		resizeMindmap(toolwidth, toolheight);
+		break;
+	}
+	toolsource += '</div>';
+		
 	$('#' + _toolWindowList[idx]['name']).draggable();
+	console.log('toolsource : ' + toolsource);
 }
 
 // 도구창 닫는 함수

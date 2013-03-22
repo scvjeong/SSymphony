@@ -48,6 +48,7 @@
       margin: 5px 0px;
     } 
     article {
+	  max-width: 960px;
 	  height: 800px;
       background: #FFFFFF;
       border: 1px solid #999999;
@@ -64,16 +65,56 @@
 	}
 
 	.tmp_editing {
-		width: 900px;
-		margin-left: 5px;
+		width: 90%;
+		margin-left: 10px;
 		font: 14px verdana, sans-serif;
-		border: 1px solid #FFFFFF;
+		border: none;
+		background: none;
+		outline: none;
 		cursor: text;
 		vertical-align: middle;
 	}
 
+
 	.bullet {
+		width: 3%;
 		text-indent: 0px !important;
 		margin-left: 5px;
 		vertical-align: middle;
+	}
+
+	.check_box {
+		width: 3%;
+		margin-left: 5px;
+		margin-top: 3px;
+		float: right;	
+	}
+
+	.input_task:hover {
+		background: #66CCFF;
+	}
+	.input_open:hover {
+
+		background: #66CCFF;
+	}
+
+	a:hover {
+		text-decoration:underline;
+		cursor:pointer;
+		background:#004596;
+	}
+
+	.home_box {
+		width: 93%;		
+	}
+	.init_box {
+		width: 7%;
+	}
+	#homeButton {
+		width: 60px;
+		cursor:pointer;
+	}
+	#initButton {
+		width: 60px;
+		cursor:pointer;
 	}

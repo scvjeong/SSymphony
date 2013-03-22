@@ -99,10 +99,15 @@
 
 		////  socket.io 서버의 해당 그룹에 접속  ////
 		groupId = 1;
-		var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
+		
+		var socket;
+		
 
 		////  처음 창 오픈되었을 때 호출  ////
-		$(document).ready(function() {
+//		$(document).ready(function() {
+		function newListTool()
+		{
+			socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 			var tmpGroup = "group"+groupId;
 			socket.emit('join_room', tmpGroup);
 
@@ -137,6 +142,7 @@
 				console.log("Check ID: "+tmpId);
 				socket.emit('set_check', { id: tmpId });
 			});
+		
 
 			////  창 크기 조절 이벤트 발생 시  ////
 			/*
@@ -144,7 +150,7 @@
 				resizeWindow();
 			});
 			*/
-		}); 
+		//}); 
 		
 		////  창 크기에 맞춰 입력 영역 조절하는 함수  ////
 		/*
@@ -224,6 +230,7 @@
 			$('.list_space > .children').children().remove();
 		});
 
+var test;
 		////  socket 오픈 - 초기 리스트 데이터 가져옴  ////
 		socket.on('open', function (data) {
 			var tmpId = data.id;
@@ -234,7 +241,9 @@
 			if ( tmpParent == "0" )
 			{
 				var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
-				$('.list_space > .children').append(rootTag);
+				test = $('.list_space > .children').append(rootTag);
+				console.log(test);
+				console.log('godong : ' + rootTag);
 			}
 			else
 			{
@@ -482,7 +491,7 @@
 				checkInput.children('.tmp_editing').css({ "text-decoration": "line-through" });			
 			}	
 		});
-
+		}
 		/*
 		////  서버에 데이터 요청 (Home 클릭시)  ////
 		function requireData(idNum) {

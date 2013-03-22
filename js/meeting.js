@@ -121,7 +121,9 @@ function showToolWindow(idx)
 	var toolsource = '<div class="toolwindow" id="' + toolname + '">';
 	toolsource += _toolWindowList[idx]['source'];
 	$('#content').append(toolsource);
-	$('.' + _toolWindowList[idx]).show();
+//	$('.' + _toolWindowList[idx]).show();
+
+	newListTool();
 	
 	$('#' + _toolWindowList[idx]['name']).draggable();
 }

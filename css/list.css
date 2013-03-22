@@ -36,7 +36,7 @@
       border: 1px solid #999999;
       padding: 10px;
     } 
-    #list_container {
+    #container {
       display: -moz-box;
       display: -webkit-box;
       -moz-box-orient: horizontal;

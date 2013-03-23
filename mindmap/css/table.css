@@ -1,0 +1,44 @@
+
+table {
+	border-collapse:collapse;
+	border-color:#7d848e;;
+}
+th {
+	background:url(../images/tableBg.gif) top repeat-x #2b303a;	
+	color:#FFF;
+	font-weight:bold;
+	font-size:11px;
+}
+
+td {
+	font-size: 10pt;
+	background-color: #ffffff;
+}
+
+td.header {
+	text-align: center;
+	font-weight: bold;
+	background-color: #aaaaff;
+}
+
+td.align-right {
+	text-align: right;
+}
+
+a {
+	color:#265992;
+	text-decoration:none
+}
+a:hover {
+	text-decoration:underline
+}
+a:visited {
+	color: #2f2f2f;
+}
+a:active {
+	color:#2f2f2f;
+}
+
+.notice {
+	color: #ff0000;
+}

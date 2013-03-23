@@ -36,9 +36,9 @@ function addTool(type)
 	var list_window_width = 600;
 	var list_window_height = 400;
 	var postit_window_width = 600;
-	var postit_window_height = 600;
+	var postit_window_height = 400;
 	var mindmap_window_width = 600;
-	var mindmap_window_height = 600;
+	var mindmap_window_height = 400;
 	var vote_window_width = 500;
 	var vote_window_height= 400;
 	
@@ -77,14 +77,14 @@ function addTool(type)
 		break;
 	case "postit":
 		_tool_postit_count++;
-		tool['type'] = 'list';
+		tool['type'] = 'postit';
 		tool['name'] = 'postit' + _tool_postit_count;
 		tool['title'] = '포스트잇 ' + _tool_postit_count;
 		tool['width'] = postit_window_width;
 		tool['height'] = postit_window_height;
 		tool['left'] = 20;
 		tool['top'] = 20;
-		tool['source'] = '';	// 포스트잇 도구 소스 들어갈 부분
+		tool['source'] = '<iframe src="../postit/index.html" width="100%" height="100%"></iframe>';	// 포스트잇 도구 소스 들어갈 부분		
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;
@@ -129,7 +129,7 @@ function showToolWindow(idx)
 	
 	switch (_toolWindowList[idx]['type'])
 	{
-	case 'list':		
+	case "list":		
 		toolsource += _toolWindowList[idx]['source'];
 		$('#content').append(toolsource);
 	//	$('.' + _toolWindowList[idx]).show();
@@ -138,7 +138,13 @@ function showToolWindow(idx)
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		break;
-	case 'mindmap':
+	case "postit":
+		toolsource += _toolWindowList[idx]['source'];
+		$('#content').append(toolsource);
+		$('#' + toolname).css('width', toolwidth);
+		$('#' + toolname).css('height', toolheight);
+		break;
+	case "mindmap":
 		toolsource += _toolWindowList[idx]['source'];
 		$('#content').append(toolsource);
 		

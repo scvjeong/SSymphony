@@ -39,6 +39,7 @@ body {
 	height: 100%;
 	width: 300px;
 	background-color: #333333;
+	z-index: 5000;
 }
 #rightpanel > ul {
 	list-style: none;

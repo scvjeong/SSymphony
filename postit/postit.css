@@ -1,0 +1,84 @@
+.container {
+  outline: 1px dashed #CCC;
+  float: left;
+  margin: 0 1% 0 1%;
+  position: relative;
+  width: 90%;
+}
+
+.container .object {
+  border: 1px solid #777;
+  border-radius: 3px;
+  box-shadow: 0px 0px 4px 1px #ccc;
+  position: absolute;
+  width: 200px;
+}
+
+.container .object .placeholder {
+  width: 200px;
+}
+
+.container .object.ss-moving {
+  cursor: move;
+  z-index: 9999;
+  opacity: .7;
+  transform:rotate(2deg);
+  -ms-transform:rotate(2deg); /* IE 9 */
+  -moz-transform:rotate(2deg); /* Firefox */
+  -webkit-transform:rotate(2deg); /* Safari and Chrome */
+  -o-transform:rotate(2deg); /* Opera */
+}
+
+.container .object img { border-radius: 2px 2px 0 0; }
+
+@media screen and (max-width: 1200px) {
+  .container .object {
+    width: 200px;
+  }
+
+  .container .object .placeholder {
+    width: 200px;
+  }
+}
+
+
+@media screen and (max-width: 800px) {
+  .container .object {
+    width: 90px;
+  }
+
+  .container .object .placeholder {
+    width: 90px;
+  }
+}
+
+.title_line {
+	width: 90%;
+	margin: 5px;
+}
+
+#title_text {
+	float:left;
+	font: bold 18px verdana, sans-serif;
+}
+
+#add_postit {
+	float:right;
+	margin-top: 5px;
+	padding: 1px 5px 1px 5px;
+	border: 1px solid #777;
+	border-radius: 3px;
+	cursor:pointer;
+}
+
+.input_area {
+	width: 90%;
+	height: 85%;
+	margin: 15% 5% 5% 5%;
+	font: 14px verdana, sans-serif;
+	border: none;
+	background: none;
+	outline: none;
+	resize: none;
+	cursor: text;
+}

@@ -1,0 +1,56 @@
+<!-- 아젠다 STEP 설정 HTML 파일 -->
+<fieldset class="tab-pane">
+	<div class="control-group">
+		<label class="control-label" for="name">주제 : </label>
+		<div class="controls">
+			<input type="text" name="title" required="required" class="span6">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="lname">목표 : </label>
+		<div class="controls">
+			<input type="text" name="goal" class="span6">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="input01">시작 시간 : </label>
+		<div class="controls">
+			<div class="input-append bootstrap-timepicker-component">
+				<input name="start_time" type="text" class="timepicker-input" value="05:30 PM" />
+				<span class="add-on"><i class="cus-clock"></i></span>
+			</div>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="input01">끝 시간 : </label>
+		<div class="controls">
+			<div class="input-append bootstrap-timepicker-component">
+				<input name="end_time" type="text" class="timepicker-input" value="05:30 PM" />
+				<span class="add-on"><i class="cus-clock"></i></span>
+			</div>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label" for="multiSelect">사용 회의 도구</label>
+		<div class="controls">
+			<select multiple="multiple" name="tools" class="span6 with-search">
+				<option value="list">list</option>
+				<option value="mindmap">mindmap</option>
+				<option value="postit">postit</option>
+				<option value="vote">vote</option>
+				<option value="matrix">matrix</option>
+			</select>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="optionsCheckbox">사용 회의 도구</label>
+		<div class="controls">
+			<label class="checkbox inline"><input type="checkbox" value="list" class="tools"> list</label>
+			<label class="checkbox inline"><input type="checkbox" value="mindmap" class="tools"> mindmap</label>
+			<label class="checkbox inline"><input type="checkbox" value="postit" class="tools"> postit</label>
+			<label class="checkbox inline"><input type="checkbox" value="vote" class="tools"> vote</label>
+			<label class="checkbox inline"><input type="checkbox" value="matrix" class="tools"> matrix</label>
+		</div>
+	</div>
+</fieldset>

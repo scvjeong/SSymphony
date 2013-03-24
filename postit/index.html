@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+    <title>Post-it</title>
+    <meta name="description" content="Post-it Tool" />
+
+    <!-- Required Libraries -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+    <!-- Core Files -->
+    <script type="text/JavaScript" src="./core/vendor/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/JavaScript" src="./core/jquery.shapeshift.js"></script>
+
+    <!-- Template Files -->
+    <link href="./template/template.css" rel="stylesheet" type="text/css" />
+  
+    <!-- Demo Files -->
+    <link href="./postit.css" rel="stylesheet" type="text/css" />
+    <script>
+		var lastId = 100;
+		$(document).ready(function() {
+		  renderChildren();		  
+		});
+
+		function renderChildren() {
+			var $containers = $(".container");
+			$containers.each(function(container_i) {
+				var $element = $("<div class='object' taskid="+lastId+"></div>"),
+						height = 160,
+						width = $containers.children().first().width();
+				$element.css({ background: "#FFFFCC", height: height });		
+				$containers.append($element);		
+					
+				var tmpPostit = $('[taskid='+lastId+']');
+				var $inputArea = $("<textarea class='input_area'></textarea>"); 
+				tmpPostit.append($inputArea);
+				lastId = lastId + 1;
+			});
+
+			$containers.shapeshift({
+				paddingY: 20
+			  });
+			  
+			  // ----------------------------------------------------------------------
+			  // - Drag and Drop events for shapeshift
+			  // ----------------------------------------------------------------------
+
+			  $containers.on("ss-event-dropped", function(e, selected) {
+				var $selected = $(selected)
+				 console.log("The dropped item is:", $selected)
+
+				// Get the index position of each object
+				$objects = $(this).children();
+				$objects.each(function(i) {
+				  //console.log("Get the index position:", i)
+				  //console.log("Get the current element:", $(this))
+				});
+			  });
+
+			  $containers.on("ss-event-dragged", function(e, selected) {
+				var $selected = $(selected);
+				 //console.log("This is the item being dragged:", $selected);
+			  });
+
+		}
+
+		function addPostit() {
+			renderChildren();
+		}
+
+	</script>
+
+  </head>
+  <body>
+    <header>
+		<div class="title_line">
+			<!--<div id="title_text">Post-it Tool</div>-->
+			<div id="add_postit" onClick="addPostit()">Add</div>
+		</div>
+	</header>
+    <div class="container">
+       
+    </div>
+
+    <footer>
+    
+    </footer>
+  </body>
+</html>

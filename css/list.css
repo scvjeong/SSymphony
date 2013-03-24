@@ -22,17 +22,17 @@
   -moz-box-orient: horizontal;
   -webkit-box-orient: horizontal;
 }
-.listtool #main_section {
+/*.listtool #main_section {
   -moz-box-flex: 1;
   -webkit-box-flex: 1;
   margin: 5px 0px;
-} 
+} */
 .listtool article {
   width: 100%;
   height: 100%;
   background: #FFFFFF;
-  border: 1px solid #999999;
-  padding: 10px;
+/*  border: 1px solid #999999;
+  padding: 10px;*/
   margin-bottom: 5px;
   cursor: text;
 } 

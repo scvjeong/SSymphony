@@ -1,0 +1,100 @@
+.listtool #wrapper{
+  max-width: 960px;
+  margin: 5px 0px;
+  display: -moz-box;
+  display: -webkit-box;
+  -moz-box-orient: vertical;
+  -webkit-box-orient: vertical;
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+}
+.listtool #main_header {
+  display: -moz-box;
+  display: -webkit-box;
+  box-orient: horizontal;
+  background: #FFFBB9;
+  border: 1px solid #999999;
+  padding: 10px;
+} 
+.listtool #container {
+  display: -moz-box;
+  display: -webkit-box;
+  -moz-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+}
+/*.listtool #main_section {
+  -moz-box-flex: 1;
+  -webkit-box-flex: 1;
+  margin: 5px 0px;
+} */
+.listtool article {
+  width: 100%;
+  height: 100%;
+  background: #FFFFFF;
+/*  border: 1px solid #999999;
+  padding: 10px;*/
+  margin-bottom: 5px;
+  cursor: text;
+} 
+
+.listtool .home_line {
+	display: -moz-box;
+	display: -webkit-box;
+	border-bottom: 1px solid #999999;
+	margin-bottom: 10px;
+}
+
+.listtool .tmp_editing {
+	width: 90%;
+	margin-left: 10px;
+	font: 14px verdana, sans-serif;
+	border: none;
+	background: none;
+	outline: none;
+	cursor: text;
+	vertical-align: middle;
+}
+
+
+.listtool .bullet {
+	width: 3%;
+	text-indent: 0px !important;
+	margin-left: 5px;
+	vertical-align: middle;
+}
+
+.listtool .check_box {
+	width: 3%;
+	margin-left: 5px;
+	margin-top: 3px;
+	float: right;	
+}
+
+.listtool .input_task:hover {
+	background: #66CCFF;
+}
+.listtool .input_open:hover {
+
+	background: #66CCFF;
+}
+
+.listtool a:hover {
+	text-decoration:underline;
+	cursor:pointer;
+	background:#004596;
+}
+
+.listtool .home_box {
+	width: 93%;		
+}
+.listtool .init_box {
+	width: 7%;
+}
+.listtool #homeButton {
+	width: 60px;
+	cursor:pointer;
+}
+.listtool #initButton {
+	width: 60px;
+	cursor:pointer;
+}

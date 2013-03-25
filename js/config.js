@@ -106,6 +106,7 @@
 						"label" : "Complete",
 						"class" : "btn-success medium hide complete",
 						"callback": function() {
+							location.href="/include/meeting.html";
 							return true;
 						}
 					},{
@@ -265,48 +266,69 @@
 				editable: true,
 				events: [
 					{
-						title: 'All Day Event',
-						start: new Date(y, m, 1)
+						title: '멘토링',
+						start: new Date(y, m, 2),
+						end: new Date(y, m, 2)
 					},
 					{
-						title: 'Long Event',
-						start: new Date(y, m, d-5),
-						end: new Date(y, m, d-2)
+						title: '멘토링',
+						start: new Date(y, m, 3),
+						end: new Date(y, m, 3)
 					},
 					{
-						id: 999,
-						title: 'Repeating Event',
-						start: new Date(y, m, d-3, 16, 0),
-						allDay: false
+						title: 'Orchestra 회의',
+						start: new Date(y, m, 6),
+						end: new Date(y, m, 6)
+					},	
+					{
+						title: 'Orchestra 회의',
+						start: new Date(y, m, 8),
+						end: new Date(y, m, 8)
+					},	
+					{
+						title: '멘토링',
+						start: new Date(y, m, 9),
+						end: new Date(y, m, 9)
 					},
 					{
-						id: 999,
-						title: 'Repeating Event',
-						start: new Date(y, m, d+4, 16, 0),
-						allDay: false
+						title: '멘토링',
+						start: new Date(y, m, 10),
+						end: new Date(y, m, 10)
 					},
 					{
-						title: 'Meeting',
-						start: new Date(y, m, d, 10, 30),
-						allDay: false
+						title: 'Orchestra 회의',
+						start: new Date(y, m, 13),
+						end: new Date(y, m, 13)
+					},	
+					{
+						title: '형성평가',
+						start: new Date(y, m, 15),
+						end: new Date(y, m, 15)
 					},
 					{
-						title: 'Lunch',
-						start: new Date(y, m, d, 12, 0),
-						end: new Date(y, m, d, 14, 0),
-						allDay: false
+						title: '멘토링',
+						start: new Date(y, m, 16),
+						end: new Date(y, m, 16)
 					},
 					{
-						title: 'Birthday Party',
-						start: new Date(y, m, d+1, 19, 0),
-						end: new Date(y, m, d+1, 22, 30),
-						allDay: false
+						title: '멘토링',
+						start: new Date(y, m, 17),
+						end: new Date(y, m, 17)
 					},
 					{
-						title: 'Click for Google',
-						start: new Date(y, m, 28),
-						end: new Date(y, m, 29),
-						url: 'http://google.com/'
+						title: '멘토링',
+						start: new Date(y, m, 23),
+						end: new Date(y, m, 23)
+					},
+					{
+						title: '멘토링',
+						start: new Date(y, m, 24),
+						end: new Date(y, m, 24)
+					},
+					{
+						title: '중간평가',
+						start: new Date(y, m, 29),
+						end: new Date(y, m, 29)
 					}
 				]
 			});

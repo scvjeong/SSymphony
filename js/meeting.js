@@ -187,7 +187,7 @@ function closeToolWindow(idx)
 
 // 팝업창 추가하고 여는 함수
 var _popupcount = 0;
-function showPopupWindow(content)
+function showPopupWindow(content, popuptype)
 {
 	var nowpopupcount = _popupcount;
 	var source = '<div id="popup' + nowpopupcount + '" class="splashpopup">';
@@ -200,9 +200,14 @@ function showPopupWindow(content)
 	setTimeout("closePopupWindow(" + nowpopupcount + ")", 3000);
 	_popupcount++;
 }
-showPopupWindow("주문하신 상품의 결제가 완료되었습니다.");
-setTimeout('showPopupWindow("회의 시간이 초과되었습니다.")', 300);
-setTimeout('showPopupWindow("서비스를 계속 이용하시려면 비용을 지불하세요.")', 600);
+showPopupWindow("회의가 시작되었습니다.");
+setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 300);
+setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
+setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
+setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
+setTimeout('showPopupWindow("정용기님이 퇴장하셨습니다.")', 12000);
+setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
+setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
 
 function closePopupWindow(idx)
 {

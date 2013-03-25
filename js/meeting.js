@@ -97,10 +97,11 @@ function addTool(type)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<div id="main">';
+		/*tool['source'] = '<div id="main">';
 			tool['source'] += '<div id="jinomap" tabindex="-1" style="outline:none; border: none; position:relative; overflow:hidden; background:#f4f4f4;">';
 			tool['source'] += '</div>';
-		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분
+		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분*/
+		tool['source'] = '<iframe src="../mindmap/start.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분
 		break;
 	case "vote":
 		_tool_vote_count++;
@@ -127,18 +128,23 @@ function addTool(type)
 function showToolWindow(idx)
 {
 	var titlebarHeight = 29;
+	var statusbarHeight = 20;
 	var toolname = _toolWindowList[idx]['name'];
 	var tooltitle = _toolWindowList[idx]['title'];
 	var tooltop = _toolWindowList[idx]['top'];
 	var toolleft = _toolWindowList[idx]['left'];
 	var toolsource = '<div class="toolwindow" id="' + toolname + '"><div>';
-	toolsource += '<div class="title"><div class="title_text">' + tooltitle + '</div><div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div><div class="clearboth"></div></div>';
+		toolsource += '<div class="title">';
+			toolsource += '<div class="title_text">' + tooltitle + '</div>';
+			toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
+			toolsource += '<div class="clearboth"></div>';
+		toolsource += '</div>';
 	var toolwidth = _toolWindowList[idx]['width'];
-	var toolheight = _toolWindowList[idx]['height'] + titlebarHeight;
+	var toolheight = _toolWindowList[idx]['height'] + titlebarHeight + statusbarHeight;
 	
 	switch (_toolWindowList[idx]['type'])
 	{
-	case "list":		
+	case "list":
 		toolsource += _toolWindowList[idx]['source'];
 		$('#meetingboard').append(toolsource);
 	//	$('.' + _toolWindowList[idx]).show();
@@ -156,13 +162,15 @@ function showToolWindow(idx)
 	case "mindmap":
 		toolsource += _toolWindowList[idx]['source'];
 		$('#meetingboard').append(toolsource);
+		$('#' + toolname).css('width', toolwidth);
+		$('#' + toolname).css('height', toolheight);
 		
-		newMindmapTool();
-		resizeMindmap(toolwidth, toolheight);
+//		newMindmapTool();
+//		resizeMindmap(toolwidth, toolheight);
 		break;
 	}
-	toolsource += '</div></div>';
-		
+	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
+
 	$('#' + _toolWindowList[idx]['name']).draggable();
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
@@ -186,13 +194,15 @@ function showPopupWindow(content)
 		source += '<div class="title"><span class="closepopup" onclick="closePopupWindow(' + nowpopupcount + ')">닫기</span></div>';
 		source += '<div class="popupcontent">' + content + '</div>';
 		source += '</div>';
-	$('#splashpopup_wrapper').append(source);
+	$('#splashpopup_wrapper').prepend(source);
 	$('#popup' + nowpopupcount).fadeIn('slow');
 	
 	setTimeout("closePopupWindow(" + nowpopupcount + ")", 3000);
 	_popupcount++;
 }
 showPopupWindow("주문하신 상품의 결제가 완료되었습니다.");
+setTimeout('showPopupWindow("회의 시간이 초과되었습니다.")', 300);
+setTimeout('showPopupWindow("서비스를 계속 이용하시려면 비용을 지불하세요.")', 600);
 
 function closePopupWindow(idx)
 {

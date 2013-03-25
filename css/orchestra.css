@@ -1455,11 +1455,15 @@ h6 small {
 
 	.chart {
 		height: 250px;
-		margin: 1%
+	}
+	.chart-title{
+		width:100%;
+		text-align:center;
 	}
 	.width-23{
 		float:left;
 		width:23%;
+		margin: 1%
 	}
 	.margin-5{
 		margin: 5% !important;

@@ -1,9 +1,9 @@
-/*
+
 html {
 	-webkit-text-size-adjust:none;
 }
-*/
-.mindmaptool #top {
+
+#top {
 	margin: 0px;
 	padding: 0px;
 	border: none;
@@ -13,7 +13,7 @@ html {
 }
 
 
-.mindmaptool #okmenubar {
+#okmenubar {
 	padding: 0px;
 	border: 0px;
 	/* ie5win fudge begins */
@@ -24,7 +24,7 @@ html {
 	}
 
 
-.mindmaptool #userinfo {
+#userinfo {
 	position: absolute;
 	top: 0px;
 	right: 0px; /* Opera5.02 will show a space at right 
@@ -42,7 +42,7 @@ html {
 
 
 
-.mindmaptool #middle {
+#middle {
 	margin: 0px;
 	padding: 0px;
 	border: none;
@@ -50,7 +50,7 @@ html {
 }
 
 
-.mindmaptool #bottom {	
+#bottom {	
 	width:100%;
 	background:url(../images/bottomBg.gif) no-repeat;
 	vertical-align: middle;

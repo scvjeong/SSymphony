@@ -47,8 +47,8 @@ iframe {
 	border-left: 2px solid #ababab;
 	height: 100%;
 	width: 300px;
-	background-color: #333333;
-	z-index: 5000;ww
+	background-color: #61b0e9;
+	z-index: 5000;
 }
 #rightpanel > ul {
 	list-style: none;
@@ -95,6 +95,7 @@ ul.users-online li a {
 	height: 40px;
 	line-height: 15px;
 	padding: 10px;
+	color: inherit;
 }
 
 ul.users-online li img {
@@ -233,6 +234,7 @@ ul.users-online li a strong {
 	position: absolute;
 	background-color: #eeeeee;
 	border: 1px solid #ababab;
+	border-radius: 5px;
 }
 
 .toolwindow .title {
@@ -240,6 +242,9 @@ ul.users-online li a strong {
 	cursor: move;
 	padding: 3px 3px 3px 10px;
 	border-bottom: 2px solid #ababab;
+}
+.toolwindow .title:hover {
+	background-color: #dddddd;
 }
 
 .toolwindow .title > .title_text,
@@ -254,6 +259,7 @@ ul.users-online li a strong {
 .toolwindow .title > .title_text {
 	float: left;
 	display: inline-block;
+	cursor: pointer;
 }
 
 .toolwindow .title > .closewindow {
@@ -266,6 +272,10 @@ ul.users-online li a strong {
 	text-decoration: underline;
 }
 
+.toolwindow .statusbar {
+	height: 20px;
+	border-top: 2px solid #ababab;
+}
 
 /* 알림창 */
 #splashpopup_wrapper {

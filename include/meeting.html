@@ -36,7 +36,7 @@
 
     <!-- Core Theme Styles -->
     <!-- <link rel="stylesheet/less" href="media/styles/style.less" /> -->
-    <link rel="stylesheet" href="/css/ohcastra.css" />
+    <link rel="stylesheet" href="/css/orchestra.css" />
 
 	<!-- full calander css -->
 	<link rel="stylesheet" href="/css/fullcalendar.css?v=1">
@@ -128,7 +128,7 @@
 <ul id="topbar" class="on-click">
   <li class="pull-left">
     <h1 id="topbar-title">
-      <i class="icon-cogs"></i>
+      <i class="icon-cogs" id="btn_closeTopbar" onclick="$('#topbar').hide()"></i>
       <!--<i class="icon-icomoon-grid-view"></i>-->
       <!--<span aria-hidden="true" class="icon-icomoon-grid-view"></span>-->
     </h1>
@@ -161,15 +161,17 @@
       <li><a href="#">Frontend Settings</a></li>
     </ul>
   </li>-->
+  <!--
   <li class="pull-right">
   	<a onclick="$('#topbar').hide()">
 		<span>____</span>
   	</a>
   </li>
+  -->
   <li class="pull-right">
     <a href="http://mma.go.kr/" target="_blank">
       <i class="icon-sign-blank"></i>
-      <span>00:00:00 / 03:00:00</span>
+      <span id="runTime">00:00:00 / 03:00:00</span>
     </a>
   </li>
 </ul>
@@ -292,37 +294,44 @@
 		</ul>
 	</div>
 	<div id="info">
-		<ul id="meta"> 
+		<ul id="meta">
 			<li>
-				<span>목적</span>
-				<span>정상적인 부도처리를 유도</span>
+				<span class="type">목적</span>
+				<span class="text">정상적인 부도처리를 유도</span>
 			</li>
 			<li>
-				<span>시간</span>
-				<span>15:00 ~ 18:00</span>
+				<span class="type">시간</span>
+				<span class="text">15:00 ~ 18:00</span>
 			</li>
 			<li>
-				<span>장소</span>
-				<span>3층 대회의실</span>
+				<span class="type">장소</span>
+				<span class="text">3층 대회의실</span>
 			</li>
 			<li>
-				<span>규칙</span>
+				<div class="type_rules">규칙</div>
 				<ul>
 					<li>껌을 씹지 말 것</li>
 					<li>반말을 하지 말 것</li>
 				</ul>
 			</li>
 		</ul>
+		<div id="processtitle">진행 과정</div>
 		<ul id="process">
-			<li></li>
+			<li>Ice Breaking</li>
+			<div class="underarrow"></div>
+			<li id="isNow">아이디어 발상</li>
+			<div class="underarrow"></div>
+			<li>아이디어 수렴</li>
+			<div class="underarrow"></div>
+			<li>아이디어 정리</li>
 		</ul>
 	</div>
 </div>
 </div>
 
-<div id="content">
+<div id="meetingboard"></div>
 
-
+<div id="splashpopup_wrapper">
 </div>
 
 

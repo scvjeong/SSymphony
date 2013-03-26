@@ -408,11 +408,16 @@ a:hover {
   float: left;
   width: 100%;
   min-height: 30px;
-  margin-left: 2.127659574468085%;
-  *margin-left: 2.074468085106383%;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+.row-fluid [class*="span"]:nth-child(odd) {
+  margin-left: 0;
+}
+.row-fluid [class*="span"]:nth-child(even) {
+  margin-left: 2.127659574468085%;
 }
 
 .row-fluid [class*="span"]:first-child {
@@ -1245,13 +1250,13 @@ textarea::-webkit-input-placeholder {
 
 .controls > .radio:first-child,
 .controls > .checkbox:first-child {
-  padding-top: 5px;
+  /*padding-top: 5px;*/
 }
 
 .radio.inline,
 .checkbox.inline {
   display: inline-block;
-  padding-top: 5px;
+/*padding-top: 5px;*/
   margin-bottom: 0;
   vertical-align: middle;
 }
@@ -1937,15 +1942,13 @@ legend + .control-group {
 
 .form-horizontal .control-label {
   float: left;
-  width: 160px;
-  padding-top: 5px;
-  text-align: right;
+  width: 100px;
 }
 
 .form-horizontal .controls {
   *display: inline-block;
   *padding-left: 20px;
-  margin-left: 180px;
+  margin-left: 120px;
   *margin-left: 0;
 }
 

@@ -10,9 +10,16 @@
 	var $chrt_fourth = "#87BA17";
 	var $chrt_fifth = "#BD362F";
 	var $chrt_mono = "#000";
+
+	var dialog = null;
 	
 	$(document).ready( function() {   
-		/* draw calendar */
+		init();
+
+		setup_group_info();
+
+		setup_timepicker();
+
 		setup_calendar();
 
 		setup_all_buttons();
@@ -22,12 +29,65 @@
 		setup_charts();
 
 		setup_select_meeting_template();
+
+		setup_quick_meeting();
+		
+		enable_select2();
 	}); 
+	/* ---------------------------------------------------------------------- */
+	/*	Init Start
+	/* ---------------------------------------------------------------------- */
+	function init()
+	{
+		$(window).resize(function(){
+			window_height = $(window).height();
+			$(".modal-body", dialog).css("max-height", window_height*0.7);
+		});
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Init End
+	/* ---------------------------------------------------------------------- */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Group Info Start
+	/* ---------------------------------------------------------------------- */
+	function setup_group_info()
+	{
+		$('#group-info .row-fluid [class*="span"]:nth-child(3)').css("margin-left","0");
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Group Info End
+	/* ---------------------------------------------------------------------- */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Quick Meeting End
+	/* ---------------------------------------------------------------------- */
+	function setup_quick_meeting()
+	{
+		if ($('#quick-meeting').length){
+
+			$('#quick-meeting').click(function(e) {
+				e.preventDefault();
+				$.get("/include/quick_meeting.html",null,function(html){
+					dialog = bootbox.dialog(html, [{
+						"label" : "Cancel",
+						"class" : "btn-primary medium",
+						"callback": function() {
+							return true;
+						}
+					}]);
+					$(".modal-body", dialog).css("max-height", window_height*0.7);
+				},"html");
+			});
+		}// end if
+	}
+	/* ---------------------------------------------------------------------- */
+	/*	Quick Meeting End
+	/* ---------------------------------------------------------------------- */
 
 	/* ---------------------------------------------------------------------- */
 	/*	Meeting Planning
 	/* ---------------------------------------------------------------------- */
-	var dialog = null;
 
 	function setup_select_meeting_template() {
 		if ($('#meeting-planning').length){
@@ -46,6 +106,7 @@
 						"label" : "Complete",
 						"class" : "btn-success medium hide complete",
 						"callback": function() {
+							location.href="/include/meeting.html";
 							return true;
 						}
 					},{
@@ -68,13 +129,40 @@
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();
 			$(".modal-footer a.prev", dialog).hide();
-			setup_meeting_wizard();
+			//setup_meeting_wizard();
 		},"html");
 	}
-
-	function show_meeting_process(idx)
+	
+	// checkbox 와 muti selectbox 와 연동
+	function select_item(item)
 	{
-		$.get("/include/meeting_process.html",
+		// step idx 
+		var idx = $(item).parent().parent().parent().parent().parent().parent().attr("idx");
+		var val = $(item).val();
+		// option 선택
+		var o = $("#inverse-tab"+idx+" select.with-search option[value="+val+"]", dialog);
+		// select2 방식의 데이터 형식
+		var data = {css:null, element:o, id:val, text:val};
+		// close 버튼의 selector
+		var close_selector = $("a.select2-search-choice-close."+val);
+		if( $(item).attr("checked") == "checked" )
+			$("#inverse-tab"+idx+" select.with-search", dialog).select2("onSelect",data);
+		else if( $(item).attr("checked") != "checked" && close_selector.length !== 0 )
+			$("#inverse-tab"+idx+" select.with-search", dialog).select2("unselect",close_selector);
+	}
+
+	function show_setting_agenda(idx)
+	{
+		$(dialog).on("blur", "#agenda_step input[name=title]", function(){
+			var idx = $(this).parent().parent().parent().attr("idx");
+			if( $(this).val() == "" )
+				$("#step-"+idx, dialog).html("Step "+idx);
+			else
+				$("#step-"+idx, dialog).html($(this).val());
+		});
+
+		// Load setting_agenda.html
+		$.get("/include/setting_agenda.html",
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
@@ -82,7 +170,61 @@
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
+			var step_cnt = $("#meeting-wizard li", dialog).length;
+			// Load setting_agenda_step.html
+			add_setting_agenda_step(1, step_cnt);
+
 		},"html");
+	}
+	
+	// start_step_idx : 시작 step idx
+	// step_cnt : step count
+	function add_setting_agenda_step(start_step_idx, step_cnt)
+	{
+		$.get("/include/setting_agenda_step.html", {},
+		function(step_html){
+			for( var i=0; i<step_cnt; i++)
+			{
+				// step 에 내용 추가 및 아이디 부여
+				$("#agenda_step .tab-content", dialog).append(step_html);
+				$("#agenda_step fieldset:last", dialog).attr("id", "inverse-tab"+(start_step_idx+i));
+				$("#agenda_step fieldset:last", dialog).attr("idx", (start_step_idx+i));
+			}
+			// 첫번째 step에 active (보여짐)
+			if( $("#agenda_step fieldset.active", dialog).length == 0 )
+				$("#agenda_step fieldset:first", dialog).addClass("active");
+			enable_select2();
+		},"html");
+	}
+
+	function add_process()
+	{
+		var len = $("#meeting-wizard ul li").length + 1;
+		if( len === 1 )
+			var active = "class='active'";
+		else
+			var active = "";
+			
+		var html = '<li '+active+'><span class="label badge-inverse">'+len+'</span><a id="step-'+len+'" href="#inverse-tab'+len+'" data-toggle="tab">Step '+len+'</a></li>';
+		$("#meeting-wizard ul").append(html);
+		add_setting_agenda_step(len, 1);
+	}
+	
+	function del_process()
+	{
+
+		if( $("#meeting-wizard ul li:last").attr("class") == "active" )
+		{
+			$("#meeting-wizard ul li:last").remove();
+			$("#meeting-wizard ul li:last").addClass("active");
+			$("#agenda_step fieldset:last", dialog).remove();
+			$("#agenda_step fieldset:last", dialog).addClass("active");
+		}
+		else
+		{
+			$("#meeting-wizard ul li:last").remove();
+			$("#agenda_step fieldset:last", dialog).remove();
+		}
 	}
 
 	/* ---------------------------------------------------------------------- */
@@ -124,52 +266,112 @@
 				editable: true,
 				events: [
 					{
-						title: 'All Day Event',
-						start: new Date(y, m, 1)
+						title: '멘토링',
+						start: new Date(y, m, 2),
+						end: new Date(y, m, 2)
 					},
 					{
-						title: 'Long Event',
-						start: new Date(y, m, d-5),
-						end: new Date(y, m, d-2)
+						title: '멘토링',
+						start: new Date(y, m, 3),
+						end: new Date(y, m, 3)
 					},
 					{
-						id: 999,
-						title: 'Repeating Event',
-						start: new Date(y, m, d-3, 16, 0),
-						allDay: false
+						title: 'Orchestra 회의',
+						start: new Date(y, m, 6),
+						end: new Date(y, m, 6)
+					},	
+					{
+						title: 'Orchestra 회의',
+						start: new Date(y, m, 8),
+						end: new Date(y, m, 8)
+					},	
+					{
+						title: '멘토링',
+						start: new Date(y, m, 9),
+						end: new Date(y, m, 9)
 					},
 					{
-						id: 999,
-						title: 'Repeating Event',
-						start: new Date(y, m, d+4, 16, 0),
-						allDay: false
+						title: '멘토링',
+						start: new Date(y, m, 10),
+						end: new Date(y, m, 10)
 					},
 					{
-						title: 'Meeting',
-						start: new Date(y, m, d, 10, 30),
-						allDay: false
+						title: 'Orchestra 회의',
+						start: new Date(y, m, 13),
+						end: new Date(y, m, 13)
+					},	
+					{
+						title: '형성평가',
+						start: new Date(y, m, 15),
+						end: new Date(y, m, 15)
 					},
 					{
-						title: 'Lunch',
-						start: new Date(y, m, d, 12, 0),
-						end: new Date(y, m, d, 14, 0),
-						allDay: false
+						title: '멘토링',
+						start: new Date(y, m, 16),
+						end: new Date(y, m, 16)
 					},
 					{
-						title: 'Birthday Party',
-						start: new Date(y, m, d+1, 19, 0),
-						end: new Date(y, m, d+1, 22, 30),
-						allDay: false
+						title: '멘토링',
+						start: new Date(y, m, 17),
+						end: new Date(y, m, 17)
 					},
 					{
-						title: 'Click for Google',
-						start: new Date(y, m, 28),
-						end: new Date(y, m, 29),
-						url: 'http://google.com/'
+						title: '멘토링',
+						start: new Date(y, m, 23),
+						end: new Date(y, m, 23)
+					},
+					{
+						title: '멘토링',
+						start: new Date(y, m, 24),
+						end: new Date(y, m, 24)
+					},
+					{
+						title: '중간평가',
+						start: new Date(y, m, 29),
+						end: new Date(y, m, 29)
 					}
 				]
 			});
+		};
 
+		if ($("#group-calendar").length) {
+			var date = new Date();
+			var d = date.getDate();
+			var m = date.getMonth();
+			var y = date.getFullYear();
+			
+			var calendar = $('#group-calendar').fullCalendar({
+				header: {
+					left: 'title', //,today
+					center: 'prev, next, today',
+					right: 'month, agendaWeek, agenDay' //month, agendaDay, 
+				},
+				selectable: true,
+				selectHelper: true,
+				select: function(start, end, allDay) {
+					var title = prompt('Event Title:');
+					if (title) {
+						calendar.fullCalendar('renderEvent',
+							{
+								title: title,
+								start: start,
+								end: end,
+								allDay: allDay
+							},
+							true // make the event "stick"
+						);
+					}
+					calendar.fullCalendar('unselect');
+				},
+				
+				editable: true,
+				events: [
+					{
+						title: 'All Day Event',
+						start: new Date(y, m, 1)
+					}
+				]
+			});
 		};
 		
 		/* hide default buttons */
@@ -185,17 +387,17 @@
 		/* calendar buttons */
 
 		$('div#calendar-buttons #btn-prev').click(function(){
-		    $('.fc-button-prev').click();
+		    $('#calendar .fc-button-prev').click();
 		    return false;
 		});
 		
 		$('div#calendar-buttons #btn-next').click(function(){
-		    $('.fc-button-next').click();
+		    $('#calendar .fc-button-next').click();
 		    return false; 
 		});
 
 		$('div#calendar-buttons #btn-today').click(function(){
-		    $('.fc-button-today').click();
+		    $('#calendar .fc-button-today').click();
 		    return false; 
 		});
 		
@@ -209,6 +411,33 @@
 		
 		$('div#calendar-buttons #btn-day').click(function(){
 		   $('#calendar').fullCalendar('changeView', 'agendaDay');
+		});
+
+		$('div#group-calendar-buttons #group-cal-btn-prev').click(function(){
+		    $('#group-calendar .fc-button-prev').click();
+		    return false;
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-next').click(function(){
+		    $('#group-calendar .fc-button-next').click();
+		    return false; 
+		});
+
+		$('div#group-calendar-buttons #group-cal-btn-today').click(function(){
+		    $('#group-calendar .fc-button-today').click();
+		    return false; 
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-month').click(function(){
+		    $('#group-calendar').fullCalendar('changeView', 'month');
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-agenda').click(function(){
+		    $('#group-calendar').fullCalendar('changeView', 'agendaWeek');
+		});
+		
+		$('div#group-calendar-buttons #group-cal-btn-day').click(function(){
+		   $('#group-calendar').fullCalendar('changeView', 'agendaDay');
 		});
 		
 		/* end calendar buttons */
@@ -351,16 +580,16 @@
 		if ($("#bar-chart").length) {
 
 			var data1 = [];
-			for (var i = 0; i <= 5; i += 1)
-				data1.push([i, parseInt(Math.random() * 30)]);
+			for (var i = 0; i <= 4; i += 1)
+				data1.push([i, parseInt(Math.random() * 100)]);
 
 			var data2 = [];
-			for (var i = 0; i <= 5; i += 1)
-				data2.push([i, parseInt(Math.random() * 30)]);
+			for (var i = 0; i <= 4; i += 1)
+				data2.push([i, parseInt(Math.random() * 100)]);
 
 			var data3 = [];
-			for (var i = 0; i <= 5; i += 1)
-				data3.push([i, parseInt(Math.random() * 30)]);
+			for (var i = 0; i <= 4; i += 1)
+				data3.push([i, parseInt(Math.random() * 100)]);
 
 			var ds = new Array();
 
@@ -410,17 +639,6 @@
 		
 		/* fill chart */
 		if ($("#fill-chart").length) {
-			var males = {
-				'15%' : [[2, 88.0], [3, 93.3], [4, 102.0], [5, 108.5], [6, 115.7], [7, 115.6], [8, 124.6], [9, 130.3], [10, 134.3], [11, 141.4], [12, 146.5], [13, 151.7], [14, 159.9], [15, 165.4], [16, 167.8], [17, 168.7], [18, 169.5], [19, 168.0]],
-				'90%' : [[2, 96.8], [3, 105.2], [4, 113.9], [5, 120.8], [6, 127.0], [7, 133.1], [8, 139.1], [9, 143.9], [10, 151.3], [11, 161.1], [12, 164.8], [13, 173.5], [14, 179.0], [15, 182.0], [16, 186.9], [17, 185.2], [18, 186.3], [19, 186.6]],
-				'25%' : [[2, 89.2], [3, 94.9], [4, 104.4], [5, 111.4], [6, 117.5], [7, 120.2], [8, 127.1], [9, 132.9], [10, 136.8], [11, 144.4], [12, 149.5], [13, 154.1], [14, 163.1], [15, 169.2], [16, 170.4], [17, 171.2], [18, 172.4], [19, 170.8]],
-				'10%' : [[2, 86.9], [3, 92.6], [4, 99.9], [5, 107.0], [6, 114.0], [7, 113.5], [8, 123.6], [9, 129.2], [10, 133.0], [11, 140.6], [12, 145.2], [13, 149.7], [14, 158.4], [15, 163.5], [16, 166.9], [17, 167.5], [18, 167.1], [19, 165.3]],
-				'mean' : [[2, 91.9], [3, 98.5], [4, 107.1], [5, 114.4], [6, 120.6], [7, 124.7], [8, 131.1], [9, 136.8], [10, 142.3], [11, 150.0], [12, 154.7], [13, 161.9], [14, 168.7], [15, 173.6], [16, 175.9], [17, 176.6], [18, 176.8], [19, 176.7]],
-				'75%' : [[2, 94.5], [3, 102.1], [4, 110.8], [5, 117.9], [6, 124.0], [7, 129.3], [8, 134.6], [9, 141.4], [10, 147.0], [11, 156.1], [12, 160.3], [13, 168.3], [14, 174.7], [15, 178.0], [16, 180.2], [17, 181.7], [18, 181.3], [19, 182.5]],
-				'85%' : [[2, 96.2], [3, 103.8], [4, 111.8], [5, 119.6], [6, 125.6], [7, 131.5], [8, 138.0], [9, 143.3], [10, 149.3], [11, 159.8], [12, 162.5], [13, 171.3], [14, 177.5], [15, 180.2], [16, 183.8], [17, 183.4], [18, 183.5], [19, 185.5]],
-				'50%' : [[2, 91.9], [3, 98.2], [4, 106.8], [5, 114.6], [6, 120.8], [7, 125.2], [8, 130.3], [9, 137.1], [10, 141.5], [11, 149.4], [12, 153.9], [13, 162.2], [14, 169.0], [15, 174.8], [16, 176.0], [17, 176.8], [18, 176.4], [19, 177.4]]
-			};
-
 			var females = {
 				'15%' : [[2, 84.8], [3, 93.7], [4, 100.6], [5, 105.8], [6, 113.3], [7, 119.3], [8, 124.3], [9, 131.4], [10, 136.9], [11, 143.8], [12, 149.4], [13, 151.2], [14, 152.3], [15, 155.9], [16, 154.7], [17, 157.0], [18, 156.1], [19, 155.4]],
 				'90%' : [[2, 95.6], [3, 104.1], [4, 111.9], [5, 119.6], [6, 127.6], [7, 133.1], [8, 138.7], [9, 147.1], [10, 152.8], [11, 161.3], [12, 166.6], [13, 167.9], [14, 169.3], [15, 170.1], [16, 172.4], [17, 169.2], [18, 171.1], [19, 172.4]],
@@ -432,7 +650,7 @@
 				'50%' : [[2, 90.2], [3, 98.1], [4, 105.2], [5, 111.7], [6, 118.2], [7, 125.6], [8, 130.5], [9, 138.3], [10, 143.7], [11, 151.4], [12, 156.7], [13, 157.7], [14, 161.0], [15, 162.0], [16, 162.8], [17, 162.2], [18, 162.8], [19, 163.3]]
 			};
 			var dataset = [{
-				label : 'female mean',
+				label : 'SSymphony',
 				data : females['mean'],
 				lines : {
 					show : true
@@ -488,63 +706,6 @@
 				},
 				color : "rgb(255,50,50)",
 				fillBetween : 'f75%'
-			}, {
-				label : 'male mean',
-				data : males['mean'],
-				lines : {
-					show : true
-				},
-				color : "rgb(50,50,255)"
-			}, {
-				id : 'm15%',
-				data : males['15%'],
-				lines : {
-					show : true,
-					lineWidth : 0,
-					fill : false
-				},
-				color : "rgb(50,50,255)"
-			}, {
-				id : 'm25%',
-				data : males['25%'],
-				lines : {
-					show : true,
-					lineWidth : 0,
-					fill : 0.2
-				},
-				color : "rgb(50,50,255)",
-				fillBetween : 'm15%'
-			}, {
-				id : 'm50%',
-				data : males['50%'],
-				lines : {
-					show : true,
-					lineWidth : 0.5,
-					fill : 0.4,
-					shadowSize : 0
-				},
-				color : "rgb(50,50,255)",
-				fillBetween : 'm25%'
-			}, {
-				id : 'm75%',
-				data : males['75%'],
-				lines : {
-					show : true,
-					lineWidth : 0,
-					fill : 0.4
-				},
-				color : "rgb(50,50,255)",
-				fillBetween : 'm50%'
-			}, {
-				id : 'm85%',
-				data : males['85%'],
-				lines : {
-					show : true,
-					lineWidth : 0,
-					fill : 0.2
-				},
-				color : "rgb(50,50,255)",
-				fillBetween : 'm75%'
 			}]
 			$.plot($("#fill-chart"), dataset, {
 				xaxis : {
@@ -552,7 +713,7 @@
 				},
 				yaxis : {
 					tickFormatter : function(v) {
-						return v + " cm";
+						return Math.floor(v/24) ;
 					}
 				},
 				legend: {
@@ -564,13 +725,80 @@
         /* end fill chart */
 
 		/* site stats chart */
-	
 		if ($("#site-stats").length) {
+
+			var SSymphony = [[1, 75], [3, 87], [4, 93], [5, 127], [6, 116]];
+			//var visitors = [[1, 65], [3, 50], [4, 73], [5, 100], [6, 95]];
+
+			var plot = $.plot($("#site-stats"), [{
+				data : SSymphony,
+				label : "SSymphony"
+			},], {
+				series : {
+					lines : {
+						show : true,
+						lineWidth : 1,
+						fill : true,
+						fillColor : {
+							colors : [{
+								opacity : 0.1
+							}, {
+								opacity : 0.15
+							}]
+						}
+					},
+					points : {
+						show : true
+					},
+					shadowSize : 0
+				},
+				xaxis : {
+					mode : "time",
+					tickLength : 10
+				},
+
+				yaxes : [{
+					min : 20,
+					tickLength : 5
+				}],
+				grid : {
+					hoverable : true,
+					clickable : true,
+					tickColor : $chrt_border_color,
+					borderWidth : 0,
+					borderColor : $chrt_border_color,
+				},
+				tooltip : true,
+				tooltipOpts : {
+					content : "%s for <b>%x:00 hrs</b> was %y",
+					dateFormat : "%y-%0m-%0d",
+					defaultTheme : false
+				},
+				colors : [$chrt_main, $chrt_second],
+				xaxis : {
+					ticks : 15,
+					tickDecimals : 2
+				},
+				yaxis : {
+					ticks : 5,
+					tickDecimals : 0
+				},
+				legend: {
+                    position: "ne", 
+                    margin: [-5, -17]
+                }
+			});
+		}
+		/* end site stats chart */
+
+				/* site stats chart */
+
+		if ($("#group-chart").length) {
 
 			var pageviews = [[1, 75], [3, 87], [4, 93], [5, 127], [6, 116]];
 			var visitors = [[1, 65], [3, 50], [4, 73], [5, 100], [6, 95]];
 
-			var plot = $.plot($("#site-stats"), [{
+			var plot = $.plot($("#group-chart"), [{
 				data : pageviews,
 				label : "Your pageviews"
 			}, {
@@ -632,7 +860,8 @@
                 }
 			});
 		}
-
+		/* end site stats chart */
+		
 		/* sales chart */
 		
 		if ($("#saleschart").length) {
@@ -783,12 +1012,43 @@
 	
 	function setup_timepicker() {
 		if ($('.timepicker-input').length) {
-			
-			/* default */
-			$('#timepicker1').timepicker();
-			console.log( $('.timepicker-input') );
-			console.log( $('.timepicker-input').size() );
+			$('.timepicker-input').timepicker();
 		}
 	}
 	
 	/* end setup_timepicker */
+	
+	/* ---------------------------------------------------------------------- */
+	/*	Enable Select2
+	/* ---------------------------------------------------------------------- */
+	
+	function enable_select2() {
+		if ($('select.with-search').length) {
+			var s = $("select.with-search").select2();
+		}
+		if ($('input[type="checkbox"]').length) {
+			$("input[type='checkbox']").uniform();
+		}
+		//$(".themed input[type='radio'], .themed input[type='checkbox'], .themed input[type='file'].file, .themed textarea").uniform();
+	}
+	
+	/* end select2 */
+
+	/* ---------------------------------------------------------------------- */
+	/*	Activate_bt_accordion_hack
+	/* ---------------------------------------------------------------------- */	
+		
+	$(function() {
+		
+		// credit: http://stackoverflow.com/questions/10918801/twitter-bootstrap-adding-a-class-to-the-open-accordion-title
+	    $('.accordion').on('show', function (e) {
+	         $(e.target).prev('.accordion-heading').find('.accordion-toggle').addClass('active');
+	    });
+	    
+	    $('.accordion').on('hide', function (e) {
+	        $(this).find('.accordion-toggle').not($(e.target)).removeClass('active');
+	    });
+	        
+	});
+
+	/* end activate_bt_accordion_hack */

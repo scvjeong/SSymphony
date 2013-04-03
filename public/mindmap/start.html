@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">		
+		<title>OKMindmap :: Design Your Mind!</title>
+
+		<link rel="stylesheet" href="./css/main.css" type="text/css">
+		<link rel="stylesheet" href="./css/impromptu.css" type="text/css" media="screen">
+
+		<script src="./lib/jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/raphael_v.1.5.0.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/browser.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/jquery-impromptu.3.1.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/hahms-textgrow.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/yui-3.2.0-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/json2.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/luasog-0.3.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/jquery.simplemodal.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/Base64.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/conversionfunctions.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/entities.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/http.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/jscolor/jscolor.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./lib/timeline.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./mayonnaise-min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./extends/ExArray.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./extends/ExRaphael.js" type="text/javascript" charset="utf-8"></script>
+		<script src="./plugin/collabDocument.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript">
+			function getSize() {
+				var myWidth = 0;
+				var myHeight = 0;
+
+				if( typeof( window.innerWidth ) == 'number' ) {
+					//Non-IE
+					myWidth = window.innerWidth;
+					myHeight = window.innerHeight;
+				} else if( document.documentElement &&
+							( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+					//IE 6+ in 'standards compliant mode'
+					myWidth = document.documentElement.clientWidth;
+					myHeight = document.documentElement.clientHeight;
+				} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+					//IE 4 compatible
+					myWidth = document.body.clientWidth;
+					myHeight = document.body.clientHeight;
+				}
+
+				return {"width": myWidth, "height": myHeight}
+			}
+
+			function resize() {
+				var size = getSize();
+				var w = size.width;
+				var h = size.height;
+
+				var topDiv = document.getElementById("top");
+				if(!topDiv) topDiv = 0;
+				var bottomDiv = document.getElementById("bottom");
+				if(!bottomDiv) bottomDiv = 0;
+				var mapDiv = document.getElementById("jinomap");
+				mapDiv.style.width = w + "px";
+				mapDiv.style.height = (h - topDiv.offsetHeight - bottomDiv.offsetHeight) + "px";
+			}
+
+			window.onresize = resize;
+			$(document).ready( resize );
+		</script>
+
+		<script type="text/javascript">
+			var jMap;
+			function jinoMap_init(){
+				jMap = new JinoMap("jinomap", 5000, 3000, 1);
+				jMap.cfg.lazyLoading = false;
+				jMap.cfg.realtimeSave = false;
+				jMap.newMap();
+			}
+			$(document).ready( jinoMap_init );
+		</script>
+
+		<!-- ----------- yui 메뉴 공통 ----------- -->
+		<!-- Standard reset and fonts -->
+		<link rel="stylesheet" type="text/css" href="./css/menu/reset.css">
+		<link rel="stylesheet" type="text/css" href="./css/menu/fonts.css">
+		<link rel="stylesheet" type="text/css" href="./css/menu/container.css">
+
+		<!-- CSS for Menu -->
+		<link rel="stylesheet" type="text/css" href="./css/menu/sam/menu.css">
+
+		<!-- Dependency source files -->
+		<script type="text/javascript" src="./lib/yui/build/utilities/utilities.js"></script>
+		<script type="text/javascript" src="./lib/yui/build/container/container.js"></script>
+
+		<!-- Menu source file -->
+		<script type="text/javascript" src="./lib/yui/build/menu/menu.js"></script>
+
+		<!-- Menu Function -->
+		<script type="text/javascript">
+			var collabDocAction = function() {
+				var selected = jMap.getSelected();
+				var collabDoc = new collabDocument(jMap, selected);
+			}
+		</script>
+
+		<!-- ----------- yui 메뉴 공통 끝 ----------- -->
+
+		<!-- /////////////////// ContextMenu ///////////////////////////// -->
+		<script type="text/javascript">
+			var oOkmContextMenu = null;
+			YAHOO.util.Event.onContentReady("jinomap", function () {
+				var oOkmContextMenuItems = [					
+					{ text: "collabDocument", onclick: { fn: collabDocAction } }
+				];
+
+				oOkmContextMenu = new YAHOO.widget.ContextMenu(
+									"okmcontextmenu",
+									{
+										trigger: this,
+										itemdata: oOkmContextMenuItems,
+										lazyload: true
+									}
+								);
+			});
+		</script>
+
+	</head>
+	<body>
+		<!-- OKMindmap View 시작 -->
+		<div id = "main">
+			<div id="jinomap" tabindex="-1" style="outline:none; border: none; width:100%; height:800px; position:relative; overflow:hidden; background:#f4f4f4;">
+			</div>
+		</div>
+		<!-- OKMindmap View 끝 -->
+	</body>
+</html>

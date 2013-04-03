@@ -1,0 +1,59 @@
+
+html {
+	-webkit-text-size-adjust:none;
+}
+
+#top {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	height: 39px;
+}
+
+
+#okmenubar {
+	padding: 0px;
+	border: 0px;
+	/* ie5win fudge begins */
+	margin: 0px; 
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	margin-top: 0px;
+	}
+
+
+#userinfo {
+	position: absolute;
+	top: 0px;
+	right: 0px; /* Opera5.02 will show a space at right 
+	when there is no scroll bar */
+	margin: 0px;
+	padding: 12px 5px 0px 0px;
+	border: 0px;
+	voice-family: "\"}\"";
+	voice-family:inherit;
+	width: 500px;
+	height: 25px;
+	text-align: right;
+	background:url(../images/topBgRight.gif) no-repeat;
+}
+
+
+
+#middle {
+	margin: 0px;
+	padding: 0px;
+	border: none;
+	background: #fff;
+}
+
+
+#bottom {	
+	width:100%;
+	background:url(../images/bottomBg.gif) no-repeat;
+	vertical-align: middle;
+	font:11px Tahoma, Arial;
+	color:#656767;*/
+}

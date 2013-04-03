@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Orchestra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <!-- Bootstrap Styles -->
+    <!-- Bootstrap 2.0.4 -->
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <!-- Font Awesome 2.0 -->
+      <link rel="stylesheet" href="/css/font-awesome.css" />
+      
+    <!-- /Font Awesome 2.0 -->
+    <!-- IcoMoon font pack -->
+      <link rel="stylesheet" href="/css/icomoon.css" />
+      
+    <!-- /IcoMoon font pack -->
+  <!-- /Bootstrap Styles -->
+
+  <!-- Theme Styles -->
+
+    <!-- Libs Styles -->
+
+      <!-- Google Code Prettyfy - source-code highlighter -->
+      <link rel="stylesheet" href="/css/prettify.css" />
+      <!-- jQuery Page Slide Plugin -->
+      <link rel="stylesheet" href="/css/jquery.pageslide.css" />      
+      <!-- jQuery Table Sorter Plugin -->
+      <link rel="stylesheet" href="/css/themes.blue.css" />
+      <link rel="stylesheet" href="/css/jquery.tablesorter.pager.css" />
+
+    <!-- /Libs Styles -->
+
+    <!-- Core Theme Styles -->
+    <!-- <link rel="stylesheet/less" href="media/styles/style.less" /> -->
+    <link rel="stylesheet" href="/css/orchestra.css" />
+
+	<!-- full calander css -->
+	<link rel="stylesheet" href="/css/fullcalendar.css?v=1">
+	<!-- jarvis widget css -->
+	<link rel="stylesheet" href="/css/jarvis-widgets.css?v=1">
+	<!-- theme css -->
+	<link rel="stylesheet" href="/css/theme.css?v=1">
+	<!-- select css -->
+	<link rel="stylesheet" href="/css/select2.css?v=1">
+	<!-- uniform css -->
+	<link rel="stylesheet" href="/css/uniform.default.css?v=1">
+
+
+  <!-- /Theme Styles -->
+
+  <!-- CMS/Framework styles & scripts -->
+    <!-- ADD HERE -->
+  <!-- /CMS/Framework styles & scripts -->
+
+  <!-- Style tweaks to CMS/plugins/widgets -->
+    <!-- ADD HERE -->
+    <!-- eg.: <link href="media/css/tweaks.css" rel="stylesheet" /> -->
+  <!-- /Style tweaks to CMS/plugins/widgets -->
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements:
+       load latest from Google Code, fall back to local if offline -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script>window.html5 || document.write('<script src="media/js/libs/fixes/html5.js"><\/script>')</script>
+  <![endif]-->
+
+  <!-- Icons: place favicon.ico and apple-touch-icon.png in the root directory (more: mathiasbynens.be/notes/touch-icons) -->
+    <!--
+    <link rel="shortcut icon" href="bootstrap/ico/favicon.ico" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="media/bootstrap/ico/apple-touch-icon-114-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="media/bootstrap/ico/apple-touch-icon-72-precomposed.png" />
+    <link rel="apple-touch-icon-precomposed" href="media/bootstrap/ico/apple-touch-icon-57-precomposed.png" />
+    -->
+  <!-- /Icons -->
+
+  <!-- Fonts -->
+    <!-- ADD HERE -->
+  <!-- /Fonts -->
+
+  <!-- LESS -->
+  <!-- <script src="media/_tools/less-1.3.0.min.js"></script> -->
+</head>
+
+<body class="sidebar-max">
+
+<!--============================= Page Body =================================-->
+
+
+
+
+
+<!-- #topbar: Top Bar Menu -->
+<ul id="topbar" class="on-click">
+  <li class="pull-left">
+    <h1 id="topbar-title">
+      <i class="icon-cogs"></i>
+      <!-- <i class="icon-icomoon-grid-view"></i> -->
+      <!-- <span aria-hidden="true" class="icon-icomoon-grid-view"></span> -->
+      <a href="/">Orchestra</a>
+    </h1>
+  </li>
+  <li>
+    <a href="theme-docs.html">
+      <i class="icon-book"></i>
+      <!-- <i class="icon-icomoon-grid-view"></i> -->
+      <!-- <span aria-hidden="true" class="icon-icomoon-grid-view"></span> -->
+      <span>Orchestra Project</span>
+    </a>
+  </li>
+  <li class="parent pull-right">
+    <a href="#" data-toggle="dropdown">
+      <i class="icon-user"></i>
+      <span>John Adminsky</span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">Finances</a></li>
+      <li class="divider"></li>
+      <li><a href="#">Logout</a></li>
+    </ul>
+  </li>
+  <li class="parent pull-right">
+    <a href="#" data-toggle="dropdown">
+      <i class="icon-cog"></i>
+      <span>Settings</span>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="#">Backend Settings</a></li>
+      <li><a href="#">Frontend Settings</a></li>
+    </ul>
+  </li>
+  <li class="pull-right">
+    <a href="page-login.html">
+      <i class="icon-sign-blank"></i>
+      <span>Sign in</span>
+    </a>
+  </li>
+</ul>
+<!-- /#topbar: Top Bar Menu -->
+
+
+<div class="container-fluid" id="container">
+
+    <!-- #sidebar: Sidebar -->
+    <div id="sidebar">
+
+      <div class="search-mini-wrapper">
+        <form action="#" class="search-mini">
+          <input name="search" type="text" placeholder="Search..." />
+          <button type="submit">
+            <i class="icon-search"></i>
+          </button>
+        </form>
+      </div>      
+
+      <!-- ul.sidebar-menu: Sidebar Menu -->
+      <ul class="sidebar-menu on-click" id="main-menu">
+		<li class="inactive">
+          <div class="sidebar-menu-item-wrapper">
+            <a href="#" id="quick-meeting">
+              <i class="icon-play-circle"></i>
+              <span>Quick Start</span>
+            </a>
+          </div>
+        </li>
+		<li class="inactive">
+          <div class="sidebar-menu-item-wrapper">
+            <a href="#" id="meeting-planning">
+              <i class="icon-edit"></i>
+              <span>Meeting Planning</span>
+            </a>
+          </div>
+        </li>		
+		<li class="active">
+          <div class="sidebar-menu-item-wrapper">
+            <a href="#" data-target-page="meeting-list">
+              <i class="icon-list-ul"></i>
+              <span>Meeting List</span>
+            </a>
+          </div>
+        </li>
+		<li class="inactive">
+          <div class="sidebar-menu-item-wrapper">
+            <a href="#" data-target-page="group-info">
+              <i class="icon-info-sign"></i>
+              <span>Group Info</span>
+            </a>
+          </div>
+        </li>
+		<li class="inactive">
+          <div class="sidebar-menu-item-wrapper">
+            <a href="#" data-target-page="manual">
+              <i class="icon-bar-chart"></i>
+              <span>Help</span>
+            </a>
+          </div>
+        </li>
+      </ul>
+      <!-- /ul.sidebar-menu: Sidebar Menu -->
+
+
+      <a href="#" id="sidebar-resizer">
+        <i class="min icon-resize-small"></i>
+        <i class="max icon-resize-full"></i>
+      </a>
+
+    </div>
+    <!-- /#sidebar: Sidebar -->
+
+    <!-- #content: The Main Content Section
+
+      Just add the page content here for a regular page or use .page DIVs for panel pages.
+      Use Bootstrap fluid layout for best effect.
+
+    -->
+    <div id="content">
+
+		<div class="page" id="meeting-list">
+		<!-- Panel Page meeting-list Content: -->
+			<section id="widget-grid-1" class="">
+			<div class="row-fluid">
+			  <div class="span12">
+				<div class="panel" id="panel-101">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-1">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Chart</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer">
+							<!-- content goes here -->
+								<div class="width-23">
+									<div class="chart-title">참여율</div>
+									<div id="bar-chart" class="chart"></div>
+								</div>
+								<div class="width-23">
+									<div class="chart-title">회의 횟수(3월)</div>
+									<div id="fill-chart" class="chart"></div>
+								</div>
+								<div class="width-23">
+									<div class="chart-title">회의 참석자 수</div>
+									<div id="site-stats" class="chart"></div>
+								</div>
+								<div class="width-23">
+									<div class="chart-title">회의 시간</div>
+									<div id="saleschart" class="chart"></div>
+								</div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			</div>
+
+			<div class="row-fluid">
+			  <div class="span6">
+				<div class="panel" id="panel-102">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-2" data-widget-deletebutton="false" data-widget-editbutton="false">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Calendar</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content goes here -->
+								<!-- calnedar container -->
+								<div id="calendar-container">
+									<div id="calendar-buttons">
+										<div class="btn-group">
+											<a href="javascript:void(0)" class="btn btn-small" id="btn-today">Today</a>
+											<a href="javascript:void(0)" class="btn dropdown-toggle btn-small" data-toggle="dropdown"><span class="caret"></span></a>
+											<ul class="dropdown-menu btn-small pull-right">
+												<li>
+													<a href="javascript:void(0);" id="btn-month">Month</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);" id="btn-agenda">Agenda</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);" id="btn-day">Today</a>
+												</li>
+											</ul>
+										</div>
+										<div class="btn-group">
+											<a href="javascript:void(0)" class="btn btn-small" id="btn-prev"><i class="icon-chevron-left"></i></a>
+											<a href="javascript:void(0)" class="btn btn-small" id="btn-next"><i class="icon-chevron-right"></i></a>
+										</div>
+									</div>
+									<div class="dt-header calender-spacer"></div>
+									<div id="calendar"></div>
+								</div>
+								<!-- end calendar container -->
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+
+			  <div class="span6">
+				<div class="panel" id="panel-103">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-2" data-widget-deletebutton="false" data-widget-editbutton="false">
+						<header>
+							<i class="icon-list-ul"></i>
+							<span>Meeting List</span>
+						</header>
+												
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content -->	
+								<div class="accordion" id="accordion1">
+									<div class="accordion-group">
+										<div class="accordion-heading">
+											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse1">
+												<i class="icon-plus-sign"></i> 퍼실리테이션 회의 #1 </a>
+										</div>
+										<div id="collapse1" class="accordion-body collapse" style="height: 0px; ">
+											<div class="accordion-inner">
+												회의 주제 - 형성평가 준비 회의
+												회의 날짜 - 2013.03.08
+												회의 시간 - 08:00 - 13:00
+												회의 참가자 - 고동현, 임종혁, 정용기
+												회의 역할 - 진행자: 정용기, 서기: 임종혁
+											</div>
+										</div>
+									</div>
+									<div class="accordion-group">
+										<div class="accordion-heading">
+											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse2">
+												<i class="icon-plus-sign"></i> 퍼실리테이션 회의 #2 </a>
+										</div>
+										<div id="collapse2" class="accordion-body collapse" style="height: 0px; ">
+											<div class="accordion-inner">
+											</div>
+										</div>
+									</div>
+									<div class="accordion-group">
+										<div class="accordion-heading">
+											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse3">
+												<i class="icon-plus-sign"></i> 퍼실리테이션 회의 #3 </a>
+										</div>
+										<div id="collapse3" class="accordion-body collapse" style="height: 0px; ">
+											<div class="accordion-inner">
+											</div>
+										</div>
+									</div>
+								</div>
+							<!-- end content -->	
+							</div>
+							
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			</div>
+			</section>
+		<!-- /Panel Page meeting-list Content -->
+		</div>
+
+		<div class="page hidden" id="group-info">
+		<!-- Panel Page group-info Content: -->
+			<section id="widget-grid-4" class="">
+			<div class="row-fluid">
+			  <div class="span6">
+				<div class="panel" id="panel-401">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-401">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Group Chart</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer">
+							<!-- content goes here -->
+								<div id="group-chart" class="chart margin-5"></div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			  <div class="span6" style="height:400px;">
+				<div class="panel" id="panel-403">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-403">
+						<header>
+							<i class="icon-list-ul"></i>
+							<span>Member List</span>
+						</header>
+												
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content -->	
+								<div id="panelcontents">
+									<div id="participants">
+										<ul class="users-online">
+											<li class="first">
+												<a href="javascript:void(0);" title="">
+													<img src="" alt="" style="background-color:#eeeeee;" />
+													<span class="user-name">
+														<strong>
+															Go Dong Hyun <span>(3)</span>
+														</strong>
+														<b>Murderer</b>
+													</span>
+													<i class="online"></i>
+												</a>
+											</li>
+											<li class="">
+												<a href="javascript:void(0);" title="">
+													<img src="" alt="" style="background-color:#eeeeee;" />
+													<span class="user-name">
+														<strong>
+															SCV Jeong <span></span>
+														</strong>
+														<b>jeongjeong1</b>
+													</span>
+													<i class="online"></i>
+												</a>
+											</li>
+											<li class="">
+												<a href="javascript:void(0);" title="">
+													<img src="" alt="" style="background-color:#eeeeee;" />
+													<span class="user-name">
+														<strong>
+															Angie Freemen <span></span>
+														</strong>
+														<b>CFO</b>
+													</span>
+													<i class="away"></i>
+												</a>
+											</li>
+											<li class="">
+												<a href="javascript:void(0);" title="">
+													<img src="" alt="" style="background-color:#eeeeee;" />
+													<span class="user-name">
+														<strong>
+															Carol Lam <span></span>
+														</strong>
+														<b>Graphic Designer</b>
+													</span>
+													<i class="offline"></i>
+												</a>
+											</li>
+											<li class="">
+												<a href="javascript:void(0);" title="">
+													<img src="" alt="" style="background-color:#eeeeee;" />
+													<span class="user-name">
+														<strong>
+															Julia Berry <span></span>
+														</strong>
+														<b>Human Resources</b>
+													</span>
+													<i class="online"></i>
+												</a>
+											</li>
+											<li class="">
+												<a href="javascript:void(0);" title="">
+													<img src="" alt="" style="background-color:#eeeeee;" />
+													<span class="user-name">
+														<strong>
+															David Simpson <span>(2)</span>
+														</strong>
+														<b>CEO</b>
+													</span>
+													<i class="away"></i>
+												</a>
+											</li>
+											<li class="last">
+												<a href="javascript:void(0);" title="">
+													<img src="" alt="" style="background-color:#eeeeee;" />
+													<span class="user-name">
+														<strong>
+															Brad Pitt <span></span>
+														</strong>
+														<b>Information Technology</b>
+													</span>
+													<i class="busy"></i>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>								
+							<!-- end content -->	
+							</div>
+							
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			  <div class="span6">
+				<div class="panel" id="panel-402">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-402">
+						<header>
+							<i class="icon-calendar"></i>
+							<span>Calendar</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content goes here -->
+								<!-- calnedar container -->
+								<div id="group-calendar-container">
+									<div id="group-calendar-buttons">
+										<div class="btn-group">
+											<a href="javascript:void(0)" class="btn btn-small" id="group-cal-btn-today">Today</a>
+											<a href="javascript:void(0)" class="btn dropdown-toggle btn-small" data-toggle="dropdown"><span class="caret"></span></a>
+											<ul class="dropdown-menu btn-small pull-right">
+												<li>
+													<a href="javascript:void(0);" id="group-cal-btn-month">Month</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);" id="group-cal-btn-agenda">Agenda</a>
+												</li>
+												<li>
+													<a href="javascript:void(0);" id="group-cal-btn-day">Today</a>
+												</li>
+											</ul>
+										</div>
+										<div class="btn-group">
+											<a href="javascript:void(0)" class="btn btn-small" id="group-cal-btn-prev"><i class="icon-chevron-left"></i></a>
+											<a href="javascript:void(0)" class="btn btn-small" id="group-cal-btn-next"><i class="icon-chevron-right"></i></a>
+										</div>
+									</div>
+									<div class="dt-header calender-spacer"></div>
+									<div id="group-calendar"></div>
+								</div>
+								<!-- end calendar container -->
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			</div>
+			</section>
+		<!-- /Panel Page group-info Content -->
+		</div>
+
+		<div class="page hidden" id="manual">
+		<!-- Panel Page group-info Content: -->
+			<section id="widget-grid-5" class="">
+			<div class="row-fluid">
+			  <div class="span6">
+				<div class="panel" id="panel-501">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-501">
+						<header>
+							<i class="icon-comment"></i>
+							<span>서비스 이용안내</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer">
+							<!-- content goes here -->
+								<div class="manual-contents">
+									<p></p>
+								</div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			  <div class="span6">
+				<div class="panel" id="panel-502">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-502">
+						<header>
+							<i class="icon-comment"></i>
+							<span>서비스 이용 데모 동영상</span>
+						</header>
+												
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+							<!-- content -->	
+							<div class="manual-contents">
+								<p></p>
+							</div>
+							<!-- end content -->	
+							</div>
+							
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			  <div class="span6">
+				<div class="panel" id="panel-503">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-503">
+						<header>
+							<i class="icon-comment"></i>
+							<span>퍼실리테이션이란 무엇인가?</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer">
+							<!-- content goes here -->
+								<div class="manual-contents">
+									<p>&nbsp;퍼실리테이션은 퍼실리테이션 되는 항목에 따라 두 가지 유형으로 구분할 수 있다. 첫 번째 유형은 내용 퍼실리테이션(ContentFacilitation)으로 미팅이나 토론에서 취급하는 현안, 논의되는 주제, 해결해야 할 문제들, 즉 토론에서 직접적으로 발언되는 내용을퍼실리테이션 하는 것을 뜻한다. </p>
+									<p>&nbsp;두 번째 유형인 프로세스 퍼실리테이션(Process Facilitation)은 안건이 어떤 방식으로 토론되는지를 다룬다. 즉, 프로세스를 퍼실리테이션 하는 것은 퍼실리테이터가 미팅의 방법이나 절차, 대화의 형식, 집단의 역학관계, 미팅 분위기를 조율하는 것을 뜻한다. 일반적으로 미팅의 내용은 말을 통해 구체적으로 표현되기 때문에 사람들이 쉽게 인식할 수 있지만, 프로세스는 그렇지 않으므로 사람들이 잘 인식하지 못하며 관심을 두지도 않는다. </p>
+									<p>&nbsp;만약 퍼실리테이터가 자신의 의견을 제시하여 토론 결과에 영향력을 발휘하고자 한다면 퍼실리테이터가 내용을 퍼실리테이션 하는것이다. 그러나 퍼실리테이터가 중립을 유지하면서 프로세스를 효과적이고 효율적으로 이끌어가는데 초점을 둔다면 프로세스를 퍼실리테이션 하는 것이다. 때에 따라 미팅 참가자들이 중요하게 고려해야 할 사항을 놓치고 있다는 것을 퍼실리테이터가 인지했을 때, 그 사항에 대해 참가자들이 생각해보도록 권유하는 것이 필요할 수 도 있다. 그러나 퍼실리테이터가 미팅 내용에 관여하는 것은 참가자들로 하여금 퍼실리테이터가 특정한 의견을 가지고 있으며, 그 방향으로 미팅의 결과를 유도하려고 한다는 생각을 하게 할 수 있으므로 내용에 대한 개입은 최소한으로 줄이는 것이 좋다.
+								</div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			  <div class="span6">
+				<div class="panel" id="panel-504">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-504">
+						<header>
+							<i class="icon-comment"></i>
+							<span>퍼실리테이션의 프로세스</span>
+						</header>
+												
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer"> 
+								<!-- content -->	
+								<div class="manual-contents">
+									<img src="/images/facilitation_process.png" alt="퍼실리테이션 프로세스">
+									<p>&nbsp;일반적인 퍼실리테이션 미팅은 '그림'과 같은 프로세스로 진행될 수 있다. 이 흐름도에서 [준비하기]와 [세션 시작하기], [초점 맞추기], [기록하기], [정보 수집하기], [세션 종결하기]는 팀의 문제해결 활동과 직접적으로 연관된 과제 프로세스 퍼실리테이션이라 할 수 있다. 한편 [역기능 관리하기], [합의 구축하기], [에너지 수준 높게 유지하기]는 팀의 문제해결 활동에 영향을 줄 수 있는 정서적인 문제를 다루는 감정 프로세스 퍼실리테이션과 관련된다. 이 밖에 [질문하기]는 모든 프로세스에 공통적으로 행해지는 활동이며, [의제 설정하기]는 미팅을 준비하고 시작하는 단계에서 이루어지는 활동이다.</p>
+									<p>&nbsp;1) 질문하기: 퍼실리테이션의 가장 중요하면서도 기본적인 도구는 질문이다. 퍼실리테이터는 미팅 초기에 참가자들에게 질문을 던지고 참가자들이 이에 대해 생각해보게 함으로써 미팅의 목적과 개인적 목표, 미팅에서 참가자들이 공통적으로 지켜야 할 원칙에 대해 분명히 할 수 있다. 또한 퍼실리테이터는 참가자들의 의도나 말한 내용이 명확하지 않을 때, 논의가 주제에서 벗어났거나, 참가자들이 반드시 고려해야 할 요소에 대해 논의하지 않을 때 이를 해결하기 위해 질문을 할 수 있다.</p>
+									<p>&nbsp;2) 의제(협의 사항) 설정하기: 퍼실리테이터는 미팅의 목적에 따라 몇 가지 의제를 준비할 수 있다. 퍼실리테이터는 미팅의 주최자, 그리고 미팅 참가자들과의 논의를 통해 자신이 준비한 의제가 적절한지 검토해야 한다.</p>
+									<p>&nbsp;3) 준비하기: 본격적인 미팅을 시작하기 전의 준비단계에서 퍼실리테이터는 미팅의 목적, 미팅을 통해 얻고자 하는 결과, 미팅에 참가할 사람, 논의될 이슈, 어떤 단계로 미팅이 진행될 것인지를 명확히 정의한다.</p>
+									<p>&nbsp;4) 미팅 시작하기: 이 단계에서 퍼실리테이터는 참가자들에게 미팅의 목적과 미팅의 결과물에 대해 알리고, 미팅을 통해 얻을 수 있는 결과 및 효과에 대해 상상하게 하여 참가자들의 참여 의욕을 고취시킨다. 또한 미팅에서 참가자들이 해야 될 역할의 중요성과 그들이 미팅에 참석하도록 선택된 이유, 주어진 권한에 대해 설명한다.</p>
+									<p>&nbsp;5) 초점 맞추기: 퍼실리테이터는 논의가 주제와는 다른 방향으로 흘러갈 때 혹은 새로운 날짜에 미팅이 시작되거나 긴 휴식시간이 지난 뒤 새롭게 미팅을 시작하려 할 때, 참가자들에게 미팅의 목적에 대해 재인식시키거나 논의의 진행상황을 파악하게 하여 참가자들이 주제에 집중하게 한다.
+									<p>&nbsp;6) 기록하기: 퍼실리테이터는 논의의 흐름을 파악하고 참가자들에게 논의된 사항에 대해 피드백 해주기 위해 중요한 내용을 기록해야 한다.</p>
+									<p>&nbsp;7) 정보 수집하기: 퍼실리테이터는 미팅을 진행하면서 참가자들에게 다양한 방식의 질문을 던짐으로써 언급된 사항에 대한 자세한 정보를 얻고, 정보를 범주화하며, 문제해결을 위한 방안을 도출하고, 해결방안의 우선순위를 결정하도록 하는 활동을 한다.</p>
+									<p>&nbsp;8) 역기능 관리하기: 미팅의 역기능은 참가자들이 미팅에 대한 불만을 무의식적, 혹은 의식적으로 표출하는 것으로 미팅에 늦거나 입을 다물고 있는 것에서 시작해서 다른 참가자들을 비난하거나 미팅 장소를 떠나는 것까지 다양하게 표현된다. 퍼실리테이터는 이러한 증상들을 초기에 파악해서 역기능의 증상별 대처 방법을 사용해야 한다.</p>
+									<p>&nbsp;9) 합의 구축하기: 참가자들이 모두 지지하는 합의를 구축하기 위해서 퍼실리테이터는 적절한 의사결정 방법을 선택하여 합의를 도출하도록 한다. 만약 참가자들의 의견이 쉽게 수렴되지 않는다면 그원인을 파악하고, 원인에 따라 합의를 이끌어낼 수 있는 기법을 사용해야 한다.</p>
+									<p>&nbsp;10) 에너지 수준 높게 유지하기: 참가자들이 높은 에너지를 지니고 있으면 주제에 대한 토의가 활발히 이루어지고, 참가자들의 참여도가 높아진다. 또한 퍼실리테이터가 높은 에너지를 지니고 있는 것 역시 참가자들에게 미팅에서 다루는 이슈가 중요하다고 느끼게 하여 참여도를 높일 수 있다. 따라서 퍼실리테이터는 자신과 참가자의 에너지 수준을 주기적으로 점검하고, 에너지 수준이 낮아졌을 때 이를 높이기 위한 기법을 사용하는 것이 좋다.</p>
+									<p>&nbsp;11) 미팅 종결하기: 미팅을 종결하기 전에 퍼실리테이터는 미팅 동안 논의된 의제와 결정된 사항, 참가자들의 목적이 달성되었는가에 대해 검토한다. 또한 미팅 활동을 통해 성취한 결과에 대해 평가하고, 공식적으로 미팅이 종결되었음을 알리며, 미팅 주최자에게 미팅 결과 및 보완점을 보고한다.</p>
+								<!-- end content -->	
+								</div>	
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			  <div class="span6">
+				<div class="panel" id="panel-505">
+					<!-- new widget -->
+					<div class="jarviswidget" id="widget-id-505">
+						<header>
+							<i class="icon-comment"></i>
+							<span>퍼실리테이션 주의 사항</span>
+						</header>
+						
+						<!-- widget div-->
+						<div>
+							<div class="inner-spacer">
+							<!-- content goes here -->
+								<div class="manual-contents">
+									<p></p>
+								</div>
+							</div>
+						</div>
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</div>
+			  </div>
+			</div>
+			</section>
+		<!-- /Panel Page group-info Content -->
+		</div>
+    </div>
+    <!-- /#content: The Main Content Section -->
+
+</div><!-- /.container-fluid#container -->
+
+
+
+<!--============================= /Page Body ================================-->
+
+<!-- Javascript: placed at the end of the document to speed up page loading
+     (generally gives more consistent behavior than 'defer') -->
+
+  <!-- Scripts will most likely break in IE6 and below, so why bother loading them? -->
+  <!--[if lte IE 6]><noscript><![endif]-->
+
+  <!-- CMS/Framework scripts -->
+    <!-- ADD HERE -->
+  <!-- /CMS/Framework scripts -->
+
+  <!-- jQuery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script>window.jQuery.ui || document.write('<script src="/js/jquery.ui.min.js"><\/script>')</script>
+    <!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+            long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+            to to "classic" jQuery behavior -->
+    <script>if ($ === undefined) $ = jQuery</script>
+  <!-- /jQuery -->
+	
+  <!-- Bootstrap Components -->
+  <script src="/js/bootstrap.min.js"></script>
+
+
+  <!-- Theme Scripts -->
+  <script src="/js/ohcastra.js"></script>
+  <script src="/js/application.js"></script>
+
+	<!-- Flot Plotting -->
+	<script src="/js/libs/flot/excanvas.min.js"></script>
+	<script src="/js/libs/flot/jquery.flot.js"></script>
+	<!-- REQUIRED: Flot Chart Engine -->
+	<script src="/js/libs/flot/jquery.flot.cust.min.js"></script>			
+	<script src="/js/libs/flot/jquery.flot.resize.min.js"></script>		
+	<script src="/js/libs/flot/jquery.flot.tooltip.min.js"></script>		
+	<script src="/js/libs/flot/jquery.flot.orderBar.min.js"></script>	
+	<script src="/js/libs/flot/jquery.flot.fillbetween.min.js"></script>	
+	<script src="/js/libs/flot/jquery.flot.pie.min.js"></script>
+
+  <!-- Google Code Prettyfy - source-code highlighter -->
+  <script src="/js/libs/google-code-prettify/prettify.js"></script>
+
+  <!-- jQuery Table Sorter Plugin -->
+  <script src="/js/libs/jquery.tablesorter/jquery.tablesorter.min.js"></script>
+
+  <!-- jQuery Page Slide Plugin -->
+  <script src="/js/libs/jquery.pageslide/jquery.pageslide.min.js"></script>
+
+  <!-- Demo Charts
+  <script src="/js/demo-area-chart.js"></script>
+  <script src="/js/demo-dynamic-chart.js"></script>
+  <script src="/js/demo-pie-chart.js"></script>
+   -->
+
+	<!-- REQUIRED: Functional Widgets -->
+	<script src="/js/jarvis.widget.min.js"></script>
+	<script src="/js/mobiledevices.min.js"></script>
+	<!-- DISABLED (only needed for IE7 <script src="js/include/json2.js"></script> -->
+	<!-- REQUIRED: Full Calendar -->
+	<script src="/js/jquery.fullcalendar.min.js"></script>	
+	<!-- REQUIRED: Bootstrap Prompt -->
+	<script src="/js/bootbox.min.js"></script>
+	<!-- REQUIRED: Bootstrap Wizard -->
+	<script src="/js/bootstrap.wizard.min.js"></script>
+	<!-- REQUIRED: Bootstrap Timepicker -->
+	<script src="/js/bootstrap.timepicker.min.js"></script>
+	<!-- REQUIRED: select2 -->
+	<script src="/js/select2.js"></script>
+	<!-- REQUIRED: uniform -->
+	<script src="/js/jquery.uniform.js"></script>
+
+	<script src="/js/config.js"></script>	
+
+<!-- /Javascript -->
+
+</body>
+</html>

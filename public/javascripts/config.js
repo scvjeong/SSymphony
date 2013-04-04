@@ -94,7 +94,7 @@
 
 			$('#meeting-planning').click(function(e) {
 				e.preventDefault();
-				$.get("/include/select_meeting_template.html",null,function(html){
+				$.get("/select_meeting_template",null,function(html){
 					dialog = bootbox.dialog(html, [{
 						"label" : "Prev",
 						"class" : "btn-success medium hide prev",

@@ -68,7 +68,7 @@
 
 			$('#quick-meeting').click(function(e) {
 				e.preventDefault();
-				$.get("/ajax/quick_meeting.html",null,function(html){
+				$.get("/ajax/quick_meeting",null,function(html){
 					dialog = bootbox.dialog(html, [{
 						"label" : "Cancel",
 						"class" : "btn-primary medium",

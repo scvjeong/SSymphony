@@ -32,7 +32,7 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/ajax/meeting', meeting.main);
-app.get('/ajax/meeting_template', meeting_planning.select_meeting_template);
+app.get('/ajax/meeting_template', meeting_planning.meeting_template);
 app.get('/ajax/setting_agenda', meeting_planning.setting_agenda);
 app.get('/ajax/setting_agenda_step', meeting_planning.setting_agenda_step);
 app.get('/ajax/users', user.list);

@@ -31,6 +31,7 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+app.get('/index.html', routes.index);
 app.get('/meeting', meeting.main);
 app.get('/select_meeting_template', meeting_planning.select_meeting_template);
 app.get('/setting_agenda', meeting_planning.setting_agenda);

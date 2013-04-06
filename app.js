@@ -7,6 +7,7 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , meeting = require('./routes/meeting')
+  , quick_meeting = require('./routes/quick_meeting')
   , meeting_planning = require('./routes/meeting_planning')
   , http = require('http')
   , path = require('path');
@@ -32,6 +33,7 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 app.get('/ajax/meeting', meeting.main);
+app.get('/ajax/quick_meeting', quick_meeting.quick_meeting);
 app.get('/ajax/meeting_template', meeting_planning.meeting_template);
 app.get('/ajax/setting_agenda', meeting_planning.setting_agenda);
 app.get('/ajax/setting_agenda_step', meeting_planning.setting_agenda_step);

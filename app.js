@@ -33,6 +33,8 @@ app.configure('development', function(){
 app.get('/', routes.index);
 app.get('/meeting', meeting.main);
 app.get('/select_meeting_template', meeting_planning.select_meeting_template);
+app.get('/setting_agenda', meeting_planning.setting_agenda);
+app.get('/setting_agenda_step', meeting_planning.setting_agenda_step);
 app.get('/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){

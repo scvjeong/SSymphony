@@ -162,7 +162,7 @@
 		});
 
 		// Load setting_agenda.html
-		$.get("/include/setting_agenda.html",
+		$.get("/setting_agenda",
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
@@ -170,10 +170,7 @@
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
-			var step_cnt = $("#meeting-wizard li", dialog).length;
-			// Load setting_agenda_step.html
-			add_setting_agenda_step(1, step_cnt);
-
+			enable_select2();
 		},"html");
 	}
 	
@@ -181,7 +178,7 @@
 	// step_cnt : step count
 	function add_setting_agenda_step(start_step_idx, step_cnt)
 	{
-		$.get("/include/setting_agenda_step.html", {},
+		$.get("/setting_agenda_step", {},
 		function(step_html){
 			for( var i=0; i<step_cnt; i++)
 			{
@@ -1012,7 +1009,11 @@
 	
 	function setup_timepicker() {
 		if ($('.timepicker-input').length) {
-			$('.timepicker-input').timepicker();
+			$('.timepicker-input').timepicker({
+                minuteStep: 10,
+                showMeridian: false,
+				defaultTime: false
+            });
 		}
 	}
 	

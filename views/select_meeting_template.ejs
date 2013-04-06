@@ -10,21 +10,17 @@
 	<div class="span6">
 		<div class="inner-spacer meeting-template"> 
 		<!-- content goes here -->
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">Group Decision Making</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">Strategic Planning</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">Project Evaluation</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">Focus Groups and Expert Panels</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">Conflict Resolution</a></div>
+			<% for(var i=0; i<(result.length/2); i++) {%>
+				<div><a class="btn btn-primary btn-large" title="<%= result[i].subject %>" href="javascript:show_setting_agenda();"><%= result[i].subject %></a></div>
+			<% } %>
 		</div>
 	</div>
 	<div class="span6">
 		<div class="inner-spacer meeting-template"> 
 		<!-- content goes here -->
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">Problem Solving</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">경영 전략 회의</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">마케팅 전략 회의</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">포지션 맵 논의 회의</a></div>
-			<div><a class="btn btn-primary btn-large" title="" href="javascript:show_setting_agenda();">비지니스 모델 수립 회의</a></div>
+			<% for(var i=Math.ceil(result.length/2); i<result.length; i++) {%>
+				<div><a class="btn btn-primary btn-large" title="<%= result[i].subject %>" href="javascript:show_setting_agenda();"><%= result[i].subject %></a></div>
+			<% } %>
 		</div>
 	</div>
 </div>

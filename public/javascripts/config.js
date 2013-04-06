@@ -106,7 +106,7 @@
 						"label" : "Complete",
 						"class" : "btn-success medium hide complete",
 						"callback": function() {
-							location.href="/meeting";
+							location.href="/ajax/meeting";
 							return true;
 						}
 					},{

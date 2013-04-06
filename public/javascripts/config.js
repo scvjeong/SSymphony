@@ -94,7 +94,7 @@
 
 			$('#meeting-planning').click(function(e) {
 				e.preventDefault();
-				$.get("/ajax/select_meeting_template",null,function(html){
+				$.get("/ajax/meeting_template",null,function(html){
 					dialog = bootbox.dialog(html, [{
 						"label" : "Prev",
 						"class" : "btn-success medium hide prev",
@@ -124,7 +124,7 @@
 
 	function show_select_meeting_template(html)
 	{
-		$.get("/ajax/select_meeting_template", null,
+		$.get("/ajax/meeting_template", null,
 		function(html){
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();

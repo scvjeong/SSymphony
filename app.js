@@ -32,12 +32,12 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
-app.get('/ajax/meeting', meeting.main);
-app.get('/ajax/quick_meeting', quick_meeting.quick_meeting);
-app.get('/ajax/meeting_template', meeting_planning.meeting_template);
-app.get('/ajax/setting_agenda', meeting_planning.setting_agenda);
-app.get('/ajax/setting_agenda_step', meeting_planning.setting_agenda_step);
-app.get('/ajax/users', user.list);
+app.get('/page/meeting', meeting.main);
+app.get('/page/quick_meeting', quick_meeting.quick_meeting);
+app.get('/page/meeting_template', meeting_planning.meeting_template);
+app.get('/page/setting_agenda', meeting_planning.setting_agenda);
+app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
+app.get('/page/users', user.list);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

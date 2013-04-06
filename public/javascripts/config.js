@@ -68,7 +68,7 @@
 
 			$('#quick-meeting').click(function(e) {
 				e.preventDefault();
-				$.get("/ajax/quick_meeting",null,function(html){
+				$.get("/page/quick_meeting",null,function(html){
 					dialog = bootbox.dialog(html, [{
 						"label" : "Cancel",
 						"class" : "btn-primary medium",
@@ -94,7 +94,7 @@
 
 			$('#meeting-planning').click(function(e) {
 				e.preventDefault();
-				$.get("/ajax/meeting_template",null,function(html){
+				$.get("/page/meeting_template",null,function(html){
 					dialog = bootbox.dialog(html, [{
 						"label" : "Prev",
 						"class" : "btn-success medium hide prev",
@@ -106,7 +106,7 @@
 						"label" : "Complete",
 						"class" : "btn-success medium hide complete",
 						"callback": function() {
-							location.href="/ajax/meeting";
+							location.href="/page/meeting";
 							return true;
 						}
 					},{
@@ -124,7 +124,7 @@
 
 	function show_select_meeting_template(html)
 	{
-		$.get("/ajax/meeting_template", null,
+		$.get("/page/meeting_template", null,
 		function(html){
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();
@@ -162,7 +162,7 @@
 		});
 
 		// Load setting_agenda.html
-		$.get("/ajax/setting_agenda",
+		$.get("/page/setting_agenda",
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
@@ -178,7 +178,7 @@
 	// step_cnt : step count
 	function add_setting_agenda_step(start_step_idx, step_cnt)
 	{
-		$.get("/ajax/setting_agenda_step", {},
+		$.get("/page/setting_agenda_step", {},
 		function(step_html){
 			for( var i=0; i<step_cnt; i++)
 			{

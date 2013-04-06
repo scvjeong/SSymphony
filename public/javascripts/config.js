@@ -94,7 +94,7 @@
 
 			$('#meeting-planning').click(function(e) {
 				e.preventDefault();
-				$.get("/select_meeting_template",null,function(html){
+				$.get("/ajax/select_meeting_template",null,function(html){
 					dialog = bootbox.dialog(html, [{
 						"label" : "Prev",
 						"class" : "btn-success medium hide prev",
@@ -124,7 +124,7 @@
 
 	function show_select_meeting_template(html)
 	{
-		$.get("/include/select_meeting_template.html", null,
+		$.get("/ajax/select_meeting_template", null,
 		function(html){
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();
@@ -162,7 +162,7 @@
 		});
 
 		// Load setting_agenda.html
-		$.get("/setting_agenda",
+		$.get("/ajax/setting_agenda",
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
@@ -178,7 +178,7 @@
 	// step_cnt : step count
 	function add_setting_agenda_step(start_step_idx, step_cnt)
 	{
-		$.get("/setting_agenda_step", {},
+		$.get("/ajax/setting_agenda_step", {},
 		function(step_html){
 			for( var i=0; i<step_cnt; i++)
 			{

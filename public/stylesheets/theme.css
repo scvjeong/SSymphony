@@ -130,7 +130,7 @@ ul.users-online li a i {
 .online, .offline, .away, .busy {
 	width: 7px;
 	height: 7px;
-	background: url('../img/chat/contact.png') 0px 0px no-repeat;
+	background: url('../images/chat/contact.png') 0px 0px no-repeat;
 	background-color: ;
 	display: block;
 }

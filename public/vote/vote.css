@@ -4,9 +4,10 @@
 
 .vote_container {
 	width: 500px;
-	height: 200px;
+	height: 180px;
 }
 
 .vote_container .question_content {
 	width: 500px;
+	height: 150px;
 }

@@ -28,7 +28,7 @@
 
 		setup_charts();
 
-		setup_select_meeting_template();
+		setup_meeting_template();
 
 		setup_quick_meeting();
 		
@@ -89,7 +89,7 @@
 	/*	Meeting Planning
 	/* ---------------------------------------------------------------------- */
 
-	function setup_select_meeting_template() {
+	function setup_meeting_template() {
 		if ($('#meeting-planning').length){
 
 			$('#meeting-planning').click(function(e) {
@@ -99,7 +99,7 @@
 						"label" : "Prev",
 						"class" : "btn-success medium hide prev",
 						"callback": function() {
-							show_select_meeting_template();
+							show_meeting_template();
 							return false;
 						}
 					},{
@@ -122,7 +122,7 @@
 		}// end if
 	}
 
-	function show_select_meeting_template(html)
+	function show_meeting_template(html)
 	{
 		$.get("/page/meeting_template", null,
 		function(html){
@@ -186,6 +186,15 @@
 				$("#agenda_step .tab-content", dialog).append(step_html);
 				$("#agenda_step fieldset:last", dialog).attr("id", "inverse-tab"+(start_step_idx+i));
 				$("#agenda_step fieldset:last", dialog).attr("idx", (start_step_idx+i));
+				// 타임 바 setup
+				$("#agenda_step fieldset:last .timepicker-input", dialog).timepicker({
+					minuteStep: 10,
+					showMeridian: false,
+					defaultTime: false
+				});
+				// 새로 추가된 step 활성화
+				$("#agenda_step fieldset", dialog).removeClass("active");
+				$("#agenda_step fieldset:last", dialog).addClass("active");
 			}
 			// 첫번째 step에 active (보여짐)
 			if( $("#agenda_step fieldset.active", dialog).length == 0 )
@@ -204,23 +213,21 @@
 			
 		var html = '<li '+active+'><span class="label badge-inverse">'+len+'</span><a id="step-'+len+'" href="#inverse-tab'+len+'" data-toggle="tab">Step '+len+'</a></li>';
 		$("#meeting-wizard ul").append(html);
+		$("#meeting-wizard ul li").removeClass("active");
+		$("#meeting-wizard ul li:last").addClass("active");
 		add_setting_agenda_step(len, 1);
 	}
 	
 	function del_process()
 	{
+		$("#meeting-wizard ul li:last").remove();
+		$("#agenda_step fieldset:last", dialog).remove();
 
-		if( $("#meeting-wizard ul li:last").attr("class") == "active" )
+		// active 된게 없으면
+		if( $("#meeting-wizard ul li.active", dialog).length < 1 )
 		{
-			$("#meeting-wizard ul li:last").remove();
 			$("#meeting-wizard ul li:last").addClass("active");
-			$("#agenda_step fieldset:last", dialog).remove();
 			$("#agenda_step fieldset:last", dialog).addClass("active");
-		}
-		else
-		{
-			$("#meeting-wizard ul li:last").remove();
-			$("#agenda_step fieldset:last", dialog).remove();
 		}
 	}
 

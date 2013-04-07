@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="This is an HTML5 example">
+  <meta name="keywords" content="HTML5, CSS3, JavaScript">
+  <title>Create Meeting</title>
+  <link rel="stylesheet" href="/css/style.css">
+    <script>
+		function selectManual() {
+			alert("Click Manual");
+		}
+
+		function selectSubject(subject) {
+			alert(subject);
+		}
+
+  </script>
+</head>
+<body>
+<div id="wrapper">
+  <header id="main_header">
+    <h1>회의 만들기</h1>
+	<button id="manual_button_main" onClick="selectManual()">매뉴얼</button>
+  </header>
+  <div id="container">
+    <section id="main_section">
+      <article>
+        <header>
+          <hgroup>
+            <h1>회의 주제</h1>
+          </hgroup>
+        </header>
+		<div id="subject_list">
+			<button id="meeting_subject" onClick="selectSubject(1)">아이디어 발상</button><p>
+			<button id="meeting_subject" onClick="selectSubject(2)">연간 예산안 준비</button><p>
+			<button id="meeting_subject" onClick="selectSubject(3)">그룹목적 수립</button><p>
+			<button id="meeting_subject" onClick="selectSubject(4)">포장라인의 효율성 향상</button><p>
+			<button id="meeting_subject" onClick="selectSubject(0)">Custom</button>
+		</div>
+      </article>
+    </section>
+  </div>
+</div>
+</body>
+</html>

@@ -86,7 +86,17 @@ function addTool(type)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<iframe src="../postit/index.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분		
+		//tool['source'] = '<iframe src="../postit/index.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분		
+		
+		tool['source'] = '<header>';
+		tool['source'] += '<div class="title_line">';
+		tool['source'] += '<div id="title_text">Post-it Tool</div>';
+		tool['source'] += '<div id="add_postit" onClick="addPostit()">Add</div>';
+		tool['source'] += '</div>';
+		tool['source'] += '</header>';
+		tool['source'] += '<div class="container">';
+		tool['source'] += '</div>'; 
+		
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;

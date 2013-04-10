@@ -35,6 +35,18 @@
 				console.log("client: "+data.client);
 			});
 			
+			////  ADD 버튼 클릭 이벤트 등록 - 데이터 전송  ////
+			$('.container').delegate('.add_button', 'click', function() {
+				var tmpSelect = $(this).parent().parent();
+		
+				var addId = tmpSelect.attr('taskid');
+				var addVal = tmpSelect.children('textarea').val();	
+				var addIndex = $('.object').index(tmpSelect);	 // 현재 Index 구함
+				////  추가된 데이터 서버에 전달  ////
+				socket.emit('set_insert_data', { group: tmpGroup, tool: 'postit1', id: addId, index: addIndex, val: addVal });
+				
+			});
+
 			////  X 버튼 클릭 이벤트 등록 - 포스트잇 삭제  ////
 			$('.container').delegate('.del_button', 'click', function() {
 				var tmpSelect = $(this).parent().parent();
@@ -72,7 +84,7 @@
 					$containers.append($element);		
 						
 					var tmpPostit = $('[taskid='+valId+']');
-					var $titleArea = $("<div class='title_area'><div class='del_button'>X</div><div>");
+					var $titleArea = $("<div class='title_area'><div class='add_button'>ADD</div><div class='del_button'>X</div><div>");
 					tmpPostit.append($titleArea);
 					var $inputArea = $("<textarea class='input_area'  onClick='mouseFocus()'>"+valData+"</textarea>"); 
 					tmpPostit.append($inputArea);

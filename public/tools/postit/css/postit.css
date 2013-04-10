@@ -73,10 +73,10 @@
 
 .input_area {
 	width: 88%;
-	height: 80%;
-	margin: 5% 5% 5% 5%;
+	height: 70%;
+	margin: 2% 5% 5% 5%;
 	font: 14px verdana, sans-serif;
-	border: none;
+
 	border-top: 1px solid #99B;
 	background: none;
 	outline: none;
@@ -89,6 +89,17 @@
 	height: 8%;
 }
 
+.add_button {
+	float:left;
+	margin: 1% 0% 0% 5%;
+	padding: 1px;
+	font: 12px verdana, sans-serif;
+	border: 1px solid #555;
+	background: none;
+	outline: none;
+	cursor: pointer;
+}
+
 .del_button {
 	float:right;
 	margin: 1% 0% 0% 0%;
@@ -99,3 +110,4 @@
 	outline: none;
 	cursor: pointer;
 }
+

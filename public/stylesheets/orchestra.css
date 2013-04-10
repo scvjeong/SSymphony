@@ -1296,7 +1296,7 @@ h6 small {
 		.bwizard-steps.clickable li:hover:not(.active):after {
 			border-left-color: #ccc;}
 
-	#wizard .navbar-inner {
+	#wizard-form .navbar-inner {
 		margin-left: -20px;
 		border-left: none;
 		border-right: none;
@@ -1308,11 +1308,11 @@ h6 small {
 		-moz-border-radius: 0px;
 	}
 	
-	#wizard .wizard ul {
+	#wizard-form .wizard ul {
 		list-style:none;
 		margin:0;
 	}
-	#wizard .wizard ul li {
+	#wizard-form .wizard ul li {
 		display:inline-block;
 	}
 	/* ---------------------------------------------------------------------- */

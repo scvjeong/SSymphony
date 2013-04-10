@@ -88,9 +88,36 @@
 	/* ---------------------------------------------------------------------- */
 	/*	Meeting Planning
 	/* ---------------------------------------------------------------------- */
+	
+	function set_meeting_planning()
+	{
+		var Options = {
+			url: '/ajax/set_meeting_planning',
+			type: 'POST',
+			dataType: 'xml',
+			resetForm: false,
+			beforeSubmit: function(){
+
+			},
+			success: function(xml) {
+				var Result = $(xml).find('Result').text();
+
+				if( Result == "Successful" ) 
+				{
+					location.href="/page/meeting"
+				}		
+				else if( Result == "Error")
+				{
+					var Error_str = $(xml).find('Error_str').text();
+					alert(Error_str);
+				}
+			}
+		};
+		$('#wizard-form').ajaxSubmit(Options);
+	}
 
 	function setup_meeting_template() {
-		if ($('#meeting-planning').length){
+		if ($('#meeting-planning').length ){
 
 			$('#meeting-planning').click(function(e) {
 				e.preventDefault();
@@ -106,7 +133,8 @@
 						"label" : "Complete",
 						"class" : "btn-success medium hide complete",
 						"callback": function() {
-							location.href="/page/meeting";
+							set_meeting_planning();
+							//location.href="/page/meeting";
 							return true;
 						}
 					},{

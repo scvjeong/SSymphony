@@ -39,6 +39,8 @@ app.get('/page/setting_agenda', meeting_planning.setting_agenda);
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
 app.get('/page/users', user.list);
 
+app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
+
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

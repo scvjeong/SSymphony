@@ -1,5 +1,5 @@
 var sql_quick_meeting = function(idx_onwer, idx_onwer_type){
-	var sql = "SELECT idx, subject FROM `meeting_planning` WHERE `idx_onwer` = '1' AND `idx_onwer_type` = 'admin'";
+	var sql = "SELECT `idx`, `name` FROM `tools` WHERE `use_flag` = 'Y'";
 	return sql;
 }
 

@@ -30,7 +30,7 @@
 <div class="row-fluid">
 	<div class="span12">
 		<div class="inner-spacer setting-agenda"> 
-			<form id="wizard" class="form-horizontal">
+			<form id="wizard-form" class="form-horizontal">
 				<div id="agenda_step">
 					<div class="tab-content">
 						<% for(var i=0; i<result.length; i++) {%>
@@ -48,7 +48,7 @@
 								<div class="control-group">
 									<label class="control-label" for="name">주제 : </label>
 									<div class="controls">
-										<input type="text" name="title" required="required" class="span6" value="<%= result[i].subject %>">
+										<input type="text" name="subject" required="required" class="span6" value="<%= result[i].subject %>">
 									</div>
 								</div>
 								<div class="control-group">

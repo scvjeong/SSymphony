@@ -1499,3 +1499,12 @@ h6 small {
 	#manual .manual-contents{
 		padding:2%;
 	}
+
+	/* meeting planning */
+	.step_hidden{
+		display:none !important;
+	}
+
+	.step_show{
+		display:block !important;
+	}

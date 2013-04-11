@@ -116,7 +116,8 @@
 		$('#wizard-form').ajaxSubmit(Options);
 	}
 
-	function setup_meeting_template() {
+	function setup_meeting_template()
+	{
 		if ($('#meeting-planning').length ){
 
 			$('#meeting-planning').click(function(e) {
@@ -126,13 +127,21 @@
 						"label" : "Prev",
 						"class" : "btn-success medium hide prev",
 						"callback": function() {
-							show_meeting_template();
+							prev_meeting_planning();
+							return false;
+						}
+					},{
+						"label" : "Next",
+						"class" : "btn-success medium hide next",
+						"callback": function() {
+							next_meeting_planning();
 							return false;
 						}
 					},{
 						"label" : "Complete",
 						"class" : "btn-success medium hide complete",
 						"callback": function() {
+							pmp = 0;
 							set_meeting_planning();
 							//location.href="/page/meeting";
 							return true;
@@ -150,12 +159,70 @@
 		}// end if
 	}
 
-	function show_meeting_template(html)
+	// meeting planning page pointer
+	var pmp = 0;
+
+	function next_meeting_planning()
+	{
+		// page pointer 증가
+		pmp++;
+		show_meeting_planning(pmp)
+	}
+
+	function prev_meeting_planning()
+	{
+		// page pointer 감소
+		pmp--;
+		show_meeting_planning()
+	}
+	
+	function show_meeting_planning()
+	{
+		switch(pmp)
+		{
+			case 0:
+				show_meeting_template();
+				break;
+			case 1:
+				$('#setting_agenda_1').addClass("step_show");
+				$('#setting_agenda_1').removeClass("step_hidden");
+				$('#setting_agenda_2').addClass("step_hidden");
+				$('#setting_agenda_2').removeClass("step_show");
+				$('#setting_agenda_3').addClass("step_hidden");
+				$('#setting_agenda_3').removeClass("step_show");
+				$(".modal-footer a.next", dialog).show();
+				$(".modal-footer a.complete", dialog).hide();
+				break;
+			case 2:
+				var meeting_subject = $('input[name=meeting_subject]');
+				if(meeting_subject.val().trim().length < 1)
+				{
+					pmp--;
+					meeting_subject.focus();
+					return false;
+				}
+				$('#setting_agenda_1').addClass("step_hidden");
+				$('#setting_agenda_1').removeClass("step_show");
+				$('#setting_agenda_2').addClass("step_show");
+				$('#setting_agenda_2').removeClass("step_hidden");
+				$('#setting_agenda_3').addClass("step_show");
+				$('#setting_agenda_3').removeClass("step_hidden");
+				$(".modal-footer a.next", dialog).hide();
+				$(".modal-footer a.complete", dialog).show();
+				break;
+			default:
+				pmp = 0;
+				show_meeting_template();
+		}
+	}
+
+	function show_meeting_template()
 	{
 		$.get("/page/meeting_template", null,
 		function(html){
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();
+			$(".modal-footer a.next", dialog).hide();
 			$(".modal-footer a.prev", dialog).hide();
 			//setup_meeting_wizard();
 		},"html");
@@ -181,6 +248,9 @@
 
 	function show_setting_agenda(idx)
 	{
+		// page pointer 증가
+		pmp++;
+
 		$(dialog).on("blur", "#agenda_step input[name=title]", function(){
 			var idx = $(this).parent().parent().parent().attr("idx");
 			if( $(this).val() == "" )
@@ -194,7 +264,7 @@
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
-			$(".modal-footer a.complete", dialog).show();
+			$(".modal-footer a.next", dialog).show();
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();

@@ -64,7 +64,7 @@ exports.meeting_template = function(req, res){
 	// params['idx_owner']
 	// params['idx_owner_type']
 	var params = { idx_owner:null, idx_owner_type:null }
-	var sql = dao_mp.dao_meeting_template(evt, mysql_conn, params);
+	dao_mp.dao_meeting_template(evt, mysql_conn, params);
 	evt.on('meeting_template', function(err, rows){
 		if(err) throw err;
 		res.render('select_meeting_template', {result:rows} );
@@ -78,8 +78,7 @@ exports.setting_agenda = function(req, res){
 	// params['idx_owner_type']
 	// params['idx_meeting_planning']
 	var params = { idx_owner:null, idx_owner_type:null, idx_meeting_planning:req.param('idx') }
-	console.log(params);
-	var sql = dao_mp.dao_load_agenda(evt, mysql_conn, params);
+	dao_mp.dao_load_agenda(evt, mysql_conn, params);
 	evt.on('setting_agenda', function(err, rows){
 		if(err) throw err;
 		res.render('setting_agenda', {result:rows} );

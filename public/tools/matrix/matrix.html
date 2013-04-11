@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Matrix Tool</title>
+	<meta name="description" content="Matrix Tool" />
+	<link rel="stylesheet" href="./css/matrix.css">
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="./lib/socket.io.js"></script>	
+	<script>		
+		var tmpLastId = 100;	// 마지막 ID 관리
+		var tmpClient = 0;	//현재 클라이언트 번호
+		var tmpGroup = 0;	//현재 그룹
+		var setFlag = 0;
+		var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
+
+		var inputFlag = 0;	//키입력 감지하기 위한 변수
+
+		////  socket.io 서버의 해당 그룹에 접속  ////
+		var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
+
+		////  처음 창 오픈되었을 때 호출  ////
+		$(document).ready(function() {
+			tmpGroup = "group1";
+			socket.emit('join_room', { group: tmpGroup });
+			
+			//set_data 이용해서 초기에 Matrix Tool 존재하는지 검사
+
+		}); 
+		
+		function setNum() {
+			if (setFlag == 0) {
+				setFlag = 1;
+				var tmpRow = $('#rowNum').val();
+				var tmpCol = $('#colNum').val();
+				//alert("row: "+tmpRowNum+" / col: "+tmpColNum);
+				$('.size_box').children('#rowNum').attr('readonly', true);
+				$('.size_box').children('#colNum').attr('readonly', true);
+				setRowCol(tmpRow, tmpCol);
+			}
+		}
+
+		function setRowCol(tmpRow, tmpCol) {
+			//alert("row: "+tmpRow+" / col: "+tmpCol);
+			var tmpMatrix = $('#matrix_table');
+
+			var tmpTag = "";
+			
+			var i=0, j=0;
+			for (i=0; i<parseInt(tmpRow)+1; i++) {
+				tmpTag = "<tr class='row'></tr>";
+				tmpMatrix.append(tmpTag);
+				for (j=0; j<parseInt(tmpCol)+1; j++) {
+					if (i==0 && j==0) {
+						var tmpInsertRow = tmpMatrix.find('.row:last');
+						tmpTag = "<td><div class='main_title'><input class='main_input' type='text'></div></td>";		
+						tmpInsertRow.append(tmpTag);
+					}
+					else if (i==0) {
+						var tmpInsertRow = tmpMatrix.find('.row:last');
+						tmpTag = "<td><div class='col_title'><input class='col_input' type='text'></div></td>";		
+						tmpInsertRow.append(tmpTag);
+					}
+					else if (j==0) {
+						var tmpInsertRow = tmpMatrix.find('.row:last');
+						tmpTag = "<td><div class='row_title'><input class='row_input' type='text'></div></td>";
+						tmpInsertRow.append(tmpTag);
+					}
+					else {
+						var tmpInsertRow = tmpMatrix.find('.row:last');
+						tmpTag = "<td><div class='input_line'><input class='val_input' type='text'></div></td>";
+						tmpInsertRow.append(tmpTag);
+					}
+					
+				}
+			}
+
+		}
+	
+
+	</script>
+</head>
+<body>
+<div id="wrapper">
+	<header id="main_header">
+		<h1>Matrix Tool</h1>
+	</header>
+	<div id="container">
+    <section id="main_section">
+		<article>
+			<header>
+				<div class="menu_line">
+					
+					<div class="size_box" >
+						<input type="number" class="inputNum" id="rowNum" value="2">
+						X
+						<input type="number" class="inputNum" id="colNum" value="2">				
+					</div>		
+					<div id="setNum" onClick="setNum()" ><h2>Set</h2></div>
+					<div class="init_box">
+						<div id="initButton" onClick=""><h2>Clear</h2></div>
+					</div>
+				</div>
+			</header>
+			<div class="matrix_space">
+				<table id="matrix_table">
+			
+				</table>
+			</div>
+		</article>
+    </section>
+	</div>
+</div>
+</body>
+</html>

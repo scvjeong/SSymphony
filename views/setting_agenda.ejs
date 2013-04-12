@@ -18,6 +18,15 @@
 							</div>
 						</div>
 						<div class="control-group">
+							<label class="control-label" for="input01">Meeting Date : </label>
+							<div class="controls">
+								<div class="input-append date" id="datepicker-js" data-date="" data-date-format="yyyy-mm-dd">
+									<input class="datepicker-input" name="date" size="16" type="text" value="" placeholder="Select a date" />
+									<span class="add-on"><i class="cus-calendar-2"></i></span>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
 							<label class="control-label" for="input01">Meeting Start Time : </label>
 							<div class="controls">
 								<div class="input-append bootstrap-timepicker-component">
@@ -38,19 +47,10 @@
 						<div class="control-group">
 							<label class="control-label" for="multiSelect">An Entry</label>
 							<div class="controls">
-								<select multiple="multiple" name="tools" class="span6 with-search">
-									<option value="Michael Jeong">Michael Jeong</option>
-									<option value="godong9">godong9</option>
-									<option value="Chicken">Chicken</option>
-									<option value="Stuart">Stuart</option>
-									<option value="Angelina Jolie">Angelina Jolie</option>
-									<option value="Brad Pitt">Brad Pitt</option>
-									<option value="Tim Cook">Tim Cook</option>
-									<option value="Steve Jobs">Steve Jobs</option>
-									<option value="da Vinci">da Vinci</option>
-									<option value="Bill Gates">Bill Gates</option>
-									<option value="Ellen Page">Ellen Page</option>
-									<option value="John Lennon">John Lennon</option>									
+								<select multiple="multiple" name="users" class="span6 with-search">
+									<% for(var i=0; i<result.users.length; i++) {%>
+										<option value="<%= result.users[i].idx %>"><%= result.users[i].name %></option>
+									<% } %>	
 								</select>
 							</div>
 						</div>
@@ -65,7 +65,7 @@
 				<div id="meeting-wizard">
 					<!-- wizard steps -->
 					<ul class="bwizard-steps">
-						<% for(var i=0; i<result.length; i++) {%>
+						<% for(var i=0; i<result.agenda.length; i++) {%>
 							<% 
 								if( i == 0 ) 
 									active = "class=active";
@@ -73,8 +73,8 @@
 									active = "";
 							%>
 								<li <%= active %>>
-								<span class="label badge-inverse"><%= result[i].order %></span>
-								<a href="#inverse-tab<%= (i+1) %>" data-toggle="tab" id="step-<%= (i+1) %>"><%= result[i].subject %></a>
+								<span class="label badge-inverse"><%= result.agenda[i].order %></span>
+								<a href="#inverse-tab<%= (i+1) %>" data-toggle="tab" id="step-<%= (i+1) %>"><%= result.agenda[i].subject %></a>
 							</li>
 						<% } %>	
 					</ul>
@@ -92,28 +92,28 @@
 			<div class="inner-spacer setting-agenda"> 
 				<div id="agenda_step">
 					<div class="tab-content">
-						<% for(var i=0; i<result.length; i++) {%>
+						<% for(var i=0; i<result.agenda.length; i++) {%>
 							<% 
 								if( i == 0 ) 
 									active = "active";
 								else
 									active = "";
-								start_time_arr = result[i].start_time.split(":");
+								start_time_arr = result.agenda[i].start_time.split(":");
 								start_time = start_time_arr[0]+":"+start_time_arr[1];
-								end_time_arr = result[i].end_time.split(":");
+								end_time_arr = result.agenda[i].end_time.split(":");
 								end_time = end_time_arr[0]+":"+end_time_arr[1];
 							%>
 							<fieldset class="tab-pane <%= active %>" id="inverse-tab<%= (i+1) %>" idx="<%= (i+1) %>">
 								<div class="control-group">
 									<label class="control-label" for="name">Agenda Subject : </label>
 									<div class="controls">
-										<input type="text" name="subject" required="required" class="span6" value="<%= result[i].subject %>">
+										<input type="text" name="subject" required="required" class="span6" value="<%= result.agenda[i].subject %>">
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="lname">Agenda Goal : </label>
 									<div class="controls">
-										<input type="text" name="goal" class="span6" value="<%= result[i].goal %>">
+										<input type="text" name="goal" class="span6" value="<%= result.agenda[i].goal %>">
 									</div>
 								</div>
 								<div class="control-group">
@@ -138,22 +138,18 @@
 									<label class="control-label" for="multiSelect">Meeting Tools</label>
 									<div class="controls">
 										<select multiple="multiple" name="tools" class="span6 with-search">
-											<option value="list">list</option>
-											<option value="mindmap">mindmap</option>
-											<option value="postit">postit</option>
-											<option value="vote">vote</option>
-											<option value="matrix">matrix</option>
+											<% for(var j=0; j<result.tools.length; j++) {%>
+												<option value="<%= result.tools[j].name %>"><%= result.tools[j].name %></option>
+											<% } %>	
 										</select>
 									</div>
 								</div>
 								<div class="control-group">
 									<label class="control-label" for="optionsCheckbox">Meeting Tools</label>
 									<div class="controls">
-										<label class="checkbox inline"><input type="checkbox" value="list" class="tools"> list</label>
-										<label class="checkbox inline"><input type="checkbox" value="mindmap" class="tools"> mindmap</label>
-										<label class="checkbox inline"><input type="checkbox" value="postit" class="tools"> postit</label>
-										<label class="checkbox inline"><input type="checkbox" value="vote" class="tools"> vote</label>
-										<label class="checkbox inline"><input type="checkbox" value="matrix" class="tools"> matrix</label>
+										<% for(var j=0; j<result.tools.length; j++) {%>
+											<label class="checkbox inline"><input type="checkbox" value="<%= result.tools[j].name %>" class="tools"> <%= result.tools[j].name %></label>
+										<% } %>
 									</div>
 								</div>
 							</fieldset>

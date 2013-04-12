@@ -37,7 +37,9 @@
     <!-- Core Theme Styles -->
     <!-- <link rel="stylesheet/less" href="media/styles/style.less" /> -->
     <link rel="stylesheet" href="/stylesheets/orchestra.css" />
-
+	
+	<!-- datepicker calander css -->
+	<link rel="stylesheet" href="/stylesheets/datepicker.css?v=1">
 	<!-- full calander css -->
 	<link rel="stylesheet" href="/stylesheets/fullcalendar.css?v=1">
 	<!-- jarvis widget css -->
@@ -324,41 +326,23 @@
 							<div class="inner-spacer"> 
 							<!-- content -->	
 								<div class="accordion" id="accordion1">
-									<div class="accordion-group">
-										<div class="accordion-heading">
-											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse1">
-												<i class="icon-plus-sign"></i> 퍼실리테이션 회의 #1 </a>
-										</div>
-										<div id="collapse1" class="accordion-body collapse" style="height: 0px; ">
-											<div class="accordion-inner">
-												회의 주제 - 형성평가 준비 회의
-												회의 날짜 - 2013.03.08
-												회의 시간 - 08:00 - 13:00
-												회의 참가자 - 고동현, 임종혁, 정용기
-												회의 역할 - 진행자: 정용기, 서기: 임종혁
+									<% for(var i=0; i<result.meeting.length; i++) {%>
+										<div class="accordion-group">
+											<div class="accordion-heading">
+												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse<%= (i+1) %>">
+													<i class="icon-plus-sign"></i> <%= result.meeting[i].subject %> </a>
+											</div>
+											<div id="collapse<%= (i+1) %>" class="accordion-body collapse" style="height: 0px; ">
+												<div class="accordion-inner">
+													회의 주제 - <%= result.meeting[i].subject %><br>
+													회의 날짜 - <%= result.meeting[i].date %><br>
+													회의 시간 - <%= result.meeting[i].start_time %> ~ <%= result.meeting[i].end_time %><br>
+													회의 참가자 - <%= result.meeting[i].user_list %><br>
+													<!--회의 역할 - 진행자: 정용기, 서기: 임종혁<br>-->
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="accordion-group">
-										<div class="accordion-heading">
-											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse2">
-												<i class="icon-plus-sign"></i> 퍼실리테이션 회의 #2 </a>
-										</div>
-										<div id="collapse2" class="accordion-body collapse" style="height: 0px; ">
-											<div class="accordion-inner">
-											</div>
-										</div>
-									</div>
-									<div class="accordion-group">
-										<div class="accordion-heading">
-											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse3">
-												<i class="icon-plus-sign"></i> 퍼실리테이션 회의 #3 </a>
-										</div>
-										<div id="collapse3" class="accordion-body collapse" style="height: 0px; ">
-											<div class="accordion-inner">
-											</div>
-										</div>
-									</div>
+									<% } %>	
 								</div>
 							<!-- end content -->	
 							</div>
@@ -378,7 +362,7 @@
 		<!-- Panel Page group-info Content: -->
 			<section id="widget-grid-4" class="">
 			<div class="row-fluid">
-			  <div class="span6">
+			  <div class="span8">
 				<div class="panel" id="panel-401">
 					<!-- new widget -->
 					<div class="jarviswidget" id="widget-id-401">
@@ -399,7 +383,7 @@
 					<!-- end widget -->
 				</div>
 			  </div>
-			  <div class="span6" style="height:400px;">
+			  <div class="span4" style="height:400px;">
 				<div class="panel" id="panel-403">
 					<!-- new widget -->
 					<div class="jarviswidget" id="widget-id-403">
@@ -415,90 +399,20 @@
 								<div id="panelcontents">
 									<div id="participants">
 										<ul class="users-online">
-											<li class="first">
-												<a href="javascript:void(0);" title="">
-													<img src="" alt="" style="background-color:#eeeeee;" />
-													<span class="user-name">
-														<strong>
-															Go Dong Hyun <span>(3)</span>
-														</strong>
-														<b>Murderer</b>
-													</span>
-													<i class="online"></i>
-												</a>
-											</li>
-											<li class="">
-												<a href="javascript:void(0);" title="">
-													<img src="" alt="" style="background-color:#eeeeee;" />
-													<span class="user-name">
-														<strong>
-															SCV Jeong <span></span>
-														</strong>
-														<b>jeongjeong1</b>
-													</span>
-													<i class="online"></i>
-												</a>
-											</li>
-											<li class="">
-												<a href="javascript:void(0);" title="">
-													<img src="" alt="" style="background-color:#eeeeee;" />
-													<span class="user-name">
-														<strong>
-															Angie Freemen <span></span>
-														</strong>
-														<b>CFO</b>
-													</span>
-													<i class="away"></i>
-												</a>
-											</li>
-											<li class="">
-												<a href="javascript:void(0);" title="">
-													<img src="" alt="" style="background-color:#eeeeee;" />
-													<span class="user-name">
-														<strong>
-															Carol Lam <span></span>
-														</strong>
-														<b>Graphic Designer</b>
-													</span>
-													<i class="offline"></i>
-												</a>
-											</li>
-											<li class="">
-												<a href="javascript:void(0);" title="">
-													<img src="" alt="" style="background-color:#eeeeee;" />
-													<span class="user-name">
-														<strong>
-															Julia Berry <span></span>
-														</strong>
-														<b>Human Resources</b>
-													</span>
-													<i class="online"></i>
-												</a>
-											</li>
-											<li class="">
-												<a href="javascript:void(0);" title="">
-													<img src="" alt="" style="background-color:#eeeeee;" />
-													<span class="user-name">
-														<strong>
-															David Simpson <span>(2)</span>
-														</strong>
-														<b>CEO</b>
-													</span>
-													<i class="away"></i>
-												</a>
-											</li>
-											<li class="last">
-												<a href="javascript:void(0);" title="">
-													<img src="" alt="" style="background-color:#eeeeee;" />
-													<span class="user-name">
-														<strong>
-															Brad Pitt <span></span>
-														</strong>
-														<b>Information Technology</b>
-													</span>
-													<i class="busy"></i>
-												</a>
-											</li>
+											<% for(var i=0; i<result.users.length; i++) {%>
+												<li class="">
+													<a href="javascript:void(0);" title="">
+														<img src="" alt="" style="background-color:#eeeeee;" />
+														<span class="user-name">
+															<strong>
+																<%= result.users[i].name %> <span>(3)</span>
+															</strong>
+															<b><%= result.users[i].position %></b>
+														</span>
+														<i class="online"></i>
+													</a>
+												</li>
+											<% } %>	
 										</ul>
 									</div>
 								</div>								
@@ -511,7 +425,7 @@
 					<!-- end widget -->
 				</div>
 			  </div>
-			  <div class="span6">
+			  <div class="span8">
 				<div class="panel" id="panel-402">
 					<!-- new widget -->
 					<div class="jarviswidget" id="widget-id-402">
@@ -779,6 +693,8 @@
 	<script src="/javascripts/bootstrap.wizard.min.js"></script>
 	<!-- REQUIRED: Bootstrap Timepicker -->
 	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
+	<!-- REQUIRED: Bootstrap Datepicker -->
+	<script src="/javascripts/bootstrap.datepicker.min.js"></script>
 	<!-- REQUIRED: select2 -->
 	<script src="/javascripts/select2.js"></script>
 	<!-- REQUIRED: uniform -->

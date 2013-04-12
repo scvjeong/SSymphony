@@ -268,6 +268,7 @@
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
+			setup_datepicker();
 			enable_select2();
 		},"html");
 	}
@@ -1124,6 +1125,18 @@
 	
 	/* end setup_timepicker */
 	
+	/* ---------------------------------------------------------------------- */
+	/*	Setup_datepicker
+	/* ---------------------------------------------------------------------- */	
+	
+	function setup_datepicker() {
+		if ($('#datepicker-js').length){
+			$('#datepicker-js').datepicker()
+		}// end if
+	}	
+	
+	/* end setup_datepicker_demo */
+
 	/* ---------------------------------------------------------------------- */
 	/*	Enable Select2
 	/* ---------------------------------------------------------------------- */

@@ -1,4 +1,4 @@
-// load_agenda
+// group_info_member
 // params['idx_owner']
 // params['idx_owner_type']
 // params['idx_meeting_planning']

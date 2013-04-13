@@ -1,6 +1,8 @@
 var mysql_conn = require('../sql/mysql_server').mysql_conn;
 var EventEmitter = require('events').EventEmitter;
-
+var util = require('../lib/util');
+var check = require('validator').check,
+    sanitize = require('validator').sanitize;
 /*
  * GET home page.
  */
@@ -8,11 +10,12 @@ exports.index = function(req, res){
 	var evt = new EventEmitter();
 	var dao_ml = require('../sql/meeting_list');
 	var dao_gi = require('../sql/group_info');
+	var dao_h = require('../sql/help');
 	// params['idx_user']
 	// params['idx_group']
 	var params = { idx_user:1, idx_group:1 }
 
-	var result = { meeting:{}, users:{} };
+	var result = { meeting:{}, users:{}, help:{} };
 	var complete_flag = 0;
 
 	dao_ml.dao_meeting_list(evt, mysql_conn, params);
@@ -20,7 +23,7 @@ exports.index = function(req, res){
 		if(err) throw err;
 		complete_flag++;
 		result.meeting = rows;
-		if( complete_flag == 2 )
+		if( complete_flag == 3 )
 			res.render('main', {result:result} );
 	});
 
@@ -29,7 +32,24 @@ exports.index = function(req, res){
 		if(err) throw err;
 		complete_flag++;
 		result.users = rows;
-		if( complete_flag == 2 )
+		if( complete_flag == 3 )
+			res.render('main', {result:result} );
+	});
+
+	dao_h.dao_help(evt, mysql_conn, params);
+	evt.on('help', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		/*
+		for(var i=0; i<rows.length; i++)
+		{
+			rows[i].name = sanitize(rows[i].name).xss();
+			rows[i].contents = sanitize(rows[i].contents).xss();
+		}
+		*/
+		console.log(rows);
+		result.help = rows;
+		if( complete_flag == 3 )
 			res.render('main', {result:result} );
 	});
 };

@@ -703,7 +703,30 @@
 	<script src="/javascripts/jquery.form.js"></script>
 
 	<script src="/javascripts/config.js"></script>	
+	<script type="text/javascript">
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
 
+		var events = [
+		<% 
+			for(var i=0; i<result.meeting.length; i++) {
+			var date = new Date(result.meeting[i].date);
+		%>
+			{
+				title: '<%=result.meeting[i].subject%>',
+				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
+				end: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>)
+			},
+		<%}%>
+		];
+					
+		$(document).ready(function(){
+			
+			setup_calendar();
+		})
+	</script>
 <!-- /Javascript -->
 
 </body>

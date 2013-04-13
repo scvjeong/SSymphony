@@ -20,8 +20,6 @@
 
 		setup_timepicker();
 
-		setup_calendar();
-
 		setup_all_buttons();
 
 		setup_widgets_desktop();
@@ -333,15 +331,10 @@
 	/* ---------------------------------------------------------------------- */
 	/*	Calendar
 	/* ---------------------------------------------------------------------- */
-
-	function setup_calendar() {
 		
+	function setup_calendar() {
+
 		if ($("#calendar").length) {
-			var date = new Date();
-			var d = date.getDate();
-			var m = date.getMonth();
-			var y = date.getFullYear();
-			
 			var calendar = $('#calendar').fullCalendar({
 				header: {
 					left: 'title', //,today
@@ -365,75 +358,8 @@
 					}
 					calendar.fullCalendar('unselect');
 				},
-				
 				editable: true,
-				events: [
-					{
-						title: '멘토링',
-						start: new Date(y, m, 2),
-						end: new Date(y, m, 2)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 3),
-						end: new Date(y, m, 3)
-					},
-					{
-						title: 'Orchestra 회의',
-						start: new Date(y, m, 6),
-						end: new Date(y, m, 6)
-					},	
-					{
-						title: 'Orchestra 회의',
-						start: new Date(y, m, 8),
-						end: new Date(y, m, 8)
-					},	
-					{
-						title: '멘토링',
-						start: new Date(y, m, 9),
-						end: new Date(y, m, 9)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 10),
-						end: new Date(y, m, 10)
-					},
-					{
-						title: 'Orchestra 회의',
-						start: new Date(y, m, 13),
-						end: new Date(y, m, 13)
-					},	
-					{
-						title: '형성평가',
-						start: new Date(y, m, 15),
-						end: new Date(y, m, 15)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 16),
-						end: new Date(y, m, 16)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 17),
-						end: new Date(y, m, 17)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 23),
-						end: new Date(y, m, 23)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 24),
-						end: new Date(y, m, 24)
-					},
-					{
-						title: '중간평가',
-						start: new Date(y, m, 29),
-						end: new Date(y, m, 29)
-					}
-				]
+				events: events
 			});
 		};
 
@@ -468,12 +394,7 @@
 				},
 				
 				editable: true,
-				events: [
-					{
-						title: 'All Day Event',
-						start: new Date(y, m, 1)
-					}
-				]
+				events: events
 			});
 		};
 		

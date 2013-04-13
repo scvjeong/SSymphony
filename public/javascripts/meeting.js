@@ -111,7 +111,7 @@ function addTool(type)
 			tool['source'] += '<div id="jinomap" tabindex="-1" style="outline:none; border: none; position:relative; overflow:hidden; background:#f4f4f4;">';
 			tool['source'] += '</div>';
 		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분*/
-		tool['source'] = '<iframe src="../mindmap/start.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분
+		tool['source'] = '<iframe src="../tools/mindmap/start.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분
 		break;
 	case "vote":
 		_tool_vote_count++;

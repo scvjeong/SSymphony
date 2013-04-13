@@ -1,4 +1,4 @@
-
+var test;
 var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 		var tmpLastId = 100;	
 		var tmpGroup = 0;
@@ -70,6 +70,7 @@ var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버�
 					tmpPostit.append($inputArea);
 				});
 				console.log($containers);
+				test = $containers;
 				$containers.shapeshift({
 					paddingY: 20
 				  });

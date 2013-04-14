@@ -280,9 +280,10 @@ function changePenColor(color)
 
 
 
-var _pen_color = "#000000"
+var _pen_color = "#000000";
+var _fill_color = "#000000";
 
-if( window.addEventListener ) {
+if(window.addEventListener) {
 	var dBoard;
 
 	function init()
@@ -380,4 +381,27 @@ if( window.addEventListener ) {
 	
 	}
 
+	function GraphicRect(objBoard, left, top, right, bottom)
+	{
+	    var canvas = document.getElementById(objBoard);
+	    if (canvas.getContext) {
+	      var context = canvas.getContext('2d');
+	      
+	      context.fillStyle = _fill_color;
+	      context.fillRect(left, top, right, bottom);
+	    } else {
+	    	console.log("canvas 안 됨");
+	    }
+	}
+	
+	function GraphicCircle(objBoard, x, y)
+	{
+		var canvas = document.getElementById(objBoard);
+		var ctx = canvas.getContext('2d');
+		canvas.onmousedown = function(event) {
+        var x = event.x;
+        var y = event.y;
+        ctx.arc(x, y, 15, 0, Math.PI*2, true);
+        ctx.closePath();
+    }
 }

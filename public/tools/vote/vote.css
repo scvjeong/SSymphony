@@ -19,3 +19,15 @@
 	padding: 10px;
 	outline: none;
 }
+
+.vote_make_container .voteReadyList {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.vote_make_container .voteReadyList li {
+	border-top: 1px solid #ababab;
+	margin: 0;
+	padding: 0;
+}

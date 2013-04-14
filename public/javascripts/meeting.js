@@ -398,9 +398,6 @@ if(window.addEventListener) {
 	{
 		var canvas = document.getElementById(objBoard);
 		var ctx = canvas.getContext('2d');
-		canvas.onmousedown = function(event) {
-        var x = event.x;
-        var y = event.y;
         ctx.arc(x, y, 15, 0, Math.PI*2, true);
         ctx.closePath();
     }

@@ -11,3 +11,11 @@
 	width: 500px;
 	height: 150px;
 }
+
+.vote_container .question_title {
+	width: 100%;
+	height: 150px;
+	border: none;
+	padding: 10px;
+	outline: none;
+}

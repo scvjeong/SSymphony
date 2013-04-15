@@ -38,6 +38,11 @@
 				setRowCol(tmpRow, tmpCol);
 			}
 		}
+		
+		function setClear() {
+			setFlag=0;
+			$('#matrix_table').html("");
+		}
 
 		function setRowCol(tmpRow, tmpCol) {
 			//alert("row: "+tmpRow+" / col: "+tmpCol);
@@ -97,7 +102,7 @@
 					</div>		
 					<div id="setNum" onClick="setNum()" ><h2>Set</h2></div>
 					<div class="init_box">
-						<div id="initButton" onClick=""><h2>Clear</h2></div>
+						<div id="initButton" onClick="setClear()"><h2>Clear</h2></div>
 					</div>
 				</div>
 			</header>

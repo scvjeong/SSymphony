@@ -8,8 +8,8 @@ var _common_windot_left = 20;
 var _new_z_index = 0;
 
 $(document).ready(function() {
-	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
-	setRightpanel("participants");
+	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
+	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 });
 
 // 오른쪽 메뉴 전환
@@ -227,6 +227,7 @@ function closePopupWindow(idx)
 setInterval("showRunTime()", 1000);
 var _runTime = 0;
 var _totalTime = "30:00:00";	// 회의 전체 시간
+var _alarmList = new Array();
 function showRunTime()
 {
 	var hour = parseInt(_runTime / 60 / 60);
@@ -247,7 +248,30 @@ function showRunTime()
 
 	$('#runTime').html(nowRunTime + " / " + _totalTime);
 
+	catchAlarmTime();
+	
 	_runTime++;
+}
+
+function addAlarmTime(hour, minute, second)
+{
+	// var newtime = new Array();
+	// newtime["hour"] = hour;
+	// newtime["minute"] = minute;
+	// newtime["second"] = second;
+	var newtime = hour * 60 * 60 + minute * 60 + second;
+	_alarmList.push(newtime);
+}
+
+function catchAlarmTime()
+{
+	for (var i = 0; i < _alarmList.length; i++)
+	{
+		if (_runTime == _alarmList[i])
+		{
+			console.log("알람 발생");
+		}
+	}
 }
 
 

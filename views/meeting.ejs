@@ -341,17 +341,26 @@
 </div>
 
 <div id="meetingboard">
-	<div>
-		<ul>
-			<li onclick="changePenColor('#000000')">검정</li>
-			<li onclick="changePenColor('#ff0000')">red</li>
-			<li onclick="changePenColor('#0000ff')">blue</li>
-		</ul>
+	<div id="whiteboard_control_box">
+		<div id="titlebar"></div>
+		<div id="color_selector">
+			<ul id="color_list">
+				<li onclick="changePenColor('#000000')" style="background-color: #000000"></li>
+				<li onclick="changePenColor('#ff0000')" style="background-color: #ff0000"></li>
+				<li onclick="changePenColor('#0000ff')" style="background-color: #0000ff"></li>
+				<li onclick="changePenColor('#00ff00')" style="background-color: #00ff00"></li>
+				<li onclick="changePenColor('#f0f000')" style="background-color: #f0f000"></li>
+				<li onclick="changePenColor('#0f0f00')" style="background-color: #0f0f00"></li>
+				<li onclick="changePenColor('#00f0f0')" style="background-color: #00f0f0"></li>
+				<li onclick="changePenColor('#ffffff')" style="background-color: #ffffff"></li>
+			</ul>
+		</div>
+		
 	</div>
-<canvas id="canvasView" width="1400" height="1000" >
-	<p>브라우저에서 캔버스 지원이 안 됩니다.<br/>
-	</p>
-</canvas>
+	<canvas id="canvasView" width="1400" height="1000" >
+		<p>브라우저에서 캔버스 지원이 안 됩니다.<br/>
+		</p>
+	</canvas>
 </div>
 
 <div id="splashpopup_wrapper">

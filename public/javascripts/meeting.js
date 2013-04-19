@@ -91,7 +91,7 @@ function addTool(type)
 		tool['source'] = '<header>';
 		tool['source'] += '<div class="title_line">';
 		tool['source'] += '<div id="title_text">Post-it Tool</div>';
-		tool['source'] += '<div id="add_postit" onClick="addPostit()">Add</div>';
+		tool['source'] += '<div id="add_postit" onClick="addPostit()">+</div>';
 		tool['source'] += '</div>';
 		tool['source'] += '</header>';
 		tool['source'] += '<div class="container">';

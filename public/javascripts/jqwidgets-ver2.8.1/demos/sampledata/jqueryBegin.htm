@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="../../jqwidgets/styles/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="../../scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="../../scripts/gettheme.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.edit.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.filter.js"></script>
+    <script type="text/javascript" src="../../jqwidgets/jqxgrid.selection.js"></script>
+     <script type="text/javascript" src="../../jqwidgets/jqxgrid.sort.js"></script>
+  <script type="text/javascript" src="../../scripts/json2.js"></script> 
+     <script type="text/javascript" src="../../jqwidgets/jqxwindow.js"></script>
+
+    <script type="text/javascript">
+          
+
+	// Input Req's as Json object for the Input Req's Grid       		
+//	var inputReqJsonObj = eval('('+'<%=sJsonInputReqs%>'+')');
+//	var jsonIRAttrTemplate = eval('('+'<%=sJsonIRAttrTemplate%>'+')') ;
+//	var resetIRData = inputReqJsonObj;
+//			
+//	var aliasTagAttrs = new Array();	
+//	var reqDRMandatoryAttrs = '<%=alReqMandatoryAttrList%>';	
+//	var drmandatoryAttrArray = reqDRMandatoryAttrs.replace("[","").replace("]","").split(",");
+//	var reqIRMandatoryAttrs = '<%=alIRMandatoryAttrList%>';	
+//	var irmandatoryAttrArray = reqIRMandatoryAttrs.replace("[","").replace("]","").split(",");
+	
+	var editType = "";
+	var rowsel = -1;
+	var dataf = -1;
+	var mandatoryMsg = "";
+	var currTab = "";
+	
+	//Global Variables for Detailed Requirments Grid
+	var tempDrsArray = new Array(); var tempDrsArrayIndex = new Array();
+	var tempIRsArray = new Array(); var tempIRsArrayIndex = new Array();
+	var sObid = 3;//"<%=request.getParameter("3") %>";
+	var sObjectid = 5;
+
+	//For Input Requirement
+	function fillInputReqsGrid(data, bFlag) {
+	    if (bFlag) {
+	        var parentElement = $("#jqxgridIR").parent();
+	        $("#jqxgridIR").remove();
+	        parentElement.append("<div id='jqxgridIR'></div>");
+	    }
+	    var detReqsGridData = data;
+	    var detReqSource =
+          {
+              localdata: detReqsGridData,
+              datatype: "json"
+          };
+
+	    var reqDataAdapter = new $.jqx.dataAdapter(detReqSource);
+	    beginedit = function (row, datafield, columntype) {
+	        var edit = $('#jqxgridIR').jqxGrid('getcellvalue', row, 'Editable');
+	        if (edit == 'False') {
+	            return false;
+	        };
+	    };
+	    // renders the cells of the non editable rows
+	    var cellsrenderer = function (row, columnfield, value, defaulthtml, columnproperties) {
+	        var edit = $('#jqxgridIR').jqxGrid('getcellvalue', row, 'Editable');
+	        if (edit == 'False') {
+	            var formattedValue = value;
+	            if (columnproperties.cellsformat != "") {
+	                formattedValue = $.jqx.dataFormat.formatnumber(formattedValue, columnproperties.cellsformat);
+	            };
+	            return '<div style="height: 100%; background-color: #BBBBBB;"><span style="float: ' + columnproperties.cellsalign + '; position: relative; margin: 4px;">' + formattedValue + '</span></div>';
+	        };
+	    };
+	    var reqGridColumns = new Array();
+	    var keys = [], props = [];
+	    var row = {};
+	    var i = 0;
+	    var j = 0;
+
+	    row["text"] = "Name";
+	    row["datafield"] = "name";
+	    row["width"] = 100;
+	    row["pinned"] = true;
+	    row["editable"] = false;
+	    row["cellsrenderer"] = cellsrenderer;
+	    reqGridColumns[i] = row;
+	    var i = 0;
+	    i++;
+	    row = {};
+	    row["text"] = "Revision";
+	    row["datafield"] = "revision";
+	    row["width"] = 100;
+	    row["pinned"] = true;
+	    row["cellbeginedit"] = beginedit;
+	    row["cellsrenderer"] = cellsrenderer;
+	    reqGridColumns[i] = row;
+
+	    //   for (var attribute in jsonIRAttrTemplate) {
+	    i++;
+	    row = {};
+	    //  props = 	jsonIRAttrTemplate [attribute];
+	    var seqOrder = props["Sequence Order"];
+	    var seq = parseInt(seqOrder);
+	    if (seq != 0 && seq <= 3 && j < 3) {
+	        aliasTagAttrs[seq - 1] = attribute;
+	        j++;
+	    }
+	    row["datafield"] = "";
+	    row["text"] = props["Caption"];
+
+	    //Column Type Validation
+	    if (props["Date"] == "true") {
+	        row["columntype"] = 'datetimeinput';
+	        row["cellsformat"] = 'yyyy-MM-dd';
+	    } else if (props["Integer"] == "true") {
+	        row["validation"] = function (cell, value) {
+	            if (/^[0-9]+$/.test(value)) {
+	                return true;
+	            } else {
+	                return { result: false, message: "It must be integer !" };
+	            }
+	        };
+	    } else {
+	        row["columntype"] = 'textbox';
+	    }
+	    row["width"] = 100;
+//	    if (attribute == "Alias Tag") {
+//	        row["editable"] = false;
+//	    }
+	    row["cellbeginedit"] = beginedit;
+	    row["cellsrenderer"] = cellsrenderer;
+	    reqGridColumns[i] = row;
+	    //dataf.push(row["datafield"]);
+	 //   keys.push(attribute);
+
+	    row = {}; i++;
+	    row["text"] = "Editable";
+	    row["datafield"] = "Editable";
+	    row["width"] = 100;
+	    row["hidden"] = true;
+	    reqGridColumns[i] = row;
+
+	    row = {}; i++;
+	    row["text"] = "NextRev";
+	    row["datafield"] = "NextRev";
+	    row["width"] = 100;
+	    row["hidden"] = true;
+	    reqGridColumns[i] = row;
+
+	    $("#jqxgridIR").jqxGrid(
+            {
+                width: document.documentElement.clientWidth - 150,
+                source: reqDataAdapter,
+                editable: true,
+                pageable: true,
+                pagesizeoptions: ['5', '10', '20'],
+                autoheight: true,
+                columnsresize: true,
+                altrows: true,
+                filterable: true,
+                sortable: true,
+                selectionmode: 'singlecell',
+                columns: [
+		    	{ text: 'name', datafield: 'name', columntype: 'textbox', width: 100, pinned: true, editable: false }
+                ]
+            });
+
+	    // change columns collection. Requirments
+	    $("#jqxgridIR").jqxGrid({ columns: reqGridColumns });
+
+	}
+		 
+		function addEventListeners() {
+	    
+	        $('#showWindowButton').mousedown(function () {
+	            $('#objectModelWindow').jqxWindow('show');
+	        });	    
+	    
+	    };	    
+	     
+        function createElements(theme) {         
+            $('#objectModelWindow').jqxWindow({ maxHeight: 1250, maxWidth:5500, minHeight: 750, minWidth: 850, height: document.documentElement.clientHeight-90, width: document.documentElement.clientWidth-100,
+                theme: theme, resizable: false, isModal: true, modalOpacity: 0.3, position: { x: 70, y: 70 }
+            });	       
+
+	    $('#tab1').jqxTabs({width: document.documentElement.clientWidth-130, height: '30%', theme: theme });
+	    $('#tab2').jqxTabs({width: document.documentElement.clientWidth-130,  height: '80%',theme: theme });
+
+	    // Here get latest IRs from to Input Requirments Grid
+	    var data = [{ "Revision": 3, "Name": "ABC" }, { "Revision": 4, "Name": "DEF"}];
+	    fillInputReqsGrid(data, true);
+  
+
+        }
+	
+     $(document).ready(function () {
+            addEventListeners();
+            createElements('classic');
+            $("#jqxWidget").css('visibility', 'visible');
+        });
+    </script>
+    <body>
+    <div id="jqxgridIR"></div>
+    </body>
+    </html>

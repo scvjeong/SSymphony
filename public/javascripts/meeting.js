@@ -176,7 +176,14 @@ function showToolWindow(idx)
 	}
 	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
 
-	$('#' + _toolWindowList[idx]['name']).draggable();
+	//$('#' + _toolWindowList[idx]['name']).draggable(); // Jquery-ui 기본 드래그 기능
+	$('#' + _toolWindowList[idx]['name']).jqxWindow({
+        showCollapseButton: true, maxHeight: 400, maxWidth: 700,
+        		minHeight: 200, minWidth: 200, height: 300, width: 500,
+        initContent: function () {
+        }
+    });
+                
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
 

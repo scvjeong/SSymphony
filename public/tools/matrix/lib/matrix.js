@@ -1,7 +1,8 @@
 var width = 100;
 var height = 100;
 var tmpClient = 0;	//현재 클라이언트 번호
-var tmpGroup = "matrix-group-1";	//현재 그룹
+//var tmpGroup = "matrix-group-1";	//현재 그룹
+var tmpGroup = "group1";	//현재 그룹
 var toolName = "matrix";
 var setupData = { row:0, col:0 }; // matrix 행, 열
 var setupFlag = { data_init:false, row:false, col:false };
@@ -15,22 +16,16 @@ var inputFlag = 0;	//키입력 감지하기 위한 변수
 
 ////  socket.io 서버의 해당 그룹에 접속  ////
 var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
-
 ////  처음 창 오픈되었을 때 호출  ////
 $(document).ready(function() {
 	resizeMatrix();
 	$(window).resize(function(){
 		resizeMatrix();
 	});
+
 	socket.emit('join_room', { group: tmpGroup });
-	socket.on('get_client', function (data) {
-		console.log(data);
-	});
 	////  서버에 초기 데이터 요청하는 함수  ////
 	socket.emit('set_tree_data', { group: tmpGroup, tool: toolName });
-	socket.on('get_tree_data', function (data) {
-		console.log(data);
-	});
 
 	$(window).focus(function(){
 		$('.writing').focus();
@@ -230,6 +225,13 @@ function focusInput(t)
 	$(t).addClass("writing");
 }
 
+
+socket.on('get_tree_data', function (data) {
+	console.log(data);
+});
+socket.on('get_client', function (data) {
+	tmpClient = data.client;
+});
 // matrix setup
 socket.on('get_init_tool_data', function (data) {
 	setupFlag.data_init = true;

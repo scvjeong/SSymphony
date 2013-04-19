@@ -18,75 +18,35 @@
       -moz-box-pack: center;
       -webkit-box-pack: center;
     }
-    #wrapper{
-      max-width: 600px;
-      margin: 5px 0px;
-      display: -moz-box;
-      display: -webkit-box;
-      -moz-box-orient: vertical;
-      -webkit-box-orient: vertical;
-      -moz-box-flex: 1;
-      -webkit-box-flex: 1;
+    .matrix{
+		max-width: 100%;
+		display: -moz-box;
+		display: -webkit-box;
+		-moz-box-orient: vertical;
+		-webkit-box-orient: vertical;
+		-moz-box-flex: 1;
+		-webkit-box-flex: 1;
     }
-    #main_header {
-	  display: -moz-box;
-	  display: -webkit-box;
-	  box-orient: horizontal;
-      background: #FFFBB9;
-      border: 1px solid #999999;
-      padding: 10px;
-    } 
-    #container {
-      display: -moz-box;
-      display: -webkit-box;
-      -moz-box-orient: horizontal;
-      -webkit-box-orient: horizontal;
+    .matrix .container {
+		width: 100%;
+		display: -moz-box;
+		display: -webkit-box;
+		-moz-box-orient: horizontal;
+		-webkit-box-orient: horizontal;
     }
-    #main_section {
+    .matrix .main_section {
       -moz-box-flex: 1;
       -webkit-box-flex: 1;
       margin: 5px 0px;
     } 
     article {
-	  max-width: 600px;
       background: #FFFFFF;
-      border: 1px solid #999999;
-      padding: 10px;
-      margin-bottom: 5px;
+      padding: 1%;
 	  cursor: text;
     } 
 
 	.menu_line {
-		display: -moz-box;
-		display: -webkit-box;
-		border-bottom: 1px solid #999999;
 		margin-bottom: 10px;
-	}
-
-	.tmp_editing {
-		width: 90%;
-		margin-left: 10px;
-		font: 14px verdana, sans-serif;
-		border: none;
-		background: none;
-		outline: none;
-		cursor: text;
-		vertical-align: middle;
-	}
-
-
-	.bullet {
-		width: 3%;
-		text-indent: 0px !important;
-		margin-left: 5px;
-		vertical-align: middle;
-	}
-
-	.check_box {
-		width: 3%;
-		margin-left: 5px;
-		margin-top: 3px;
-		float: right;	
 	}
 
 	.input_task:hover {
@@ -103,34 +63,22 @@
 		background:#004596;
 	}
 
-	.size_box {
-		margin-left: 1%;
-		width: 18%;		
-	}
-	.init_box {
-		width: 12%;
-	}
-
-	#initButton {
-		width: 60px;
-		cursor:pointer;
-	}
-
 	.inputNum {
-		width: 30%;
+		width: 100px;
+		border:1px solid #000000;
+		text-align:center;
 	}
 
-	#setNum {
-		width: 70%;
-		cursor:pointer;
-	}
-
-	#matrix_table {
+	.matrix_table {
 		border: 1px solid #999999;
 		width:100%;
 		border-collapse:collapse;
 	}
 	
+	.button{
+		cursor:pointer;
+		text-align:right;
+	}
 	.input_line {
 		min-height: 100px;
 		border: 0px none;
@@ -166,8 +114,9 @@
 	}
 
 	.matrix-input{
-		padding:2px;
+		padding:3px 1%;
 		border: 0px none;
+		width:98%;
 		/* background-color:inherit; */
 	}
 

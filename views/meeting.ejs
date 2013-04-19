@@ -366,9 +366,35 @@
 				<li onclick="changePenColor('#00f0f0')" style="background-color: #00f0f0"></li>
 				<li onclick="changePenColor('#ffffff')" style="background-color: #ffffff"></li>
 			</ul>
-		</div>
-		
+			
+			<input type="button" value="파일창 열기" id="btn_show_cm_box" />
+		</div>		
 	</div>
+	
+	<div id="content_manage_box">
+		<div id="titlebar">
+			<span>
+				<img src="" style="width:15px; height:15px; margin-right:15px" />Content Manage Box
+			</span>
+		</div>
+		<div style="content">
+			<div id="tab">
+				<ul style="margin-left:10px;">
+					<li><img src="" style="width:15px; height:15px; margin-right:5px" />링크</li>
+					<li><img src="" style="width:15px; height:15px; margin-right:5px" />파일</li>
+				</ul>
+				<div>
+					<ul id="link_list">
+					</ul>
+				</div>
+				<div>
+					<ul id="file_list">
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<canvas id="canvasView" width="1400" height="1000" >
 		<p>브라우저에서 캔버스 지원이 안 됩니다.<br/>
 		</p>

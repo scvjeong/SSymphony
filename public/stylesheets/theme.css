@@ -78,6 +78,17 @@ iframe {
 
 /* /화이트보드 */
 
+
+/* 콘텐트 관리 상자 */
+#meetingboard #content_manage_box {
+}
+
+#meetingboard #content_manage_box #content {
+	overflow: hidden;
+}
+/* /콘텐트 관리 상자 */
+
+
 #rightpanel {
 	position: fixed;
 	top: 30px;

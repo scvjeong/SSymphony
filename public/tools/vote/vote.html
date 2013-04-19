@@ -1,34 +1,39 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="vote.css" />
+	<link rel="stylesheet" type="text/css" href="vote.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="vote.js"></script>
 </head>
 <body>
 <div class="vote_make_container" style="width:500px; border:1px solid #ababab">
 	<div style="padding:10px;">
-	<textarea class="question_title" style="width:100%; height:100px; border:none; outline: none; resize: vertical;" placeholder="투표 내용을 입력해 주세요."></textarea>
+	<textarea class="question_title" placeholder="투표 내용을 입력해 주세요."></textarea>
 	</div>
 	<ul class="voteReadyList">
-		<li><input type="text" placeholder="옵션 추가하기" /></li>
-		<li><input type="text" placeholder="옵션 추가하기" /></li>
-		<li><input type="text" placeholder="옵션 추가하기" /></li>
-		<li><input type="text" placeholder="옵션 추가하기" /></li>
+		
 	</ul>
 	<div class="underbar" style="border-top:1px solid #ababab;">
-		<span style="float:left; font-size:12px; height:23px; line-height:23px; padding-left:5px; cursor:pointer;" onclick="alert('투표 옵션 추가하기')">투표 옵션 추가하기</span>
-		<span style="float:right; padding-right:3px;"><input type="button" value="투표 게시" style="width:100px; height:18px; font-size:8px; background-color:#2b4d90; color:#ffffff" /></span>
-		<div style="clear:both"></div>
+		<span class="txt_init_votereadylist">투표 옵션 추가하기</span>
+		<span class="container_checkboxes">
+			<input type="checkbox" id="chk_addpermit_to_all" /><span>누구나 투표 항목 추가 가능</span>
+			<input type="checkbox" id="chk_multi_vote" /><span>중복 투표</span>
+			<input type="checkbox" id="chk_realtime_result" /><span>실시간 투표 결과 공유</span>
+		</span>
+		<span class="container_btn_votestart">
+			<input type="button" class="btn_votestart" value="투표 시작" />
+		</span>
+		<div class="clearboth"></div>
 	</div>
 </div>
 
 <div class="vote_processing_container">
 	<div class="question_title">
-		뭐뭐뭐뭐 하시겠습니까?
+		<span></span>
 	</div>
-	<div class="question_options">
+	<div class="question_list">
 		<ul>
-			<li>예</li>
-			<li>아니오</li>
+			
 		</ul>
 	</div>
 </div>

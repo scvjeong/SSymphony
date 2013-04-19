@@ -2,12 +2,14 @@
  * GET select_meeting_template
  */
 var mysql_conn = require('../sql/mysql_server').mysql_conn;
+var EventEmitter = require('events').EventEmitter;
 
 exports.quick_meeting = function(req, res){
-	var model = require('../sql/quick_meeting');
-	var sql = model.sql_quick_meeting(null,null);
-	mysql_conn.query(sql, function(err, rows, fields) {
-		if (err) throw err;
+	var evt = new EventEmitter();
+	var dao_qm = require('../sql/quick_meeting');
+	dao_qm.dao_quick_meeting(evt, mysql_conn, null);
+	evt.on('quick_meeting', function(err, rows){
+		if(err) throw err;
 		res.render('quick_meeting', {result:rows} );
 	});
 };

@@ -20,8 +20,6 @@
 
 		setup_timepicker();
 
-		setup_calendar();
-
 		setup_all_buttons();
 
 		setup_widgets_desktop();
@@ -88,9 +86,37 @@
 	/* ---------------------------------------------------------------------- */
 	/*	Meeting Planning
 	/* ---------------------------------------------------------------------- */
+	
+	function set_meeting_planning()
+	{
+		var Options = {
+			url: '/ajax/set_meeting_planning',
+			type: 'POST',
+			dataType: 'xml',
+			resetForm: false,
+			beforeSubmit: function(){
 
-	function setup_meeting_template() {
-		if ($('#meeting-planning').length){
+			},
+			success: function(xml) {
+				var Result = $(xml).find('Result').text();
+
+				if( Result == "Successful" ) 
+				{
+					location.href="/page/meeting"
+				}		
+				else if( Result == "Error")
+				{
+					var Error_str = $(xml).find('Error_str').text();
+					alert(Error_str);
+				}
+			}
+		};
+		$('#wizard-form').ajaxSubmit(Options);
+	}
+
+	function setup_meeting_template()
+	{
+		if ($('#meeting-planning').length ){
 
 			$('#meeting-planning').click(function(e) {
 				e.preventDefault();
@@ -99,14 +125,23 @@
 						"label" : "Prev",
 						"class" : "btn-success medium hide prev",
 						"callback": function() {
-							show_meeting_template();
+							prev_meeting_planning();
+							return false;
+						}
+					},{
+						"label" : "Next",
+						"class" : "btn-success medium hide next",
+						"callback": function() {
+							next_meeting_planning();
 							return false;
 						}
 					},{
 						"label" : "Complete",
 						"class" : "btn-success medium hide complete",
 						"callback": function() {
-							location.href="/page/meeting";
+							pmp = 0;
+							set_meeting_planning();
+							//location.href="/page/meeting";
 							return true;
 						}
 					},{
@@ -122,12 +157,70 @@
 		}// end if
 	}
 
-	function show_meeting_template(html)
+	// meeting planning page pointer
+	var pmp = 0;
+
+	function next_meeting_planning()
+	{
+		// page pointer 증가
+		pmp++;
+		show_meeting_planning(pmp)
+	}
+
+	function prev_meeting_planning()
+	{
+		// page pointer 감소
+		pmp--;
+		show_meeting_planning()
+	}
+	
+	function show_meeting_planning()
+	{
+		switch(pmp)
+		{
+			case 0:
+				show_meeting_template();
+				break;
+			case 1:
+				$('#setting_agenda_1').addClass("step_show");
+				$('#setting_agenda_1').removeClass("step_hidden");
+				$('#setting_agenda_2').addClass("step_hidden");
+				$('#setting_agenda_2').removeClass("step_show");
+				$('#setting_agenda_3').addClass("step_hidden");
+				$('#setting_agenda_3').removeClass("step_show");
+				$(".modal-footer a.next", dialog).show();
+				$(".modal-footer a.complete", dialog).hide();
+				break;
+			case 2:
+				var meeting_subject = $('input[name=meeting_subject]');
+				if(meeting_subject.val().trim().length < 1)
+				{
+					pmp--;
+					meeting_subject.focus();
+					return false;
+				}
+				$('#setting_agenda_1').addClass("step_hidden");
+				$('#setting_agenda_1').removeClass("step_show");
+				$('#setting_agenda_2').addClass("step_show");
+				$('#setting_agenda_2').removeClass("step_hidden");
+				$('#setting_agenda_3').addClass("step_show");
+				$('#setting_agenda_3').removeClass("step_hidden");
+				$(".modal-footer a.next", dialog).hide();
+				$(".modal-footer a.complete", dialog).show();
+				break;
+			default:
+				pmp = 0;
+				show_meeting_template();
+		}
+	}
+
+	function show_meeting_template()
 	{
 		$.get("/page/meeting_template", null,
 		function(html){
 			$(".modal-body", dialog).html(html);
 			$(".modal-footer a.complete", dialog).hide();
+			$(".modal-footer a.next", dialog).hide();
 			$(".modal-footer a.prev", dialog).hide();
 			//setup_meeting_wizard();
 		},"html");
@@ -153,6 +246,9 @@
 
 	function show_setting_agenda(idx)
 	{
+		// page pointer 증가
+		pmp++;
+
 		$(dialog).on("blur", "#agenda_step input[name=title]", function(){
 			var idx = $(this).parent().parent().parent().attr("idx");
 			if( $(this).val() == "" )
@@ -166,10 +262,11 @@
 		{	idx:idx	},
 		function(html){
 			$(".modal-body", dialog).html(html);
-			$(".modal-footer a.complete", dialog).show();
+			$(".modal-footer a.next", dialog).show();
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
+			setup_datepicker();
 			enable_select2();
 		},"html");
 	}
@@ -234,15 +331,10 @@
 	/* ---------------------------------------------------------------------- */
 	/*	Calendar
 	/* ---------------------------------------------------------------------- */
-
-	function setup_calendar() {
 		
+	function setup_calendar() {
+
 		if ($("#calendar").length) {
-			var date = new Date();
-			var d = date.getDate();
-			var m = date.getMonth();
-			var y = date.getFullYear();
-			
 			var calendar = $('#calendar').fullCalendar({
 				header: {
 					left: 'title', //,today
@@ -266,75 +358,8 @@
 					}
 					calendar.fullCalendar('unselect');
 				},
-				
 				editable: true,
-				events: [
-					{
-						title: '멘토링',
-						start: new Date(y, m, 2),
-						end: new Date(y, m, 2)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 3),
-						end: new Date(y, m, 3)
-					},
-					{
-						title: 'Orchestra 회의',
-						start: new Date(y, m, 6),
-						end: new Date(y, m, 6)
-					},	
-					{
-						title: 'Orchestra 회의',
-						start: new Date(y, m, 8),
-						end: new Date(y, m, 8)
-					},	
-					{
-						title: '멘토링',
-						start: new Date(y, m, 9),
-						end: new Date(y, m, 9)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 10),
-						end: new Date(y, m, 10)
-					},
-					{
-						title: 'Orchestra 회의',
-						start: new Date(y, m, 13),
-						end: new Date(y, m, 13)
-					},	
-					{
-						title: '형성평가',
-						start: new Date(y, m, 15),
-						end: new Date(y, m, 15)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 16),
-						end: new Date(y, m, 16)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 17),
-						end: new Date(y, m, 17)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 23),
-						end: new Date(y, m, 23)
-					},
-					{
-						title: '멘토링',
-						start: new Date(y, m, 24),
-						end: new Date(y, m, 24)
-					},
-					{
-						title: '중간평가',
-						start: new Date(y, m, 29),
-						end: new Date(y, m, 29)
-					}
-				]
+				events: events
 			});
 		};
 
@@ -369,12 +394,7 @@
 				},
 				
 				editable: true,
-				events: [
-					{
-						title: 'All Day Event',
-						start: new Date(y, m, 1)
-					}
-				]
+				events: events
 			});
 		};
 		
@@ -1026,6 +1046,18 @@
 	
 	/* end setup_timepicker */
 	
+	/* ---------------------------------------------------------------------- */
+	/*	Setup_datepicker
+	/* ---------------------------------------------------------------------- */	
+	
+	function setup_datepicker() {
+		if ($('#datepicker-js').length){
+			$('#datepicker-js').datepicker()
+		}// end if
+	}	
+	
+	/* end setup_datepicker_demo */
+
 	/* ---------------------------------------------------------------------- */
 	/*	Enable Select2
 	/* ---------------------------------------------------------------------- */

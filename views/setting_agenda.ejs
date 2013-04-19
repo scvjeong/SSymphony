@@ -1,64 +1,123 @@
 <!-- 아젠다 설정 HTML 파일 -->
-<div class="row-fluid">
-	<div class="span12">
-		<div class="inner-spacer setting-agenda"> 
-			<div id="meeting-wizard">
-				<!-- wizard steps -->
-				<ul class="bwizard-steps">
-					<% for(var i=0; i<result.length; i++) {%>
-						<% 
-							if( i == 0 ) 
-								active = "class=active";
-							else
-								active = "";
-						%>
-							<li <%= active %>>
-							<span class="label badge-inverse"><%= result[i].order %></span>
-							<a href="#inverse-tab<%= (i+1) %>" data-toggle="tab" id="step-<%= (i+1) %>"><%= result[i].subject %></a>
-						</li>
-					<% } %>					
-				</ul>
-				<!-- end wizard steps -->
-				<div class="btn-div">
-					<a href="javascript:add_process();"><button class="btn medium btn-primary"><i class="cus-add"></i>Process-Add</button></a>
-					<a href="javascript:del_process();"><button class="btn medium btn-primary"><i class="cus-add"></i>Process-Delete</button></a>
+<form id="wizard-form" class="form-horizontal">
+	<div id="setting_agenda_1" class="row-fluid step_show">
+		<div class="span12">
+			<div class="inner-spacer setting-agenda"> 
+				<div id="agenda_step">
+					<div class="tab-content">
+						<div class="control-group">
+							<label class="control-label" for="name">Meeting Subject : </label>
+							<div class="controls">
+								<input type="text" name="meeting_subject" required="required" class="span6" value="">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="lname">Meeting Goal : </label>
+							<div class="controls">
+								<input type="text" name="meeting_goal" class="span6" value="">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="input01">Meeting Date : </label>
+							<div class="controls">
+								<div class="input-append date" id="datepicker-js" data-date="" data-date-format="yyyy-mm-dd">
+									<input class="datepicker-input" name="date" size="16" type="text" value="" placeholder="Select a date" />
+									<span class="add-on"><i class="cus-calendar-2"></i></span>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="input01">Meeting Start Time : </label>
+							<div class="controls">
+								<div class="input-append bootstrap-timepicker-component">
+									<input name="meeting_start_time" type="text" class="timepicker-input" value="00:00" />
+									<span class="add-on"><i class="cus-clock"></i></span>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="input01">Meeting End Time : </label>
+							<div class="controls">
+								<div class="input-append bootstrap-timepicker-component">
+									<input name="meeting_end_time" type="text" class="timepicker-input" value="00:00" />
+									<span class="add-on"><i class="cus-clock"></i></span>
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="multiSelect">An Entry</label>
+							<div class="controls">
+								<select multiple="multiple" name="users" class="span6 with-search">
+									<% for(var i=0; i<result.users.length; i++) {%>
+										<option value="<%= result.users[i].idx %>"><%= result.users[i].name %></option>
+									<% } %>	
+								</select>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<div class="row-fluid">
-	<div class="span12">
-		<div class="inner-spacer setting-agenda"> 
-			<form id="wizard" class="form-horizontal">
+	<div id="setting_agenda_2" class="row-fluid step_hidden">
+		<div class="span12">
+			<div class="inner-spacer setting-agenda"> 
+				<div id="meeting-wizard">
+					<!-- wizard steps -->
+					<ul class="bwizard-steps">
+						<% for(var i=0; i<result.agenda.length; i++) {%>
+							<% 
+								if( i == 0 ) 
+									active = "class=active";
+								else
+									active = "";
+							%>
+								<li <%= active %>>
+								<span class="label badge-inverse"><%= result.agenda[i].order %></span>
+								<a href="#inverse-tab<%= (i+1) %>" data-toggle="tab" id="step-<%= (i+1) %>"><%= result.agenda[i].subject %></a>
+							</li>
+						<% } %>	
+					</ul>
+					<!-- end wizard steps -->
+					<div class="btn-div">
+						<a href="javascript:add_process();"><!--button class="btn medium btn-primary"--><i class="cus-add"></i>Process-Add<!--/button--></a>
+						<a href="javascript:del_process();"><!--button class="btn medium btn-primary"--><i class="cus-add"></i>Process-Delete<!--/button--></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="setting_agenda_3" class="row-fluid step_hidden">
+		<div class="span12">
+			<div class="inner-spacer setting-agenda"> 
 				<div id="agenda_step">
 					<div class="tab-content">
-						<% for(var i=0; i<result.length; i++) {%>
+						<% for(var i=0; i<result.agenda.length; i++) {%>
 							<% 
 								if( i == 0 ) 
 									active = "active";
 								else
 									active = "";
-								start_time_arr = result[i].start_time.split(":");
+								start_time_arr = result.agenda[i].start_time.split(":");
 								start_time = start_time_arr[0]+":"+start_time_arr[1];
-								end_time_arr = result[i].end_time.split(":");
+								end_time_arr = result.agenda[i].end_time.split(":");
 								end_time = end_time_arr[0]+":"+end_time_arr[1];
 							%>
 							<fieldset class="tab-pane <%= active %>" id="inverse-tab<%= (i+1) %>" idx="<%= (i+1) %>">
 								<div class="control-group">
-									<label class="control-label" for="name">주제 : </label>
+									<label class="control-label" for="name">Agenda Subject : </label>
 									<div class="controls">
-										<input type="text" name="title" required="required" class="span6" value="<%= result[i].subject %>">
+										<input type="text" name="subject" required="required" class="span6" value="<%= result.agenda[i].subject %>">
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="lname">목표 : </label>
+									<label class="control-label" for="lname">Agenda Goal : </label>
 									<div class="controls">
-										<input type="text" name="goal" class="span6" value="<%= result[i].goal %>">
+										<input type="text" name="goal" class="span6" value="<%= result.agenda[i].goal %>">
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="input01">시작 시간 : </label>
+									<label class="control-label" for="input01">Agenda Start Time : </label>
 									<div class="controls">
 										<div class="input-append bootstrap-timepicker-component">
 											<input name="start_time" type="text" class="timepicker-input" value="<%= start_time %>" />
@@ -67,7 +126,7 @@
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="input01">끝 시간 : </label>
+									<label class="control-label" for="input01">Agenda End Time : </label>
 									<div class="controls">
 										<div class="input-append bootstrap-timepicker-component">
 											<input name="end_time" type="text" class="timepicker-input" value="<%= end_time %>" />
@@ -75,27 +134,22 @@
 										</div>
 									</div>
 								</div>
-
 								<div class="control-group">
-									<label class="control-label" for="multiSelect">사용 회의 도구</label>
+									<label class="control-label" for="multiSelect">Meeting Tools</label>
 									<div class="controls">
 										<select multiple="multiple" name="tools" class="span6 with-search">
-											<option value="list">list</option>
-											<option value="mindmap">mindmap</option>
-											<option value="postit">postit</option>
-											<option value="vote">vote</option>
-											<option value="matrix">matrix</option>
+											<% for(var j=0; j<result.tools.length; j++) {%>
+												<option value="<%= result.tools[j].name %>"><%= result.tools[j].name %></option>
+											<% } %>	
 										</select>
 									</div>
 								</div>
 								<div class="control-group">
-									<label class="control-label" for="optionsCheckbox">사용 회의 도구</label>
+									<label class="control-label" for="optionsCheckbox">Meeting Tools</label>
 									<div class="controls">
-										<label class="checkbox inline"><input type="checkbox" value="list" class="tools"> list</label>
-										<label class="checkbox inline"><input type="checkbox" value="mindmap" class="tools"> mindmap</label>
-										<label class="checkbox inline"><input type="checkbox" value="postit" class="tools"> postit</label>
-										<label class="checkbox inline"><input type="checkbox" value="vote" class="tools"> vote</label>
-										<label class="checkbox inline"><input type="checkbox" value="matrix" class="tools"> matrix</label>
+										<% for(var j=0; j<result.tools.length; j++) {%>
+											<label class="checkbox inline"><input type="checkbox" value="<%= result.tools[j].name %>" class="tools"> <%= result.tools[j].name %></label>
+										<% } %>
 									</div>
 								</div>
 							</fieldset>
@@ -127,7 +181,7 @@
 						</div-->
 					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 	</div>
-</div>
+</form>

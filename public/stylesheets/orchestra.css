@@ -1296,7 +1296,7 @@ h6 small {
 		.bwizard-steps.clickable li:hover:not(.active):after {
 			border-left-color: #ccc;}
 
-	#wizard .navbar-inner {
+	#wizard-form .navbar-inner {
 		margin-left: -20px;
 		border-left: none;
 		border-right: none;
@@ -1308,11 +1308,11 @@ h6 small {
 		-moz-border-radius: 0px;
 	}
 	
-	#wizard .wizard ul {
+	#wizard-form .wizard ul {
 		list-style:none;
 		margin:0;
 	}
-	#wizard .wizard ul li {
+	#wizard-form .wizard ul li {
 		display:inline-block;
 	}
 	/* ---------------------------------------------------------------------- */
@@ -1433,6 +1433,9 @@ h6 small {
 	.cus-clock {
 		background-position: -187px -238px;
 	}
+	.cus-calendar-2 {
+		background-position: -153px -170px;
+	}
 	.cus-add {
 		background-position: -17px -51px;
 		margin:2px 5px 2px 2px;
@@ -1498,4 +1501,13 @@ h6 small {
 
 	#manual .manual-contents{
 		padding:2%;
+	}
+
+	/* meeting planning */
+	.step_hidden{
+		display:none !important;
+	}
+
+	.step_show{
+		display:block !important;
 	}

@@ -5,6 +5,7 @@ var _tool_mindmap_count = 0;
 var _tool_vote_count = 0;
 var _common_window_top = 50;
 var _common_windot_left = 20;
+var _new_z_index = 0;
 
 $(document).ready(function() {
 	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
@@ -26,7 +27,7 @@ function setRightpanel(panel)
 	case "info":
 		break;
 	}
-	
+
 	$("#rightpanel #panelcontents div").hide();
 	$("#rightpanel #panelcontents #" + panel).show();
 }
@@ -34,7 +35,7 @@ function setRightpanel(panel)
 function addTool(type)
 {
 	var tool = new Array();
-	
+
 	var list_window_width = 600;
 	var list_window_height = 400;
 	var postit_window_width = 600;
@@ -43,7 +44,7 @@ function addTool(type)
 	var mindmap_window_height = 400;
 	var vote_window_width = 500;
 	var vote_window_height= 400;
-	
+
 	console.log('addToolWindow 호출됨, type:' + type);
 	switch (type)
 	{
@@ -86,7 +87,7 @@ function addTool(type)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<iframe src="../postit/index.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분		
+		tool['source'] = '<iframe src="../tools/postit/postit.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분		
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;
@@ -117,9 +118,9 @@ function addTool(type)
 	}
 	_common_windot_left += 10;
 	_common_window_top += 10;
-	
+
 		console.log('addTool source : ', tool['source']);
-	
+
 	_toolWindowList.push(tool);
 	showToolWindow(_toolWindowList.length - 1);
 }
@@ -133,22 +134,26 @@ function showToolWindow(idx)
 	var tooltitle = _toolWindowList[idx]['title'];
 	var tooltop = _toolWindowList[idx]['top'];
 	var toolleft = _toolWindowList[idx]['left'];
-	var toolsource = '<div class="toolwindow" id="' + toolname + '"><div>';
+	var toolsource = '<div class="toolwindow" id="' + toolname + '" onclick="upToFrontWindow(\'' + toolname + '\')"><div>';
 		toolsource += '<div class="title">';
 			toolsource += '<div class="title_text">' + tooltitle + '</div>';
 			toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
+			toolsource += '<div class="closewindow" onclick="transWindow(\'' + toolname + '\')">투명</div>';
 			toolsource += '<div class="clearboth"></div>';
 		toolsource += '</div>';
 	var toolwidth = _toolWindowList[idx]['width'];
 	var toolheight = _toolWindowList[idx]['height'] + titlebarHeight + statusbarHeight;
-	
+
+	$('#' + toolname).css('z-index', _new_z_index);
+	_new_z_index++;
+
 	switch (_toolWindowList[idx]['type'])
 	{
 	case "list":
 		toolsource += _toolWindowList[idx]['source'];
 		$('#meetingboard').append(toolsource);
 	//	$('.' + _toolWindowList[idx]).show();
-	
+
 		newListTool();
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
@@ -164,7 +169,7 @@ function showToolWindow(idx)
 		$('#meetingboard').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
-		
+
 //		newMindmapTool();
 //		resizeMindmap(toolwidth, toolheight);
 		break;
@@ -174,7 +179,7 @@ function showToolWindow(idx)
 	$('#' + _toolWindowList[idx]['name']).draggable();
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
-	
+
 	console.log('toolsource : ' + toolsource);
 }
 
@@ -184,6 +189,11 @@ function closeToolWindow(idx)
 	$('#' + _toolWindowList[idx].name).hide();
 }
 
+function resumeToolWindow(idx)
+{
+	$('#' + _toolWindowList[idx].name).show();
+}
+
 
 // 팝업창 추가하고 여는 함수
 var _popupcount = 0;
@@ -191,12 +201,12 @@ function showPopupWindow(content, popuptype)
 {
 	var nowpopupcount = _popupcount;
 	var source = '<div id="popup' + nowpopupcount + '" class="splashpopup">';
-		source += '<div class="title"><span class="closepopup" onclick="closePopupWindow(' + nowpopupcount + ')">닫기</span></div>';
+		source += '<div class="title"><span class="closepopup" onmousedown="closePopupWindow(' + nowpopupcount + ')">닫기</span></div>';
 		source += '<div class="popupcontent">' + content + '</div>';
 		source += '</div>';
 	$('#splashpopup_wrapper').prepend(source);
 	$('#popup' + nowpopupcount).fadeIn('slow');
-	
+
 	setTimeout("closePopupWindow(" + nowpopupcount + ")", 3000);
 	_popupcount++;
 }
@@ -223,19 +233,175 @@ function showRunTime()
 	var minute = parseInt(_runTime / 60);
 	var second = parseInt(_runTime % 60);
 	var tHour, tMinute, tSecond;
-	
+
 	if (hour < 10)	tHour = "0" + hour;
 	else	tHour = tHour;
-	
+
 	if (minute < 10)	tMinute = "0" + minute;
 	else	tMinute = minute;
-	
+
 	if (second < 10)	tSecond = "0" + second;
 	else	tSecond = second;
-	
+
 	var nowRunTime = tHour + ":" + tMinute + ":" + tSecond;
-	
+
 	$('#runTime').html(nowRunTime + " / " + _totalTime);
-	
+
 	_runTime++;
+}
+
+
+function upToFrontWindow(name)
+{
+	var size = _toolWindowList.length;
+	for (var i = 0; i < size; i++)
+	{
+		if (_toolWindowList[i].name == name)
+		{
+			var now_z = parseInt($('#' + _toolWindowList[i].name).css('z-index'));
+			$('#' + _toolWindowList[i].name).css('z-index', (now_z + size) );
+			_new_z_index += size;
+			break;
+		}
+	}
+}
+
+function transWindow(name)
+{
+	$('#' + name).removeClass('toolwindow');
+	$('#' + name).addClass('toolwindow_trans');
+}
+
+
+function changePenColor(color)
+{
+	_pen_color = color;
+}
+
+
+
+var _pen_color = "#000000";
+var _fill_color = "#000000";
+
+if(window.addEventListener) {
+	var dBoard;
+
+	function init()
+	{
+		var canvas = document.getElementById("canvasView");
+
+		if(!canvas)
+		{
+			alert('캔버스 참조 실패');
+			return;
+		}
+
+		if(!canvas.getContext){
+			alert("canvas.getContext를 사용할 수 없음");
+			return;
+		}
+
+		dBoard = new DrawBoard(canvas);
+		dBoard.initBoard();
+	}
+
+	window.addEventListener( "load", init, false );
+
+
+
+	function DrawBoard( objCanvas ){
+		var canvas = objCanvas;
+		var pen	= new GraphicPen(canvas);
+	
+		this.initBoard	=function() {
+			canvas.addEventListener("mousedown", onMouseDown_Canvas, false);
+		}
+		function registMouseInteraction()
+		{
+			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
+			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
+		}
+		function clearMouseInteraction()
+		{
+			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
+			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
+		}
+	
+		// 마우스 이벤트 등록 및 pen의 위치를 마우스 좌표로 이동
+		function onMouseDown_Canvas(event)
+		{ 
+			var point = getMousePoint(event);
+			pen.moveTo( point );
+			canvas.addEventListener("mousemove", onMouseMove_Canvas, false);
+			window.addEventListener("mouseup", onMouseUp_Canvas, false);
+		}
+	
+		// 마우스 업시 등록한 마우스 이벤트 해지 
+		function onMouseUp_Canvas( event ){
+			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
+			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
+		}
+	
+		// pen에 draw요청
+		function onMouseMove_Canvas( event ){
+	
+			var point = getMousePoint( event );
+			pen.draw( point );
+	
+		}
+	
+		// 마우스 좌표를 브라우저에 따라 반환
+		function getMousePoint( event ){
+			var x,y;
+			if( event.layerX || event.layerY == 0 ){ // fireFox
+				x	=event.layerX;
+				y	=event.layerY;
+			} else if( event.offsetX || event.offsetY == 0 ){ // opera
+				x	=event.offsetX;
+				y	=event.offsetY;
+			}
+			return {x:x, y:y};
+		}
+	}
+	
+	function GraphicPen(objBoard)
+	{
+		this.pen	= objBoard.getContext('2d');
+	
+		this.moveTo	= function(point) {
+			this.pen.beginPath();
+			this.pen.strokeStyle = _pen_color;
+			this.pen.moveTo( point.x, point.y );
+		}
+	
+		this.draw = function(point) {
+			this.pen.lineTo( point.x, point.y );
+			this.pen.stroke();
+		}
+	
+	}
+
+	function GraphicRect(objBoard, left, top, right, bottom)
+	{
+	    var canvas = document.getElementById(objBoard);
+	    if (canvas.getContext) {
+	      var context = canvas.getContext('2d');
+	      
+	      context.fillStyle = _fill_color;
+	      context.fillRect(left, top, right, bottom);
+	    } else {
+	    	console.log("canvas 안 됨");
+	    }
+	}
+	
+	function GraphicCircle(objBoard, x, y)
+	{
+		var canvas = document.getElementById(objBoard);
+		var ctx = canvas.getContext('2d');
+		canvas.onmousedown = function(event) {
+        var x = event.x;
+        var y = event.y;
+        ctx.arc(x, y, 15, 0, Math.PI*2, true);
+        ctx.closePath();
+    }
 }

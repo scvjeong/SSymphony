@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Matrix Tool</title>
+	<meta name="description" content="Matrix Tool" />
+	<link rel="stylesheet" href="./css/matrix.css">
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="./lib/socket.io.js"></script>	
+	<script src="./lib/matrix.js"></script>	
+</head>
+<body>
+<div class="matrix">
+	<div class="container">
+    <section class="main_section">
+		<article>
+			<header>
+				<div class="menu_line">
+						<input type="number" class="inputNum" id="rowNum" value="2">
+						X
+						<input type="number" class="inputNum" id="colNum" value="2">				
+					<input type="button" onClick="setMatrix(this)" value="Set">
+					<input type="button" onClick="setClear()" value="Clear">
+				</div>
+			</header>
+			<div class="matrix_space">
+				<table class="matrix_table">
+					<thead><colgroup></colgroup></thead>
+					<tbody></tbody>
+				</table>
+			</div>
+		</article>
+    </section>
+	</div>
+</div>
+</body>
+</html>

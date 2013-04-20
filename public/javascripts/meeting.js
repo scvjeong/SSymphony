@@ -8,9 +8,87 @@ var _common_windot_left = 20;
 var _new_z_index = 0;
 
 $(document).ready(function() {
-	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
-	setRightpanel("participants");
+	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
+	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
+	
+	// 콘텐트 관리 상자 초기화
+	cm_box.init();
+	addLinkList("네이버", "http://naver.com");
+	addLinkList("다음", "http://daum.net");
+	
+	// 알림 예시
+	showPopupWindow("회의가 시작되었습니다.");
+	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 300);
+	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
+	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
+	setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
+	setTimeout('showPopupWindow("정용기님이 퇴장하셨습니다.")', 12000);
+	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
+	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
+
 });
+
+
+
+var cm_box = ( function() {
+		function _addEventListeners() {
+			$('#whiteboard_control_box #btn_show_cm_box').click(function() {
+				$('#content_manage_box').jqxWindow('open');
+				console.log("open cm_box");
+			});
+		};
+		function _createElements() {
+			$('#whiteboard_control_box #btn_show_cm_box')
+				.jqxButton({ theme: cm_box.config.theme, width: '50px' });
+		};
+		function _createWindow() {
+			$('#content_manage_box').jqxWindow({
+				showCollapseButton : true,
+				maxHeight : 400,
+				maxWidth : 700,
+				minHeight : 200,
+				minWidth : 200,
+				height : 300,
+				width : 500,
+				theme : cm_box.config.theme,
+				initContent : function() {
+					$('#content_manage_box #tab').jqxTabs({
+						height : '100%',
+						width : '100%',
+						theme : cm_box.config.theme
+					});
+					$('#content_manage_box').jqxWindow('focus');
+				}
+			});
+		};
+		return {
+			config : {
+				dragArea : null,
+				theme : null
+			},
+			init : function() {
+				_createElements();
+				_addEventListeners();
+				_createWindow();
+			}
+		};
+	}()); 
+
+function addLinkList(title, link)
+{
+	var link_list = $('#content_manage_box #link_list');
+	var newlink = "<li>";
+		newlink += "<span>";
+		newlink += title;
+		newlink += "</span> ";
+		newlink += "<span><a href=\"";
+		newlink += link;
+		newlink += "\">";
+		newlink += link;
+		newlink += "</a></span>";
+		newlink += "</li>";
+		link_list.append(newlink);
+}
 
 // 오른쪽 메뉴 전환
 function setRightpanel(panel)
@@ -176,7 +254,14 @@ function showToolWindow(idx)
 	}
 	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
 
-	$('#' + _toolWindowList[idx]['name']).draggable();
+	//$('#' + _toolWindowList[idx]['name']).draggable(); // Jquery-ui 기본 드래그 기능
+	$('#' + _toolWindowList[idx]['name']).jqxWindow({
+        showCollapseButton: true, maxHeight: 400, maxWidth: 700,
+        		minHeight: 200, minWidth: 200, height: 300, width: 500,
+        initContent: function () {
+        }
+    });
+                
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
 
@@ -210,14 +295,6 @@ function showPopupWindow(content, popuptype)
 	setTimeout("closePopupWindow(" + nowpopupcount + ")", 3000);
 	_popupcount++;
 }
-showPopupWindow("회의가 시작되었습니다.");
-setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 300);
-setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
-setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
-setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
-setTimeout('showPopupWindow("정용기님이 퇴장하셨습니다.")', 12000);
-setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
-setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
 
 function closePopupWindow(idx)
 {
@@ -227,6 +304,7 @@ function closePopupWindow(idx)
 setInterval("showRunTime()", 1000);
 var _runTime = 0;
 var _totalTime = "30:00:00";	// 회의 전체 시간
+var _alarmList = new Array();
 function showRunTime()
 {
 	var hour = parseInt(_runTime / 60 / 60);
@@ -247,7 +325,30 @@ function showRunTime()
 
 	$('#runTime').html(nowRunTime + " / " + _totalTime);
 
+	catchAlarmTime();
+	
 	_runTime++;
+}
+
+function addAlarmTime(hour, minute, second)
+{
+	// var newtime = new Array();
+	// newtime["hour"] = hour;
+	// newtime["minute"] = minute;
+	// newtime["second"] = second;
+	var newtime = hour * 60 * 60 + minute * 60 + second;
+	_alarmList.push(newtime);
+}
+
+function catchAlarmTime()
+{
+	for (var i = 0; i < _alarmList.length; i++)
+	{
+		if (_runTime == _alarmList[i])
+		{
+			console.log("알람 발생");
+		}
+	}
 }
 
 
@@ -398,9 +499,6 @@ if(window.addEventListener) {
 	{
 		var canvas = document.getElementById(objBoard);
 		var ctx = canvas.getContext('2d');
-		canvas.onmousedown = function(event) {
-        var x = event.x;
-        var y = event.y;
         ctx.arc(x, y, 15, 0, Math.PI*2, true);
         ctx.closePath();
     }

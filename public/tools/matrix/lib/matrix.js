@@ -15,7 +15,8 @@ var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC",
 var inputFlag = 0;	//키입력 감지하기 위한 변수
 
 ////  socket.io 서버의 해당 그룹에 접속  ////
-var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
+//var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
+var socket = io.connect('http://lyd.kr:8000/group');	// socket.io 서버에 접속
 ////  처음 창 오픈되었을 때 호출  ////
 $(document).ready(function() {
 	resizeMatrix();

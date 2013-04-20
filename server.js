@@ -224,6 +224,7 @@ var meeting = io.of('/group').on('connection', function (socket) {
 
 		////  부모 필드 존재하는지 검사  ////
 		client.hlen(storeId, function (err, num) {
+			console.log("num : "+num );
 			if ( num > 0 )
 			{
 				client.hkeys(storeId, function (err, parent) {
@@ -234,8 +235,8 @@ var meeting = io.of('/group').on('connection', function (socket) {
 			}
 			else
 			{
-				multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
-				multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+				multi.hset(storeId, storeParent, tmpVal, redis.print);	 //hash에 데이터 저장
+				multi.set(clientId, tmpClient, redis.print);	//key에 클라이언트 ID 저장
 			}
 		});	
 		
@@ -246,7 +247,10 @@ var meeting = io.of('/group').on('connection', function (socket) {
 				if ( preId != storeId )	//Id 다를때
 				{
 					client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
-						//console.log("id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
+						console.log("err : "+err );
+						console.log("reply : "+reply );
+						console.log("tmpOrder : "+tmpOrder );
+						console.log("id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
 						multi.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입			
 						multi.exec();
 					});	

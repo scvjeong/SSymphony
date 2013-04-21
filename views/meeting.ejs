@@ -78,12 +78,24 @@
 
   <!-- LESS -->
   <!-- <script src="media/_tools/less-1.3.0.min.js"></script> -->
+<!-- 공통 스크립트 -->
+<link rel="stylesheet" href="../javascripts/jqwidgets/styles/jqx.base.css" type="text/css" />
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxcore.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxwindow.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxbuttons.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxscrollbar.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxpanel.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxtabs.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
+<!-- /공통 스크립트 -->
   
   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<!-- 리스트 도구 -->
 		<link rel="stylesheet" href="/stylesheets/list.css">
-		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+		<!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>-->
 		<script src="/tools/list/lib/socket.io.js"></script>	
 		<script src="/tools/list/tool_list.js"></script>
 	<!-- /리스트 도구 -->
@@ -91,8 +103,8 @@
 	<!-- 포스트잇 도구 -->
 		<link href="/tools/postit/css/template.css" rel="stylesheet" type="text/css" />
 		<link href="/tools/postit/css/postit.css" rel="stylesheet" type="text/css" />
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-   		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+		<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+   		<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>-->
 		<script type="text/JavaScript" src="/tools/postit/lib/jquery.ui.touch-punch.min.js"></script>
 		<script type="text/JavaScript" src="/tools/postit/lib/jquery.shapeshift.js"></script>	
 		<script src="/tools/postit/lib/socket.io.js"></script>
@@ -340,7 +352,54 @@
 </div>
 </div>
 
-<div id="meetingboard"></div>
+<div id="meetingboard">
+	<div id="whiteboard_control_box">
+		<div id="titlebar"></div>
+		<div id="color_selector">
+			<ul id="color_list">
+				<li onclick="changePenColor('#000000')" style="background-color: #000000"></li>
+				<li onclick="changePenColor('#ff0000')" style="background-color: #ff0000"></li>
+				<li onclick="changePenColor('#0000ff')" style="background-color: #0000ff"></li>
+				<li onclick="changePenColor('#00ff00')" style="background-color: #00ff00"></li>
+				<li onclick="changePenColor('#f0f000')" style="background-color: #f0f000"></li>
+				<li onclick="changePenColor('#0f0f00')" style="background-color: #0f0f00"></li>
+				<li onclick="changePenColor('#00f0f0')" style="background-color: #00f0f0"></li>
+				<li onclick="changePenColor('#ffffff')" style="background-color: #ffffff"></li>
+			</ul>
+			
+			<input type="button" value="파일창 열기" id="btn_show_cm_box" />
+		</div>		
+	</div>
+	
+	<div id="content_manage_box">
+		<div id="titlebar">
+			<span>
+				<img src="" style="width:15px; height:15px; margin-right:15px" />Content Manage Box
+			</span>
+		</div>
+		<div style="content">
+			<div id="tab">
+				<ul style="margin-left:10px;">
+					<li><img src="" style="width:15px; height:15px; margin-right:5px" />링크</li>
+					<li><img src="" style="width:15px; height:15px; margin-right:5px" />파일</li>
+				</ul>
+				<div>
+					<ul id="link_list">
+					</ul>
+				</div>
+				<div>
+					<ul id="file_list">
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<canvas id="canvasView" width="1400" height="1000" >
+		<p>브라우저에서 캔버스 지원이 안 됩니다.<br/>
+		</p>
+	</canvas>
+</div>
 
 <div id="splashpopup_wrapper">
 </div>

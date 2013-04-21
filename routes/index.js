@@ -40,14 +40,6 @@ exports.index = function(req, res){
 	evt.on('help', function(err, rows){
 		if(err) throw err;
 		complete_flag++;
-		/*
-		for(var i=0; i<rows.length; i++)
-		{
-			rows[i].name = sanitize(rows[i].name).xss();
-			rows[i].contents = sanitize(rows[i].contents).xss();
-		}
-		*/
-		console.log(rows);
 		result.help = rows;
 		if( complete_flag == 3 )
 			res.render('main', {result:result} );

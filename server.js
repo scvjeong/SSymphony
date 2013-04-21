@@ -306,8 +306,10 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpGroup = data.group;
 		var tmpTool = data.tool;
 		var tmpOrder = tmpGroup+":"+tmpTool+":order";
+		var tmpOptions = tmpGroup+":"+tmpTool+":options";
 		
 		multi.del(tmpOrder);
+		multi.del(tmpOptions);
 		multi.exec();
 
 		////  다른 클라이언트들에게 초기화된 tool 전달  ////
@@ -322,6 +324,10 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpId = data.id;
 		var tmpOption = data.option;
 		var tmpVal = data.val;
+		var optionList = tmpGroup + ":" + tmpTool + ":options";
+		var optionKey = tmpGroup + ":" + tmpTool + ":" + tmpOption;
+		
+		multi.hset(optionList, optionKey, tmpVal).exec();
 		
 		////  다른 클라이언트들에게 tool의 옵션 데이터 전달  ////
 		socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal });

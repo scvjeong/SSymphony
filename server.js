@@ -31,7 +31,6 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		socket.join(tmpGroup);
 		console.log("Join "+tmpGroup);
 	
-		multi = client.multi();
 		////  클라이언트에게 Client 번호 전달 후 Clinet 번호 증가  ////
 		////  향후 세션으로 관리하도록 수정 필요  ////
 		socket.emit('get_client', { client: lastClient });
@@ -181,7 +180,8 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpOrder = tmpGroup+":"+tmpTool+":order";
 		var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;	
 		var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
-
+		
+		multi = client.multi();
 		multi.set(storeId, tmpVal);	 //key에 데이터 저장
 		multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
 		multi.exec();
@@ -221,6 +221,7 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 
 		//console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);
+		multi = client.multi();
 
 		////  부모 필드 존재하는지 검사  ////
 		client.hlen(storeId, function (err, num) {
@@ -269,6 +270,7 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 		var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 
+		multi = client.multi();
 		multi.del(delId);	
 		multi.del(delClient);
 		multi.lrem(tmpOrder, 0, delId);	
@@ -288,6 +290,8 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 		var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 		//console.log("delId: "+delId);
+		multi = client.multi();
+
 		client.hkeys(delId, function (err, parent) {
 			multi.hdel(delId, parent);	
 		});
@@ -315,7 +319,8 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpGroup = data.group;
 		var tmpTool = data.tool;
 		var tmpOrder = tmpGroup+":"+tmpTool+":order";
-		
+		multi = client.multi();
+
 		multi.del(tmpOrder);
 		multi.exec();
 

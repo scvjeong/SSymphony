@@ -182,8 +182,6 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;	
 		var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 
-		
-
 		multi.set(storeId, tmpVal);	 //key에 데이터 저장
 		multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
 		multi.exec();
@@ -299,6 +297,16 @@ var meeting = io.of('/group').on('connection', function (socket) {
 
 		////  다른 클라이언트들에게 삭제된 값 전달_tree  ////
 		socket.broadcast.to(tmpGroup).emit('get_delete_tree_data', { tool: tmpTool, id: tmpId });
+	});
+
+	////  다른 도구 형태로 데이터 변경  ////
+	socket.on('set_change_data', function(data) {
+
+	});
+
+	////  다른 도구 형태로 데이터 변경_tree  ////
+	socket.on('set_change_tree_data', function(data) {
+
 	});
 
 	////  해당 tool의 데이터 초기화  ////

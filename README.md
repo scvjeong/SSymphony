@@ -14,6 +14,7 @@ SSymphony
 	on('join_room', data)
 - 클라이언트 API
 	emit('join_room', {group: 'group'}) 
+
 예제) socket.emit('join_room', { group: 'group1' });
 
 
@@ -22,6 +23,7 @@ SSymphony
 	emit('get_client', {client: 'client'})
 - 클라이언트 API
 	on('get_client', data) 
+
 예제) socket.on('get_client', function (data) {
 
 

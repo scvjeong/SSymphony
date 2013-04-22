@@ -8,7 +8,7 @@ API References
 
 
 ◇ Common
-
+=========
 ◎ join_room : 그룹에 join하는 함수
 - Server
 	on('join_room', data)

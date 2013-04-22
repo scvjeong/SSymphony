@@ -182,9 +182,17 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;	
 		var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 
+		
+
 		multi.set(storeId, tmpVal);	 //key에 데이터 저장
 		multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+<<<<<<< HEAD
 		multi.exec();
+=======
+		multi.exec(function (err, replies) {
+			console.log(replies);
+		});
+>>>>>>> master
 
 		////  list에서 현재 위치에 ID 중복되는지 확인  ////
 		client.llen(tmpOrder, function (err, idVal) {			
@@ -230,14 +238,26 @@ var meeting = io.of('/group').on('connection', function (socket) {
 					multi.hdel(storeId, parent);	
 					multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
 					multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+<<<<<<< HEAD
 					multi.exec();
+=======
+					multi.exec(function (err, replies) {
+						console.log(replies);
+					});
+>>>>>>> master
 				});
 			}
 			else
 			{
 				multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
 				multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+<<<<<<< HEAD
 				multi.exec();
+=======
+				multi.exec(function (err, replies) {
+					console.log(replies);
+				});
+>>>>>>> master
 			}
 		});	
 		
@@ -272,7 +292,13 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		multi.del(delId);	
 		multi.del(delClient);
 		multi.lrem(tmpOrder, 0, delId);	
+<<<<<<< HEAD
 		multi.exec();
+=======
+		multi.exec(function (err, replies) {
+			console.log(replies);
+		});
+>>>>>>> master
 		////  다른 클라이언트들에게 삭제된 값 전달  ////
 		socket.broadcast.to(tmpGroup).emit('get_delete_data', { tool: tmpTool, id: tmpId });
 	});
@@ -293,7 +319,9 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		});
 		multi.del(delClient);
 		multi.lrem(tmpOrder, 0, delId);	
-		multi.exec();
+		multi.exec(function (err, replies) {
+			console.log(replies);
+		});
 
 		////  다른 클라이언트들에게 삭제된 값 전달_tree  ////
 		socket.broadcast.to(tmpGroup).emit('get_delete_tree_data', { tool: tmpTool, id: tmpId });
@@ -317,7 +345,9 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpOrder = tmpGroup+":"+tmpTool+":order";
 		
 		multi.del(tmpOrder);
-		multi.exec();
+		multi.exec(function (err, replies) {
+			console.log(replies);
+		});
 
 		////  다른 클라이언트들에게 초기화된 tool 전달  ////
 		socket.broadcast.to(tmpGroup).emit('get_init_tool_data', { tool: tmpTool });

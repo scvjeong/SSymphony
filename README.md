@@ -85,7 +85,7 @@ API References
 
 
 ◇ Normal Structure Tool
-
+=========
 ◎ set_data : 현재 group, tool에 해당하는 데이터 서버에 요청하는 함수
 - Server
 	on('set_data', data)
@@ -180,7 +180,7 @@ API References
 
 
 ◇ Tree Structure Tool
-
+=========
 ◎ set_tree_data : 현재 group, tool에 해당하는 데이터 서버에 요청하는 함수(tree)
 - Server
 	on('set_tree_data', data)

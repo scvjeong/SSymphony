@@ -290,12 +290,13 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 		var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 		//console.log("delId: "+delId);
-		
-		multi = client.multi();
-
+			
+		var tmpDelParent = 0;
 		client.hkeys(delId, function (err, parent) {
-			multi.hdel(delId, parent);	
+			tmpDelParent = parent;
 		});
+		multi = client.multi();
+		multi.hdel(delId, tmpDelParent);	
 		multi.del(delClient);
 		multi.lrem(tmpOrder, 0, delId);	
 		multi.exec();

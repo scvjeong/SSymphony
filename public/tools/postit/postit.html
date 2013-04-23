@@ -22,6 +22,7 @@
 		var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 		var tmpLastId = 100;	
 		var tmpGroup = 0;
+		var tmpItemGroup = 0;
 		$(document).ready(function() {
 			tmpGroup = "group1";
 			
@@ -34,7 +35,13 @@
 			socket.on('get_client', function (data) {
 				console.log("client: "+data.client);
 			});
-			
+
+			////  포스트잇 추가 클릭 이벤트 등록  ////
+			$('article').delegate('.add_postit', 'click', function() {
+				tmpItemGroup = $(this).parent('.group_container').attr('groupid');
+				socket.emit('set_last_id', { group: tmpGroup, tool: 'postit1' });		
+			});
+
 			////  ADD 버튼 클릭 이벤트 등록 - 데이터 전송  ////
 			$('.container').delegate('.add_button', 'click', function() {
 				var tmpSelect = $(this).parent().parent();
@@ -65,7 +72,7 @@
 		});
 
 		////  포스트잇 추가하는 함수 - valId: 추가할 ID, valData: 추가할 데이터  ////
-		function renderChildren(valId, valData) {
+		function renderChildren(valId, groupId, valData) {
 			
 			//현재 ID 존재하는지 검사
 			var tmpIdClass = $('[taskid='+valId+']');
@@ -75,14 +82,15 @@
 				console.log(tmpIdClass);
 			}
 			else {
-				var $containers = $(".container");
+				var $containers = $('.container:eq('+groupId+')');
 				$containers.each(function(container_i) {
 					var $element = $("<div class='object task' taskid="+valId+"></div>"),
 							height = 160,
 							width = $containers.children().first().width();
 					$element.css({ background: "#FFFFCC", height: height });		
+					//$containers.children('.add_postit').before($element);		
 					$containers.append($element);		
-						
+
 					var tmpPostit = $('[taskid='+valId+']');
 					var $titleArea = $("<div class='title_area'><div class='add_button'>ADD</div><div class='del_button'>X</div><div>");
 					tmpPostit.append($titleArea);
@@ -122,7 +130,7 @@
 		socket.on('get_last_id', function (data) {
 			var tmpTool = data.tool; 
 			tmpLastId = data.last;
-			renderChildren(tmpLastId, "");
+			renderChildren(tmpLastId, tmpItemGroup, "");
 		});
 
 		////  서버에서 데이터 받는 함수  ////
@@ -131,7 +139,7 @@
 			var tmpTool = data.tool;
 			tmpLastId = data.id;
 			var tmpVal = data.val;			
-			renderChildren(tmpLastId, tmpVal);
+			renderChildren(tmpLastId, "0", tmpVal);
 		});
 		
 		////  서버에서 추가된 데이터 받는 함수  ////
@@ -142,7 +150,7 @@
 			var tmpIndex = data.index;
 			var tmpVal = data.val;
 			
-			renderChildren(tmpId, tmpVal);
+			renderChildren(tmpId, "0", tmpVal);
 		});
 		
 		////  서버에서 삭제된 데이터 받는 함수  ////
@@ -158,6 +166,8 @@
 		////  포스트잇 추가하는 함수  ////
 		function addPostit() {	
 			////  lastId 서버에 요청  ////
+			tmpItemGroup = $(this).parent('.group_container').attr('groupid');
+			alert($(this).attr('class'));
 			socket.emit('set_last_id', { group: tmpGroup, tool: 'postit1' });		
 		}
 
@@ -182,6 +192,19 @@
 			}
 			
 		}
+
+		////  그룹 추가하는 함수  ////
+		function addGroup() {
+			tmpItemGroup = parseInt(tmpItemGroup) + 1;
+			var $article = $("article");
+			var tmpAddGroupData = "<div class='group_container' groupid="+tmpItemGroup+">";
+			tmpAddGroupData += "<input type='text' class='group_title' />"
+			tmpAddGroupData += "<div class='add_postit'>+</div>";
+			tmpAddGroupData += "<div class='container'></div></div>";
+			$article.append(tmpAddGroupData);
+
+			socket.emit('set_last_id', { group: tmpGroup, tool: 'postit1' });		
+		}
 	</script>
 
   </head>
@@ -189,13 +212,19 @@
     <header>
 		<div class="title_line">
 			<div id="title_text">Post-it Tool</div>
-			<div id="add_postit" onClick="addPostit()">+</div>
+			<div id="add_group" onClick="addGroup()">+</div>
 		</div>
 	</header>
+	<article>
+		<div class="group_container" groupid="0">
+			<input type="text" class="group_title" />
+			<div class="add_postit">+</div> 
+			<div class="container">
+						
+			</div>
+		</div>
 
-    <div class="container">
-       
-    </div>
+	</article>
 
     <footer>
     

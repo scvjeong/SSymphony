@@ -103,18 +103,20 @@
 		cursor:pointer;
 		background:#004596;
 	}
-
 	.home_box {
-		width: 88%;		
+		width: 90%;		
 	}
 	.init_box {
-		width: 12%;
+		width: 10%;
 	}
 	#homeButton {
 		width: 60px;
 		cursor:pointer;
 	}
-	#initButton {
-		width: 60px;
+	#addButton {
+		width: 50px;
+		text-align: center;
+		background: #FFFBB9;
+		border: 1px solid #999999;
 		cursor:pointer;
 	}

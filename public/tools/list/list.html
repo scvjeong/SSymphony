@@ -638,6 +638,11 @@
 				}
 			}
 		}
+		
+		function addNewInput() {
+			socket.emit('set_last_id', { group: tmpGroup, tool: 'list1' });		
+			inputFlag = 0;
+		}
 
 	</script>
 </head>
@@ -655,7 +660,7 @@
 						<div id="homeButton"><h2>Home</h2></div>
 					</div>
 					<div class="init_box">
-						<div id="initButton" onClick=""><h2>Clear</h2></div>
+						<div id="addButton" onClick="addNewInput()">ADD</div>
 					</div>
 				</div>
 			</header>

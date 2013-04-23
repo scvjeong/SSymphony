@@ -2,9 +2,13 @@
 	clear: both;
 }
 
-.vote_container {
+.vote_make_container {
 	width: 500px;
-	height: 180px;
+	border: 1px solid #ababab;
+}
+
+.vote_make_container .container_question_title {
+	padding: 10px;
 }
 
 .vote_container .question_content {

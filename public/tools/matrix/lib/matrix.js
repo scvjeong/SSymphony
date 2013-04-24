@@ -212,22 +212,15 @@ function addRemoteInputbox( lastId , val, parent, index )
 		else
 		{
 			var len = $("input", $div).length;
-			console.log( "len : "+$("input", $div).length );
+			var emtpyInput = $("input[value='']", $div).length;
 			if( len < 1 )
 				$($div).append(makeInputbox(lastId, val));
-			else if( len == 1 )
+			else if( len == 1 && emtpyInput > 0 )
 				$("input", $div).before(makeInputbox(lastId, val));
-			else if( len > 1 )
+			else if( len > 1 && emtpyInput > 0 )
 				$("input:eq("+(len-2)+")",$div).after(makeInputbox(lastId, val));
-
-			/*
-			if( $("input", $div).length < 1 )
-				$($div).append(makeInputbox(lastId, val));
-			else if( $("input", $div).length > 0 && index > 0 )
-				$("input:eq("+(index-1)+")",$div).after(makeInputbox(lastId, val));
-			else if( $("input", $div).length > 0 && index < 1 )
-				$("input:eq("+(index)+")",$div).before(makeInputbox(lastId, val));
-			*/
+			else if( len > 0 )
+				$("input:eq("+(len-1)+")",$div).after(makeInputbox(lastId, val));
 		}
 	}
 }
@@ -235,7 +228,7 @@ function addRemoteInputbox( lastId , val, parent, index )
 // 초기 box 생성시 input 생성
 function setupBox(lastId)
 {
-	var $div = $(".matrix-box:not(input):nth-child("+boxCount+")");
+	var $div = $(".matrix-box:not(input):eq("+boxCount+")");
 	$div.append(makeInputbox(lastId, ""))
 	boxCount++;
 }
@@ -255,7 +248,6 @@ function focusInput(t)
 socket.on('get_tree_data', function (data) {
 	index = $(".matrix-box[parent="+data.parent+"]").length;
 	addRemoteInputbox(data.id, data.val, data.parent, index);
-	console.log(data.val);
 });
 socket.on('get_client', function (data) {
 	tmpClient = data.client;

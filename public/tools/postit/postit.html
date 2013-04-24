@@ -36,6 +36,8 @@
 			////  서버에 초기 데이터 요청하는 함수  ////
 			socket.emit('set_tree_data', { group: tmpGroup, tool: 'postit1' });
 
+			
+
 			socket.on('get_client', function (data) {
 				tmpClient = data.client;
 				//console.log("client: "+data.client);
@@ -119,7 +121,7 @@
 					var $selectedGroup = $selected.parent().parent();
 					var tmpId = $selected.attr('taskid');
 		
-					console.log("The dropped item is:", $selectedGroup.attr('groupid'));
+					//console.log("The dropped item is:", $selectedGroup.attr('groupid'));
 					dropFlag = 0;
 
 					var tmpSelectGroup = $selectedGroup.attr('groupid');
@@ -144,7 +146,7 @@
 					var $selected = $(selected);
 					var $selectedGroup = $selected.parent().parent();
 					preSelectGroup = $selectedGroup.attr('groupid');
-					console.log("This is the item being dragged:", preSelectGroup);
+					//console.log("This is the item being dragged:", preSelectGroup);
 				});
 			}
 		}
@@ -155,27 +157,48 @@
 			tmpLastId = data.last;
 			renderChildren(tmpLastId, tmpItemGroup, "");
 			
-			var addIndex = $('.object').index(tmpLastId);	 // 현재 Index 구함
+			var tmpSelect = $('[taskid='+tmpLastId+']');
+
+			var addIndex = $('.object').index(tmpSelect);	 // 현재 Index 구함
+			//console.log("index: "+addIndex);
 			socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'postit1', id: tmpLastId, parent: tmpItemGroup, index: addIndex, val:"", client: tmpClient });
 
 		});
 
 		////  서버에서 데이터 받는 함수  ////
 		socket.on('get_tree_data', function (data) {
-
+			
 			var tmpTool = data.tool;
 			tmpLastId = data.id;
 			var tmpParent = data.parent;
 			var tmpVal = data.val;		
 			
+			console.log("get_data: "+tmpLastId);
+
 			var groupFlag = $('article').find('.group_container[groupid='+tmpParent+']');
 			
 			if (groupFlag.length == 0) {
 				addGroup(tmpParent);
 			}
 			renderChildren(tmpLastId, tmpParent, tmpVal);
+
+			socket.emit('set_tree_option_data', { group: tmpGroup, tool: 'postit1' });
 		});
 		
+		socket.on('get_tree_option_data', function (data) {
+			var tmpTool = data.tool;
+			var tmpOption = data.option;
+			var tmpVal = data.val;
+			
+			var tmpTitle = $('[titleid='+tmpOption+']');
+			if ( tmpTitle.length > 0 )
+			{
+				//console.log("get_option: "+tmpOption+" val: "+tmpVal);  2번 호출되는 부분 해결해야함!
+				tmpTitle.val(tmpVal);
+			}		
+
+		});
+
 		////  서버에서 추가된 데이터 받는 함수  ////
 		socket.on('get_insert_tree_data', function (data) {
 			console.log("get_data");
@@ -219,6 +242,23 @@
 
 		});
 
+		////  서버에서 그룹제목 데이터 받는 함수  ////
+		socket.on('get_option_data', function (data) {
+			var tmpTool = data.tool;
+			var tmpOption = data.option;
+			var tmpVal = data.val;
+			
+			//console.log("11get_option: "+tmpOption+" val: "+tmpVal);
+
+			var tmpTitle = $('[titleid='+tmpOption+']');
+			if ( tmpTitle.length > 0 )
+			{
+				//console.log(tmpTitle.attr('class'));
+				//console.log("get_option: "+tmpOption+" val: "+tmpVal);
+				tmpTitle.val(tmpVal);
+			}
+		});
+
 		////  마우스 포커스 이동시 처리하는 함수  ////
 		function mouseFocus() {
 			var focusClass = $('textarea:focus').parent();
@@ -256,7 +296,7 @@
 			}
 			var $article = $("article");
 			var tmpAddGroupData = "<div class='group_container' groupid="+tmpItemGroup+">";
-			tmpAddGroupData += "<input type='text' class='group_title' />"
+			tmpAddGroupData += "<input type='text' class='group_title' titleid="+tmpItemGroup+" onKeyDown='keyInput()'/>"
 			tmpAddGroupData += "<div class='add_postit'>+</div>";
 			tmpAddGroupData += "<div class='container'></div></div>";
 			$article.append(tmpAddGroupData);
@@ -265,6 +305,22 @@
 				socket.emit('set_last_id', { group: tmpGroup, tool: 'postit1' });		
 			}		
 		}
+
+		
+		//// input 영역에서 키보드 입력시 호출되는 함수  ////
+		function keyInput() {
+			var inputKey = event.keyCode;
+			if ( inputKey == 13 )	// Input Enter
+			{
+				var tmpTitle = $('input:focus').attr('titleid');
+				//alert(tmpTitle);
+				var tmpVal = $('input:focus').val();
+				console.log(tmpVal);
+				socket.emit('set_option_data', { group: tmpGroup, tool: 'postit1', id: '', option: tmpTitle, val: tmpVal });
+			}
+		}
+		
+
 	</script>
 
   </head>
@@ -277,7 +333,7 @@
 	</header>
 	<article>
 		<div class="group_container" groupid="0">
-			<input type="text" class="group_title" />
+			<input type="text" class="group_title" titleid="0" onKeyDown="keyInput()"/>
 			<div class="add_postit">+</div> 
 			<div class="container">
 						

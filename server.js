@@ -110,17 +110,6 @@ var meeting = io.of('/group').on('connection', function (socket) {
 				client.hset(tmpId, tmpParent, "");
 			}
 
-			// option return
-			client.hkeys(tmpOption, function (err, replies) {
-		        replies.forEach(function (reply, i) {
-		        	client.hget(tmpOption, reply, function(err, val){
-			        	var splitOption = reply.toString().split(":");
-						var option = splitOption[2];
-			        	socket.emit('get_option_data', { tool: tmpTool, id: tmpId, option: option, val: val });
-		        	})
-		        });
-		    });
-
 			// order return 
 			client.lrange(tmpOrder, 0, -1, function (err, replies) {	
 				replies.forEach( function (idNum, index) {
@@ -142,6 +131,24 @@ var meeting = io.of('/group').on('connection', function (socket) {
 				});
 			});	
 		});				
+	});
+
+	////  클라이언트 해당 tool의 옵션 데이터 요청 처리하는 함수_tree  ////
+	socket.on('set_tree_option_data', function(data) {
+		console.log("Call: set_tree_data");
+		var tmpGroup = data.group;
+		var tmpTool = data.tool;
+		var tmpOption = tmpGroup+":"+tmpTool+":options";
+		// option return
+		client.hkeys(tmpOption, function (err, replies) {
+			replies.forEach(function (reply, i) {
+				client.hget(tmpOption, reply, function(err, val){
+					var splitOption = reply.toString().split(":");
+					var option = splitOption[2];
+					socket.emit('get_tree_option_data', { tool: tmpTool, id: '', option: option, val: val });
+				})
+			});
+		});
 	});
 
 	////  클라이언트가 입력 시작한 경우 전달된 데이터 처리하는 함수  ////

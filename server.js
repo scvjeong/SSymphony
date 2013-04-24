@@ -177,8 +177,23 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var setId = data.id;
 		var setDepth = data.depth;
 
+		// Redis 데이터 변경하는 부분 필요...
+
 		////  다른 클라이언트들에게 변경된 depth 전달_tree  ////
 		socket.broadcast.to(tmpGroup).emit('get_change_depth', { tool:tmpTool, id: setId, depth: setDepth } );
+	});
+
+	////  클라이언트가 parent 변경한 경우 전달된 데이터 처리하는 함수_tree  ////
+	socket.on('set_change_parent', function (data) {
+		var tmpGroup = data.group;
+		var tmpTool = data.tool;
+		var setId = data.id;
+		var setParent = data.parent;
+
+		// Redis 데이터 변경하는 부분 필요...
+
+		////  다른 클라이언트들에게 변경된 parent 전달_tree  ////
+		socket.broadcast.to(tmpGroup).emit('get_change_parent', { tool:tmpTool, id: setId, parent: setParent } );
 	});
 
 	////  클라이언트 해당 tool에 추가된 값을 DB에 저장  ////
@@ -234,13 +249,13 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
 		var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 		//console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);		
-		multi = client.multi();
-
+		
 		////  부모 필드 존재하는지 검사  ////
 		client.hlen(storeId, function (err, num) {
 			if ( num > 0 )
 			{
 				client.hkeys(storeId, function (err, parent) {
+					multi = client.multi();
 					multi.hdel(storeId, parent);	
 					multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
 					multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
@@ -249,6 +264,7 @@ var meeting = io.of('/group').on('connection', function (socket) {
 			}
 			else
 			{
+				multi = client.multi();
 				multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
 				multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
 				multi.exec();
@@ -263,9 +279,9 @@ var meeting = io.of('/group').on('connection', function (socket) {
 				{
 					client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
 						//console.log("id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
-						multi.linsert(tmpOrder, "after", reply, storeId).exec();	//해당 인덱스 위치에 데이터 삽입			
+						client.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입			
 					});	
-				}				
+				}
 				////  다른 클라이언트들에게 추가된 값 전달_tree  ////
 				socket.broadcast.to(tmpGroup).emit('get_insert_tree_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
 			});	
@@ -303,11 +319,13 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 		var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 		//console.log("delId: "+delId);
-		multi = client.multi();
-
+			
+		var tmpDelParent = 0;
 		client.hkeys(delId, function (err, parent) {
-			multi.hdel(delId, parent);	
+			tmpDelParent = parent;
 		});
+		multi = client.multi();
+		multi.hdel(delId, tmpDelParent);	
 		multi.del(delClient);
 		multi.lrem(tmpOrder, 0, delId);	
 		multi.exec();
@@ -360,10 +378,10 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpVal = data.val;
 		var optionKey = tmpGroup + ":" + tmpTool + ":options";
 		var optionField = tmpGroup + ":" + tmpTool + ":" + tmpOption;
-		
+
 		multi = client.multi();
 		multi.hset(optionKey, optionField, tmpVal).exec();
-		
+
 		////  다른 클라이언트들에게 tool의 옵션 데이터 전달  ////
 		socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal });
 	});

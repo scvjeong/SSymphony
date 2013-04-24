@@ -124,14 +124,14 @@ API References
 - Server
 	on('set_change_parent', data)
 - Client API
-	emit('set_change_parent', {group: 'group', tool: 'tool', id: 'id', depth: 'depth'}) 
+	emit('set_change_parent', {group: 'group', tool: 'tool', id: 'id', parent: 'parent'}) 
 
 	ex) socket.emit(
 
 
 ◎ get_change_parent : 데이터의 parent 변경된 내용 서버에서 응답 받는 함수(tree)
 - Server
-	emit('get_change_parent', {tool: 'tool', id: 'id', depth: 'depth'}) 
+	emit('get_change_parent', {tool: 'tool', id: 'id', parent: 'parent'}) 
 - Client API
 	on('get_change_parent', data)
 

@@ -120,6 +120,24 @@ API References
 	ex) socket.on(
 
 
+◎ set_change_depth : 데이터의 depth 변경된 경우 서버로 데이터 전달(tree)
+- Server
+	on('set_change_depth', data)
+- Client API
+	emit('set_change_depth', {group: 'group', tool: 'tool', id: 'id', depth: 'depth'}) 
+
+	ex) socket.emit(
+
+
+◎ get_change_depth : 데이터의 depth 변경된 내용 서버에서 응답 받는 함수(tree)
+- Server
+	emit('get_change_depth', {tool: 'tool', id: 'id', depth: 'depth'}) 
+- Client API
+	on('get_change_depth', data)
+
+	ex) socket.on(
+
+
 ◎ set_change_parent : 데이터의 parent 변경된 경우 서버로 데이터 전달(tree)
 - Server
 	on('set_change_parent', data)

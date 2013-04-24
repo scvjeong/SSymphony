@@ -102,6 +102,24 @@ API References
 	ex) socket.on(
 
 
+◎ set_tree_option_data : 현재 group, tool에 해당하는 옵션 데이터 서버에 요청하는 함수(tree)
+- Server
+	on('set_tree_data', data)
+- Client API
+	emit('set_tree_data', {group: 'group', tool: 'tool'}) 
+
+	ex) socket.emit(
+
+
+◎ get_tree_option_data : 현재 tool에 해당하는 옵션 데이터 서버에서 응답 받는 함수(tree)
+- Server
+	emit('get_tree_data', {tool: 'tool', id: 'id', option: 'option', val: 'val'})
+- Client API
+	on('get_tree_data', data)
+
+	ex) socket.on(
+
+
 ◎ set_input_tree_data : 클라이언트가 입력 시작한 경우 서버로 데이터 전달(tree)
 - Server
 	on('set_input_tree_data', data)

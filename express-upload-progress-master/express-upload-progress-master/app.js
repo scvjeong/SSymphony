@@ -13,7 +13,7 @@ app.configure(function(){
   app.use(express.bodyParser({ 
     keepExtensions: true, 
     uploadDir: __dirname + '/tmp',
-    limit: '2mb'
+    limit: '10mb'
   }));
   app.use(express.methodOverride());
   app.use(app.router);

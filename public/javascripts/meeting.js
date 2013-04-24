@@ -6,16 +6,28 @@ var _tool_vote_count = 0;
 var _common_window_top = 50;
 var _common_windot_left = 20;
 var _new_z_index = 0;
+var _drawtool = 'pen';
 
 $(document).ready(function() {
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
-	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 	
 	// 콘텐트 관리 상자 초기화
 	cm_box.init();
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
 	
+	// 화이트보드 초기화
+	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
+	$('#meetingboard #btn_drawtool_pen').click(function() {
+		_drawtool = 'pen';
+	});
+	$('#meetingboard #btn_drawtool_rect').click(function() {
+		_drawtool = 'rect';
+	});
+	$('#meetingboard #btn_drawtool_ellipse').click(function() {
+		_drawtool = 'ellipse';
+	});
+		
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
 	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 300);
@@ -413,6 +425,7 @@ if(window.addEventListener) {
 	function DrawBoard( objCanvas ){
 		var canvas = objCanvas;
 		var pen	= new GraphicPen(canvas);
+		var prev_point;
 	
 		this.initBoard	=function() {
 			canvas.addEventListener("mousedown", onMouseDown_Canvas, false);
@@ -430,25 +443,66 @@ if(window.addEventListener) {
 	
 		// 마우스 이벤트 등록 및 pen의 위치를 마우스 좌표로 이동
 		function onMouseDown_Canvas(event)
-		{ 
-			var point = getMousePoint(event);
-			pen.moveTo( point );
+		{
+			console.log("Call onMouseDown_Canvas");
 			canvas.addEventListener("mousemove", onMouseMove_Canvas, false);
 			window.addEventListener("mouseup", onMouseUp_Canvas, false);
+			switch (_drawtool)
+			{
+				case 'pen':
+					var point = getMousePoint(event);
+					pen.moveTo( point );
+					break;
+				case 'rect':
+					prev_point = getMousePoint(event);
+					console.log("[Prev] x : " + prev_point.x + ", y : " + prev_point.y); 
+					break;
+				case 'ellipse':
+					prev_point = getMousePoint(event);
+					console.log("[Prev] x : " + prev_point.x + ", y : " + prev_point.y); 
+					break;
+			}
 		}
 	
 		// 마우스 업시 등록한 마우스 이벤트 해지 
 		function onMouseUp_Canvas( event ){
+			console.log("Call onMouseUp_Canvas");
+			console.log(canvas);
+			switch (_drawtool)
+			{
+				case 'pen':
+					break;
+				case 'rect':
+					var now_point = getMousePoint(event);
+					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
+					var width = now_point.x - prev_point.x;
+					var height = now_point.y - prev_point.y;
+					GraphicRect('canvasView', prev_point.x, prev_point.y, width, height);
+					break;
+				case 'ellipse':
+					var now_point = getMousePoint(event);
+					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
+					var width = now_point.x - prev_point.x;
+					var height = now_point.y - prev_point.y;
+					GraphicCircle('canvasView', prev_point.x, prev_point.y, width, height);
+					break;
+			}
 			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
 			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
 		}
 	
 		// pen에 draw요청
 		function onMouseMove_Canvas( event ){
-	
-			var point = getMousePoint( event );
-			pen.draw( point );
-	
+			switch (_drawtool)
+			{
+				case 'pen':
+					var point = getMousePoint( event );
+					pen.draw( point );
+					break;
+				case 'ellipse':
+					
+					break;
+			}
 		}
 	
 		// 마우스 좌표를 브라우저에 따라 반환
@@ -464,6 +518,11 @@ if(window.addEventListener) {
 			return {x:x, y:y};
 		}
 	}
+}
+
+
+
+
 	
 	function GraphicPen(objBoard)
 	{
@@ -482,24 +541,33 @@ if(window.addEventListener) {
 	
 	}
 
-	function GraphicRect(objBoard, left, top, right, bottom)
+	function GraphicRect(objBoard, left, top, width, height)
 	{
 	    var canvas = document.getElementById(objBoard);
 	    if (canvas.getContext) {
 	      var context = canvas.getContext('2d');
 	      
 	      context.fillStyle = _fill_color;
-	      context.fillRect(left, top, right, bottom);
+	      context.fillRect(left, top, width, height);
 	    } else {
 	    	console.log("canvas 안 됨");
 	    }
 	}
 	
-	function GraphicCircle(objBoard, x, y)
+	function GraphicCircle(objBoard, x, y, width, height)
 	{
 		var canvas = document.getElementById(objBoard);
 		var ctx = canvas.getContext('2d');
-        ctx.arc(x, y, 15, 0, Math.PI*2, true);
-        ctx.closePath();
+		var startAngle = 0;
+		var endAngle = 360 * Math.PI / 180;
+		
+		ctx.fillStyle = _fill_color;
+		ctx.fillRect(x, y, width, height);
+		ctx.beginPath();
+        ctx.arc(x, y, startAngle, endAngle, Math.PI*2, true);
+        
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        //ctx.closePath();
     }
-}

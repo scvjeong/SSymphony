@@ -139,7 +139,7 @@
 	<!-- /마인드맵 도구 -->
 </head>
 
-<body class="sidebar-max">
+<body class="sidebar-max" oncontextmenu="return false" onselectstart="return false">
 
 <!--============================= Page Body =================================-->
 
@@ -151,7 +151,8 @@
 <ul id="topbar" class="on-click">
   <li class="pull-left">
     <h1 id="topbar-title">
-      <i class="icon-cogs" id="btn_closeTopbar" onclick="$('#topbar').hide()"></i>
+      <i class="icon-cogs" id="btn_closeTopbar"></i>
+      <!--  onclick="$('#topbar').hide()" -->
       <!--<i class="icon-icomoon-grid-view"></i>-->
       <!--<span aria-hidden="true" class="icon-icomoon-grid-view"></span>-->
     </h1>
@@ -366,9 +367,16 @@
 				<li onclick="changePenColor('#00f0f0')" style="background-color: #00f0f0"></li>
 				<li onclick="changePenColor('#ffffff')" style="background-color: #ffffff"></li>
 			</ul>
+		</div>
+		
+		<input type="button" value="파일창 열기" id="btn_show_cm_box" />
+		
+		<div>
+			<input type="button" value="펜" id="btn_drawtool_pen" />
+			<input type="button" value="사각형" id="btn_drawtool_rect" />
+			<input type="button" value="원" id="btn_drawtool_ellipse" />
 			
-			<input type="button" value="파일창 열기" id="btn_show_cm_box" />
-		</div>		
+		</div>	
 	</div>
 	
 	<div id="content_manage_box">

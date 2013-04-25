@@ -73,6 +73,15 @@
 				socket.emit('set_last_id', { group: tmpGroup, tool: 'postit1' });		
 			});
 
+			////  그룹 타이틀 포커스 잃었을 때 이벤트 등록  ////
+			$('article').delegate('.group_title', 'change', function() {
+				var tmpTitle = $(this).attr('titleid');
+				//lert(tmpTitle);
+				var tmpVal = $(this).val();
+				//console.log(tmpVal);
+				socket.emit('set_option_data', { group: tmpGroup, tool: 'postit1', id: '', option: tmpTitle, val: tmpVal });
+			});
+
 			////  입력창에서 포커스 잃었을 때 이벤트 등록  ////
 			$('.container').delegate('.input_area', 'blur', function() {
 				//데이터 전달하는 부분 작성
@@ -201,7 +210,7 @@
 
 		////  서버에서 추가된 데이터 받는 함수  ////
 		socket.on('get_insert_tree_data', function (data) {
-			console.log("get_data");
+			//console.log("get_data");
 			var tmpTool = data.tool;
 			var tmpId = data.id;
 			var tmpParent = data.parent;

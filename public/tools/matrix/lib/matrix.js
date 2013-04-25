@@ -28,6 +28,7 @@ $(document).ready(function() {
 	socket.emit('join_room', { group: tmpGroup });
 	////  서버에 초기 데이터 요청하는 함수  ////
 	socket.emit('set_tree_data', { group: tmpGroup, tool: toolName });
+	socket.emit('set_tree_option_data', { group: tmpGroup, tool: toolName });
 
 	$(window).focus(function(){
 		$('.writing').focus();
@@ -235,6 +236,8 @@ function setupBox(lastId)
 
 function focusInput(t)
 {
+	var taskId = $(t).attr("taskid");
+	socket.emit('set_input_data', { group: tmpGroup, tool: toolName, id: taskId, index: 0, client: tmpClient });
 	if( $(".writing") == t )
 		console.log("=");
 	$(".writing").each(function(){
@@ -245,18 +248,8 @@ function focusInput(t)
 	$(t).addClass("writing");
 }
 
-socket.on('get_tree_data', function (data) {
-	index = $(".matrix-box[parent="+data.parent+"]").length;
-	addRemoteInputbox(data.id, data.val, data.parent, index);
-});
-socket.on('get_client', function (data) {
-	tmpClient = data.client;
-});
-// matrix setup
-socket.on('get_init_tool_data', function (data) {
-	setupFlag.data_init = true;
-});
-socket.on('get_option_data', function (data) {
+function setOption(data)
+{
 	if( data.option == "row" && data.val != "false" )
 	{
 		setupFlag.row = true;
@@ -283,6 +276,24 @@ socket.on('get_option_data', function (data) {
 		setDoMatrix();
 	else if( data.option == "set" && !data.val )
 		setDoClear();
+}
+
+socket.on('get_tree_data', function (data) {
+	index = $(".matrix-box[parent="+data.parent+"]").length;
+	addRemoteInputbox(data.id, data.val, data.parent, index);
+});
+socket.on('get_client', function (data) {
+	tmpClient = data.client;
+});
+// matrix setup
+socket.on('get_init_tool_data', function (data) {
+	setupFlag.data_init = true;
+});
+socket.on('get_tree_option_data', function (data) {
+	setOption(data)
+});
+socket.on('get_option_data', function (data) {
+	setOption(data)
 });
 
 socket.on('get_insert_tree_data', function (data) {
@@ -294,7 +305,6 @@ socket.on('get_delete_tree_data', function (data) {
 });
 
 socket.on('get_last_id', function (data) {
-	console.log( data );
 	var tmpTool = data.tool; 
 	lastId = data.last;
 	if( totalBoxCount != boxCount )
@@ -305,3 +315,10 @@ socket.on('get_last_id', function (data) {
 	else
 		addInputbox(lastId, "");
 });
+
+/*
+socket.on('get_input_data', function (data) {
+//	console.log( data.client );
+//	console.log( data.id );
+});
+*/

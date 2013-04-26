@@ -14,6 +14,8 @@ var express = require('express')
 
 var app = express();
 
+var _upload_dir = 'tmp';
+
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
@@ -25,6 +27,8 @@ app.configure(function(){
   app.use(app.router);
   app.use(require('stylus').middleware(__dirname + '/public'));
   app.use(express.static(path.join(__dirname, 'public')));
+  app.use(require('stylus').middleware(__dirname + '/' + _upload_dir));
+  app.use(express.static(path.join(__dirname, _upload_dir)));
 });
 
 app.configure('development', function(){
@@ -40,6 +44,47 @@ app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
 app.get('/page/users', user.list);
 
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
+
+app.post('/lib/upload', function(req, res) {
+	console.log(JSON.stringify(req.files));
+ 
+    var serverPath = '/' + _upload_dir + '/' + req.files.uploadFile.name;
+	console.log('serverPath : ' + __dirname + "\\" + serverPath);
+ 
+ 	var fs = require('fs'),
+    util = require('util');
+
+	var is = fs.createReadStream(req.files.uploadFile.path);
+	var os = fs.createWriteStream(__dirname + "\\" + serverPath);
+	
+	util.pump(is, os, function() {
+	    fs.unlinkSync(req.files.uploadFile.path);
+	    res.send({
+            filename: req.files.uploadFile.name,
+            filetype: req.files.uploadFile.type
+		});
+	});
+ 
+ 	// 권한 문제로 시스템마다 작동여부가 다름
+    /*require('fs').rename(
+		req.files.uploadFile.path,
+		'.' + serverPath,
+		//__dirname + "\\" + serverPath,
+		function(error) {
+            if(error) {
+            	console.log(error);
+				res.send({
+                    error: 'Ah crap! Something bad happened'
+				});
+                return;
+            }
+ 
+            res.send({
+				path: serverPath
+            });
+		}
+    );*/
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

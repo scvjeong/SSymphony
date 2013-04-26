@@ -15,6 +15,11 @@ $(document).ready(function() {
 	cm_box.init();
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
+	$('#btn_addlink').click(function() {
+		var linktitle = $('#txt_linktitle').val();
+		var linkurl = $('#txt_linkurl').val();
+		addLinkList(linktitle, linkurl);
+	});
 	
 	// 화이트보드 초기화
 	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
@@ -38,7 +43,70 @@ $(document).ready(function() {
 	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
 	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
 
+	// 파일 업로드 초기화
+	$('#btn_uploadFile').click(function() {
+            $('#uploadForm').submit();
+     });
+ 
+    $('#uploadForm').submit(function() { 
+        $(this).ajaxSubmit({                                                                                                                 
+ 
+            error: function(xhr) {
+				status('Error: ' + xhr.status);
+            },
+ 
+            success: function(response) {
+            	console.log(response);
+            	
+            	var newfileitem = "";
+            	var filetypeinfo = getFileTypeInfo(response.filetype);
+            	
+            	newfileitem += "<li>";
+            	newfileitem += "<a href=\"";
+            	newfileitem += "/tmp/";
+            	newfileitem += response.filename;
+            	newfileitem += "\">";
+            	newfileitem += "<img src=\"";
+            	newfileitem += filetypeinfo.iconurl;
+            	newfileitem += "\" width=\"16\" height=\"16\" /> ";
+            	newfileitem += "[" + filetypeinfo.category + "]";
+            	newfileitem += response.filename;
+            	newfileitem += "</a>";
+            	newfileitem += "</li>";
+				$('#file_list').append(newfileitem);
+            }
+		});
+		                                                                                                                      
+		return false;
+    });
 });
+
+function getFileTypeInfo(filetype)
+{
+	var result = {};
+	
+	switch(filetype)
+	{
+	case "application/pdf":
+		result.category = "document";
+		result.iconurl = "../images/pdf.png";	
+		break;
+	case "application/haansofthwp":
+		result.category = "document";
+		result.iconurl = "../images/hangul.png";
+		break;
+	case "image/jpeg":
+	case "image/png":
+		result.category = "image";
+		result.iconurl = "../images/image.png";
+		break;
+	default:
+		result.category = "unknown";
+		result.iconurl = "../images/unknown.png";
+	}
+	
+	return result;
+}
 
 
 

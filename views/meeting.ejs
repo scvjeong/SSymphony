@@ -82,6 +82,7 @@
 <link rel="stylesheet" href="../javascripts/jqwidgets/styles/jqx.base.css" type="text/css" />
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<script type="text/javascript" src="../javascripts/jquery.form.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxwindow.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxbuttons.js"></script>
@@ -91,7 +92,7 @@
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
 <!-- /공통 스크립트 -->
   
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<!-- 리스트 도구 -->
 		<link rel="stylesheet" href="/stylesheets/list.css">
 		<!--<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
@@ -392,10 +393,20 @@
 					<li><img src="" style="width:15px; height:15px; margin-right:5px" />파일</li>
 				</ul>
 				<div>
+					<input type="text" id="txt_linktitle" placeholder="링크 제목" />
+					<input type="text" id="txt_linkurl" placeholder="링크 주소" />
+					<input type="button" value="등록" id="btn_addlink" />
 					<ul id="link_list">
 					</ul>
 				</div>
 				<div>
+					<form id="uploadForm"
+				          enctype="multipart/form-data"
+				          action="/lib/upload"
+				          method="post">
+				      <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
+				      <input type="button" id="btn_uploadFile" value="업로드" />
+				    </form>
 					<ul id="file_list">
 					</ul>
 				</div>

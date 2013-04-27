@@ -90,6 +90,7 @@
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxpanel.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxtabs.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxexpander.js"></script>
 <!-- /공통 스크립트 -->
   
   	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
@@ -380,38 +381,53 @@
 		</div>	
 	</div>
 	
-	<div id="content_manage_box">
+	<div id="window_share_box">
 		<div id="titlebar">
 			<span>
-				<img src="" style="width:15px; height:15px; margin-right:15px" />Content Manage Box
+				<img src="" style="width:15px; height:15px; margin-right:15px" />Share Box
 			</span>
 		</div>
-		<div style="content">
-			<div id="tab">
-				<ul style="margin-left:10px;">
-					<li><img src="" style="width:15px; height:15px; margin-right:5px" />링크</li>
-					<li><img src="" style="width:15px; height:15px; margin-right:5px" />파일</li>
-				</ul>
-				<div>
-					<input type="text" id="txt_linktitle" placeholder="링크 제목" />
-					<input type="text" id="txt_linkurl" placeholder="링크 주소" />
-					<input type="button" value="등록" id="btn_addlink" />
-					<ul id="link_list">
-					</ul>
-				</div>
-				<div>
-					<form id="uploadForm"
-				          enctype="multipart/form-data"
-				          action="/lib/upload"
-				          method="post">
-				      <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
-				      <input type="button" id="btn_uploadFile" value="업로드" />
-				    </form>
-					<ul id="file_list">
-					</ul>
+		<div class="content"><div>
+			<div id="section_links">
+				<div class="section_title">
+					<span class="title_text">Links</span><span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
 				</div>
 			</div>
-		</div>
+			<div id="section_documents">
+				<div class="section_title">Documents</div>
+			</div>
+			<div id="section_photos">
+				<div class="section_title">Photos</div>
+			</div>
+			<div id="section_movies">
+				<div class="section_title">Movies</div>
+			</div>
+			<div id="section_sounds">
+				<div class="section_title">Sounds</div>
+			</div>
+			<div id="section_others">
+				<div class="section_title">Others</div>
+			</div>
+			</div>
+			<div>
+				<input type="text" id="txt_linktitle" placeholder="링크 제목" />
+				<input type="text" id="txt_linkurl" placeholder="링크 주소" />
+				<input type="button" value="등록" id="btn_addlink" />
+				<ul id="link_list">
+				</ul>
+			</div>
+			<div>
+				<form id="uploadForm"
+			          enctype="multipart/form-data"
+			          action="/lib/upload"
+			          method="post">
+			      <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
+			      <input type="button" id="btn_uploadFile" value="업로드" />
+			    </form>
+				<ul id="file_list">
+				</ul>
+			</div>
+		</div></div>
 	</div>
 	
 	<canvas id="canvasView" width="1400" height="1000" >

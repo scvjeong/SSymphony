@@ -12,7 +12,7 @@ $(document).ready(function() {
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
 	
 	// 콘텐트 관리 상자 초기화
-	cm_box.init();
+	share_box.init();
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
 	$('#btn_addlink').click(function() {
@@ -110,34 +110,34 @@ function getFileTypeInfo(filetype)
 
 
 
-var cm_box = ( function() {
+var share_box = ( function() {
 		function _addEventListeners() {
-			$('#whiteboard_control_box #btn_show_cm_box').click(function() {
-				$('#content_manage_box').jqxWindow('open');
-				console.log("open cm_box");
+			$('#whiteboard_control_box #btn_show_share_box').click(function() {
+				$('#window_share_box').jqxWindow('open');
+				console.log("open share_box");
 			});
 		};
 		function _createElements() {
-			$('#whiteboard_control_box #btn_show_cm_box')
-				.jqxButton({ theme: cm_box.config.theme, width: '50px' });
+			$('#whiteboard_control_box #btn_show_share_box')
+				.jqxButton({ theme: share_box.config.theme, width: '50px' });
 		};
 		function _createWindow() {
-			$('#content_manage_box').jqxWindow({
+			$('#window_share_box').jqxWindow({
 				showCollapseButton : true,
-				maxHeight : 400,
-				maxWidth : 700,
+				maxHeight : 1000,
+				maxWidth : 1000,
 				minHeight : 200,
 				minWidth : 200,
 				height : 300,
 				width : 500,
-				theme : cm_box.config.theme,
+				theme : share_box.config.theme,
 				initContent : function() {
-					$('#content_manage_box #tab').jqxTabs({
+					$('#window_share_box #tab').jqxTabs({
 						height : '100%',
 						width : '100%',
-						theme : cm_box.config.theme
+						theme : share_box.config.theme
 					});
-					$('#content_manage_box').jqxWindow('focus');
+					$('#window_share_box').jqxWindow('focus');
 				}
 			});
 		};
@@ -154,16 +154,17 @@ var cm_box = ( function() {
 		};
 	}()); 
 
+// 링크 추가
 function addLinkList(title, link)
 {
-	var link_list = $('#content_manage_box #link_list');
+	var link_list = $('#window_share_box #link_list');
 	var newlink = "<li>";
 		newlink += "<span>";
 		newlink += title;
 		newlink += "</span> ";
 		newlink += "<span><a href=\"";
 		newlink += link;
-		newlink += "\">";
+		newlink += "\" target=\"_blank\">";
 		newlink += link;
 		newlink += "</a></span>";
 		newlink += "</li>";

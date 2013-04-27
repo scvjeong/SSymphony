@@ -49,13 +49,13 @@ app.post('/lib/upload', function(req, res) {
 	console.log(JSON.stringify(req.files));
  
     var serverPath = '/' + _upload_dir + '/' + req.files.uploadFile.name;
-	console.log('serverPath : ' + __dirname + "\\" + serverPath);
+	console.log('serverPath : ' + __dirname + "/" + serverPath);	// 윈도우에서 테스트할 때는 /를 \\로 그치기
  
  	var fs = require('fs'),
     util = require('util');
 
 	var is = fs.createReadStream(req.files.uploadFile.path);
-	var os = fs.createWriteStream(__dirname + "\\" + serverPath);
+	var os = fs.createWriteStream(__dirname + "/" + serverPath);	// 윈도우에서 테스트할 때는 /를 \\로 그치기
 	
 	util.pump(is, os, function() {
 	    fs.unlinkSync(req.files.uploadFile.path);

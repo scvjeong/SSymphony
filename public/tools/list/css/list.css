@@ -104,17 +104,18 @@
 		background:#004596;
 	}
 	.home_box {
-		width: 90%;		
+		width: 94%;		
 	}
 	.init_box {
-		width: 10%;
+		width: 6%;
 	}
 	#homeButton {
 		width: 60px;
 		cursor:pointer;
 	}
 	#addButton {
-		width: 50px;
+		width: 20px;
+		font: bold 18px;
 		text-align: center;
 		background: #FFFBB9;
 		border: 1px solid #999999;

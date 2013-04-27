@@ -630,6 +630,13 @@
 					delLine();			
 				}				
 			}
+			else if ( inputKey == 27 )	// Input ESCKey
+			{				
+				//alert("ESC");
+				$('.input_open > .tmp_editing').val('');
+				
+			}
+
 			else	//그 외 키보드 입력시
 			{
 				if ( inputFlag == 0 ) {
@@ -660,7 +667,7 @@
 						<div id="homeButton"><h2>Home</h2></div>
 					</div>
 					<div class="init_box">
-						<div id="addButton" onClick="addNewInput()">ADD</div>
+						<div id="addButton" onClick="addNewInput()">+</div>
 					</div>
 				</div>
 			</header>

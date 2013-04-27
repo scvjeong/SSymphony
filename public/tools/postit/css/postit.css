@@ -75,13 +75,18 @@
 	cursor:pointer;
 }
 
+.object {
+	height: 160px;
+	box-shadow: 5px 5px 5px 0px lightgray;
+	background: -webkit-linear-gradient(top, #ffffcc 0%,#ffff88 100%);
+}
+
 .input_area {
 	width: 88%;
 	height: 70%;
 	margin: 2% 5% 5% 5%;
 	font: 14px verdana, sans-serif;
 	border: none;
-	border-top: 1px solid #99B;
 	background: none;
 	outline: none;
 	resize: none;
@@ -89,8 +94,14 @@
 }
 
 .title_area {
-	width: 95%;
-	height: 8%;
+	background: #ffee77;
+	border-radius: 3px;
+	width: 100%;
+	height: 14%;
+}
+
+.title_area:hover {
+	background: #ffff33;
 }
 
 .add_button {
@@ -106,10 +117,10 @@
 
 .del_button {
 	float:right;
-	margin: 1% 0% 0% 0%;
+	margin: 1% 2% 0% 0%;
 	padding: 1px;
 	font: 12px verdana, sans-serif;
-	border: 1px solid #555;
+
 	background: none;
 	outline: none;
 	cursor: pointer;

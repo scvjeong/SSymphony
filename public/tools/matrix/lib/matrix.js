@@ -112,7 +112,7 @@ function setDoMatrix() {
 				socket.emit('set_last_id', { group: tmpGroup, tool: toolName });
 			}
 		}
-
+		$('.matrix_table tr:nth-child(even) td').css({width:colWidth+"px"});
 		$('.matrix_table tr:nth-child(even) td:nth-child(even)').addClass("even");
 		$('.matrix_table tr:nth-child(even) td:nth-child(odd)').addClass("c-even");
 		$('.matrix_table tr:nth-child(odd) td:nth-child(even)').addClass("odd");
@@ -129,8 +129,13 @@ function setDoMatrix() {
 function keyDownCheck(t, e)
 {
 	var $div = $(t).parent();
-	if( e.keyCode == 13 && $(t).val().trim().length > 0 )
+	if( e.keyCode == 13 && $(t).val().trim().length > 0 ) // enter
 		addInput(t);
+	else if( e.keyCode == 9 && $(t).val().trim().length > 0 ) // tab
+	{
+		addInput(t);
+		return false;
+	}
 	else if( (e.keyCode == 8 ) && $(t).val().trim().length < 1 && $("input",$div).length > 1 )
 	{
 		delInput(t);

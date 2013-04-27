@@ -8,12 +8,10 @@ var check = require('validator').check,
  */
 
 exports.meeting_list = function(req, res){
-
+	console.log( req.session );
 	/** session start **/
-	req.session.id = "scvjeong";
-	req.session.nickname = "Dream Supporter";
-	if( req.session.id.length < 1 )
-		res.redirect("/page/login");
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
 	/** session end **/
 
 	var evt = new EventEmitter();

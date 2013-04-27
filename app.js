@@ -47,8 +47,8 @@ console.log(req.session);
   res.send(body + '<p>viewed <strong>' + req.session.views + '</strong> times.</p>');
 });
 
-app.get('/page/login', main.main);
-app.get('/', routes.meeting_list);
+app.get('/', main.main);
+app.get('/page/meeting_list', routes.meeting_list);
 app.get('/page/meeting', meeting.main);
 app.get('/page/quick_meeting', quick_meeting.quick_meeting);
 app.get('/page/meeting_template', meeting_planning.meeting_template);
@@ -56,6 +56,7 @@ app.get('/page/setting_agenda', meeting_planning.setting_agenda);
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
 
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
+app.post('/page/login', main.login);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

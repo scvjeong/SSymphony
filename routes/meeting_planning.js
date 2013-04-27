@@ -8,10 +8,8 @@ var EventEmitter = require('events').EventEmitter;
 
 exports.set_meeting_planning = function(req, res){
 	/** session start **/
-	req.session.id = "scvjeong";
-	req.session.nickname = "Dream Supporter";
-	if( req.session.id.length < 1 )
-		res.redirect("/page/login");
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
 	/** session end **/
 
 	var evt = new EventEmitter();
@@ -117,10 +115,8 @@ exports.set_meeting_planning = function(req, res){
 
 exports.meeting_template = function(req, res){
 	/** session start **/
-	req.session.id = "scvjeong";
-	req.session.nickname = "Dream Supporter";
-	if( req.session.id.length < 1 )
-		res.redirect("/page/login");
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
 	/** session end **/
 
 	var evt = new EventEmitter();
@@ -137,10 +133,8 @@ exports.meeting_template = function(req, res){
 
 exports.setting_agenda = function(req, res){
 	/** session start **/
-	req.session.id = "scvjeong";
-	req.session.nickname = "Dream Supporter";
-	if( req.session.id.length < 1 )
-		res.redirect("/page/login");
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
 	/** session end **/
 
 	var evt = new EventEmitter();
@@ -186,10 +180,8 @@ exports.setting_agenda = function(req, res){
 
 exports.setting_agenda_step = function(req, res){
 	/** session start **/
-	req.session.id = "scvjeong";
-	req.session.nickname = "Dream Supporter";
-	if( req.session.id.length < 1 )
-		res.redirect("/page/login");
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
 	/** session end **/
 
 	res.render('setting_agenda_step');

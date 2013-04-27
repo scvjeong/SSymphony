@@ -109,7 +109,7 @@ function startVote()
 		}
 	}
 	
-	///////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////아래는 모듈로
 	
 	var is_addpermit_to_all = $('#chk_addpermit_to_all').is(":checked");		// 누구나 투표 항목 추가 가능
 		if(is_addpermit_to_all == true) $('.vote_processing_container .container_add_item').css('display', 'block');
@@ -147,12 +147,58 @@ function initSocket()
 	_socket.emit('join_room', {group: _tmpGroup});					// 그룹에 join
 	_socket.emit('set_data', {group: _tmpGroup, tool: _voteid});	// 서버에 초기 데이터 요청
 	
-	_socket.on('get_client', function (data) {
-		_clientId = data.client;
-		console.log("_clientId: "+_clientId);
-	});
+	var sendingData = JSON.stringify(_votelist);	// 투표 항목들
+	var is_addpermit_to_all = $('#chk_addpermit_to_all').is(":checked");		// 누구나 투표 항목 추가 가능
+	var is_multi_vote = $('#chk_multi_vote').is(":checked");						// 중복 투표
+	var is_realtime_result = $('#chk_realtime_result').is(":checked");			// 실시간 투표 결과 공유
+		
+	_socket.emit('set_insert_data', {group: _tmpGroup, tool: _voteid, id: 'set_vote_process', index: 0, val: sendingData, client: 0});
+	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid, id: 0, option: 'is_addpermit_to_all', val: is_addpermit_to_all});
+	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid, id: 0, option: 'is_multi_vote', val: is_multi_vote});
+	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid, id: 0, option: 'is_realtime_result', val: is_realtime_result});
 	
-	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid, id:'123', option: 'testoption', val: 'valval'});
 	
-	_socket.on('get_option_data', function(data) { console.log(data); console.log("over"); });
+	//_socket.on('get_option_data', function(data) {
 }
+
+function initOption(data)
+{
+	if (data.option == "is_addpermit_to_all")
+	{
+		// set
+	}
+	else if (data.option == "is_multi_vote")
+	{
+		// set
+	}
+	else if (data.option == "is_realtime_result")
+	{
+		// set
+	}
+}
+
+function initVoteProcess(data)
+{
+	
+}
+
+
+_socket.on('get_client', function (data) {
+	_clientId = data.client;
+	console.log("_clientId: "+_clientId);
+});
+
+_socket.on('get_insert_data', function(data) {
+	if (data.id == "set_vote_process")
+	{
+		initVoteProcess(data.val);
+	}
+	else if (data.id == "end_vote")
+	{
+		
+	}
+});
+
+_socket.on('get_option_data', function(data) {
+	initOption(data);
+});

@@ -27,8 +27,7 @@ app.configure(function(){
   app.use(app.router);
   app.use(require('stylus').middleware(__dirname + '/public'));
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(require('stylus').middleware(__dirname + '/' + _upload_dir));
-  app.use(express.static(path.join(__dirname, _upload_dir)));
+  app.use('/' + _upload_dir, express.static(path.join(__dirname, _upload_dir)));	// 업로드 디렉토리 static 등재
 });
 
 app.configure('development', function(){
@@ -46,16 +45,17 @@ app.get('/page/users', user.list);
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 
 app.post('/lib/upload', function(req, res) {
-	console.log(JSON.stringify(req.files));
+	console.log(JSON.stringify(req.files)); 
+	console.log('serverPath : ' + targetPath);
+ 	
+  	var fs = require('fs');
+ 	var util = require('util');
  
-    var serverPath = '/' + _upload_dir + '/' + req.files.uploadFile.name;
-	console.log('serverPath : ' + __dirname + "/" + serverPath);	// 윈도우에서 테스트할 때는 /를 \\로 그치기
- 
- 	var fs = require('fs'),
-    util = require('util');
+    var serverPath = '/' + _upload_dir + '/' + req.files.uploadFile.name;	
+ 	var targetPath = path.join(__dirname, serverPath);
 
 	var is = fs.createReadStream(req.files.uploadFile.path);
-	var os = fs.createWriteStream(__dirname + "/" + serverPath);	// 윈도우에서 테스트할 때는 /를 \\로 그치기
+	var os = fs.createWriteStream(targetPath);
 	
 	util.pump(is, os, function() {
 	    fs.unlinkSync(req.files.uploadFile.path);

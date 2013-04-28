@@ -645,6 +645,12 @@
 				delLine();			
 			}				
 		}
+		else if ( inputKey == 27 )	// Input ESCKey
+		{				
+			//alert("ESC");
+			$('.input_open > .tmp_editing').val('');
+			
+		}
 		else	//그 외 키보드 입력시
 		{
 			if ( inputFlag == 0 ) {

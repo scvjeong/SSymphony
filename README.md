@@ -10,7 +10,7 @@ API References
 ◇ Common
 =======
 ◎ join_room : 그룹에 join하는 함수
-- Server
+- Server\n
 	on('join_room', data)
 - Client API
 	emit('join_room', {group: 'group'}) 

@@ -361,3 +361,19 @@ ul.users-online li a strong {
 
 
 /* /알림창 */
+
+
+/*  쉐어 박스 */
+#window_share_box .content {
+	border: 1px solid #cccccc;
+}
+
+
+#window_share_box .content .section_title {
+	padding: 0 0 0 10px;
+	font-size: 11px;
+	font-weight: bold;
+	margin: 0;
+	border-top: 1px solid #cccccc;
+}
+/* /쉐어 박스 */

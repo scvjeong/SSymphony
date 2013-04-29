@@ -6,16 +6,33 @@ var _tool_vote_count = 0;
 var _common_window_top = 50;
 var _common_windot_left = 20;
 var _new_z_index = 0;
+var _drawtool = 'pen';
 
 $(document).ready(function() {
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
-	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 	
 	// 콘텐트 관리 상자 초기화
-	cm_box.init();
+	share_box.init();
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
+	$('#btn_addlink').click(function() {
+		var linktitle = $('#txt_linktitle').val();
+		var linkurl = $('#txt_linkurl').val();
+		addLinkList(linktitle, linkurl);
+	});
 	
+	// 화이트보드 초기화
+	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
+	$('#meetingboard #btn_drawtool_pen').click(function() {
+		_drawtool = 'pen';
+	});
+	$('#meetingboard #btn_drawtool_rect').click(function() {
+		_drawtool = 'rect';
+	});
+	$('#meetingboard #btn_drawtool_ellipse').click(function() {
+		_drawtool = 'ellipse';
+	});
+		
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
 	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 300);
@@ -26,38 +43,101 @@ $(document).ready(function() {
 	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
 	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
 
+	// 파일 업로드 초기화
+	$('#btn_uploadFile').click(function() {
+            $('#uploadForm').submit();
+     });
+ 
+    $('#uploadForm').submit(function() { 
+        $(this).ajaxSubmit({                                                                                                                 
+ 
+            error: function(xhr) {
+				status('Error: ' + xhr.status);
+            },
+ 
+            success: function(response) {
+            	console.log(response);
+            	
+            	var newfileitem = "";
+            	var filetypeinfo = getFileTypeInfo(response.filetype);
+            	
+            	newfileitem += "<li>";
+            	newfileitem += "<a href=\"";
+            	newfileitem += "/tmp/";
+            	newfileitem += response.filename;
+            	newfileitem += "\">";
+            	newfileitem += "<img src=\"";
+            	newfileitem += filetypeinfo.iconurl;
+            	newfileitem += "\" width=\"16\" height=\"16\" /> ";
+            	newfileitem += "[" + filetypeinfo.category + "]";
+            	newfileitem += response.filename;
+            	newfileitem += "</a>";
+            	newfileitem += "</li>";
+				$('#file_list').append(newfileitem);
+            }
+		});
+		                                                                                                                      
+		return false;
+    });
 });
 
+function getFileTypeInfo(filetype)
+{
+	var result = {};
+	
+	switch(filetype)
+	{
+	case "application/pdf":
+		result.category = "document";
+		result.iconurl = "../images/pdf.png";	
+		break;
+	case "application/haansofthwp":
+		result.category = "document";
+		result.iconurl = "../images/hangul.png";
+		break;
+	case "image/jpeg":
+	case "image/png":
+		result.category = "image";
+		result.iconurl = "../images/image.png";
+		break;
+	default:
+		result.category = "unknown";
+		result.iconurl = "../images/unknown.png";
+	}
+	
+	return result;
+}
 
 
-var cm_box = ( function() {
+
+var share_box = ( function() {
 		function _addEventListeners() {
-			$('#whiteboard_control_box #btn_show_cm_box').click(function() {
-				$('#content_manage_box').jqxWindow('open');
-				console.log("open cm_box");
+			$('#whiteboard_control_box #btn_show_share_box').click(function() {
+				$('#window_share_box').jqxWindow('open');
+				console.log("open share_box");
 			});
 		};
 		function _createElements() {
-			$('#whiteboard_control_box #btn_show_cm_box')
-				.jqxButton({ theme: cm_box.config.theme, width: '50px' });
+			$('#whiteboard_control_box #btn_show_share_box')
+				.jqxButton({ theme: share_box.config.theme, width: '50px' });
 		};
 		function _createWindow() {
-			$('#content_manage_box').jqxWindow({
+			$('#window_share_box').jqxWindow({
 				showCollapseButton : true,
-				maxHeight : 400,
-				maxWidth : 700,
+				maxHeight : 1000,
+				maxWidth : 1000,
 				minHeight : 200,
 				minWidth : 200,
 				height : 300,
 				width : 500,
-				theme : cm_box.config.theme,
+				theme : share_box.config.theme,
 				initContent : function() {
-					$('#content_manage_box #tab').jqxTabs({
+					$('#window_share_box #tab').jqxTabs({
 						height : '100%',
 						width : '100%',
-						theme : cm_box.config.theme
+						theme : share_box.config.theme
 					});
-					$('#content_manage_box').jqxWindow('focus');
+					$('#window_share_box').jqxWindow('focus');
 				}
 			});
 		};
@@ -74,16 +154,17 @@ var cm_box = ( function() {
 		};
 	}()); 
 
+// 링크 추가
 function addLinkList(title, link)
 {
-	var link_list = $('#content_manage_box #link_list');
+	var link_list = $('#window_share_box #link_list');
 	var newlink = "<li>";
 		newlink += "<span>";
 		newlink += title;
 		newlink += "</span> ";
 		newlink += "<span><a href=\"";
 		newlink += link;
-		newlink += "\">";
+		newlink += "\" target=\"_blank\">";
 		newlink += link;
 		newlink += "</a></span>";
 		newlink += "</li>";
@@ -413,6 +494,7 @@ if(window.addEventListener) {
 	function DrawBoard( objCanvas ){
 		var canvas = objCanvas;
 		var pen	= new GraphicPen(canvas);
+		var prev_point;
 	
 		this.initBoard	=function() {
 			canvas.addEventListener("mousedown", onMouseDown_Canvas, false);
@@ -430,25 +512,66 @@ if(window.addEventListener) {
 	
 		// 마우스 이벤트 등록 및 pen의 위치를 마우스 좌표로 이동
 		function onMouseDown_Canvas(event)
-		{ 
-			var point = getMousePoint(event);
-			pen.moveTo( point );
+		{
+			console.log("Call onMouseDown_Canvas");
 			canvas.addEventListener("mousemove", onMouseMove_Canvas, false);
 			window.addEventListener("mouseup", onMouseUp_Canvas, false);
+			switch (_drawtool)
+			{
+				case 'pen':
+					var point = getMousePoint(event);
+					pen.moveTo( point );
+					break;
+				case 'rect':
+					prev_point = getMousePoint(event);
+					console.log("[Prev] x : " + prev_point.x + ", y : " + prev_point.y); 
+					break;
+				case 'ellipse':
+					prev_point = getMousePoint(event);
+					console.log("[Prev] x : " + prev_point.x + ", y : " + prev_point.y); 
+					break;
+			}
 		}
 	
 		// 마우스 업시 등록한 마우스 이벤트 해지 
 		function onMouseUp_Canvas( event ){
+			console.log("Call onMouseUp_Canvas");
+			console.log(canvas);
+			switch (_drawtool)
+			{
+				case 'pen':
+					break;
+				case 'rect':
+					var now_point = getMousePoint(event);
+					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
+					var width = now_point.x - prev_point.x;
+					var height = now_point.y - prev_point.y;
+					GraphicRect('canvasView', prev_point.x, prev_point.y, width, height);
+					break;
+				case 'ellipse':
+					var now_point = getMousePoint(event);
+					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
+					var width = now_point.x - prev_point.x;
+					var height = now_point.y - prev_point.y;
+					GraphicCircle('canvasView', prev_point.x, prev_point.y, width, height);
+					break;
+			}
 			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
 			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
 		}
 	
 		// pen에 draw요청
 		function onMouseMove_Canvas( event ){
-	
-			var point = getMousePoint( event );
-			pen.draw( point );
-	
+			switch (_drawtool)
+			{
+				case 'pen':
+					var point = getMousePoint( event );
+					pen.draw( point );
+					break;
+				case 'ellipse':
+					
+					break;
+			}
 		}
 	
 		// 마우스 좌표를 브라우저에 따라 반환
@@ -464,6 +587,11 @@ if(window.addEventListener) {
 			return {x:x, y:y};
 		}
 	}
+}
+
+
+
+
 	
 	function GraphicPen(objBoard)
 	{
@@ -482,24 +610,33 @@ if(window.addEventListener) {
 	
 	}
 
-	function GraphicRect(objBoard, left, top, right, bottom)
+	function GraphicRect(objBoard, left, top, width, height)
 	{
 	    var canvas = document.getElementById(objBoard);
 	    if (canvas.getContext) {
 	      var context = canvas.getContext('2d');
 	      
 	      context.fillStyle = _fill_color;
-	      context.fillRect(left, top, right, bottom);
+	      context.fillRect(left, top, width, height);
 	    } else {
 	    	console.log("canvas 안 됨");
 	    }
 	}
 	
-	function GraphicCircle(objBoard, x, y)
+	function GraphicCircle(objBoard, x, y, width, height)
 	{
 		var canvas = document.getElementById(objBoard);
 		var ctx = canvas.getContext('2d');
-        ctx.arc(x, y, 15, 0, Math.PI*2, true);
-        ctx.closePath();
+		var startAngle = 0;
+		var endAngle = 360 * Math.PI / 180;
+		
+		ctx.fillStyle = _fill_color;
+		ctx.fillRect(x, y, width, height);
+		ctx.beginPath();
+        ctx.arc(x, y, startAngle, endAngle, Math.PI*2, true);
+        
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        //ctx.closePath();
     }
-}

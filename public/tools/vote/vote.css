@@ -2,14 +2,29 @@
 	clear: both;
 }
 
-.vote_container {
-	width: 500px;
-	height: 180px;
+.verticalmiddle {
+	vertical-align: middle;
 }
 
-.vote_container .question_content {
+.underbar {
+	 border-top: 1px solid #ababab;
+}
+
+.button1 {
+	width: 100px;
+	height: 20px;
+	font-size: 11px;
+	background-color: #2b4d90;
+	color: #ffffff;
+}
+
+.vote_make_container {
 	width: 500px;
-	height: 150px;
+	border: 1px solid #ababab;
+}
+
+.vote_make_container .container_question_title {
+	padding: 10px;
 }
 
 .vote_make_container .question_title {
@@ -34,7 +49,8 @@
 	padding: 0;
 }
 
-.vote_make_container .voteReadyList li .plusicon {
+.vote_make_container .voteReadyList li .plusicon,
+.vote_processing_container .container_add_item .plusicon {
 	margin-left: 3px;
 	font-size: 8px;
 	font-weight: bold;
@@ -76,15 +92,85 @@
 }
 
 
-.vote_make_container .underbar .container_btn_votestart {
+.vote_make_container .underbar .container_btn_votestart,
+.vote_processing_container .underbar .container_btn_votefinish {
 	float: right;
 	padding-right: 3px;
 }
 
-.vote_make_container .underbar .btn_votestart {
-	width: 100px;
-	height: 20px;
-	font-size: 11px;
-	background-color: #2b4d90;
-	color: #ffffff;
+/* 회의 진행 */
+.vote_processing_container {
+	width: 500px;
+	border: 1px solid #ababab;
 }
+
+.vote_processing_container .question_title {
+	font-size: 13px;
+	margin: 20px 20px 10px 20px;
+	font-weight: normal;
+}
+
+.vote_processing_container .question_list {
+	margin: 0px 20px 20px 20px;
+	font-size: 11px;
+}
+
+.vote_processing_container .question_list ul {
+	list-style: none;
+	padding-left: 5px;
+	margin-bottom: 15px;
+}
+
+.vote_processing_container .question_list ul li {
+	line-height: 18px;
+	height: 18px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	vertical-align: middle;
+	pointer: cursor;
+}
+
+.vote_processing_container .question_list ul li .item_text {
+	display: inline-block;
+	
+	width: 300px;
+	border-top: 1px solid #aaaaaa;
+	border-left: 1px solid #aaaaaa; 
+	border-right: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+	
+	font-weight: bold;
+	color: #1e476c;
+	
+	padding: 3px;
+}
+
+.vote_processing_container .container_add_item {
+	display: inline-block;
+	width: 306px;
+	margin-left: 26px;
+	padding: 0;
+	border: 1px solid #cccccc;
+}
+
+.vote_processing_container .container_add_item #txt_add_item {
+	width: 250px;
+	margin-left: 5px;
+	border: none;
+	outline: none;
+	font-size: 11px;
+}
+
+.vote_processing_container .container_add_item #btn_add_item {
+	float: right;
+	height: 22px;
+	margin: 0;
+	font-size: 11px;
+	/*border: none;
+	border-left: 1px solid #cccccc;*/
+}
+
+.vote_processing_container .btn_votefinish {
+	float: right;
+}
+/* /회의 진행 */

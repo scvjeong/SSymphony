@@ -1,9 +1,9 @@
 var width = 100;
 var height = 100;
 var tmpClient = 0;	//현재 클라이언트 번호
-//var tmpGroup = "matrix-group-1";	//현재 그룹
-var tmpGroup = "group1";	//현재 그룹
-var toolName = "matrix";
+//var _tmpGroup = "matrix-group-1";	//현재 그룹
+var _tmpGroup = "group1";	//현재 그룹
+var _toolName = "matrix";
 var setupData = { row:0, col:0 }; // matrix 행, 열
 var setupFlag = { data_init:true, row:false, col:false };
 var optionId = { set:999999, row:999998, col:999997 };
@@ -15,21 +15,24 @@ var _key_code = null // 키 입력 값 저장
 
 var inputFlag = 0;	//키입력 감지하기 위한 변수
 
-////  socket.io 서버의 해당 그룹에 접속  ////
-//var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
-var socket = io.connect('http://lyd.kr:8000/group');	// socket.io 서버에 접속
+////  _socket_matrix.io 서버의 해당 그룹에 접속  ////
+//var _socket_matrix = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
+//var _socket_matrix = io.connect('http://lyd.kr:8000/group');	// socket.io 서버에 접속
+var _socket_matrix = io.connect('http://61.43.139.69:8000/group');
+
 
 ////  처음 창 오픈되었을 때 호출  ////
+/*
 $(document).ready(function() {
 	resizeMatrix();
 	$(window).resize(function(){
 		resizeMatrix();
 	});
 
-	socket.emit('join_room', { group: tmpGroup });
+	socket.emit('join_room', { group: _tmpGroup });
 	////  서버에 초기 데이터 요청하는 함수  ////
-	socket.emit('set_tree_data', { group: tmpGroup, tool: toolName });
-	socket.emit('set_tree_option_data', { group: tmpGroup, tool: toolName });
+	socket.emit('set_tree_data', { group: _tmpGroup, tool: _toolName });
+	socket.emit('set_tree_option_data', { group: _tmpGroup, tool: _toolName });
 
 	$(window).focus(function(){
 		$('.writing').focus();
@@ -38,7 +41,8 @@ $(document).ready(function() {
 		//console.log("focus");
 		//$('.writing').focus();
 	});
-}); 
+});
+*/
 
 function resizeMatrix(){
 	width = $(window).width();
@@ -47,25 +51,26 @@ function resizeMatrix(){
 }
 
 function setMatrix(t){
+	console.log( setupFlag );
 	if( setupFlag.data_init == true )
 	{
 		setupData.row = $('#rowNum', $(t).parent() ).val();
 		setupData.col = $('#colNum', $(t).parent() ).val();
 		setupFlag.row = true;
 		setupFlag.col = true;
-		socket.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.row, option: "row", val: setupData.row });
-		socket.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.col, option: "col", val: setupData.col });
-		socket.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.set, option: "set", val: true });
+		socket.emit('set_option_data', { group: _tmpGroup, tool: _toolName, id: optionId.row, option: "row", val: setupData.row });
+		socket.emit('set_option_data', { group: _tmpGroup, tool: _toolName, id: optionId.col, option: "col", val: setupData.col });
+		socket.emit('set_option_data', { group: _tmpGroup, tool: _toolName, id: optionId.set, option: "set", val: true });
 		setDoMatrix();
 	}
 }
 
 function setClear() {
 	//if( confirm("정말 삭제하겠습니까?") ) {
-		socket.emit('set_init_tool_data', { group: tmpGroup, tool: toolName });		
-		socket.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.row, option: "row", val: false });
-		socket.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.col, option: "col", val: false });
-		socket.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.set, option: "set", val: false });
+		_socket_matrix.emit('set_init_tool_data', { group: _tmpGroup, tool: _toolName });		
+		_socket_matrix.emit('set_option_data', { group: _tmpGroup, tool: _toolName, id: optionId.row, option: "row", val: false });
+		_socket_matrix.emit('set_option_data', { group: _tmpGroup, tool: _toolName, id: optionId.col, option: "col", val: false });
+		_socket_matrix.emit('set_option_data', { group: _tmpGroup, tool: _toolName, id: optionId.set, option: "set", val: false });
 		setDoClear();
 	//}
 }
@@ -110,7 +115,7 @@ function setDoMatrix() {
 				var tmpInsertRow = tmpMatrix.find('.row:last');
 				tmpTag = "<td><div class='input_line matrix-box' parent='"+( (i*tmpCol)+j )+"'></div></td>";
 				tmpInsertRow.append(tmpTag);
-				socket.emit('set_last_id', { group: tmpGroup, tool: toolName });
+				_socket_matrix.emit('set_last_id', { group: _tmpGroup, tool: _toolName });
 			}
 		}
 		$('.matrix_table tr:nth-child(even) td').css({width:colWidth+"px"});
@@ -175,7 +180,7 @@ function addInput(t)
 			idx = (i+1);
 	});
 	var val = $(t).val();
-	socket.emit('set_insert_tree_data', { group: tmpGroup, tool: toolName, id: taskId, parent: parent, index: idx, val: val });
+	_socket_matrix.emit('set_insert_tree_data', { group: _tmpGroup, tool: _toolName, id: taskId, parent: parent, index: idx, val: val });
 
 	// 비어있는 input 박스 존재 유무 확인
 	var existObj = null;
@@ -192,7 +197,7 @@ function addInput(t)
 	else if( existObj != null )
 		existObj.focus();
 	else
-		socket.emit('set_last_id', { group: tmpGroup, tool: toolName });
+		_socket_matrix.emit('set_last_id', { group: _tmpGroup, tool: _toolName });
 }
 
 function delInput(t)
@@ -200,7 +205,7 @@ function delInput(t)
 	var $div = $(t).parent();
 	var taskId = $(t).attr("taskid");
 	$(t).remove();
-	socket.emit('set_delete_tree_data', { group: tmpGroup, tool: toolName, id: taskId });
+	_socket_matrix.emit('set_delete_tree_data', { group: _tmpGroup, tool: _toolName, id: taskId });
 	$("input",$div).focus();
 }
 
@@ -283,7 +288,7 @@ function setupBox(lastId)
 function focusInput(t)
 {
 	var taskId = $(t).attr("taskid");
-	socket.emit('set_input_data', { group: tmpGroup, tool: toolName, id: taskId, index: 0, client: tmpClient });
+	_socket_matrix.emit('set_input_data', { group: _tmpGroup, tool: _toolName, id: taskId, index: 0, client: tmpClient });
 	if( $(".writing") == t )
 		console.log("=");
 	$(".writing").each(function(){
@@ -324,33 +329,33 @@ function setOption(data)
 		setDoClear();
 }
 
-socket.on('get_tree_data', function (data) {
+_socket_matrix.on('get_tree_data', function (data) {
 	index = $(".matrix-box[parent="+data.parent+"]").length;
 	addRemoteInputbox(data.id, data.val, data.parent, index);
 });
-socket.on('get_client', function (data) {
+_socket_matrix.on('get_client', function (data) {
 	tmpClient = data.client;
 });
 // matrix setup
-socket.on('get_init_tool_data', function (data) {
+_socket_matrix.on('get_init_tool_data', function (data) {
 	setupFlag.data_init = true;
 });
-socket.on('get_tree_option_data', function (data) {
+_socket_matrix.on('get_tree_option_data', function (data) {
 	setOption(data);
 });
-socket.on('get_option_data', function (data) {
+_socket_matrix.on('get_option_data', function (data) {
 	setOption(data);
 });
 
-socket.on('get_insert_tree_data', function (data) {
+_socket_matrix.on('get_insert_tree_data', function (data) {
 	addRemoteInputbox(data.id, data.val, data.parent, data.index);
 });
 
-socket.on('get_delete_tree_data', function (data) {
+_socket_matrix.on('get_delete_tree_data', function (data) {
 	$("input[taskid="+data.id+"]").remove();
 });
 
-socket.on('get_last_id', function (data) {
+_socket_matrix.on('get_last_id', function (data) {
 	var tmpTool = data.tool; 
 	lastId = data.last;
 	if( totalBoxCount != boxCount )
@@ -363,7 +368,7 @@ socket.on('get_last_id', function (data) {
 });
 
 /*
-socket.on('get_input_data', function (data) {
+_socket_matrix.on('get_input_data', function (data) {
 //	console.log( data.client );
 //	console.log( data.id );
 });

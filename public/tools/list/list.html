@@ -651,6 +651,10 @@
 			inputFlag = 0;
 		}
 
+		function changeData() {
+			socket.emit('set_change_tree_data', { group: tmpGroup, tool: 'list1', change: 'mindmap1' });
+		}
+
 	</script>
 </head>
 <body>
@@ -664,7 +668,7 @@
 			<header>
 				<div class="home_line">
 					<div class="home_box">
-						<div id="homeButton"><h2>Home</h2></div>
+						<div id="homeButton" onClick="changeData()"><h2>Change</h2></div>
 					</div>
 					<div class="init_box">
 						<div id="addButton" onClick="addNewInput()">+</div>

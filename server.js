@@ -343,11 +343,80 @@ var meeting = io.of('/group').on('connection', function (socket) {
 
 	////  다른 도구 형태로 데이터 변경  ////
 	socket.on('set_change_data', function(data) {
+		console.log("Call: set_change_data");
+		var tmpGroup = data.group;
+		var tmpTool = data.tool;
+		var newTool= data.change;	
+		var tmpOrder = tmpGroup+":"+tmpTool+":order";
+		var newOrder = tmpGroup+":"+newTool+":order";		
+		
+		// 데이터 변환하는 부분 작성
+		
+		client.lindex(tmpOrder, 0, function (err,reply) {
+			if ( reply == null ) {
+	
+			}	
+			//console.log("tmpOrder: "+tmpOrder);
+			client.lrange(tmpOrder, 0, -1, function (err, replies) {	
+				//console.log("test: "+replies);
+				replies.forEach( function (idNum, index) {
+					client.get(idNum, function (err, val) {
+						var newId = idNum.toString().replace(tmpTool, newTool);			
+						var newVal = val;
 
+						client.rpush(newOrder, newId);
+						client.set(newId, newVal);
+					});
+				});
+			});
+		});	
+
+
+
+
+		////  클라이언트는 change 받아서 새로 도구 창 띄우면 될 듯  ////
+		socket.emit('get_change_data', { tool: tmpTool, change: newTool });	
+		socket.broadcast.to(tmpGroup).emit('get_change_data', { tool: tmpTool, change: newTool });
 	});
 
 	////  다른 도구 형태로 데이터 변경_tree  ////
 	socket.on('set_change_tree_data', function(data) {
+		console.log("Call: set_change_data");
+		var tmpGroup = data.group;
+		var tmpTool = data.tool;
+		var newTool = data.change;	
+		var tmpOrder = tmpGroup+":"+tmpTool+":order";
+		var newOrder = tmpGroup+":"+newTool+":order";		
+
+		client.lindex(tmpOrder, 0, function (err,reply) {
+			if ( reply == null ) {
+
+			}
+
+			// order return 
+			client.lrange(tmpOrder, 0, -1, function (err, replies) {	
+				replies.forEach( function (idNum, index) {
+					//console.log("id: "+idNum);
+					client.hkeys(idNum, function (err, parentNum){
+						//console.log("parent: "+parentNum);
+						client.hget(idNum, parentNum, function (err, val) {
+							//console.dir("val: "+val);	
+							var newId = idNum.toString().replace(tmpTool, newTool);
+							var newParent = parentNum.toString().replace(tmpTool, newTool);
+							var newVal = val;
+						
+							client.rpush(newOrder, newId);
+							client.hset(newId, newParent, newVal);
+
+						});
+					});
+				});
+			});	
+		});	
+	
+		////  클라이언트는 change 받아서 새로 도구 창 띄우면 될 듯  ////
+		socket.emit('get_change_tree_data', { tool: tmpTool, change: newTool });	
+		socket.broadcast.to(tmpGroup).emit('get_change_tree_data', { tool: tmpTool, change: newTool });
 
 	});
 

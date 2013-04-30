@@ -11,6 +11,7 @@ var boxCount = 0; // lastId 가 세팅 되어 있는 input 이 있는 박스 갯
 var totalBoxCount = 0; // row * col 총 박스 갯수
 var setFlag = 0;
 var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
+var _key_code = null // 키 입력 값 저장
 
 var inputFlag = 0;	//키입력 감지하기 위한 변수
 
@@ -129,17 +130,36 @@ function setDoMatrix() {
 function keyDownCheck(t, e)
 {
 	var $div = $(t).parent();
-	if( e.keyCode == 13 && $(t).val().trim().length > 0 ) // enter
-		addInput(t);
-	else if( e.keyCode == 9 && $(t).val().trim().length > 0 ) // tab
+	_key_code = e.keyCode;
+
+	if( $(t).val().trim().length > 0  )
 	{
-		addInput(t);
-		return false;
+		switch( _key_code )
+		{
+			case 13:
+				addInput(t);
+				break;
+			case 9:
+			case 38:
+			case 40:
+				addInput(t);
+				return false;
+				break;
+		}
 	}
-	else if( (e.keyCode == 8 ) && $(t).val().trim().length < 1 && $("input",$div).length > 1 )
+	else if( $(t).val().trim().length < 1 && $("input",$div).length > 1 )
 	{
-		delInput(t);
-		return false;
+		switch( _key_code )
+		{
+			case 8:
+				delInput(t);
+				return false;
+				break;
+			case 38:
+				$(t).prev().focus();
+				return false;
+				break;
+		}
 	}
 	return true;
 }
@@ -155,7 +175,6 @@ function addInput(t)
 			idx = (i+1);
 	});
 	var val = $(t).val();
-	console.log("idx : "+idx);
 	socket.emit('set_insert_tree_data', { group: tmpGroup, tool: toolName, id: taskId, parent: parent, index: idx, val: val });
 
 	// 비어있는 input 박스 존재 유무 확인
@@ -164,8 +183,14 @@ function addInput(t)
 		if( $(this).val().trim().length < 1 )
 			existObj = $(this);
 	});
-	if( existObj != null )
-		existObj.focus()
+	// 아래 화살표
+	if( existObj != null && _key_code == 40 )
+		$(t).next().focus();
+	// 위 화살표
+	else if( existObj != null && _key_code == 38 )
+		$(t).prev().focus();
+	else if( existObj != null )
+		existObj.focus();
 	else
 		socket.emit('set_last_id', { group: tmpGroup, tool: toolName });
 }
@@ -184,7 +209,7 @@ function makeInputbox(lastId, val)
 	if( typeof(val) == "undefined" )
 		val = "";
 	var html = "<input taskid='"+lastId+"' type='text' class='matrix-input' name='matrix-input' onkeydown='javascript:return keyDownCheck(this, event);' onfocus='focusInput(this);' value='"+val+"'>";
-	return html
+	return html;
 }
 
 // 이전에 작성중이였던 box를 찾아서 input 추가
@@ -195,12 +220,28 @@ function addInputbox( lastId , val )
 	$input.removeClass("writing");
 	// 작성중이였던 div select
 	var $div = $input.parent();
+	var parent = $div.attr("parent");
 	$div.append(makeInputbox(lastId, val));
-	$('input:last', $div).focus();
 	var h = $div.height();
 	var td_obj = $div.parent().parent();
 	$("div.matrix-box", td_obj).css("min-height", h+"px");
-	$('input:last', $div).focus();
+
+	// tab 키로 확장 했을 경우
+	if( _key_code == 9 )
+	{
+		if( $('div[parent='+((parent*1)+1)+'] input:last').length > 0 )
+			$('div[parent='+((parent*1)+1)+'] input:last').focus();
+		else
+			$('div[parent=0] input:last').focus();
+	}
+	// ↑
+	else if( _key_code == 38 )
+		$input.prev().focus();
+	// ↓
+	else if( _key_code == 40 )
+		$input.next().focus();
+	else
+		$('input:last', $div).focus();
 }
 
 // 동기화를 위한 원격에서 input 요청
@@ -235,7 +276,7 @@ function addRemoteInputbox( lastId , val, parent, index )
 function setupBox(lastId)
 {
 	var $div = $(".matrix-box:not(input):eq("+boxCount+")");
-	$div.append(makeInputbox(lastId, ""))
+	$div.append(makeInputbox(lastId, ""));
 	boxCount++;
 }
 
@@ -295,10 +336,10 @@ socket.on('get_init_tool_data', function (data) {
 	setupFlag.data_init = true;
 });
 socket.on('get_tree_option_data', function (data) {
-	setOption(data)
+	setOption(data);
 });
 socket.on('get_option_data', function (data) {
-	setOption(data)
+	setOption(data);
 });
 
 socket.on('get_insert_tree_data', function (data) {

@@ -1,6 +1,6 @@
 var express = require('express')
   , routes = require('./routes')
-  , user = require('./routes/user')
+  , main = require('./routes/main')
   , meeting = require('./routes/meeting')
   , quick_meeting = require('./routes/quick_meeting')
   , meeting_planning = require('./routes/meeting_planning')
@@ -12,32 +12,35 @@ var app = express();
 var _upload_dir = 'tmp';
 
 app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'ejs');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(require('stylus').middleware(__dirname + '/public'));
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.use('/' + _upload_dir, express.static(path.join(__dirname, _upload_dir)));	// 업로드 디렉토리 static 등재
+	app.set('port', process.env.PORT || 3000);
+	app.set('views', __dirname + '/views');
+	app.set('view engine', 'ejs');
+	app.use(express.favicon());
+	app.use(express.logger('dev'));
+	app.use(express.bodyParser());
+	app.use(express.methodOverride());
+	app.use(express.cookieParser('keyboard cat'));
+	app.use(express.session());
+	app.use(app.router);
+	app.use(require('stylus').middleware(__dirname + '/public'));
+	app.use(express.static(path.join(__dirname, 'public')));
+	app.use('/' + _upload_dir, express.static(path.join(__dirname, _upload_dir)));	// 업로드 디렉토리 static 등재
 });
 
 app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.get('/', routes.index);
+app.get('/', main.main);
+app.get('/page/meeting_list', routes.meeting_list);
 app.get('/page/meeting', meeting.main);
 app.get('/page/quick_meeting', quick_meeting.quick_meeting);
 app.get('/page/meeting_template', meeting_planning.meeting_template);
 app.get('/page/setting_agenda', meeting_planning.setting_agenda);
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
-app.get('/page/users', user.list);
 
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
+app.post('/page/login', main.login);
 
 app.post('/lib/upload', function(req, res) {
 	console.log(JSON.stringify(req.files)); 

@@ -19,7 +19,7 @@
     
 	<script src="./lib/socket.io.js"></script>	
 	<script>
-		var socket = io.connect('http://61.43.139.69:50002/group');	// socket.io 서버에 접속
+		var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 		var tmpLastId = 100;	
 		var tmpGroup = 0;
 		var tmpItemGroup = 0;
@@ -35,10 +35,26 @@
 
 			////  서버에 초기 데이터 요청하는 함수  ////
 			socket.emit('set_tree_data', { group: tmpGroup, tool: 'postit1' });
-		
+
+			
+
 			socket.on('get_client', function (data) {
 				tmpClient = data.client;
 				//console.log("client: "+data.client);
+			});
+
+			////  ADD 버튼 클릭 이벤트 등록 - 데이터 전송  ////
+			$('article').delegate('.add_button', 'click', function() {
+				var tmpSelect = $(this).parent().parent();
+		
+				var addId = tmpSelect.attr('taskid');
+				var addVal = tmpSelect.children('textarea').val();	
+				var addIndex = $('.object').index(tmpSelect);	 // 현재 Index 구함
+				var addParent = tmpSelect.parent().parent().attr('groupid');
+				
+				////  추가된 데이터 서버에 전달  ////
+				socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'postit1', id: addId, parent: addParent, index: addIndex, val: addVal, client: tmpClient });
+				
 			});
 
 			////  X 버튼 클릭 이벤트 등록 - 포스트잇 삭제  ////
@@ -93,9 +109,9 @@
 					$containers.append($element);		
 
 					var tmpPostit = $('[taskid='+valId+']');
-					var $titleArea = $("<div class='title_area'><div class='del_button'>X</div><div>");
+					var $titleArea = $("<div class='title_area'><div class='add_button'>ADD</div><div class='del_button'>X</div><div>");
 					tmpPostit.append($titleArea);
-					var $inputArea = $("<textarea class='input_area'  onClick='mouseFocus()' onKeyDown='keyInput()'>"+valData+"</textarea>"); 
+					var $inputArea = $("<textarea class='input_area'  onClick='mouseFocus()'>"+valData+"</textarea>"); 
 					tmpPostit.append($inputArea);
 				});
 
@@ -112,16 +128,16 @@
 					var $selected = $(selected)
 					var $selectedGroup = $selected.parent().parent();
 					var tmpId = $selected.attr('taskid');
-					var tmpVal = $selected.children('textarea').val();
+		
 					//console.log("The dropped item is:", $selectedGroup.attr('groupid'));
 					dropFlag = 0;
 
 					var tmpSelectGroup = $selectedGroup.attr('groupid');
 					if ( tmpSelectGroup != preSelectGroup ) {		//다른 그룹으로 이동
-						socket.emit('set_change_parent', {  group: tmpGroup, tool: 'postit1', id: tmpId,  parent: tmpSelectGroup, val: tmpVal });
+						socket.emit('set_change_parent', {  group: tmpGroup, tool: 'postit1', id: tmpId,  parent: tmpSelectGroup });
 					}
 					else {		//그룹내 이동하는 경우
-						
+
 					}
 
 					/*
@@ -298,49 +314,17 @@
 			}		
 		}
 
+		
 		//// input 영역에서 키보드 입력시 호출되는 함수  ////
 		function keyInput() {
 			var inputKey = event.keyCode;
 			if ( inputKey == 13 )	// Input Enter
-			{				
-				var tmpTitleInput = $('input:focus');
-				
-				if ( tmpTitleInput.length > 0 )
-				{
-					var tmpTitle = $('input:focus').attr('titleid');
-					var tmpVal = $('input:focus').val();
-					console.log(tmpVal);
-					socket.emit('set_option_data', { group: tmpGroup, tool: 'postit1', id: '', option: tmpTitle, val: tmpVal });
-				}
-				else
-				{
-					var tmpSelect = $('textarea:focus').parent();
-					var addId = tmpSelect.attr('taskid');
-					var addVal = tmpSelect.children('textarea').val();	
-					var addIndex = $('.object').index(tmpSelect);	 // 현재 Index 구함
-					var addParent = tmpSelect.parent().parent().attr('groupid');
-					
-					////  추가된 데이터 서버에 전달  ////
-					socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'postit1', id: addId, parent: addParent, index: addIndex, val: addVal, client: tmpClient });
-				}
-			}
-			else if ( inputKey == 8 )	// Input BackSpaceKey
-			{			
-				/*
-				//alert("BackSpace");
-				var tmpSelect = $('textarea:focus').parent();
-				if ( tmpSelect.length > 0 )
-				{
-					var delId = tmpSelect.attr('taskid');
-					var delVal = tmpSelect.children('textarea').val();	
-					var delIndex = $('.object').index(tmpSelect);	 // 현재 Index 구함
-					var delParent = tmpSelect.parent().parent().attr('groupid');
-						
-					////  변경된 데이터 서버에 전달  ////
-					socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'postit1', id: delId, parent: delParent, index: delIndex, val: delVal, client: tmpClient });
-				
-				}
-				*/
+			{
+				var tmpTitle = $('input:focus').attr('titleid');
+				//alert(tmpTitle);
+				var tmpVal = $('input:focus').val();
+				console.log(tmpVal);
+				socket.emit('set_option_data', { group: tmpGroup, tool: 'postit1', id: '', option: tmpTitle, val: tmpVal });
 			}
 		}
 		

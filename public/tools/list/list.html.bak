@@ -18,7 +18,7 @@
 		var inputFlag = 0;	//키입력 감지하기 위한 변수
 
 		////  socket.io 서버의 해당 그룹에 접속  ////
-		var socket = io.connect('http://61.43.139.69:50001/group');	// socket.io 서버에 접속
+		var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 
 		////  처음 창 오픈되었을 때 호출  ////
 		$(document).ready(function() {
@@ -630,13 +630,6 @@
 					delLine();			
 				}				
 			}
-			else if ( inputKey == 27 )	// Input ESCKey
-			{				
-				//alert("ESC");
-				$('.input_open > .tmp_editing').val('');
-				
-			}
-
 			else	//그 외 키보드 입력시
 			{
 				if ( inputFlag == 0 ) {
@@ -644,15 +637,6 @@
 					startInput();
 				}
 			}
-		}
-		
-		function addNewInput() {
-			socket.emit('set_last_id', { group: tmpGroup, tool: 'list1' });		
-			inputFlag = 0;
-		}
-
-		function changeData() {
-			socket.emit('set_change_tree_data', { group: tmpGroup, tool: 'list1', change: 'mindmap1' });
 		}
 
 	</script>
@@ -668,10 +652,10 @@
 			<header>
 				<div class="home_line">
 					<div class="home_box">
-						<div id="homeButton" onClick="changeData()"><h2>Change</h2></div>
+						<div id="homeButton"><h2>Home</h2></div>
 					</div>
 					<div class="init_box">
-						<div id="addButton" onClick="addNewInput()">+</div>
+						<div id="initButton" onClick=""><h2>Clear</h2></div>
 					</div>
 				</div>
 			</header>

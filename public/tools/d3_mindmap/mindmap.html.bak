@@ -23,7 +23,7 @@
 
 	var inputFlag = 0;	//키입력 감지하기 위한 변수
 
-	var socket = io.connect('http://61.43.139.69:50003/group');	// socket.io 서버에 접속
+	var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 
 	$(document).ready(function() {
 		////  socket.io 서버의 해당 그룹에 접속  ////
@@ -351,13 +351,24 @@
 	////  check 상태 변화 서버에서 받아와서 적용  ////
 	socket.on('get_option_data', function (data) {
 		var tmpTool = data.tool;
-		var tmpOption = data.option;
-		var tmpVal = data.val;
-
-		drawMindmap();
+		var checkId = data.id;
+		var checkInput = $('[taskid='+checkId+']');
+		var checkBox = checkInput.children('.check_box');
+		console.log("GetCheck ID: "+checkId);
+		
+		if ( checkBox.is(':checked') )
+		{
+			checkBox.attr('checked', false);
+			checkInput.children('.tmp_editing').css({ "ime-mode": "auto" });
+			checkInput.children('.tmp_editing').css({ "text-decoration": "" });	
+		}
+		else
+		{
+			checkBox.attr('checked', true);
+			checkInput.children('.tmp_editing').css({ "ime-mode": "readonly" });
+			checkInput.children('.tmp_editing').css({ "text-decoration": "line-through" });			
+		}	
 	});
-
-
 
 	////  들여쓰기 공백 설정해주는 함수  ////
 	function setIndent(indentStatus) {
@@ -645,12 +656,6 @@
 				delLine();			
 			}				
 		}
-		else if ( inputKey == 27 )	// Input ESCKey
-		{				
-			//alert("ESC");
-			$('.input_open > .tmp_editing').val('');
-			
-		}
 		else	//그 외 키보드 입력시
 		{
 			if ( inputFlag == 0 ) {
@@ -701,13 +706,7 @@
 		}
 	}
 
-	function draw() {
-		drawMindmap();
-		socket.emit('set_option_data', { group: tmpGroup, tool: tmpTool, id: '', option: 'draw', val: '' });
-	}
-
 	function drawMindmap() {
-			
 		initMindmap();
 		getListData();
 		
@@ -775,7 +774,7 @@
 		
 	</div>
 </div>
-<div id="draw_button" onClick="draw()">Draw</div>
+<div id="draw_button" onClick="drawMindmap()">Draw</div>
 </div>
 <svg id="svg" viewBox="150 100 600 400" >
 </svg>

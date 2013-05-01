@@ -3,101 +3,162 @@
 	<meta charset="utf-8">
 	<meta content="noodp, noydir" name="robots">
 	<meta id="meta_referrer" content="default" name="referrer">
-	<link href="https://www.orchestra.im/" media="handheld" rel="alternate">
 	<title id="pageTitle">Orchestra에 오신 것을 환영합니다. 로그인, 가입 및 더 알아보기</title>
 	<link href="/stylesheets/tmp.css" rel="stylesheet">
-	<link href="https://fbstatic-a.akamaihd.net/rsrc.php/yP/r/Ivn-CVe5TGK.ico" rel="shortcut icon">
-    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yE/r/k_1qL8eHpGd.css" rel="stylesheet">
-    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yx/r/PCFbxPkLp_Y.css" rel="stylesheet">
-    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yY/r/u8iA3kXb8Y1.css" rel="stylesheet">
-    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yf/r/uGBNQwLGaKv.css" rel="stylesheet">
+	<style>
+		*{
+			margin:0px;padding:0px;
+		}
+		.login{
+			font-family:"oxygen";
+		}
+		.login placeholder{
+			font-family:"oxygen";
+		}
+		.login .header *{
+			float:left;
+		}
+		.login .header{
+			height:62px;
+			background-color:#336699;
+			padding-top:15px;
+			padding-bottom:10px;
+		}
+		.login .header .logo{
+			margin-left:10%;
+			font-size:3.3em;
+			font-weight:bold;
+			color:#ffffff;
+			line-height:62px;
+			width:50%;
+		}
+		.login .header .login-box{
+			width:40%;
+			font-size:0.8em;
+			color:#ffffff;
+		}
+		.login .header .login-box-wrap{
+			width:28%;
+			margin-right:5%;
+		}
+		.login .header .login-box-wrap div{
+			width:100%;
+			height:21px;
+			line-height:21px;
+		}
+		.login .header .login-box-wrap input{
+			width:100%;
+			height:20px;
+			line-height:20px;
+		}
+		.login .header .login-box-wrap .login-btn{
+			background-color:#003263;
+			padding:1px 9px;
+			border-radius:4px;
+		}
+		.login a:link {text-decoration: none; color: #ffffff;}
+		.login a:visited {text-decoration: none; color: #ffffff;}
+		.login a:active {text-decoration: none; color: #ffffff;}
+		.login a:hover {text-decoration: none; color: #ffffff;}
+		
+		.login .body{
+			width:100%;
+			background: url("/images/main/shape.png") repeat-x 0 0 transparent;
+		}
+		.login .body .login-bg{
+			margin-top:5%;
+			margin-left:10%;
+		}
+		.login .body .sign-up-box{
+			position:relative;
+			top:-80px;
+			margin-left:60%;
+		}
+		.login .body .sign-up-box .sign-up-box-wrap{
+			height:46px;
+			margin-bottom:5px;
+		}
+		.login .body .sign-up-box input{
+			padding:5px;
+			height:34px;
+			line-height:34px;
+			border:1px solid;
+			border-radius:6px;
+			border-color: #aaa #bbb #bbb #bbb;
+			-webkit-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			-moz-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+		}
+		.login .body .sign-up-box input.input-name{
+			width:180px;
+			margin-right:15px;
+		}
+		.login .body .sign-up-box input.input-order{
+			width:380px;
+		}
+		.login .body .sign-up-box .sign-up-btn{
+			float:left;
+			color:#ffffff;
+			background-color:#003263;
+			padding:7px 160px;
+			border-radius:6px;
+			-webkit-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			-moz-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+		}
+
+		/* all */
+		::-webkit-input-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; }
+		::-moz-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; } /* firefox 19+ */
+		:-ms-input-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; } /* ie */
+		input:-moz-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; }
+
+		/* individual: webkit */
+		#field2::-webkit-input-placeholder { color:#00f; }
+		#field3::-webkit-input-placeholder { color:#090; background:lightgreen; text-transform:uppercase; }
+		#field4::-webkit-input-placeholder { font-family:"oxygen"; font-weight:bold; text-decoration:overline; letter-spacing:3px; color:#999; }
+
+		/* individual: mozilla */
+		#field2::-moz-placeholder { color:#00f; }
+		#field3::-moz-placeholder { color:#090; background:lightgreen; text-transform:uppercase; }
+		#field4::-moz-placeholder { font-family:"oxygen"; font-weight:bold; text-decoration:overline; letter-spacing:3px; color:#999; }
+	</style>
 </head>
-<body class="fbIndex UIPage_LoggedOut ff4 win Locale_ko_KR">
-	<div style="position:absolute; top:-10000px; width:0px; height:0px;" id="FB_HiddenContainer"></div>
-	<div class="_li">
-		<div data-referrer="pagelet_bluebar" id="pagelet_bluebar">
-			<div id="blueBarHolder"><div id="blueBar">
-				<div>
-					<div class="loggedout_menubar_container">
-						<div class="clearfix loggedout_menubar">
-							<div class="menu_login_container rfloat">
-								<form onsubmit="return window.Event && Event.__inlineSubmit && Event.__inlineSubmit(this,event)" method="post" action="/page/login" id="login_form">
-									<table cellspacing="0">
-									<tbody>
-										<tr><td class="html7magic"><label for="email">이메일 또는 휴대폰</label></td><td class="html7magic"><label for="pass">비밀번호</label></td></tr>
-										<tr><td><input type="text" tabindex="1" value="orchestra" id="email" name="email" class="inputtext"></td><td><input type="password" tabindex="2" id="pass" name="pass" class="inputtext" value="1234"></td><td><label for="u_0_8" id="loginbutton" class="uiButton uiButtonConfirm"><input type="submit" id="u_0_8" tabindex="4" value="로그인"></label></td></tr>
-										<tr><td class="login_form_label_field"><div><div class="uiInputLabel clearfix"><input type="checkbox" class="uiInputLabelCheckbox" tabindex="3" value="1" name="persistent" id="persist_box"><label for="persist_box">로그인 상태 유지</label></div><input type="hidden" value="0" name="default_persistent"></div></td><td class="login_form_label_field"><a href="#" rel="nofollow">로그인 정보를 잊으셨나요?</a></td></tr>
-									</tbody>
-									</table>
-								</form>
-							</div>
-						</div>
+<body class="login">
+	<div class="container">
+		<div class="header">
+			<div class="logo">orchestra</div>
+			<div class="login-box">
+				<form name="login-form" method="post" action="/page/login">				
+					<div class="login-box-wrap">
+						<div class="login-box-header">E-mail</div>
+						<div class="login-box-body"><input type="text" name="email" placeholder="Your e-mail" value="orchestra"></div>
+						<div class="login-box-footer">Keep me logged in</div>
 					</div>
-					<div class="_4--d hidden_elem" id="login_chooser_container">
-						<div class="_4--f">
-							<div id="u_0_9" class="_4--e">RECENT LOGINS</div>
-							<div id="u_0_a">
-								<div class="_4--g hidden_elem" id="user_chooser_user_container">
-									<div class="userBox">
-										<div class="_4--i"><img alt="" src="https://fbstatic-a.akamaihd.net/rsrc.php/v2/y4/r/-PAXP-deijE.gif" class="_s0 _4--h _rv img"></div>
-										<div class="_507d"></div>
-									</div>
-									<div class="_27-r"><label class="closeButton"></label></div>
-								</div>
-							</div>
-						</div>
+					<div class="login-box-wrap">
+						<div class="login-box-header">Password</div>
+						<div class="login-box-body"><input type="password" name="pass" placeholder="Enter Password" value="1234"></div>
+						<div class="login-box-footer">Forgot your password?</div>
 					</div>
-				</div>
+					<div class="login-box-wrap">
+						<div class="login-box-header"></div>
+						<div class="login-box-body"><a href="javascript:login();" class="login-btn">LOG IN</a></div>
+						<div class="login-box-footer"></div>
+					</div>
+				</form>
 			</div>
 		</div>
-	</div>
-	<div class="uiContextualLayerParent" id="globalContainer">
-		<div class="fb_content clearfix" id="content">
-			<div class="_50dz">
-				<div style="background: #E7EBF2; min-width: 980px">
-					<div style="width: 980px; margin: 0 auto" class="pvl">
-						<div class="_6_ _74">
-							<h1 style="font-size: 36px" class="mbs _6n _6s _6v">가입하기</h1>
-							<div class="_52ls">
-								<div class="registration_redesign" id="reg_box">
-									<form onsubmit="alert('준비 중 입니다.'); return false;" action="/" name="reg" id="reg" method="post">
-										<input type="hidden" autocomplete="off" value="AVrQQX8G" name="lsd">
-										<div class="large_form" id="reg_form_box">
-											<div class="clearfix short_fields">
-												<div class="mrm lfloat">
-													<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-														<input type="text" placeholder="성" aria-required="true" value="성" name="lastname" id="lastname" class="inputtext text_field">
-													</div>
-												</div>
-												<div class="mbm rfloat">
-													<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-														<input type="text" placeholder="이름(성은 제외)" aria-required="true" name="firstname" id="firstname" class="inputtext text_field">
-													</div>
-												</div>
-											</div>
-											<div class="mbm">
-												<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-													<input type="text" placeholder="이메일 주소" aria-required="true" value="이메일 주소" name="reg_email__" id="reg_email__" class="inputtext text_field">
-												</div>
-											</div>
-											<div class="mbm">
-												<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-													<input type="password" placeholder="비밀번호" aria-required="true" name="reg_passwd__" id="reg_passwd__" class="inputtext text_field">
-												</div>
-											</div>
-											<div class="mbm">
-												<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
-													<input type="text" placeholder="비밀번호  다시 입력" aria-required="true" value="이메일  다시 입력" name="reg_email_confirmation__" id="reg_email_confirmation__" class="inputtext text_field">
-												</div>
-											</div>
-											<div class="reg_btn clearfix"><button id="u_0_2" name="websubmit" class="_6j mvm _6wk _6wl signup_button _6o _6v" type="submit">가입하기</button><span class="async_status hidden_elem" id="async_status"><img width="16" height="11" alt="" src="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yb/r/GsNJNwuI-UM.gif" class="img"></span></div>
-										</div>										
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
+		<div class="body">
+			<img src="/images/main/login_bg.png" alt="login_bg" class="login-bg">
+			<div class="sign-up-box">
+				<div class="sign-up-box-wrap">
+					<input type="text" name="first_name" placeholder="First Name" class="input-name">
+					<input type="text" name="last_name" placeholder="Last Name" class="input-name">
 				</div>
+				<div class="sign-up-box-wrap"><input type="text" name="sign_up_email" placeholder="Your e-mail" class="input-order"></div>
+				<div class="sign-up-box-wrap"><input type="password" name="sign_up_password" placeholder="Enter Password" class="input-order"></div>
+				<div class="sign-up-box-wrap"><input type="password" name="sign_up_re_password" placeholder="Re-enter Password" class="input-order"></div>
+				<div class="sign-up-box-wrap"><a class="sign-up-btn" href="javascript:alert('준비중 입니다.');">SIGN UP</a></div>
 			</div>
 		</div>
 	</div>
@@ -119,5 +180,9 @@
 		if( status == "failed" )
 			alert("이메일 또는 비밀번호가 일치하지 않습니다.");
 	})
+	function login()
+	{
+		$('form[name=login-form]').submit();
+	}
 </script>
 </html>

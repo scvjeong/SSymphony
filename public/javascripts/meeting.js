@@ -3,6 +3,7 @@ var _tool_list_count = 0;
 var _tool_postit_count = 0;
 var _tool_mindmap_count = 0;
 var _tool_vote_count = 0;
+var _tool_matrix_count = 0;
 var _common_window_top = 50;
 var _common_windot_left = 20;
 var _new_z_index = 0;
@@ -43,7 +44,6 @@ $(document).ready(function() {
 	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
 	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
 	setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
-	setTimeout('showPopupWindow("정용기님이 퇴장하셨습니다.")', 12000);
 	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
 	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
 
@@ -207,6 +207,8 @@ function addTool(type)
 	var mindmap_window_height = 400;
 	var vote_window_width = 500;
 	var vote_window_height= 400;
+	var matrix_window_width = 500;
+	var matrix_window_height= 400;
 
 	console.log('addToolWindow 호출됨, type:' + type);
 	switch (type)
@@ -223,7 +225,7 @@ function addTool(type)
 		tool['source'] = '<div id="container" class="listtool" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px; overflow-y: scroll">';
 			tool['source'] += '<section id="main_section" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px">';
 				tool['source'] += '<article>';
-/*				tool['source'] += '<header>';
+				/*tool['source'] += '<header>';
 					tool['source'] += '<div class="home_line">';
 						tool['source'] += '<div class="home_box">';
 							tool['source'] += '<div id="homeButton"><h2>Home</h2></div>';
@@ -278,6 +280,38 @@ function addTool(type)
 		tool['top'] = _common_window_top;
 		tool['source'] = '';	// 투표 도구 소스 들어갈 부분
 		break;
+	case "matrix":
+		_tool_matrix_count++;
+		tool['type'] = 'matrix';
+		tool['name'] = 'matrix' + _tool_matrix_count;
+		tool['title'] = 'matrix ' + _tool_matrix_count;
+		tool['width'] = matrix_window_width;
+		tool['height'] = matrix_window_height;
+		tool['left'] = _common_windot_left;
+		tool['top'] = _common_window_top;
+		tool['source'] = '<div class="matrix">';
+		tool['source'] += '<div class="container">';
+		tool['source'] += '<section class="main_section">';
+		tool['source'] += '<article>';
+		tool['source'] += '<header>';
+		tool['source'] += '<div class="menu_line">';
+		tool['source'] += '<input type="number" class="inputNum" id="rowNum" value="2"> X ';
+		tool['source'] += '<input type="number" class="inputNum" id="colNum" value="2">';
+		tool['source'] += '<input type="button" onClick="setMatrix(this)" value="Set">';
+		tool['source'] += '<input type="button" onClick="setClear()" value="Clear">';
+		tool['source'] += '</div>';
+		tool['source'] += '</header>';
+		tool['source'] += '<div class="matrix_space">';
+		tool['source'] += '<table class="matrix_table">';
+		tool['source'] += '<thead><colgroup></colgroup></thead>';
+		tool['source'] += '<tbody></tbody>';
+		tool['source'] += '</table>';
+		tool['source'] += '</div>';
+		tool['source'] += '</article>';
+		tool['source'] += ' </section>';
+		tool['source'] += '</div>';
+		tool['source'] += '</div>';
+		break;
 	}
 	_common_windot_left += 10;
 	_common_window_top += 10;
@@ -297,12 +331,14 @@ function showToolWindow(idx)
 	var tooltitle = _toolWindowList[idx]['title'];
 	var tooltop = _toolWindowList[idx]['top'];
 	var toolleft = _toolWindowList[idx]['left'];
-	var toolsource = '<div class="toolwindow" id="' + toolname + '" onclick="upToFrontWindow(\'' + toolname + '\')"><div>';
+	var toolsource = '<div class="toolwindow" id="' + toolname + '" onclick="upToFrontWindow(\'' + toolname + '\')">';
 		toolsource += '<div class="title">';
 			toolsource += '<div class="title_text">' + tooltitle + '</div>';
-			toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
-			toolsource += '<div class="closewindow" onclick="transWindow(\'' + toolname + '\')">투명</div>';
-			toolsource += '<div class="clearboth"></div>';
+			//toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
+			//toolsource += '<div class="closewindow" onclick="transWindow(\'' + toolname + '\')">투명</div>';
+			//toolsource += '<div class="clearboth"></div>';
+		toolsource += '</div>';
+		toolsource += _toolWindowList[idx]['source'];
 		toolsource += '</div>';
 	var toolwidth = _toolWindowList[idx]['width'];
 	var toolheight = _toolWindowList[idx]['height'] + titlebarHeight + statusbarHeight;
@@ -313,7 +349,6 @@ function showToolWindow(idx)
 	switch (_toolWindowList[idx]['type'])
 	{
 	case "list":
-		toolsource += _toolWindowList[idx]['source'];
 		$('#meetingboard').append(toolsource);
 	//	$('.' + _toolWindowList[idx]).show();
 
@@ -322,13 +357,11 @@ function showToolWindow(idx)
 		$('#' + toolname).css('height', toolheight);
 		break;
 	case "postit":
-		toolsource += _toolWindowList[idx]['source'];
 		$('#meetingboard').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		break;
 	case "mindmap":
-		toolsource += _toolWindowList[idx]['source'];
 		$('#meetingboard').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
@@ -336,16 +369,59 @@ function showToolWindow(idx)
 //		newMindmapTool();
 //		resizeMindmap(toolwidth, toolheight);
 		break;
+	case "matrix":
+		$('#meetingboard').append(toolsource);
+		$('#' + toolname).css('width', toolwidth);
+		$('#' + toolname).css('height', toolheight);
+		break;
 	}
 	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
 
 	//$('#' + _toolWindowList[idx]['name']).draggable(); // Jquery-ui 기본 드래그 기능
+	
 	$('#' + _toolWindowList[idx]['name']).jqxWindow({
         showCollapseButton: true, maxHeight: 400, maxWidth: 700,
         		minHeight: 200, minWidth: 200, height: 300, width: 500,
         initContent: function () {
+			switch (_toolWindowList[idx]['type'])
+			{
+				case "list":
+					break;
+				case "postit":
+					break;
+				case "mindmap":
+					break;
+				case "matrix":
+					_tmpGroup = "group1";	//현재 그룹
+					_toolName = "matrix";
+					_socket_matrix.emit('join_room', { group: _tmpGroup });
+					////  서버에 초기 데이터 요청하는 함수  ////
+					_socket_matrix.emit('set_tree_data', { group: _tmpGroup, tool: _toolName });
+
+					/*
+					resizeMatrix();
+					$(window).resize(function(){
+						resizeMatrix();
+					});
+
+					socket.emit('join_room', { group: tmpGroup });
+					////  서버에 초기 데이터 요청하는 함수  ////
+					socket.emit('set_tree_data', { group: tmpGroup, tool: toolName });
+					socket.emit('set_tree_option_data', { group: tmpGroup, tool: toolName });
+
+					$(window).focus(function(){
+						$('.writing').focus();
+					});
+					$('.matrix').click(function(){
+						//console.log("focus");
+						//$('.writing').focus();
+					});
+					*/
+					break;
+			}
         }
     });
+
                 
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');

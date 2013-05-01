@@ -1,17 +1,28 @@
 var _voteid = "vote1";
 var _votelistnum = 0;
-var _votelist = [];
 
 var _socket;
 var _tmpLastId = 100;
 var _tmpGroup = 0;
 var _clientId = 0;
 
+/* 서버로부터 받는 변수들 */
+var _question_title = "";
+var _is_multi_vote = "";
+var _votelist = [];
+
 $(document).ready(function()
 {
-	// 투표 시작
+	// 소켓 오픈
+	initSocket();
+	
+	// 투표 시작 버튼 작동
 	$('.btn_votestart').click(function() {
 		startVote();
+	});
+	
+	$('btn_votefinish').click(function() {
+		finishVote();
 	});
 	
 	// 투표 옵션 추가하기
@@ -21,12 +32,13 @@ $(document).ready(function()
 		newVoteReadyList();
 		newVoteReadyList();
 		
-		// 누구나 옵션을 추가할 수 있도록 허용 보이게
+		// 체크박스 컨테이너 레이아웃 보이게
 		$('.underbar .txt_init_votereadylist').hide();
 		$('.underbar .container_checkboxes').show(); 
 	});
 });
 
+/* 투표 리스트에 항목 새로 추가 */
 function newVoteReadyList()
 {
 	var votereadylist = $('.voteReadyList');
@@ -83,15 +95,14 @@ var _refresh_btn_del_votelist = function() {
 		}
 };
 
+/* 투표 시작 */
 function startVote()
 {
-	initSocket();
-	
 	var listcount = $('.voteReadyList input').length; //[1].value == ""
-	var question_title = $(".vote_make_container .question_title").val();
+	_question_title = $(".vote_make_container .question_title").val();
 	
 	console.log("listcount : " + listcount);
-	console.log("question_title : " + question_title);
+	console.log("question_title : " + _question_title);
 	
 	_votelist = [];	// 투표 항목 목록 초기화
 	for (var i = 0; i < listcount; i++)
@@ -109,24 +120,47 @@ function startVote()
 		}
 	}
 	
-	///////////////////////////////////////////////////////////////////////////////아래는 모듈로
+	sendVoteDataToServer();	// 서버로 투표데이터 전송
+	initVoteProcess();
+}
+
+/* 소켓 초기화 */
+function initSocket()
+{
+	console.log('Call initSocket()');
 	
-	var is_addpermit_to_all = $('#chk_addpermit_to_all').is(":checked");		// 누구나 투표 항목 추가 가능
-		if(is_addpermit_to_all == true) $('.vote_processing_container .container_add_item').css('display', 'block');
-		else $('.vote_processing_container .container_add_item').css('display', 'none');
-	var is_multi_vote = $('#chk_multi_vote').is(":checked");						// 중복 투표
-	var is_realtime_result = $('#chk_realtime_result').is(":checked");			// 실시간 투표 결과 공유
-		if(is_realtime_result == true) $('.vote_processing_container .underbar').css('display', 'none');
-		else $('.vote_processing_container .underbar').css('display', 'block');
+	_socket = io.connect('http://61.43.139.69:8000/group');
+	_tmpGroup = "group1";
 	
-	$('.vote_processing_container .question_title').html(question_title);
+	_socket.emit('join_room', {group: _tmpGroup});						// 그룹에 join
+	_socket.emit('set_data', {group: _tmpGroup, tool: _voteid});		// 서버에 초기 데이터 요청
+}
+
+/* 데이터를 서버로 전송함 */
+function sendVoteDataToServer()
+{
+	var sendingData = JSON.stringify(_votelist);						// 투표 항목들
+	_is_multi_vote = $('#chk_multi_vote').is(":checked");	// 중복 투표 여부	
+		
+	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid,
+													id: 0, option: 'is_multi_vote', val: _is_multi_vote});
+	_socket.emit('set_insert_data', {group: _tmpGroup, tool: _voteid,
+													id: 'set_vote_process', index: 0, val: sendingData, client: 0});
+}
+
+/* 투표 진행 초기화 */
+function initVoteProcess(data)
+{
+	$('.vote_make_container').css('display', 'none');
+	$('.vote_processing_container').css('display', 'block');	
+	$('.vote_processing_container .question_title').html(_question_title);
 	
 	var question_list = $('.vote_processing_container .question_list ul');
 	question_list.html("");
 	for (var i = 0; i < _votelist.length; i++)
 	{
 		var newitem = "<li>";
-			if (is_multi_vote == true) newitem += "<input type=\"checkbox\" class=\"verticalmiddle\" />";
+			if (_is_multi_vote == true) newitem += "<input type=\"checkbox\" class=\"verticalmiddle\" />";
 			else newitem += "<input type=\"radio\" class=\"verticalmiddle\" />";	
 			newitem += "<span class=\"item_text\">";
 			newitem += _votelist[i].title;
@@ -137,61 +171,24 @@ function startVote()
 	}
 }
 
-function initSocket()
+/* 투표 완료 */
+function finishVote()
 {
-	console.log('Call initSocket()');
-	
-	_socket = io.connect('http://61.43.139.69:8000/group');
-	_tmpGroup = "group1";
-	
-	_socket.emit('join_room', {group: _tmpGroup});					// 그룹에 join
-	_socket.emit('set_data', {group: _tmpGroup, tool: _voteid});	// 서버에 초기 데이터 요청
-	
-	var sendingData = JSON.stringify(_votelist);	// 투표 항목들
-	var is_addpermit_to_all = $('#chk_addpermit_to_all').is(":checked");		// 누구나 투표 항목 추가 가능
-	var is_multi_vote = $('#chk_multi_vote').is(":checked");						// 중복 투표
-	var is_realtime_result = $('#chk_realtime_result').is(":checked");			// 실시간 투표 결과 공유
-		
-	_socket.emit('set_insert_data', {group: _tmpGroup, tool: _voteid, id: 'set_vote_process', index: 0, val: sendingData, client: 0});
-	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid, id: 0, option: 'is_addpermit_to_all', val: is_addpermit_to_all});
-	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid, id: 0, option: 'is_multi_vote', val: is_multi_vote});
-	_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid, id: 0, option: 'is_realtime_result', val: is_realtime_result});
-	
-	
-	//_socket.on('get_option_data', function(data) {
-}
-
-function initOption(data)
-{
-	if (data.option == "is_addpermit_to_all")
-	{
-		// set
-	}
-	else if (data.option == "is_multi_vote")
-	{
-		// set
-	}
-	else if (data.option == "is_realtime_result")
-	{
-		// set
-	}
-}
-
-function initVoteProcess(data)
-{
-	
+	$('.vote_processing_container').css('display', 'none');
+	$('.vote_result_container').css('display', 'block');
 }
 
 
 _socket.on('get_client', function (data) {
 	_clientId = data.client;
-	console.log("_clientId: "+_clientId);
 });
 
 _socket.on('get_insert_data', function(data) {
+	console.log("get_insert_data : " + data);
 	if (data.id == "set_vote_process")
 	{
-		initVoteProcess(data.val);
+		_votelist = data.val;
+		initVoteProcess();
 	}
 	else if (data.id == "end_vote")
 	{
@@ -200,5 +197,8 @@ _socket.on('get_insert_data', function(data) {
 });
 
 _socket.on('get_option_data', function(data) {
-	initOption(data);
+	if (data.option = "is_multi_vote")
+	{
+		_is_multi_vote = data.val;
+	}
 });

@@ -33,6 +33,10 @@ $(document).ready(function() {
 	$('#meetingboard #btn_drawtool_ellipse').click(function() {
 		_drawtool = 'ellipse';
 	});
+	
+	$('#meetingboard #btn_text_add').click(function() {
+		
+	});
 		
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");

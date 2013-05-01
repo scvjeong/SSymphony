@@ -16,6 +16,7 @@ API References
 	: emit('join_room', {group: 'group'}) 
 - Parameter
 	: group (그룹명)
+
 	ex) socket.emit('join_room', { group: 'group1' });
 
 

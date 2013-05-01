@@ -15,9 +15,9 @@ API References
 - Client API
 	: emit('join_room', {group: 'group'}) 
 - Parameter
-	: group(group명 전달)
-
+	: group (그룹명)
 	ex) socket.emit('join_room', { group: 'group1' });
+
 
 
 ◎ get_client : 자신의 클라이언트 번호 가져오는 함수
@@ -26,7 +26,6 @@ API References
 - Client API
 	: on('get_client', data) 
 
-	ex) socket.on('get_client', function (data) {
 
 
 ◎ set_last_id : 현재 tool의 lastId 서버에 요청하는 함수
@@ -35,7 +34,6 @@ API References
 - Client API
 	: emit('set_last_id', {group: 'group', tool: 'tool'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_last_id : 현재 tool의 lastId 서버에서 응답 받는 함수
@@ -44,7 +42,6 @@ API References
 - Client API
 	: on('get_last_id', data)
 
-	ex) socket.on(
 
 
 ◎ set_option_data : 현재 tool의 옵션 데이터 전달
@@ -53,7 +50,6 @@ API References
 - Client API
 	: emit('set_option_data', {group: 'group', tool: 'tool', id: 'id', option: 'option', val: 'val'})
 
-	ex) socket.emit(
 
 
 ◎ get_option_data : 현재 tool의 옵션 데이터 응답 받는 함수
@@ -62,7 +58,6 @@ API References
 - Client API	
 	: on('get_option_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_init_tool_data : 현재 tool의 데이터 초기화
@@ -71,7 +66,6 @@ API References
 - Client API
 	: emit('set_init_tool_data', {group: 'group', tool: 'tool'})
 
-	ex) socket.emit(
 
 
 ◎ get_init_tool_data : 현재 tool의 데이터 초기화 응답 받는 함수
@@ -80,7 +74,6 @@ API References
 - Client API
 	: on('get_init_tool_data', data)
 
-	ex) socket.on(
 
 
 
@@ -92,7 +85,6 @@ API References
 - Client API
 	: emit('set_tree_data', {group: 'group', tool: 'tool'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_tree_data : 현재 tool에 해당하는 데이터 서버에서 응답 받는 함수(tree)
@@ -101,7 +93,6 @@ API References
 - Client API
 	: on('get_tree_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_tree_option_data : 현재 group, tool에 해당하는 옵션 데이터 서버에 요청하는 함수(tree)
@@ -110,7 +101,6 @@ API References
 - Client API
 	: emit('set_tree_data', {group: 'group', tool: 'tool'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_tree_option_data : 현재 tool에 해당하는 옵션 데이터 서버에서 응답 받는 함수(tree)
@@ -119,7 +109,6 @@ API References
 - Client API
 	: on('get_tree_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_input_tree_data : 클라이언트가 입력 시작한 경우 서버로 데이터 전달(tree)
@@ -128,7 +117,6 @@ API References
 - Client API
 	: emit('set_input_data', {group: 'group', tool: 'tool', id: 'id', parent: 'parent', index: 'index', client: 'client'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_input_tree_data : 다른 클라이언트 입력 내용 서버에서 응답 받는 함수(tree)
@@ -137,7 +125,6 @@ API References
 - Client API
 	: on('get_input_tree_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_change_depth : 데이터의 depth 변경된 경우 서버로 데이터 전달(tree)
@@ -146,7 +133,6 @@ API References
 - Client API
 	: emit('set_change_depth', {group: 'group', tool: 'tool', id: 'id', depth: 'depth'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_change_depth : 데이터의 depth 변경된 내용 서버에서 응답 받는 함수(tree)
@@ -155,7 +141,6 @@ API References
 - Client API
 	: on('get_change_depth', data)
 
-	ex) socket.on(
 
 
 ◎ set_change_parent : 데이터의 parent 변경된 경우 서버로 데이터 전달(tree)
@@ -164,7 +149,6 @@ API References
 - Client API
 	: emit('set_change_parent', {group: 'group', tool: 'tool', id: 'id', parent: 'parent'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_change_parent : 데이터의 parent 변경된 내용 서버에서 응답 받는 함수(tree)
@@ -173,7 +157,6 @@ API References
 - Client API
 	: on('get_change_parent', data)
 
-	ex) socket.on(
 
 
 ◎ set_insert_tree_data : 현재 tool의 추가된 값 서버에 저장(tree)
@@ -182,7 +165,6 @@ API References
 - Client API
 	: emit('set_insert_tree_data', {group: 'group', tool: 'tool', id: 'id', parent: 'parent', index: 'index', val: 'val', client: 'client'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_insert_tree_data : 현재 tool의 추가된 값 서버에서 응답 받는 함수(tree)
@@ -191,7 +173,6 @@ API References
 - Client API
 	: on('get_insert_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_delete_tree_data : 현재 tool의 삭제된 값 서버에서 삭제(tree)
@@ -200,7 +181,6 @@ API References
 - Client API
 	: emit('set_delete_tree_data', {group: 'group', tool: 'tool', id: 'id'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_delete_tree_data : 현재 tool의 삭제된 값 서버에서 응답 받는 함수(tree)
@@ -209,7 +189,6 @@ API References
 - Client API
 	: on('get_delete_tree_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_change_tree_data : 현재 tool의 데이터 다른 tool 형태로 변경(tree)
@@ -218,7 +197,6 @@ API References
 - Client API
 	: emit('set_delete_tree_data', {group: 'group', tool: 'tool', change: 'change'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_change_tree_data : 새로운 tool로 변경된 데이터 서버에서 응답 받는 함수(tree)
@@ -227,7 +205,6 @@ API References
 - Client API
 	: on('get_delete_tree_data', data)
 
-	ex) socket.on(
 
 
 
@@ -239,7 +216,6 @@ API References
 - Client API
 	: emit('set_data', {group: 'group', tool: 'tool'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_data : 현재 tool에 해당하는 데이터 서버에서 응답 받는 함수
@@ -248,7 +224,6 @@ API References
 - Client API
 	: on('get_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_input_data : 클라이언트가 입력 시작한 경우 서버로 데이터 전달
@@ -257,7 +232,6 @@ API References
 - Client API
 	: emit('set_input_data', {group: 'group', tool: 'tool', id: 'id', index: 'index', client: 'client'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_input_data : 다른 클라이언트 입력 내용 서버에서 응답 받는 함수
@@ -266,7 +240,6 @@ API References
 - Client API
 	: on('get_input_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_insert_data : 현재 tool의 추가된 값 서버에 저장
@@ -275,7 +248,6 @@ API References
 - Client API
 	: emit('set_insert_data', {group: 'group', tool: 'tool', id: 'id', index: 'index', val: 'val', client: 'client'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_insert_data : 현재 tool의 추가된 값 서버에서 응답 받는 함수
@@ -284,7 +256,6 @@ API References
 - Client API
 	: on('get_insert_data', data)
 
-	ex) socket.on(
 
 
 ◎ set_delete_data : 현재 tool의 삭제된 값 서버에서 삭제
@@ -293,7 +264,6 @@ API References
 - Client API
 	: emit('set_delete_data', {group: 'group', tool: 'tool', id: 'id'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_delete_data : 현재 tool의 삭제된 값 서버에서 응답 받는 함수
@@ -302,7 +272,6 @@ API References
 - Client API
 	: on('get_delete_data', data)	
 
-	ex) socket.on(
 
 
 ◎ set_change_data : 현재 tool의 데이터 다른 tool 형태로 변경
@@ -311,7 +280,6 @@ API References
 - Client API
 	: emit('set_delete_tree_data', {group: 'group', tool: 'tool', change: 'change'}) 
 
-	ex) socket.emit(
 
 
 ◎ get_change_data : 새로운 tool로 변경된 데이터 서버에서 응답 받는 함수
@@ -320,4 +288,3 @@ API References
 - Client API
 	: on('get_delete_tree_data', data)
 
-	ex) socket.on(

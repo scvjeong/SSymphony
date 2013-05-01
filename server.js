@@ -31,7 +31,6 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		socket.join(tmpGroup);
 		console.log("Join "+tmpGroup);
 	
-		multi = client.multi();
 		////  클라이언트에게 Client 번호 전달 후 Clinet 번호 증가  ////
 		////  향후 세션으로 관리하도록 수정 필요  ////
 		socket.emit('get_client', { client: lastClient });
@@ -75,9 +74,8 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		client.lindex(tmpOrder, 0, function (err,reply) {
 			if ( reply == null ) {
 				var tmpId = tmpOrder.replace("order", "100");	
-				multi.lpush(tmpOrder, tmpId);
-				multi.set(tmpId, "");
-				multi.exec();
+				client.lpush(tmpOrder, tmpId);
+				client.set(tmpId, "");
 			}	
 			//console.log("tmpOrder: "+tmpOrder);
 			client.lrange(tmpOrder, 0, -1, function (err, replies) {	
@@ -102,15 +100,17 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpGroup = data.group;
 		var tmpTool = data.tool;
 		var tmpOrder = tmpGroup+":"+tmpTool+":order";
+		var tmpOption = tmpGroup+":"+tmpTool+":options";
 		
 		client.lindex(tmpOrder, 0, function (err,reply) {
 			if ( reply == null ) {
 				var tmpId = tmpOrder.replace("order", "100");
 				var tmpParent = tmpOrder.replace("order", "0");
-				multi.lpush(tmpOrder, tmpId);
-				multi.hset(tmpId, tmpParent, "");
-				multi.exec();
+				client.lpush(tmpOrder, tmpId);
+				client.hset(tmpId, tmpParent, "");
 			}
+
+			// order return 
 			client.lrange(tmpOrder, 0, -1, function (err, replies) {	
 				replies.forEach( function (idNum, index) {
 					//console.log("id: "+idNum);
@@ -131,6 +131,24 @@ var meeting = io.of('/group').on('connection', function (socket) {
 				});
 			});	
 		});				
+	});
+
+	////  클라이언트 해당 tool의 옵션 데이터 요청 처리하는 함수_tree  ////
+	socket.on('set_tree_option_data', function(data) {
+		console.log("Call: set_tree_data");
+		var tmpGroup = data.group;
+		var tmpTool = data.tool;
+		var tmpOption = tmpGroup+":"+tmpTool+":options";
+		// option return
+		client.hkeys(tmpOption, function (err, replies) {
+			replies.forEach(function (reply, i) {
+				client.hget(tmpOption, reply, function(err, val){
+					var splitOption = reply.toString().split(":");
+					var option = splitOption[2];
+					socket.emit('get_tree_option_data', { tool: tmpTool, id: '', option: option, val: val });
+				})
+			});
+		});
 	});
 
 	////  클라이언트가 입력 시작한 경우 전달된 데이터 처리하는 함수  ////
@@ -166,8 +184,23 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var setId = data.id;
 		var setDepth = data.depth;
 
+		// Redis 데이터 변경하는 부분 필요...
+
 		////  다른 클라이언트들에게 변경된 depth 전달_tree  ////
 		socket.broadcast.to(tmpGroup).emit('get_change_depth', { tool:tmpTool, id: setId, depth: setDepth } );
+	});
+
+	////  클라이언트가 parent 변경한 경우 전달된 데이터 처리하는 함수_tree  ////
+	socket.on('set_change_parent', function (data) {
+		var tmpGroup = data.group;
+		var tmpTool = data.tool;
+		var setId = data.id;
+		var setParent = data.parent;
+
+		// Redis 데이터 변경하는 부분 필요...
+
+		////  다른 클라이언트들에게 변경된 parent 전달_tree  ////
+		socket.broadcast.to(tmpGroup).emit('get_change_parent', { tool:tmpTool, id: setId, parent: setParent } );
 	});
 
 	////  클라이언트 해당 tool에 추가된 값을 DB에 저장  ////
@@ -183,20 +216,21 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpOrder = tmpGroup+":"+tmpTool+":order";
 		var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;	
 		var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
-
+		
+		multi = client.multi();
 		multi.set(storeId, tmpVal);	 //key에 데이터 저장
 		multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
-		
+		multi.exec();
+
 		////  list에서 현재 위치에 ID 중복되는지 확인  ////
 		client.llen(tmpOrder, function (err, idVal) {			
 			client.lindex(tmpOrder, tmpIndex, function (err, preId) {
-				//console.log("tmpIndex: "+tmpIndex+ "// preId: " +preId);
+				//console.log("stroeId: "+storeId+ "// preId: " +preId);
 				if ( preId != storeId )	//Id 다를때
 				{
 					client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
 						//console.log("tmpOrder: " + tmpOrder +"id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
-						multi.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입		
-						multi.exec();
+						client.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입		
 					});	
 				}
 
@@ -221,37 +255,40 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 		var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
 		var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
-
+		//console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);		
+		
 		////  부모 필드 존재하는지 검사  ////
 		client.hlen(storeId, function (err, num) {
 			if ( num > 0 )
 			{
 				client.hkeys(storeId, function (err, parent) {
+					multi = client.multi();
 					multi.hdel(storeId, parent);	
 					multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
 					multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+					multi.exec();
 				});
 			}
 			else
 			{
+				multi = client.multi();
 				multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
 				multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+				multi.exec();
 			}
 		});	
 		
 		////  list에서 현재 위치에 ID 중복되는지 확인  ////
 		client.llen(tmpOrder, function (err, idVal) {			
 			client.lindex(tmpOrder, tmpIndex, function (err, preId) {
-				//console.log("tmpIndex: "+tmpIndex+ "// preId: " +preId);
+				//console.log("stroeId: "+storeId+ "// preId: " +preId);
 				if ( preId != storeId )	//Id 다를때
 				{
 					client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
 						//console.log("id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
-						multi.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입			
-						multi.exec();
+						client.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입			
 					});	
 				}
-
 				////  다른 클라이언트들에게 추가된 값 전달_tree  ////
 				socket.broadcast.to(tmpGroup).emit('get_insert_tree_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
 			});	
@@ -269,11 +306,11 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 		var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 
+		multi = client.multi();
 		multi.del(delId);	
 		multi.del(delClient);
 		multi.lrem(tmpOrder, 0, delId);	
 		multi.exec();
-
 		////  다른 클라이언트들에게 삭제된 값 전달  ////
 		socket.broadcast.to(tmpGroup).emit('get_delete_data', { tool: tmpTool, id: tmpId });
 	});
@@ -289,9 +326,13 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 		var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 		//console.log("delId: "+delId);
+			
+		var tmpDelParent = 0;
 		client.hkeys(delId, function (err, parent) {
-			multi.hdel(delId, parent);	
+			tmpDelParent = parent;
 		});
+		multi = client.multi();
+		multi.hdel(delId, tmpDelParent);	
 		multi.del(delClient);
 		multi.lrem(tmpOrder, 0, delId);	
 		multi.exec();
@@ -300,15 +341,35 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		socket.broadcast.to(tmpGroup).emit('get_delete_tree_data', { tool: tmpTool, id: tmpId });
 	});
 
+	////  다른 도구 형태로 데이터 변경  ////
+	socket.on('set_change_data', function(data) {
+
+	});
+
+	////  다른 도구 형태로 데이터 변경_tree  ////
+	socket.on('set_change_tree_data', function(data) {
+
+	});
+
 	////  해당 tool의 데이터 초기화  ////
 	socket.on('set_init_tool_data', function(data) {
 		console.log("Call: set_init_tool_data");
 		var tmpGroup = data.group;
 		var tmpTool = data.tool;
 		var tmpOrder = tmpGroup+":"+tmpTool+":order";
-		
-		multi.del(tmpOrder);
-		multi.exec();
+		var tmpOptions = tmpGroup+":"+tmpTool+":options";
+
+		multi = client.multi();
+		multi.del(tmpOrder).del(tmpOptions).exec();
+
+		// 초기 인덱스가 있는지 확인후 없으면 추가
+		client.lindex(tmpOrder, 0, function (err,reply) {
+			if ( reply == null ) {
+				var tmpInitId = tmpOrder.replace("order", "100");
+				var tmpInitParent = tmpOrder.replace("order", "0");
+				multi.lpush(tmpOrder, tmpInitId).hset(tmpInitId, tmpInitParent, "").exec();	
+			}	
+		});
 
 		////  다른 클라이언트들에게 초기화된 tool 전달  ////
 		socket.broadcast.to(tmpGroup).emit('get_init_tool_data', { tool: tmpTool });
@@ -322,7 +383,12 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpId = data.id;
 		var tmpOption = data.option;
 		var tmpVal = data.val;
-		
+		var optionKey = tmpGroup + ":" + tmpTool + ":options";
+		var optionField = tmpGroup + ":" + tmpTool + ":" + tmpOption;
+
+		multi = client.multi();
+		multi.hset(optionKey, optionField, tmpVal).exec();
+
 		////  다른 클라이언트들에게 tool의 옵션 데이터 전달  ////
 		socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal });
 	});

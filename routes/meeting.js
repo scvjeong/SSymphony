@@ -4,5 +4,10 @@
  */
 
 exports.main = function(req, res){
-  res.render('meeting', { title: 'Express' });
+	/** session start **/
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+
+	res.render('meeting', { title: 'Express' });
 };

@@ -1,13 +1,85 @@
 <!DOCTYPE html>
+<html>
 <head>
-	<meta charset="utf-8">
-	<title>List Tool</title>
-	<meta name="description" content="List Tool" />
-	<link rel="stylesheet" href="./css/list.css">
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="./lib/socket.io.js"></script>	
-	<script>	
-		
+<meta charset="utf-8">
+<link rel="stylesheet" href="./css/mindmap.css">
+<script src="./lib/d3.v3.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+var flag = 0;
+var preX = 0;
+var preY = 0;
+
+var dataLinks = [];
+var dataNodes = [];
+
+$(document).ready(function() {
+
+	////  백그라운드 이동을 위한 이벤트 등록  ////
+	$('#svg').bind("mousedown", function(event) {
+		flag = 1;
+		preX = event.clientX;
+		preY = event.clientY;
+	});
+	$('#svg').bind("mousemove", function(event) {
+		if (flag == 1)
+		{		
+			var tmpX = event.clientX;
+			var tmpY = event.clientY;
+			var addX = Math.abs( parseInt(preX) - parseInt(tmpX) );
+			var addY = Math.abs( parseInt(preY) - parseInt(tmpY) );
+
+			if ( addX > 20 || addY > 20 )
+			{
+				var svgSelect = d3.select("svg");
+				var tmpView = svgSelect.attr('viewBox');
+				var viewVal = tmpView.split(' ');
+				var viewX = viewVal[0];
+				var viewY = viewVal[1];
+				
+				////  X, Y 위치 조절  ////
+				if ( preX > tmpX ) {
+					var newX = parseInt(viewX) + parseInt(addX / 20);
+				}
+				else {
+					var newX = parseInt(viewX) - parseInt(addX / 20);	
+				}
+				if ( preY > tmpY ) {	
+					var newY = parseInt(viewY) + parseInt(addY / 20);			
+				}
+				else {
+					var newY = parseInt(viewY) - parseInt(addY / 20);
+				}
+				
+				////  이동 제한 900*600 으로  ////
+				if ( newX >= 0 && newX <= 300 && newY >= 0 && newY <= 200)
+				{
+					var newViewVal = newX + " " + newY + " " +"600 400";
+					svgSelect.attr('viewBox', newViewVal);
+					console.log(newViewVal);
+				}			
+			}	
+		}
+	});
+	$('#svg').bind("mouseup", function(event) {
+		if (flag == 1) {
+			flag = 0;
+		}
+	});
+
+
+	//임시로
+		var rootTag = "<div class='edit_task'><div class='input_open' indent='0' taskId='100'><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='Root'></div></div>";
+		$('.list_space > .children').append(rootTag);
+	//임시
+
+
+	
+});
+
+
+
+
 		var tmpIndent = 0;	// 현재 들여쓰기 상태 
 		var tmpLastId = 100;	// 마지막 ID 관리
 		var tmpClient = 0;	//현재 클라이언트 번호
@@ -16,10 +88,9 @@
 		var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
 
 		var inputFlag = 0;	//키입력 감지하기 위한 변수
-
+/*
 		////  socket.io 서버의 해당 그룹에 접속  ////
-		//var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
-		var socket = io.connect('http://lyd.kr:8000/group');	// socket.io 서버에 접속
+		var socket = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 
 		////  처음 창 오픈되었을 때 호출  ////
 		$(document).ready(function() {
@@ -66,12 +137,6 @@
 			tmpClient = data.client;
 		});
 		
-		/*
-		////  다른 클라이언트가 데이터 초기화했을 때  ////
-		socket.on('get_init', function (data) {
-			$('.list_space > .children').children().remove();
-		});
-		*/
 		
 		////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
 		socket.on('get_tree_data', function (data) {
@@ -337,56 +402,8 @@
 			}	
 		});
 
-		/*
-		function initData() {
-			//alert("Init Data");
-			socket.emit('set_init', 'Init Data');	
-			$('.list_space > .children').children().remove();
-		}
-		*/
 	
-		////  input 영역 마우스로 클릭시 호출되는 함수  ////
-		function mouseFocus(){
-			//alert("Mouse focus");
-				
-			var focusClass = $('input:focus').parent();
-			//console.log(focusClass.attr('taskid'));
-			var tmpInputOpen = $('.list_space').find('.input_open');
-			
-			if ( tmpInputOpen.length <= 0 )
-			{
-				////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
-				focusClass = $('input:focus');
-				tmpIndent = focusClass.parent('.input_task').attr('indent');
-				focusClass.parent('.input_task').attr('class', 'input_open');
-			}
-			else if( focusClass.attr('class') != "input_open" )
-			{
-				inputFlag = 0;
-				////  이전에 작성 중이던 데이터 저장  ////		
-				var preInput = $('.input_open');
-				var preId = preInput.attr('taskid');		// 자신의 id 가져옴	
-				var parentId = 0;	 
-				var preIndentStatus =  preInput.attr('indent');
-				if( preIndentStatus != 0 ) {
-					var parentChildrenClass = preInput.parent().parent();
-					parentId = parentChildrenClass.prev('.input_task').attr('taskid');	// 부모 id 가져옴
-				}		
-				var preBullet = $('.input_open a');
-				var preIndex = $('.bullet').index(preBullet);	 // 이전 Index 구함
-				var preVal = $('.input_open > .tmp_editing').val();	// 이전 값 구함
-			
-				socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'list1', id: preId, parent: parentId, index: preIndex, val: preVal } );
-				//서버 소켓으로 데이터 전송
-
-				////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
-				focusClass = $('input:focus');
-				tmpIndent = focusClass.parent('.input_task').attr('indent');
-				focusClass.parent('.input_task').attr('class', 'input_open');
-				
-				preInput.attr('class', 'input_task');
-			}		
-		}
+		*/
 
 		////  들여쓰기 공백 설정해주는 함수  ////
 		function setIndent(indentStatus) {
@@ -397,9 +414,9 @@
 				var tmpBullet = $('.input_add > .bullet');
 				var tmpBulletLeft = tmpBullet.css('margin-left');
 				var tmpWidth = tmpInput.width();
-				tmpBullet.css({"margin-left": parseInt(5) + (20*parseInt(indentStatus)) });
-				tmpInput.css({ "margin-left": 10 });
-				tmpInput.css({ "width": (90-(3*parseInt(indentStatus)))+'%' });
+				tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
+				tmpInput.css({ "margin-left": 1 });
+				tmpInput.css({ "width": (90-(4*parseInt(indentStatus)))+'%' });
 				$('.input_add').attr('class', 'input_task');
 			}
 			else 
@@ -408,9 +425,9 @@
 				var tmpBullet = $('.input_open > .bullet');
 				var tmpBulletLeft = tmpBullet.css('margin-left');
 				var tmpWidth = tmpInput.width();
-				tmpBullet.css({"margin-left": parseInt(5) + (20*parseInt(indentStatus)) });
-				tmpInput.css({ "margin-left": 10 });
-				tmpInput.css({ "width": (90-(3*parseInt(indentStatus)))+'%' });
+				tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
+				tmpInput.css({ "margin-left": 1 });
+				tmpInput.css({ "width": (90-(4*parseInt(indentStatus)))+'%' });
 				tmpInput.trigger('focus');
 			}
 		}
@@ -433,12 +450,12 @@
 		
 			preInput.css({ "background": clientColor[0] });
 
-			socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'list1', id: preId, parent: parentId, index: preIndex, val: preVal } );
+			//socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'list1', id: preId, parent: parentId, index: preIndex, val: preVal } );
 			//서버 소켓으로 데이터 전송
 
 			preInput.attr('class', 'input_task');					
 
-			var addTag = "<div class='edit_task'><div class='input_open' indent="+tmpIndent+" taskid="+tmpLastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
+			var addTag = "<div class='edit_task'><div class='input_open' indent="+tmpIndent+" taskid="+tmpLastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'></div></div>";
 			var preInputParent = preInput.parent(); 
 		
 			if( preInputParent.attr('class') == "edit_open" )	// 자식 노드 존재하는 경우 자식노드로 추가
@@ -477,23 +494,23 @@
 					tmpInput.parent().remove();			
 					preClass.attr('class', "edit_open");
 					
-					var addTag = "<div class='children'><div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div></div>";
+					var addTag = "<div class='children'><div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div></div>";
 					preClass.append(addTag);
 
 					setIndent(tmpIndent);
 
-					socket.emit('set_change_depth', {  group: tmpGroup, tool: 'list1', id: tmpId,  depth: tmpIndent });
+					//socket.emit('set_change_depth', {  group: tmpGroup, tool: 'list1', id: tmpId,  depth: tmpIndent });
 				}		
 				else if ( preClass.attr('class') == "edit_open" )	//직전 클래스가 edit_open인 경우 태그만 추가
 				{
 					tmpIndent = parseInt(tmpIndent)+1;
 					tmpInput.parent().remove();
-					var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
+					var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";
 					preClass.children('.children').append(addTag);
 
 					setIndent(tmpIndent);
 		
-					socket.emit('set_change_depth', {  group: tmpGroup, tool: 'list1', id: tmpId,  depth: tmpIndent });
+					//socket.emit('set_change_depth', {  group: tmpGroup, tool: 'list1', id: tmpId,  depth: tmpIndent });
 				}
 			}	
 		}
@@ -509,7 +526,7 @@
 			{	
 				tmpIndent = parseInt(tmpIndent)-1;
 						
-				var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";		
+				var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";		
 
 				if( tmpInputParent.parent().attr('class') == "children" )
 				{
@@ -518,7 +535,7 @@
 				}
 				setIndent(tmpIndent);	// 들여쓰기 설정 함수 호출
 
-				socket.emit('set_change_depth', {  group: tmpGroup, tool: 'list1', id: tmpId,  depth: tmpIndent });
+				//socket.emit('set_change_depth', {  group: tmpGroup, tool: 'list1', id: tmpId,  depth: tmpIndent });
 			}
 		}
 
@@ -570,7 +587,7 @@
 					}						
 				}						
 				var delId = tmpInput.attr('taskid');
-				socket.emit('set_delete_tree_data', { group: tmpGroup, tool: 'list1', id: delId  } );
+				//socket.emit('set_delete_tree_data', { group: tmpGroup, tool: 'list1', id: delId  } );
 			}
 		}
 
@@ -589,9 +606,53 @@
 			var tmpBullet = $('.input_open a');
 			var tmpIndex = $('.bullet').index(tmpBullet);	 // 이전 Index 구함
 			
-			console.log("Id: "+tmpId+"// addClient: "+tmpClient);
+			//console.log("Id: "+tmpId+"// addClient: "+tmpClient);
 
-			socket.emit('set_input_tree_data', { group: tmpGroup, tool: 'list1', id: tmpId, parent: tmpParentId, index: tmpIndex, client: tmpClient } );
+			//socket.emit('set_input_tree_data', { group: tmpGroup, tool: 'list1', id: tmpId, parent: tmpParentId, index: tmpIndex, client: tmpClient } );
+		}
+		
+
+		////  input 영역 마우스로 클릭시 호출되는 함수  ////
+		function mouseFocus(){
+			//alert("Mouse focus");
+				
+			var focusClass = $('input:focus').parent();
+			//console.log(focusClass.attr('taskid'));
+			var tmpInputOpen = $('.list_space').find('.input_open');
+			
+			if ( tmpInputOpen.length <= 0 )
+			{
+				////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
+				focusClass = $('input:focus');
+				tmpIndent = focusClass.parent('.input_task').attr('indent');
+				focusClass.parent('.input_task').attr('class', 'input_open');
+			}
+			else if( focusClass.attr('class') != "input_open" )
+			{
+				inputFlag = 0;
+				////  이전에 작성 중이던 데이터 저장  ////		
+				var preInput = $('.input_open');
+				var preId = preInput.attr('taskid');		// 자신의 id 가져옴	
+				var parentId = 0;	 
+				var preIndentStatus =  preInput.attr('indent');
+				if( preIndentStatus != 0 ) {
+					var parentChildrenClass = preInput.parent().parent();
+					parentId = parentChildrenClass.prev('.input_task').attr('taskid');	// 부모 id 가져옴
+				}		
+				var preBullet = $('.input_open a');
+				var preIndex = $('.bullet').index(preBullet);	 // 이전 Index 구함
+				var preVal = $('.input_open > .tmp_editing').val();	// 이전 값 구함
+			
+				//socket.emit('set_insert_tree_data', { group: tmpGroup, tool: 'list1', id: preId, parent: parentId, index: preIndex, val: preVal } );
+				//서버 소켓으로 데이터 전송
+
+				////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
+				focusClass = $('input:focus');
+				tmpIndent = focusClass.parent('.input_task').attr('indent');
+				focusClass.parent('.input_task').attr('class', 'input_open');
+				
+				preInput.attr('class', 'input_task');
+			}		
 		}
 
 		//// input 영역에서 키보드 입력시 호출되는 함수  ////
@@ -600,8 +661,13 @@
 			if ( inputKey == 13 )	// Input Enter
 			{
 				//alert("Enter");
-				socket.emit('set_last_id', { group: tmpGroup, tool: 'list1' });		
+				//socket.emit('set_last_id', { group: tmpGroup, tool: 'list1' });		
 				inputFlag = 0;
+
+
+				//임시로
+				addInputBox();
+				//임시
 			}
 			else if ( inputKey == 9 && event.shiftKey ) // Input Shift + Tab
 			{
@@ -639,35 +705,136 @@
 				}
 			}
 		}
+		
+		function initMindmap() {
+			var svgSelect = $('#svg');
+			svgSelect.empty();
+			dataLinks = [];
+			dataNodes = [];
+		}
 
-	</script>
+		
+
+		function addMindmapData(name, index, parentIndex, indent) {
+			var groupNum = parseInt(indent)+1;
+			if ( index == 0 ) {
+				dataNodes.push({"name":name, "group":groupNum});
+			}
+			else {
+				dataNodes.push({"name":name, "group":groupNum});
+				dataLinks.push({"source":parentIndex, "target":index, "value":1});
+			}
+		}
+	
+		function getListData() {
+			var i=0;
+			var countNum = $('input').size();
+			
+			////  리스트 값 순서대로 마인드맵 데이터로 저장  ////
+			for (i=0; i<countNum; i++)
+			{
+				var tmpInput = $('input:eq('+i+')');
+				var tmpName = tmpInput.val();
+				var tmpIndex = i;
+				var tmpIndent = tmpInput.parent().attr('indent');
+				var parentIndex = 0;
+				
+				if ( tmpIndent != 0 )
+				{
+					var tmpParent = tmpInput.parent().parent().parent().prev();
+					var tmpParentInput = tmpParent.children('.tmp_editing');
+					
+					parentIndex = $('.tmp_editing').index(tmpParentInput);	 //부모의 인덱스 구함
+				}
+				
+				addMindmapData(tmpName, tmpIndex, parentIndex, tmpIndent);
+				//console.log(tmpIndent);		
+
+			}
+			//var listData = $('.list_space > .children').children();
+			//alert(listData.attr('class'));
+		//	addMindmapData("Root", 0, 0, 0);
+		//	addMindmapData("Test1", 1, 0, 0);
+
+		}
+
+		function drawMindmap() {
+			initMindmap();
+
+			getListData();
+			
+			var width = 900,
+				height = 600;
+
+			var color = d3.scale.category20();
+
+			var force = d3.layout.force()
+				.charge(-150)
+				.friction(0.8)
+				.linkDistance(60)
+				.size([width, height]);
+
+			var svg = d3.select("svg")
+				.attr("id", "svg")
+				.attr("width", width)
+				.attr("height", height);
+
+			force
+				.nodes(dataNodes)
+				.links(dataLinks)
+				.start();
+
+			var link = svg.selectAll(".link")
+				.data(dataLinks)
+				.enter().append("line")
+				.attr("class", "link")
+				.style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+			var node = svg.selectAll(".node")
+				.data(dataNodes)
+				.enter().append("circle")
+				.attr("class", "node")
+				.attr("r", 5)
+				.style("fill", function(d) { return color(d.group); })
+				.call(force.drag);
+
+			var text = svg.selectAll("text.node")
+				.data(dataNodes)
+				.enter().append("text")
+				.attr("class", "node")
+				.text(function(d) { return d.name;});			
+
+			force.on("tick", function() {
+				link.attr("x1", function(d) { return d.source.x; })
+					 .attr("y1", function(d) { return d.source.y; })
+					 .attr("x2", function(d) { return d.target.x; })
+					 .attr("y2", function(d) { return d.target.y; });
+				
+				node.attr("cx", function(d) { return d.x; })
+					.attr("cy", function(d) { return d.y; });
+
+				text.attr("x", function(d) { return d.x + 10; })
+					.attr("y", function(d) { return d.y + 5; });
+			});
+
+		}
+
+		
+	
+
+</script>
+
 </head>
 <body>
-<div id="wrapper">
-	<header id="main_header">
-		<h1>List Tool</h1>
-	</header>
-	<div id="container">
-    <section id="main_section">
-		<article>
-			<header>
-				<div class="home_line">
-					<div class="home_box">
-						<div id="homeButton"><h2>Home</h2></div>
-					</div>
-					<div class="init_box">
-						<div id="initButton" onClick=""><h2>Clear</h2></div>
-					</div>
-				</div>
-			</header>
-			<div class="list_space">
-				<div class="children">
-				
-				</div>
-			</div>
-		</article>
-    </section>
+<div id="list_tool">
+<div class="list_space">
+	<div class="children">
+		
 	</div>
 </div>
+<div id="draw_button" onClick="drawMindmap()">Draw</div>
+</div>
+<svg id="svg" viewBox="150 100 600 400" >
+</svg>
 </body>
 </html>

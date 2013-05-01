@@ -1,663 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="ko" class="canHaveFixedElements" id="facebook">
 <head>
-  <meta charset="utf-8" />
-  <title>Orchestra</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-
-  <!-- Bootstrap Styles -->
-    <!-- Bootstrap 2.0.4 -->
-    <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
-    <!-- Font Awesome 2.0 -->
-      <link rel="stylesheet" href="/stylesheets/font-awesome.css" />
-      
-    <!-- /Font Awesome 2.0 -->
-    <!-- IcoMoon font pack -->
-      <link rel="stylesheet" href="/stylesheets/icomoon.css" />
-      
-    <!-- /IcoMoon font pack -->
-  <!-- /Bootstrap Styles -->
-
-  <!-- Theme Styles -->
-
-    <!-- Libs Styles -->
-
-      <!-- Google Code Prettyfy - source-code highlighter -->
-      <link rel="stylesheet" href="/stylesheets/prettify.css" />
-      <!-- jQuery Page Slide Plugin -->
-      <link rel="stylesheet" href="/stylesheets/jquery.pageslide.css" />      
-      <!-- jQuery Table Sorter Plugin -->
-      <link rel="stylesheet" href="/stylesheets/themes.blue.css" />
-      <link rel="stylesheet" href="/stylesheets/jquery.tablesorter.pager.css" />
-
-    <!-- /Libs Styles -->
-
-    <!-- Core Theme Styles -->
-    <!-- <link rel="stylesheet/less" href="media/styles/style.less" /> -->
-    <link rel="stylesheet" href="/stylesheets/orchestra.css" />
-	
-	<!-- datepicker calander css -->
-	<link rel="stylesheet" href="/stylesheets/datepicker.css?v=1">
-	<!-- full calander css -->
-	<link rel="stylesheet" href="/stylesheets/fullcalendar.css?v=1">
-	<!-- jarvis widget css -->
-	<link rel="stylesheet" href="/stylesheets/jarvis-widgets.css?v=1">
-	<!-- theme css -->
-	<link rel="stylesheet" href="/stylesheets/theme.css?v=1">
-	<!-- select css -->
-	<link rel="stylesheet" href="/stylesheets/select2.css?v=1">
-	<!-- uniform css -->
-	<link rel="stylesheet" href="/stylesheets/uniform.default.css?v=1">
-
-
-  <!-- /Theme Styles -->
-
-  <!-- CMS/Framework styles & scripts -->
-    <!-- ADD HERE -->
-  <!-- /CMS/Framework styles & scripts -->
-
-  <!-- Style tweaks to CMS/plugins/widgets -->
-    <!-- ADD HERE -->
-    <!-- eg.: <link href="media/stylesheets/tweaks.css" rel="stylesheet" /> -->
-  <!-- /Style tweaks to CMS/plugins/widgets -->
-
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements:
-       load latest from Google Code, fall back to local if offline -->
-  <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <script>window.html5 || document.write('<script src="media/javascripts/libs/fixes/html5.js"><\/script>')</script>
-  <![endif]-->
-
-  <!-- Icons: place favicon.ico and apple-touch-icon.png in the root directory (more: mathiasbynens.be/notes/touch-icons) -->
-    <!--
-    <link rel="shortcut icon" href="bootstrap/ico/favicon.ico" />
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="media/bootstrap/ico/apple-touch-icon-114-precomposed.png" />
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="media/bootstrap/ico/apple-touch-icon-72-precomposed.png" />
-    <link rel="apple-touch-icon-precomposed" href="media/bootstrap/ico/apple-touch-icon-57-precomposed.png" />
-    -->
-  <!-- /Icons -->
-
-  <!-- Fonts -->
-    <!-- ADD HERE -->
-  <!-- /Fonts -->
-
-  <!-- LESS -->
-  <!-- <script src="media/_tools/less-1.3.0.min.js"></script> -->
+	<meta charset="utf-8">
+	<meta content="noodp, noydir" name="robots">
+	<meta id="meta_referrer" content="default" name="referrer">
+	<link href="https://www.orchestra.im/" media="handheld" rel="alternate">
+	<title id="pageTitle">Orchestra에 오신 것을 환영합니다. 로그인, 가입 및 더 알아보기</title>
+	<link href="/stylesheets/tmp.css" rel="stylesheet">
+	<link href="https://fbstatic-a.akamaihd.net/rsrc.php/yP/r/Ivn-CVe5TGK.ico" rel="shortcut icon">
+    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yE/r/k_1qL8eHpGd.css" rel="stylesheet">
+    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yx/r/PCFbxPkLp_Y.css" rel="stylesheet">
+    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yY/r/u8iA3kXb8Y1.css" rel="stylesheet">
+    <link href="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yf/r/uGBNQwLGaKv.css" rel="stylesheet">
 </head>
-
-<body class="sidebar-max">
-
-<!--============================= Page Body =================================-->
-
-
-
-
-
-<!-- #topbar: Top Bar Menu -->
-<ul id="topbar" class="on-click">
-  <li class="pull-left">
-    <h1 id="topbar-title">
-      <i class="icon-cogs"></i>
-      <!-- <i class="icon-icomoon-grid-view"></i> -->
-      <!-- <span aria-hidden="true" class="icon-icomoon-grid-view"></span> -->
-      <a href="/">Orchestra</a>
-    </h1>
-  </li>
-  <li>
-    <a href="theme-docs.html">
-      <i class="icon-book"></i>
-      <!-- <i class="icon-icomoon-grid-view"></i> -->
-      <!-- <span aria-hidden="true" class="icon-icomoon-grid-view"></span> -->
-      <span>Orchestra Project</span>
-    </a>
-  </li>
-  <li class="parent pull-right">
-    <a href="#" data-toggle="dropdown">
-      <i class="icon-user"></i>
-      <span>John Adminsky</span>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="#">Profile</a></li>
-      <li><a href="#">Finances</a></li>
-      <li class="divider"></li>
-      <li><a href="#">Logout</a></li>
-    </ul>
-  </li>
-  <li class="parent pull-right">
-    <a href="#" data-toggle="dropdown">
-      <i class="icon-cog"></i>
-      <span>Settings</span>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="#">Backend Settings</a></li>
-      <li><a href="#">Frontend Settings</a></li>
-    </ul>
-  </li>
-  <li class="pull-right">
-    <a href="page-login.html">
-      <i class="icon-sign-blank"></i>
-      <span>Sign in</span>
-    </a>
-  </li>
-</ul>
-<!-- /#topbar: Top Bar Menu -->
-
-
-<div class="container-fluid" id="container">
-
-    <!-- #sidebar: Sidebar -->
-    <div id="sidebar">
-
-      <div class="search-mini-wrapper">
-        <form action="#" class="search-mini">
-          <input name="search" type="text" placeholder="Search..." />
-          <button type="submit">
-            <i class="icon-search"></i>
-          </button>
-        </form>
-      </div>      
-
-      <!-- ul.sidebar-menu: Sidebar Menu -->
-      <ul class="sidebar-menu on-click" id="main-menu">
-		<li class="inactive">
-          <div class="sidebar-menu-item-wrapper">
-            <a href="#" id="quick-meeting">
-              <i class="icon-play-circle"></i>
-              <span>Quick Start</span>
-            </a>
-          </div>
-        </li>
-		<li class="inactive">
-          <div class="sidebar-menu-item-wrapper">
-            <a href="#" id="meeting-planning">
-              <i class="icon-edit"></i>
-              <span>Meeting Planning</span>
-            </a>
-          </div>
-        </li>		
-		<li class="active">
-          <div class="sidebar-menu-item-wrapper">
-            <a href="#" data-target-page="meeting-list">
-              <i class="icon-list-ul"></i>
-              <span>Meeting List</span>
-            </a>
-          </div>
-        </li>
-		<li class="inactive">
-          <div class="sidebar-menu-item-wrapper">
-            <a href="#" data-target-page="group-info">
-              <i class="icon-info-sign"></i>
-              <span>Group Info</span>
-            </a>
-          </div>
-        </li>
-		<li class="inactive">
-          <div class="sidebar-menu-item-wrapper">
-            <a href="#" data-target-page="manual">
-              <i class="icon-bar-chart"></i>
-              <span>Help</span>
-            </a>
-          </div>
-        </li>
-      </ul>
-      <!-- /ul.sidebar-menu: Sidebar Menu -->
-
-
-      <a href="#" id="sidebar-resizer">
-        <i class="min icon-resize-small"></i>
-        <i class="max icon-resize-full"></i>
-      </a>
-
-    </div>
-    <!-- /#sidebar: Sidebar -->
-
-    <!-- #content: The Main Content Section
-
-      Just add the page content here for a regular page or use .page DIVs for panel pages.
-      Use Bootstrap fluid layout for best effect.
-
-    -->
-    <div id="content">
-
-		<div class="page" id="meeting-list">
-		<!-- Panel Page meeting-list Content: -->
-			<section id="widget-grid-1" class="">
-			<div class="row-fluid">
-			  <div class="span12">
-				<div class="panel" id="panel-101">
-					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-1">
-						<header>
-							<i class="icon-calendar"></i>
-							<span>Chart</span>
-						</header>
-						
-						<!-- widget div-->
-						<div>
-							<div class="inner-spacer">
-							<!-- content goes here -->
-								<div class="width-23">
-									<div class="chart-title">참여율</div>
-									<div id="bar-chart" class="chart"></div>
-								</div>
-								<div class="width-23">
-									<div class="chart-title">회의 횟수(3월)</div>
-									<div id="fill-chart" class="chart"></div>
-								</div>
-								<div class="width-23">
-									<div class="chart-title">회의 참석자 수</div>
-									<div id="site-stats" class="chart"></div>
-								</div>
-								<div class="width-23">
-									<div class="chart-title">회의 시간</div>
-									<div id="saleschart" class="chart"></div>
-								</div>
+<body class="fbIndex UIPage_LoggedOut ff4 win Locale_ko_KR">
+	<div style="position:absolute; top:-10000px; width:0px; height:0px;" id="FB_HiddenContainer"></div>
+	<div class="_li">
+		<div data-referrer="pagelet_bluebar" id="pagelet_bluebar">
+			<div id="blueBarHolder"><div id="blueBar">
+				<div>
+					<div class="loggedout_menubar_container">
+						<div class="clearfix loggedout_menubar">
+							<div class="menu_login_container rfloat">
+								<form onsubmit="return window.Event && Event.__inlineSubmit && Event.__inlineSubmit(this,event)" method="post" action="/page/login" id="login_form">
+									<table cellspacing="0">
+									<tbody>
+										<tr><td class="html7magic"><label for="email">이메일 또는 휴대폰</label></td><td class="html7magic"><label for="pass">비밀번호</label></td></tr>
+										<tr><td><input type="text" tabindex="1" value="orchestra" id="email" name="email" class="inputtext"></td><td><input type="password" tabindex="2" id="pass" name="pass" class="inputtext" value="1234"></td><td><label for="u_0_8" id="loginbutton" class="uiButton uiButtonConfirm"><input type="submit" id="u_0_8" tabindex="4" value="로그인"></label></td></tr>
+										<tr><td class="login_form_label_field"><div><div class="uiInputLabel clearfix"><input type="checkbox" class="uiInputLabelCheckbox" tabindex="3" value="1" name="persistent" id="persist_box"><label for="persist_box">로그인 상태 유지</label></div><input type="hidden" value="0" name="default_persistent"></div></td><td class="login_form_label_field"><a href="#" rel="nofollow">로그인 정보를 잊으셨나요?</a></td></tr>
+									</tbody>
+									</table>
+								</form>
 							</div>
 						</div>
-						<!-- end widget div -->
 					</div>
-					<!-- end widget -->
-				</div>
-			  </div>
-			</div>
-
-			<div class="row-fluid">
-			  <div class="span6">
-				<div class="panel" id="panel-102">
-					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-2" data-widget-deletebutton="false" data-widget-editbutton="false">
-						<header>
-							<i class="icon-calendar"></i>
-							<span>Calendar</span>
-						</header>
-						
-						<!-- widget div-->
-						<div>
-							<div class="inner-spacer"> 
-							<!-- content goes here -->
-								<!-- calnedar container -->
-								<div id="calendar-container">
-									<div id="calendar-buttons">
-										<div class="btn-group">
-											<a href="javascript:void(0)" class="btn btn-small" id="btn-cal-view">Today</a>
-											<a href="javascript:void(0)" class="btn dropdown-toggle btn-small" data-toggle="dropdown"><span class="caret"></span></a>
-											<ul class="dropdown-menu btn-small pull-right">
-												<li>
-													<a href="javascript:void(0);" id="btn-month">Month</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" id="btn-agenda">Agenda</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" id="btn-day">Today</a>
-												</li>
-											</ul>
-										</div>
-										<div class="btn-group">
-											<a href="javascript:void(0)" class="btn btn-small" id="btn-prev"><i class="icon-chevron-left"></i></a>
-											<a href="javascript:void(0)" class="btn btn-small" id="btn-next"><i class="icon-chevron-right"></i></a>
-										</div>
+					<div class="_4--d hidden_elem" id="login_chooser_container">
+						<div class="_4--f">
+							<div id="u_0_9" class="_4--e">RECENT LOGINS</div>
+							<div id="u_0_a">
+								<div class="_4--g hidden_elem" id="user_chooser_user_container">
+									<div class="userBox">
+										<div class="_4--i"><img alt="" src="https://fbstatic-a.akamaihd.net/rsrc.php/v2/y4/r/-PAXP-deijE.gif" class="_s0 _4--h _rv img"></div>
+										<div class="_507d"></div>
 									</div>
-									<div class="dt-header calender-spacer"></div>
-									<div id="calendar"></div>
+									<div class="_27-r"><label class="closeButton"></label></div>
 								</div>
-								<!-- end calendar container -->
 							</div>
 						</div>
-						<!-- end widget div -->
 					</div>
-					<!-- end widget -->
 				</div>
-			  </div>
-
-			  <div class="span6">
-				<div class="panel" id="panel-103">
-					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-2" data-widget-deletebutton="false" data-widget-editbutton="false">
-						<header>
-							<i class="icon-list-ul"></i>
-							<span>Meeting List</span>
-						</header>
-												
-						<!-- widget div-->
-						<div>
-							<div class="inner-spacer"> 
-							<!-- content -->	
-								<div class="accordion" id="accordion1">
-									<% for(var i=0; i<result.meeting.length; i++) {%>
-										<div class="accordion-group">
-											<div class="accordion-heading">
-												<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapse<%= (i+1) %>">
-													<i class="icon-plus-sign"></i> <%= result.meeting[i].subject %> </a>
-											</div>
-											<div id="collapse<%= (i+1) %>" class="accordion-body collapse" style="height: 0px; ">
-												<div class="accordion-inner">
-													회의 주제 - <%= result.meeting[i].subject %><br>
-													회의 날짜 - <%= result.meeting[i].date %><br>
-													회의 시간 - <%= result.meeting[i].start_time %> ~ <%= result.meeting[i].end_time %><br>
-													회의 참가자 - <%= result.meeting[i].user_list %><br>
-													<!--회의 역할 - 진행자: 정용기, 서기: 임종혁<br>-->
+			</div>
+		</div>
+	</div>
+	<div class="uiContextualLayerParent" id="globalContainer">
+		<div class="fb_content clearfix" id="content">
+			<div class="_50dz">
+				<div style="background: #E7EBF2; min-width: 980px">
+					<div style="width: 980px; margin: 0 auto" class="pvl">
+						<div class="_6_ _74">
+							<h1 style="font-size: 36px" class="mbs _6n _6s _6v">가입하기</h1>
+							<div class="_52ls">
+								<div class="registration_redesign" id="reg_box">
+									<form onsubmit="alert('준비 중 입니다.'); return false;" action="/" name="reg" id="reg" method="post">
+										<input type="hidden" autocomplete="off" value="AVrQQX8G" name="lsd">
+										<div class="large_form" id="reg_form_box">
+											<div class="clearfix short_fields">
+												<div class="mrm lfloat">
+													<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
+														<input type="text" placeholder="성" aria-required="true" value="성" name="lastname" id="lastname" class="inputtext text_field">
+													</div>
+												</div>
+												<div class="mbm rfloat">
+													<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
+														<input type="text" placeholder="이름(성은 제외)" aria-required="true" name="firstname" id="firstname" class="inputtext text_field">
+													</div>
 												</div>
 											</div>
-										</div>
-									<% } %>	
+											<div class="mbm">
+												<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
+													<input type="text" placeholder="이메일 주소" aria-required="true" value="이메일 주소" name="reg_email__" id="reg_email__" class="inputtext text_field">
+												</div>
+											</div>
+											<div class="mbm">
+												<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
+													<input type="password" placeholder="비밀번호" aria-required="true" name="reg_passwd__" id="reg_passwd__" class="inputtext text_field">
+												</div>
+											</div>
+											<div class="mbm">
+												<div class="uiStickyPlaceholderInput uiStickyPlaceholderEmptyInput">
+													<input type="text" placeholder="비밀번호  다시 입력" aria-required="true" value="이메일  다시 입력" name="reg_email_confirmation__" id="reg_email_confirmation__" class="inputtext text_field">
+												</div>
+											</div>
+											<div class="reg_btn clearfix"><button id="u_0_2" name="websubmit" class="_6j mvm _6wk _6wl signup_button _6o _6v" type="submit">가입하기</button><span class="async_status hidden_elem" id="async_status"><img width="16" height="11" alt="" src="https://fbstatic-a.akamaihd.net/rsrc.php/v2/yb/r/GsNJNwuI-UM.gif" class="img"></span></div>
+										</div>										
+									</form>
 								</div>
-							<!-- end content -->	
 							</div>
-							
 						</div>
-						<!-- end widget div -->
 					</div>
-					<!-- end widget -->
 				</div>
-			  </div>
 			</div>
-			</section>
-		<!-- /Panel Page meeting-list Content -->
 		</div>
-
-		<div class="page hidden" id="group-info">
-		<!-- Panel Page group-info Content: -->
-			<section id="widget-grid-4" class="">
-			<div class="row-fluid">
-			  <div class="span8">
-				<div class="panel" id="panel-401">
-					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-401">
-						<header>
-							<i class="icon-calendar"></i>
-							<span>Group Chart</span>
-						</header>
-						
-						<!-- widget div-->
-						<div>
-							<div class="inner-spacer">
-							<!-- content goes here -->
-								<div id="group-chart" class="chart margin-5"></div>
-							</div>
-						</div>
-						<!-- end widget div -->
-					</div>
-					<!-- end widget -->
-				</div>
-			  </div>
-			  <div class="span4" style="height:400px;">
-				<div class="panel" id="panel-403">
-					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-403">
-						<header>
-							<i class="icon-list-ul"></i>
-							<span>Member List</span>
-						</header>
-												
-						<!-- widget div-->
-						<div>
-							<div class="inner-spacer"> 
-							<!-- content -->	
-								<div id="panelcontents">
-									<div id="participants">
-										<ul class="users-online">
-											<% for(var i=0; i<result.users.length; i++) {%>
-												<li class="">
-													<a href="javascript:void(0);" title="">
-														<img src="" alt="" style="background-color:#eeeeee;" />
-														<span class="user-name">
-															<strong>
-																<%= result.users[i].name %> <span>(3)</span>
-															</strong>
-															<b><%= result.users[i].position %></b>
-														</span>
-														<i class="online"></i>
-													</a>
-												</li>
-											<% } %>	
-										</ul>
-									</div>
-								</div>								
-							<!-- end content -->	
-							</div>
-							
-						</div>
-						<!-- end widget div -->
-					</div>
-					<!-- end widget -->
-				</div>
-			  </div>
-			  <div class="span8">
-				<div class="panel" id="panel-402">
-					<!-- new widget -->
-					<div class="jarviswidget" id="widget-id-402">
-						<header>
-							<i class="icon-calendar"></i>
-							<span>Calendar</span>
-						</header>
-						
-						<!-- widget div-->
-						<div>
-							<div class="inner-spacer"> 
-							<!-- content goes here -->
-								<!-- calnedar container -->
-								<div id="group-calendar-container">
-									<div id="group-calendar-buttons">
-										<div class="btn-group">
-											<a href="javascript:void(0)" class="btn btn-small" id="group-cal-btn-today">Today</a>
-											<a href="javascript:void(0)" class="btn dropdown-toggle btn-small" data-toggle="dropdown"><span class="caret"></span></a>
-											<ul class="dropdown-menu btn-small pull-right">
-												<li>
-													<a href="javascript:void(0);" id="group-cal-btn-month">Month</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" id="group-cal-btn-agenda">Agenda</a>
-												</li>
-												<li>
-													<a href="javascript:void(0);" id="group-cal-btn-day">Today</a>
-												</li>
-											</ul>
-										</div>
-										<div class="btn-group">
-											<a href="javascript:void(0)" class="btn btn-small" id="group-cal-btn-prev"><i class="icon-chevron-left"></i></a>
-											<a href="javascript:void(0)" class="btn btn-small" id="group-cal-btn-next"><i class="icon-chevron-right"></i></a>
-										</div>
-									</div>
-									<div class="dt-header calender-spacer"></div>
-									<div id="group-calendar"></div>
-								</div>
-								<!-- end calendar container -->
-							</div>
-						</div>
-						<!-- end widget div -->
-					</div>
-					<!-- end widget -->
-				</div>
-			  </div>
-			</div>
-			</section>
-		<!-- /Panel Page group-info Content -->
-		</div>
-
-		<div class="page hidden" id="manual">
-		<!-- Panel Page group-info Content: -->
-			<section id="widget-grid-5" class="">
-			<div class="row-fluid">
-			  <!--
-				  <div class="span6">
-					<div class="panel" id="panel-501">
-						<div class="jarviswidget" id="widget-id-501">
-							<header>
-								<i class="icon-comment"></i>
-								<span>서비스 이용안내</span>
-							</header>
-							
-							<div>
-								<div class="inner-spacer">
-									<div class="manual-contents">
-										<p></p>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				  </div>
-				  <div class="span6">
-					<div class="panel" id="panel-502">
-						<div class="jarviswidget" id="widget-id-502">
-							<header>
-								<i class="icon-comment"></i>
-								<span>서비스 이용 데모 동영상</span>
-							</header>
-							<div>
-								<div class="inner-spacer"> 
-								<div class="manual-contents">
-									<p></p>
-								</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				  </div>
-			  -->
-			  <% for(var i=0; i<result.help.length; i++) {%>
-				  <div class="span6">
-					<div class="panel" id="panel-503">
-						<!-- new widget -->
-						<div class="jarviswidget" id="widget-id-503">
-							<header>
-								<i class="icon-comment"></i>
-								<span><%= result.help[i].name %></span>
-							</header>
-							
-							<!-- widget div-->
-							<div>
-								<div class="inner-spacer">
-								<!-- content goes here -->
-									<div class="manual-contents">
-										<%- result.help[i].contents %>
-									</div>
-								</div>
-							</div>
-							<!-- end widget div -->
-						</div>
-						<!-- end widget -->
-					</div>
-				  </div>
-			  <% } %>
-			</div>
-			</section>
-		<!-- /Panel Page group-info Content -->
-		</div>
-    </div>
-    <!-- /#content: The Main Content Section -->
-
-</div><!-- /.container-fluid#container -->
-
-
-
-<!--============================= /Page Body ================================-->
-
-<!-- Javascript: placed at the end of the document to speed up page loading
-     (generally gives more consistent behavior than 'defer') -->
-
-  <!-- Scripts will most likely break in IE6 and below, so why bother loading them? -->
-  <!--[if lte IE 6]><noscript><![endif]-->
-
-  <!-- CMS/Framework scripts -->
-    <!-- ADD HERE -->
-  <!-- /CMS/Framework scripts -->
-
-  <!-- jQuery -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-    <script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
-    <!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
-            long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
-            to to "classic" jQuery behavior -->
-    <script>if ($ === undefined) $ = jQuery</script>
-  <!-- /jQuery -->
-	
-  <!-- Bootstrap Components -->
-  <script src="/javascripts/bootstrap.min.js"></script>
-
-
-  <!-- Theme Scripts -->
-  <script src="/javascripts/ohcastra.js"></script>
-  <script src="/javascripts/application.js"></script>
-
-	<!-- Flot Plotting -->
-	<script src="/javascripts/libs/flot/excanvas.min.js"></script>
-	<script src="/javascripts/libs/flot/jquery.flot.js"></script>
-	<!-- REQUIRED: Flot Chart Engine -->
-	<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>			
-	<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>		
-	<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
-	<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>	
-	<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>	
-	<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
-
-  <!-- Google Code Prettyfy - source-code highlighter -->
-  <script src="/javascripts/libs/google-code-prettify/prettify.js"></script>
-
-  <!-- jQuery Table Sorter Plugin -->
-  <script src="/javascripts/libs/jquery.tablesorter/jquery.tablesorter.min.js"></script>
-
-  <!-- jQuery Page Slide Plugin -->
-  <script src="/javascripts/libs/jquery.pageslide/jquery.pageslide.min.js"></script>
-
-  <!-- Demo Charts
-  <script src="/javascripts/demo-area-chart.js"></script>
-  <script src="/javascripts/demo-dynamic-chart.js"></script>
-  <script src="/javascripts/demo-pie-chart.js"></script>
-   -->
-
-	<!-- REQUIRED: Functional Widgets -->
-	<script src="/javascripts/jarvis.widget.min.js"></script>
-	<script src="/javascripts/mobiledevices.min.js"></script>
-	<!-- DISABLED (only needed for IE7 <script src="js/include/json2.js"></script> -->
-	<!-- REQUIRED: Full Calendar -->
-	<script src="/javascripts/jquery.fullcalendar.min.js"></script>	
-	<!-- REQUIRED: Bootstrap Prompt -->
-	<script src="/javascripts/bootbox.min.js"></script>
-	<!-- REQUIRED: Bootstrap Wizard -->
-	<script src="/javascripts/bootstrap.wizard.min.js"></script>
-	<!-- REQUIRED: Bootstrap Timepicker -->
-	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
-	<!-- REQUIRED: Bootstrap Datepicker -->
-	<script src="/javascripts/bootstrap.datepicker.min.js"></script>
-	<!-- REQUIRED: select2 -->
-	<script src="/javascripts/select2.js"></script>
-	<!-- REQUIRED: uniform -->
-	<script src="/javascripts/jquery.uniform.js"></script>
-	<!-- REQUIRED: form -->
-	<script src="/javascripts/jquery.form.js"></script>
-
-	<script src="/javascripts/config.js"></script>	
-	<script type="text/javascript">
-		var date = new Date();
-		var d = date.getDate();
-		var m = date.getMonth();
-		var y = date.getFullYear();
-
-		var events = [
-		<% 
-			for(var i=0; i<result.meeting.length; i++) {
-			var date = new Date(result.meeting[i].date);
-		%>
-			{
-				title: '<%=result.meeting[i].subject%>',
-				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
-				end: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>)
-			},
-		<%}%>
-		];
-					
-		$(document).ready(function(){
-			
-			setup_calendar();
-		})
-	</script>
-<!-- /Javascript -->
-
+	</div>
 </body>
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
+<!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+		long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+		to to "classic" jQuery behavior -->
+<script>if ($ === undefined) $ = jQuery</script>
+<!-- /jQuery -->
+<script src="/javascripts/orchestra.js"></script>
+<script>
+	$(document).ready(function(){
+		var status = $.getUrlVar('status');
+		if( status == "failed" )
+			alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+	})
+</script>
 </html>

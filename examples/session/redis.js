@@ -1,4 +1,4 @@
-
+/*
 
 var express = require('../..');
 
@@ -31,3 +31,4 @@ app.get('/', function(req, res){
 
 app.listen(3000);
 console.log('Express app started on port 3000');
+*/

@@ -7,6 +7,11 @@ var EventEmitter = require('events').EventEmitter;
 
 
 exports.set_meeting_planning = function(req, res){
+	/** session start **/
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_mp = require('../sql/meeting_planning');
@@ -109,6 +114,11 @@ exports.set_meeting_planning = function(req, res){
 };
 
 exports.meeting_template = function(req, res){
+	/** session start **/
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+
 	var evt = new EventEmitter();
 	var dao_mp = require('../sql/meeting_planning');
 	// params['idx_owner']
@@ -122,6 +132,11 @@ exports.meeting_template = function(req, res){
 };
 
 exports.setting_agenda = function(req, res){
+	/** session start **/
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+
 	var evt = new EventEmitter();
 	var dao_mp = require('../sql/meeting_planning');
 	var dao_gi = require('../sql/group_info');
@@ -164,6 +179,11 @@ exports.setting_agenda = function(req, res){
 };
 
 exports.setting_agenda_step = function(req, res){
+	/** session start **/
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+
 	res.render('setting_agenda_step');
 };
 

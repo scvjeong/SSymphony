@@ -5,6 +5,11 @@ var mysql_conn = require('../sql/mysql_server').mysql_conn;
 var EventEmitter = require('events').EventEmitter;
 
 exports.quick_meeting = function(req, res){
+	/** session start **/
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+
 	var evt = new EventEmitter();
 	var dao_qm = require('../sql/quick_meeting');
 	dao_qm.dao_quick_meeting(evt, mysql_conn, null);

@@ -184,8 +184,6 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var setId = data.id;
 		var setDepth = data.depth;
 
-		// Redis 데이터 변경하는 부분 필요...
-
 		////  다른 클라이언트들에게 변경된 depth 전달_tree  ////
 		socket.broadcast.to(tmpGroup).emit('get_change_depth', { tool:tmpTool, id: setId, depth: setDepth } );
 	});
@@ -196,8 +194,21 @@ var meeting = io.of('/group').on('connection', function (socket) {
 		var tmpTool = data.tool;
 		var setId = data.id;
 		var setParent = data.parent;
+		var tmpVal = data.val;
 
-		// Redis 데이터 변경하는 부분 필요...
+		var tmpOrder = tmpGroup+":"+tmpTool+":order";
+		var storeId = tmpGroup + ":" + tmpTool + ":" + setId;
+		var storeParent = tmpGroup + ":" + tmpTool + ":" + setParent;
+		
+		////  부모 필드 존재하는지 검사  ////
+		client.hlen(storeId, function (err, num) {
+			client.hkeys(storeId, function (err, parent) {
+				multi = client.multi();
+				multi.hdel(storeId, parent);	
+				multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
+				multi.exec();
+			});		
+		});	
 
 		////  다른 클라이언트들에게 변경된 parent 전달_tree  ////
 		socket.broadcast.to(tmpGroup).emit('get_change_parent', { tool:tmpTool, id: setId, parent: setParent } );
@@ -370,8 +381,6 @@ var meeting = io.of('/group').on('connection', function (socket) {
 				});
 			});
 		});	
-
-
 
 
 		////  클라이언트는 change 받아서 새로 도구 창 띄우면 될 듯  ////

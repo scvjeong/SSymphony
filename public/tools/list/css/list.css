@@ -104,15 +104,23 @@
 		background:#004596;
 	}
 	.home_box {
-		width: 94%;		
+		width: 95%;		
 	}
 	.init_box {
-		width: 6%;
+		width: 5%;
 	}
 	#homeButton {
-		width: 60px;
+		float: left;
+		width: 20%;
 		cursor:pointer;
 	}
+	
+	#initButton {
+		float: right;
+		width: 80%;
+		cursor:pointer;
+	}
+
 	#addButton {
 		width: 20px;
 		font: bold 18px;

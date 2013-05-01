@@ -1,5 +1,5 @@
 ////  socket.io 서버 오픈  ////
-var io = require('socket.io').listen(8000);
+var io = require('socket.io').listen(50000);
 
 ////  redis 클라이언트 생성  ////
 var redis = require('redis'), 

@@ -112,13 +112,13 @@
 					var $selected = $(selected)
 					var $selectedGroup = $selected.parent().parent();
 					var tmpId = $selected.attr('taskid');
-		
+					var tmpVal = $selected.children('textarea').val();
 					//console.log("The dropped item is:", $selectedGroup.attr('groupid'));
 					dropFlag = 0;
 
 					var tmpSelectGroup = $selectedGroup.attr('groupid');
 					if ( tmpSelectGroup != preSelectGroup ) {		//다른 그룹으로 이동
-						socket.emit('set_change_parent', {  group: tmpGroup, tool: 'postit1', id: tmpId,  parent: tmpSelectGroup });
+						socket.emit('set_change_parent', {  group: tmpGroup, tool: 'postit1', id: tmpId,  parent: tmpSelectGroup, val: tmpVal });
 					}
 					else {		//그룹내 이동하는 경우
 						

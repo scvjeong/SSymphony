@@ -65,12 +65,11 @@
 			tmpClient = data.client;
 		});
 		
-		/*
 		////  다른 클라이언트가 데이터 초기화했을 때  ////
-		socket.on('get_init', function (data) {
+		socket.on('get_init_tool_data', function (data) {
 			$('.list_space > .children').children().remove();
+			socket.emit('set_tree_data', { group: tmpGroup, tool: 'list1' });
 		});
-		*/
 		
 		////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
 		socket.on('get_tree_data', function (data) {
@@ -336,13 +335,12 @@
 			}	
 		});
 
-		/*
 		function initData() {
 			//alert("Init Data");
-			socket.emit('set_init', 'Init Data');	
+			socket.emit('set_init_tool_data', { group: tmpGroup, tool: 'list1' });	
 			$('.list_space > .children').children().remove();
+			socket.emit('set_tree_data', { group: tmpGroup, tool: 'list1' });
 		}
-		*/
 	
 		////  input 영역 마우스로 클릭시 호출되는 함수  ////
 		function mouseFocus(){

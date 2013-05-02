@@ -293,8 +293,8 @@ function addTool(type)
 		tool['source'] += '<div class="menu_line">';
 		tool['source'] += '<input type="number" class="inputNum" id="rowNum" value="2"> X ';
 		tool['source'] += '<input type="number" class="inputNum" id="colNum" value="2">';
-		tool['source'] += '<input type="button" onClick="setMatrix(this)" value="Set">';
-		tool['source'] += '<input type="button" onClick="setClear()" value="Clear">';
+		tool['source'] += '<input type="button" onClick="setMatrix(this,	 \'matrix'+_tool_matrix_count+'\')" value="Set">';
+		tool['source'] += '<input type="button" onClick="setClear(\'matrix'+_tool_matrix_count+'\')" value="Clear">';
 		tool['source'] += '</div>';
 		tool['source'] += '</header>';
 		tool['source'] += '<div class="matrix_space">';
@@ -389,10 +389,15 @@ function showToolWindow(idx)
 					break;
 				case "matrix":
 					_tmpGroup = "group1";	//현재 그룹
-					_toolName = "matrix";
+					_toolName = _toolWindowList[idx]['name'];
+					resizeMatrix();
+					$(window).resize(function(){
+						resizeMatrix();
+					});
 					_socket_matrix.emit('join_room', { group: _tmpGroup });
 					////  서버에 초기 데이터 요청하는 함수  ////
 					_socket_matrix.emit('set_tree_data', { group: _tmpGroup, tool: _toolName });
+					_socket_matrix.emit('set_tree_option_data', { group: _tmpGroup, tool: _toolName });
 
 					/*
 					resizeMatrix();

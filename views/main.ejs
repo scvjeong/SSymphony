@@ -9,22 +9,28 @@
 		*{
 			margin:0px;padding:0px;
 		}
+		.login .container{
+			width:100%;
+		}
 		.login{
 			font-family:"oxygen";
+		}
+		.login .context-box {
+			margin:0 auto;
+			width:1280px;
 		}
 		.login placeholder{
 			font-family:"oxygen";
 		}
-		.login .header *{
-			float:left;
-		}
 		.login .header{
+			width:100%;
 			height:62px;
 			background-color:#336699;
 			padding-top:15px;
 			padding-bottom:10px;
 		}
 		.login .header .logo{
+			float:left;
 			margin-left:10%;
 			font-size:3.3em;
 			font-weight:bold;
@@ -33,11 +39,13 @@
 			width:50%;
 		}
 		.login .header .login-box{
+			float:left;
 			width:40%;
-			font-size:0.8em;
+			font-size:0.75em;
 			color:#ffffff;
 		}
 		.login .header .login-box-wrap{
+			float:left;
 			width:28%;
 			margin-right:5%;
 		}
@@ -133,38 +141,42 @@
 <body class="login">
 	<div class="container">
 		<div class="header">
-			<div class="logo">orchestra</div>
-			<div class="login-box">
-				<form name="login-form" method="post" action="/page/login">				
-					<div class="login-box-wrap">
-						<div class="login-box-header">E-mail</div>
-						<div class="login-box-body"><input type="text" name="email" placeholder="Your e-mail" value="orchestra"></div>
-						<div class="login-box-footer">Keep me logged in</div>
-					</div>
-					<div class="login-box-wrap">
-						<div class="login-box-header">Password</div>
-						<div class="login-box-body"><input type="password" name="pass" placeholder="Enter Password" value="1234"></div>
-						<div class="login-box-footer">Forgot your password?</div>
-					</div>
-					<div class="login-box-wrap">
-						<div class="login-box-header"></div>
-						<div class="login-box-body"><a href="javascript:login();" class="login-btn">LOG IN</a></div>
-						<div class="login-box-footer"></div>
-					</div>
-				</form>
+			<div class="context-box">
+				<div class="logo">orchestra</div>
+				<div class="login-box">
+					<form name="login-form" method="post" action="/page/login">				
+						<div class="login-box-wrap">
+							<div class="login-box-header">E-mail</div>
+							<div class="login-box-body"><input type="text" name="email" placeholder="Your e-mail" value="orchestra"></div>
+							<div class="login-box-footer">Keep me logged in</div>
+						</div>
+						<div class="login-box-wrap">
+							<div class="login-box-header">Password</div>
+							<div class="login-box-body"><input type="password" name="pass" placeholder="Enter Password" value="1234"></div>
+							<div class="login-box-footer">Forgot your password?</div>
+						</div>
+						<div class="login-box-wrap">
+							<div class="login-box-header"></div>
+							<div class="login-box-body"><a href="javascript:login();" class="login-btn">LOG IN</a></div>
+							<div class="login-box-footer"></div>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 		<div class="body">
-			<img src="/images/main/login_bg.png" alt="login_bg" class="login-bg">
-			<div class="sign-up-box">
-				<div class="sign-up-box-wrap">
-					<input type="text" name="first_name" placeholder="First Name" class="input-name">
-					<input type="text" name="last_name" placeholder="Last Name" class="input-name">
+			<div class="context-box">
+				<img src="/images/main/login_bg.png" alt="login_bg" class="login-bg">
+				<div class="sign-up-box">
+					<div class="sign-up-box-wrap">
+						<input type="text" name="first_name" placeholder="First Name" class="input-name">
+						<input type="text" name="last_name" placeholder="Last Name" class="input-name">
+					</div>
+					<div class="sign-up-box-wrap"><input type="text" name="sign_up_email" placeholder="Your e-mail" class="input-order"></div>
+					<div class="sign-up-box-wrap"><input type="password" name="sign_up_password" placeholder="Enter Password" class="input-order"></div>
+					<div class="sign-up-box-wrap"><input type="password" name="sign_up_re_password" placeholder="Re-enter Password" class="input-order"></div>
+					<div class="sign-up-box-wrap"><a class="sign-up-btn" href="javascript:alert('준비중 입니다.');">SIGN UP</a></div>
 				</div>
-				<div class="sign-up-box-wrap"><input type="text" name="sign_up_email" placeholder="Your e-mail" class="input-order"></div>
-				<div class="sign-up-box-wrap"><input type="password" name="sign_up_password" placeholder="Enter Password" class="input-order"></div>
-				<div class="sign-up-box-wrap"><input type="password" name="sign_up_re_password" placeholder="Re-enter Password" class="input-order"></div>
-				<div class="sign-up-box-wrap"><a class="sign-up-btn" href="javascript:alert('준비중 입니다.');">SIGN UP</a></div>
 			</div>
 		</div>
 	</div>
@@ -182,6 +194,8 @@
 <script src="/javascripts/orchestra.js"></script>
 <script>
 	$(document).ready(function(){
+		if( $(window).width() < 1280 )
+			$(".container").width("1280");
 		var status = $.getUrlVar('status');
 		if( status == "failed" )
 			alert("이메일 또는 비밀번호가 일치하지 않습니다.");

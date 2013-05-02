@@ -35,7 +35,7 @@ $(document).ready(function() {
 	});
 	
 	$('#meetingboard #btn_text_add').click(function() {
-		
+		_drawtool = 'text';
 	});
 		
 	// 알림 예시
@@ -616,24 +616,24 @@ if(window.addEventListener) {
 		// 마우스 업시 등록한 마우스 이벤트 해지 
 		function onMouseUp_Canvas( event ){
 			console.log("Call onMouseUp_Canvas");
-			console.log(canvas);
+			var now_point = getMousePoint(event);
 			switch (_drawtool)
 			{
 				case 'pen':
+					console.log(now_point);
 					break;
 				case 'rect':
-					var now_point = getMousePoint(event);
-					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
 					var width = now_point.x - prev_point.x;
 					var height = now_point.y - prev_point.y;
 					GraphicRect('canvasView', prev_point.x, prev_point.y, width, height);
 					break;
 				case 'ellipse':
-					var now_point = getMousePoint(event);
-					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
 					var width = now_point.x - prev_point.x;
 					var height = now_point.y - prev_point.y;
 					GraphicCircle('canvasView', prev_point.x, prev_point.y, width, height);
+					break;
+				case 'text':
+					addTextToCanvas(now_point.x, now_point.y);
 					break;
 			}
 			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
@@ -669,54 +669,71 @@ if(window.addEventListener) {
 	}
 }
 
+function addTextToCanvas(x, y)
+{
+	console.log("call addTextToCanvas");
+	var drawtext_container = $('#meetingboard #drawtext_container');
+	var inputbox = $('#meetingboard #drawtext_container #inputbox');
+	inputbox.val("");
+	inputbox.focus();
+	drawtext_container.css('display', 'block');
+	drawtext_container.css('left', x + 'px');
+	drawtext_container.css('top', y + 'px');
+	console.log();
+}
 
+	
+function GraphicPen(objBoard)
+{
+	this.pen	= objBoard.getContext('2d');
 
-
-	
-	function GraphicPen(objBoard)
-	{
-		this.pen	= objBoard.getContext('2d');
-	
-		this.moveTo	= function(point) {
-			this.pen.beginPath();
-			this.pen.strokeStyle = _pen_color;
-			this.pen.moveTo( point.x, point.y );
-		}
-	
-		this.draw = function(point) {
-			this.pen.lineTo( point.x, point.y );
-			this.pen.stroke();
-		}
-	
+	this.moveTo	= function(point) {
+		this.pen.beginPath();
+		this.pen.strokeStyle = _pen_color;
+		this.pen.moveTo( point.x, point.y );
 	}
 
-	function GraphicRect(objBoard, left, top, width, height)
-	{
-	    var canvas = document.getElementById(objBoard);
-	    if (canvas.getContext) {
-	      var context = canvas.getContext('2d');
-	      
-	      context.fillStyle = _fill_color;
-	      context.fillRect(left, top, width, height);
-	    } else {
-	    	console.log("canvas 안 됨");
-	    }
+	this.draw = function(point) {
+		this.pen.lineTo( point.x, point.y );
+		this.pen.stroke();
 	}
-	
-	function GraphicCircle(objBoard, x, y, width, height)
-	{
-		var canvas = document.getElementById(objBoard);
-		var ctx = canvas.getContext('2d');
-		var startAngle = 0;
-		var endAngle = 360 * Math.PI / 180;
-		
-		ctx.fillStyle = _fill_color;
-		ctx.fillRect(x, y, width, height);
-		ctx.beginPath();
-        ctx.arc(x, y, startAngle, endAngle, Math.PI*2, true);
-        
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        //ctx.closePath();
+
+}
+
+function GraphicRect(objBoard, left, top, width, height)
+{
+    var canvas = document.getElementById(objBoard);
+    if (canvas.getContext) {
+      var context = canvas.getContext('2d');
+      
+      context.fillStyle = _fill_color;
+      context.fillRect(left, top, width, height);
+    } else {
+    	console.log("canvas 안 됨");
     }
+}
+
+function GraphicCircle(objBoard, x, y, width, height)
+{
+	var canvas = document.getElementById(objBoard);
+	var ctx = canvas.getContext('2d');
+	var startAngle = 0;
+	var endAngle = 360 * Math.PI / 180;
+	
+	ctx.fillStyle = _fill_color;
+	ctx.fillRect(x, y, width, height);
+	ctx.beginPath();
+    ctx.arc(x, y, startAngle, endAngle, Math.PI*2, true);
+    
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    //ctx.closePath();
+}
+
+function GraphicText(objBoard, x, y, text)
+{
+	var canvas = document.getElementById(objBoard);
+	var canvas_context = canvas.getContext("2d");
+	canvas.fillText(text, x, y);
+}

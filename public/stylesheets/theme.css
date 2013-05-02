@@ -54,6 +54,17 @@ iframe {
 	border-width: 2px;
 }
 
+#meetingboard #drawtext_container {
+	display: none;
+	position: absolute;
+}
+
+#meetingboard #drawtext_container #inputbox {
+	background: none;
+	border: none;
+	outline: none;
+}
+
 #meetingboard #whiteboard_control_box #titlebar {
 	height: 20px;
 	background-color: #ababab;

@@ -120,7 +120,7 @@
 
 </head>
 
-<body class="sidebar-max" oncontextmenu="return false" onselectstart="return false">
+<body class="sidebar-max" onselectstart="return false">
 
 <!--============================= Page Body =================================-->
 
@@ -339,6 +339,10 @@
 </div>
 
 <div id="meetingboard">
+	<div id="drawtext_container">
+		<input type="text" id="inputbox" placeholder="여기에 글자를 입력" />
+	</div>
+
 	<div id="whiteboard_control_box">
 		<div id="titlebar"></div>
 		<div id="color_selector">
@@ -375,23 +379,30 @@
 		<div class="content"><div>
 			<div id="section_links">
 				<div class="section_title">
-					<span class="title_text">Links</span><span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+					<span class="title_text">Links</span>
+					<div style="float:right; display:inline-block"><span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span></div>
 				</div>
+				<div class="list"></div>
 			</div>
 			<div id="section_documents">
 				<div class="section_title">Documents</div>
+				<div class="list"></div>
 			</div>
 			<div id="section_photos">
 				<div class="section_title">Photos</div>
+				<div class="list"></div>
 			</div>
 			<div id="section_movies">
 				<div class="section_title">Movies</div>
+				<div class="list"></div>
 			</div>
 			<div id="section_sounds">
 				<div class="section_title">Sounds</div>
+				<div class="list"></div>
 			</div>
 			<div id="section_others">
 				<div class="section_title">Others</div>
+				<div class="list"></div>
 			</div>
 			</div>
 			<div>

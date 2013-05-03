@@ -18,7 +18,8 @@
       -moz-box-pack: center;
       -webkit-box-pack: center;
     }
-    #wrapper{
+
+	.list_tool {
       max-width: 600px;
       margin: 5px 0px;
       display: -moz-box;
@@ -28,6 +29,7 @@
       -moz-box-flex: 1;
       -webkit-box-flex: 1;
     }
+
     #main_header {
 	  display: -moz-box;
 	  display: -webkit-box;

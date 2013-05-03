@@ -79,7 +79,7 @@
 	padding-left: 5px;
 	cursor: pointer;
 }
-.vote_make_container .underbar .txt_init_votereadylist:hover{
+.vote_make_container .underbar .txt_init_votereadylist:hover {
 	text-decoration: underline;
 }
 

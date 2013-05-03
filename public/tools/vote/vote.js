@@ -2,6 +2,7 @@ var _voteid = "vote1";
 var _votelistnum = 0;
 
 var _socket;
+	_socket = io.connect('http://61.43.139.69:8000/group');
 var _tmpLastId = 100;
 var _tmpGroup = 0;
 var _clientId = 0;
@@ -129,7 +130,6 @@ function initSocket()
 {
 	console.log('Call initSocket()');
 	
-	_socket = io.connect('http://61.43.139.69:8000/group');
 	_tmpGroup = "group1";
 	
 	_socket.emit('join_room', {group: _tmpGroup});						// 그룹에 join

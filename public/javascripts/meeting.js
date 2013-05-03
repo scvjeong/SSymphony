@@ -85,6 +85,9 @@ $(document).ready(function() {
     });
 });
 
+
+
+
 function getFileTypeInfo(filetype)
 {
 	var result = {};
@@ -254,6 +257,13 @@ function setRightpanel(panel)
 	$("#rightpanel #panelcontents div").hide();
 	$("#rightpanel #panelcontents #" + panel).show();
 }
+
+
+function getToolSource(toolName, initFuncName)
+{
+	
+}
+
 
 function addTool(type)
 {

@@ -7,33 +7,42 @@
 <script src="./lib/d3.v3.js"></script>
 <script src="./lib/socket.io.js"></script>
 <script>
-	var moveFlag = 0;
-	var preX = 0;
-	var preY = 0;
 
-	var dataLinks = [];
-	var dataNodes = [];
-	var tmpIndent = 0;	// 현재 들여쓰기 상태 
-	var tmpLastId = 100;	// 마지막 ID 관리
-	var tmpClient = 0;	//현재 클라이언트 번호
-	var preWindowWidth = 0;	// 이전 창 사이즈
-	var tmpGroup = 0;	//현재 그룹
-	var tmpTool = 0;
-	var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
 
-	var inputFlag = 0;	//키입력 감지하기 위한 변수
+	var mindmap_var = {};
+	mindmap_var.socket = io.connect('http://61.43.139.69:50003/group');	// socket.io 서버에 접속
+	mindmap_var.moveFlag = 0;
+	mindmap_var.preX = 0;
+	mindmap_var.preY = 0;
+	mindmap_var.dataLinks = [];
+	mindmap_var.dataNodes = [];
+	mindmap_var.tmpIndent = 0;	// 현재 들여쓰기 상태 
+	mindmap_var.tmpLastId = 100;	// 마지막 ID 관리
+	mindmap_var.tmpClient = 0;	//현재 클라이언트 번호
+	mindmap_var.tmpGroup = 0;	//현재 그룹
+	mindmap_var.tmpTool = 0;
+	mindmap_var.clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999",											"#9999FF", "#00CCCC", "#CC9900");	
+	mindmap_var.inputFlag = 0;	//키입력 감지하기 위한 변수
 
-	var socket = io.connect('http://61.43.139.69:50003/group');	// socket.io 서버에 접속
-
+	
 	$(document).ready(function() {
+		init_mindmap("mindmap1", "group1");			
+	});
+
+	////  리스트 초기 설정해주는 함수  ////
+	function init_mindmap( tool, group ){
+	
+		mindmap_var.tmpTool = tool;
+		mindmap_var.tmpGroup = group;
+
+		mindmap_var.tmpToolSelect = $('[id='+mindmap_var.tmpTool+']');
+
 		////  socket.io 서버의 해당 그룹에 접속  ////
-		tmpGroup = "group1";
-		tmpTool = "mindmap1";
-		socket.emit('join_room', { group: tmpGroup });	
-		socket.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
+		mindmap_var.socket.emit('join_room', { group: mindmap_var.tmpGroup });	
+		mindmap_var.socket.emit('set_tree_data', { group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool });
 
 		////  Bullet 클릭 이벤트 등록 - 자식 노드 숨김  ////
-		$('.list_space').delegate('.bullet', 'click', function() {
+		mindmap_var.tmpToolSelect.find('.list_space').delegate('.bullet', 'click', function() {
 			var tmpSelectEdit = $(this).parent().parent();
 			if ( tmpSelectEdit.attr('class') == "edit_open")
 			{
@@ -44,18 +53,18 @@
 		});
 
 		////  백그라운드 이동을 위한 이벤트 등록  ////
-		$('#svg').bind("mousedown", function(event) {
-			moveFlag = 1;
-			preX = event.clientX;
-			preY = event.clientY;
+		mindmap_var.tmpToolSelect.find('#svg').bind("mousedown", function(event) {
+			mindmap_var.moveFlag = 1;
+			mindmap_var.preX = event.clientX;
+			mindmap_var.preY = event.clientY;
 		});
-		$('#svg').bind("mousemove", function(event) {
-			if (moveFlag == 1)
+		mindmap_var.tmpToolSelect.find('#svg').bind("mousemove", function(event) {
+			if (mindmap_var.moveFlag == 1)
 			{		
 				var tmpX = event.clientX;
 				var tmpY = event.clientY;
-				var addX = Math.abs( parseInt(preX) - parseInt(tmpX) );
-				var addY = Math.abs( parseInt(preY) - parseInt(tmpY) );
+				var addX = Math.abs( parseInt(mindmap_var.preX) - parseInt(tmpX) );
+				var addY = Math.abs( parseInt(mindmap_var.preY) - parseInt(tmpY) );
 
 				if ( addX > 20 || addY > 20 )
 				{
@@ -66,13 +75,13 @@
 					var viewY = viewVal[1];
 					
 					////  X, Y 위치 조절  ////
-					if ( preX > tmpX ) {
+					if ( mindmap_var.preX > tmpX ) {
 						var newX = parseInt(viewX) + parseInt(addX / 20);
 					}
 					else {
 						var newX = parseInt(viewX) - parseInt(addX / 20);	
 					}
-					if ( preY > tmpY ) {	
+					if ( mindmap_var.preY > tmpY ) {	
 						var newY = parseInt(viewY) + parseInt(addY / 20);			
 					}
 					else {
@@ -89,29 +98,29 @@
 				}	
 			}
 		});
-		$('#svg').bind("mouseup", function(event) {
-			if (moveFlag == 1) {
-				moveFlag = 0;
+		mindmap_var.tmpToolSelect.find('#svg').bind("mouseup", function(event) {
+			if (mindmap_var.moveFlag == 1) {
+				mindmap_var.moveFlag = 0;
 			}
 		});
-	});
+	}
 
 	////  클라이언트 번호 얻어오는 부분  ////
-	socket.on('get_client', function (data) {
-		tmpClient = data.client;
+	mindmap_var.socket.on('get_client', function (data) {
+		mindmap_var.tmpClient = data.client;
 	});
 
 	////  lastId 얻어오는 함수  ////
-	socket.on('get_last_id', function (data) {
-		var tmpTool = data.tool; 
-		tmpLastId = data.last;
+	mindmap_var.socket.on('get_last_id', function (data) {
+
+		mindmap_var.tmpLastId = data.last;
 		addInputBox();
 	});
 
 	////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
-	socket.on('get_tree_data', function (data) {
+	mindmap_var.socket.on('get_tree_data', function (data) {
 
-		var tmpTool = data.tool;
+	
 		var tmpId = data.id;
 		var tmpParent = data.parent;
 		var tmpVal = data.val;			
@@ -121,16 +130,16 @@
 		if ( tmpId == "100" )
 		{
 			var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";
-			$('.list_space > .children').append(rootTag);		
+			mindmap_var.tmpToolSelect.find('.list_space > .children').append(rootTag);		
 		}
 		else if ( tmpParent == "0" )
 		{
 			var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";
-			$('.list_space > .children').append(rootTag);
+			mindmap_var.tmpToolSelect.find('.list_space > .children').append(rootTag);
 		}
 		else
 		{
-			var childParentInput = $('[taskid='+tmpParent+']');
+			var childParentInput = mindmap_var.tmpToolSelect.find('[taskid='+tmpParent+']');
 			var childParent = childParentInput.parent();
 			var parentIndent = childParentInput.attr('indent');
 			var childIndent = parseInt(parentIndent) +1;
@@ -147,20 +156,20 @@
 			}
 			setIndent(childIndent);	 // 들여쓰기 설정			
 		}
-		$('.input_open').attr('class', 'input_task');
-		var lastInput = $('.input_task:last');
+		mindmap_var.tmpToolSelect.find('.input_open').attr('class', 'input_task');
+		var lastInput = mindmap_var.tmpToolSelect.find('.input_task:last');
 		lastInput.attr('class', 'input_open');
-		$('.input_open > .tmp_editing').trigger('focus'); 
+		mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
 
 	});
 		
 	////  변경된 들여쓰기 얻어오는 함수  ////
-	socket.on('get_change_depth', function (data) {
-		var tmpTool = data.tool;
+	mindmap_var.socket.on('get_change_depth', function (data) {
+	
 		var tmpChangeId = data.id;
 		var tmpChangeIndent = data.depth;
 		//console.log("id: "+tmpChangeId+" // indent: "+tmpChangeIndent);
-		var tmpInput = $('[taskid='+tmpChangeId+']');
+		var tmpInput = mindmap_var.tmpToolSelect.find('[taskid='+tmpChangeId+']');
 		var tmpVal = tmpInput.children('.tmp_editing').val();	
 
 		var tmpInputParent = tmpInput.parent();
@@ -202,8 +211,8 @@
 	});
 
 	////  다른 클라이언트가 입력 시작할 경우 해당 라인 스타일 변경  ////
-	socket.on('get_input_tree_data', function (data) {
-		var tmpTool = data.tool;
+	mindmap_var.socket.on('get_input_tree_data', function (data) {
+	
 		var addId = data.id;
 		var addParent = data.parent;
 		var addIndex = data.index;
@@ -212,16 +221,16 @@
 		console.log("Id: "+addId+"// addClient: "+addClient);
 		
 		////  해당 인덱스에 존재하는 Edit 태그 찾기  ////
-		var preInput = $('.bullet:eq('+addIndex+')');
+		var preInput = mindmap_var.tmpToolSelect.find('.bullet:eq('+addIndex+')');
 		var preInputParent = preInput.parent();
 		var preEdit = preInputParent.parent();
 
-		var tmpTask = $('[taskid='+addId+']');
+		var tmpTask = mindmap_var.tmpToolSelect.find('[taskid='+addId+']');
 		
 		////  taskid 존재할 경우  ////
 		if ( tmpTask.length > 0 )	{	
-			var changeInput = $('[taskid='+addId+']');
-			changeInput.css({ "background": clientColor[addClient] });
+			var changeInput = mindmap_var.tmpToolSelect.find('[taskid='+addId+']');
+			changeInput.css({ "background": mindmap_var.clientColor[addClient] });
 			//changeInput.css({ "ime-mode": "readonly" });
 		}
 
@@ -233,7 +242,7 @@
 				addTag = "<div class='edit_task'><div class='input_task' indent='0' taskid="+addId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'></div></div>";
 				if ( preEdit.length == 0 )	//정의 안 된경우
 				{
-					preEdit = $('.list_space > .children');
+					preEdit = mindmap_var.tmpToolSelect.find('.list_space > .children');
 					preEdit.append(addTag);
 				}
 				else
@@ -244,11 +253,11 @@
 			else	// 부모가 Root가 아닐 때
 			{
 				addIndex = parseInt(addIndex) -1;
-				preInput = $('.bullet:eq('+addIndex+')');
+				preInput = mindmap_var.tmpToolSelect.find('.bullet:eq('+addIndex+')');
 				preInputParent = preInput.parent();
 				preEdit = preInputParent.parent();
 
-				var addInputParent = $('[taskid='+addParent+']');
+				var addInputParent = mindmap_var.tmpToolSelect.find('[taskid='+addParent+']');
 				var addParentIndent = parseInt(addInputParent.attr('indent'));
 				var preInputIndent = parseInt(preInputParent.attr('indent'));
 				var tmpIndentStatus = parseInt(addInputParent.attr('indent')) + 1;	//부모보다 한칸 들여쓰기
@@ -282,46 +291,46 @@
 					preEdit.after(addTag);
 				}
 			}
-			var changeInput = $('[taskid='+addId+']');
-			changeInput.css({ "background": clientColor[addClient] });
-			$('.input_open > .tmp_editing').trigger('focus'); 
+			var changeInput = mindmap_var.tmpToolSelect.find('[taskid='+addId+']');
+			changeInput.css({ "background": mindmap_var.clientColor[addClient] });
+			mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
 			setIndent(tmpIndentStatus);	// 들여쓰기 설정		
 		}
 			
 	});
 
 	////  다른 클라이언트가 추가한 리스트 data 서버에서 가져옴  ////
-	socket.on('get_insert_tree_data', function (data) {
+	mindmap_var.socket.on('get_insert_tree_data', function (data) {
 		//console.log(data);
-		var tmpTool = data.tool;
+
 		var addId = data.id;
 		var addParent = data.parent;
 		var addIndex = data.index;
 		var addVal = data.val;
 		
 		////  해당 인덱스에 존재하는 Edit 태그 찾기  ////
-		var preInput = $('.bullet:eq('+addIndex+')');
+		var preInput = mindmap_var.tmpToolSelect.find('.bullet:eq('+addIndex+')');
 		var preInputParent = preInput.parent();
 		var preEdit = preInputParent.parent();
 		//lastId = parseInt(lastId) + 1;
 	
-		var tmpTask = $('[taskid='+addId+']');
+		var tmpTask = mindmap_var.tmpToolSelect.find('[taskid='+addId+']');
 		if ( tmpTask.length > 0 )	// 자신의 id 가진 객체 존재시
 		{	
-			var changeInput = $('[taskid='+addId+']');
+			var changeInput = mindmap_var.tmpToolSelect.find('[taskid='+addId+']');
 			changeInput.children('.tmp_editing').val(addVal);	// 값 업데이트
-			changeInput.css({ "background": clientColor[0] });
+			changeInput.css({ "background": mindmap_var.clientColor[0] });
 			//changeInput.css({ "ime-mode": "auto" });
 		}
 		
 	});
 
 	////  다른 클라이언트에서 삭제한 리스트 data ID 서버에서 가져와서 삭제  ////
-	socket.on('get_delete_tree_data', function (data) {
+	mindmap_var.socket.on('get_delete_tree_data', function (data) {
 		//console.log(data);
-		var tmpTool = data.tool;
+
 		var tmpDelId = data.id;
-		var delInput = $('[taskid='+tmpDelId+']');
+		var delInput = mindmap_var.tmpToolSelect.find('[taskid='+tmpDelId+']');
 		var delInputParent = delInput.parent();
 	
 		if ( delInputParent.attr('class') != "edit_open" )
@@ -349,8 +358,8 @@
 	});
 	
 	////  check 상태 변화 서버에서 받아와서 적용  ////
-	socket.on('get_option_data', function (data) {
-		var tmpTool = data.tool;
+	mindmap_var.socket.on('get_option_data', function (data) {
+
 		var tmpOption = data.option;
 		var tmpVal = data.val;
 
@@ -361,22 +370,22 @@
 
 	////  들여쓰기 공백 설정해주는 함수  ////
 	function setIndent(indentStatus) {
-		var tmpInput = $('.input_add');	// 추가된 태그인 경우
+		var tmpInput = mindmap_var.tmpToolSelect.find('.input_add');	// 추가된 태그인 경우
 		if ( tmpInput.length > 0 )
 		{
-			tmpInput = $('.input_add > .tmp_editing');
-			var tmpBullet = $('.input_add > .bullet');
+			tmpInput = mindmap_var.tmpToolSelect.find('.input_add > .tmp_editing');
+			var tmpBullet = mindmap_var.tmpToolSelect.find('.input_add > .bullet');
 			var tmpBulletLeft = tmpBullet.css('margin-left');
 			var tmpWidth = tmpInput.width();
 			tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
 			tmpInput.css({ "margin-left": 1 });
 			tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
-			$('.input_add').attr('class', 'input_task');
+			mindmap_var.tmpToolSelect.find('.input_add').attr('class', 'input_task');
 		}
 		else 
 		{		
-			tmpInput = $('.input_open > .tmp_editing');
-			var tmpBullet = $('.input_open > .bullet');
+			tmpInput = mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing');
+			var tmpBullet = mindmap_var.tmpToolSelect.find('.input_open > .bullet');
 			var tmpBulletLeft = tmpBullet.css('margin-left');
 			var tmpWidth = tmpInput.width();
 			tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
@@ -388,7 +397,7 @@
 	
 	////  현재 값 서버로 전송해주고 inputbox 추가  ////
 	function addInputBox(){
-		var preInput = $('.input_open');
+		var preInput = mindmap_var.tmpToolSelect.find('.input_open');
 		var preId = preInput.attr('taskid');	// 자신의 id 가져옴		
 		var parentId = 0;	 	
 		var preIndentStatus =  preInput.attr('indent');
@@ -398,40 +407,40 @@
 			//alert(parentId);
 		}
 		
-		var preBullet = $('.input_open a');
-		var preIndex = $('.bullet').index(preBullet);		// 이전 Index 구함			
-		var preVal = $('.input_open > .tmp_editing').val();	// 이전 값 구함
+		var preBullet = mindmap_var.tmpToolSelect.find('.input_open a');
+		var preIndex = mindmap_var.tmpToolSelect.find('.bullet').index(preBullet);		// 이전 Index 구함			
+		var preVal = mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').val();	// 이전 값 구함
 	
-		preInput.css({ "background": clientColor[0] });
+		preInput.css({ "background": mindmap_var.clientColor[0] });
 
-		socket.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+		mindmap_var.socket.emit('set_insert_tree_data', { group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 		//서버 소켓으로 데이터 전송
 
 		preInput.attr('class', 'input_task');					
 
-		var addTag = "<div class='edit_task'><div class='input_open' indent="+tmpIndent+" taskid="+tmpLastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'></div></div>";
+		var addTag = "<div class='edit_task'><div class='input_open' indent="+mindmap_var.tmpIndent+" taskid="+mindmap_var.tmpLastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'></div></div>";
 		var preInputParent = preInput.parent(); 
 	
 		if( preInputParent.attr('class') == "edit_open" )	// 자식 노드 존재하는 경우 자식노드로 추가
 		{
-			tmpIndent = parseInt(tmpIndent) + 1;
+			mindmap_var.tmpIndent = parseInt(mindmap_var.tmpIndent) + 1;
 			preInputParent.children('.children').prepend(addTag);
-			$('.input_open').attr('indent', tmpIndent);
+			mindmap_var.tmpToolSelect.find('.input_open').attr('indent', mindmap_var.tmpIndent);
 		}
 		else
 		{
 			preInputParent.after(addTag);
 		}
 
-		$('.input_open > .tmp_editing').trigger('focus'); 
-		var tmpIndentStatus = $('.input_open').attr('indent'); 
+		mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
+		var tmpIndentStatus = mindmap_var.tmpToolSelect.find('.input_open').attr('indent'); 
 		setIndent(tmpIndentStatus);	// 들여쓰기 설정
 	}
 
 	////  들여쓰기 추가된 경우 호출되는 함수  ////
 	function addIndent() {
 		
-		var tmpInput = $('.input_open');					
+		var tmpInput = mindmap_var.tmpToolSelect.find('.input_open');					
 		var tmpInputParent = tmpInput.parent();
 		var tmpId = tmpInput.attr('taskid');		
 		var tmpVal = tmpInput.children('.tmp_editing').val();	
@@ -443,60 +452,60 @@
 		{		
 			if ( preClass.attr('class') == "edit_task" )	//직전 클래스가 edit_task인 경우 추가하려는 children 태그 추가
 			{
-				tmpIndent = parseInt(tmpIndent)+1;
+				mindmap_var.tmpIndent = parseInt(mindmap_var.tmpIndent)+1;
 				tmpInput.parent().remove();			
 				preClass.attr('class', "edit_open");
 				
-				var addTag = "<div class='children'><div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div></div>";
+				var addTag = "<div class='children'><div class=edit_task><div class='input_open' indent="+mindmap_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div></div>";
 				preClass.append(addTag);
 
-				setIndent(tmpIndent);
+				setIndent(mindmap_var.tmpIndent);
 
-				socket.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+				mindmap_var.socket.emit('set_change_depth', {  group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: tmpId,  depth: mindmap_var.tmpIndent });
 			}		
 			else if ( preClass.attr('class') == "edit_open" )	//직전 클래스가 edit_open인 경우 태그만 추가
 			{
-				tmpIndent = parseInt(tmpIndent)+1;
+				mindmap_var.tmpIndent = parseInt(mindmap_var.tmpIndent)+1;
 				tmpInput.parent().remove();
-				var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";
+				var addTag = "<div class=edit_task><div class='input_open' indent="+mindmap_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";
 				preClass.children('.children').append(addTag);
 
-				setIndent(tmpIndent);
+				setIndent(mindmap_var.tmpIndent);
 	
-				socket.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+				mindmap_var.socket.emit('set_change_depth', {  group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: tmpId,  depth: mindmap_var.tmpIndent });
 			}
 		}	
 	}
 
 	////  들여쓰기 삭제했을 경우 호출되는 함수  ////
 	function removeIndent() {
-		var tmpInput = $('.input_open');
+		var tmpInput = mindmap_var.tmpToolSelect.find('.input_open');
 		var tmpId = tmpInput.attr('taskid');
-		var tmpVal = $('.input_open > .tmp_editing').val();					
-		var tmpInputParent = $('.input_open').parent();
+		var tmpVal = mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').val();					
+		var tmpInputParent = mindmap_var.tmpToolSelect.find('.input_open').parent();
 
-		if ( tmpIndent > 0 && tmpInputParent.attr('class') != "edit_open" ) 
+		if ( mindmap_var.tmpIndent > 0 && tmpInputParent.attr('class') != "edit_open" ) 
 		{	
-			tmpIndent = parseInt(tmpIndent)-1;
+			mindmap_var.tmpIndent = parseInt(mindmap_var.tmpIndent)-1;
 					
-			var addTag = "<div class=edit_task><div class='input_open' indent="+tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";		
+			var addTag = "<div class=edit_task><div class='input_open' indent="+mindmap_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'></div></div>";		
 
 			if( tmpInputParent.parent().attr('class') == "children" )
 			{
 				tmpInputParent.parent().parent().after(addTag);
 				tmpInputParent.remove();
 			}
-			setIndent(tmpIndent);	// 들여쓰기 설정 함수 호출
+			setIndent(mindmap_var.tmpIndent);	// 들여쓰기 설정 함수 호출
 
-			socket.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+			mindmap_var.socket.emit('set_change_depth', {  group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: tmpId,  depth: mindmap_var.tmpIndent });
 		}
 	}
 
 	////  현재 노드 삭제할 경우 호출되는 함수  ////
 	function delLine() {
-		var tmpInput = $('.input_open');
+		var tmpInput = mindmap_var.tmpToolSelect.find('.input_open');
 		var tmpId = tmpInput.attr('taskid');
-		var tmpInputParent = $('.input_open').parent();
+		var tmpInputParent = mindmap_var.tmpToolSelect.find('.input_open').parent();
 
 		if ( tmpInputParent.attr('class') != "edit_open" )
 		{
@@ -505,7 +514,7 @@
 			{
 				preClass.children('.input_task').attr('class', 'input_open');
 				preClass.children('.input_open').children('.tmp_editing').trigger('focus');							
-				tmpIndent = preClass.children('.input_open').attr('indent');
+				mindmap_var.tmpIndent = preClass.children('.input_open').attr('indent');
 												
 				tmpInputParent.remove();
 			}
@@ -514,7 +523,7 @@
 				var preEditClass = preClass.children('.children').children('.edit_task:last');
 				preEditClass.children('.input_task').attr('class', 'input_open');
 				preEditClass.children('.input_open').children('.tmp_editing').trigger('focus');						
-				tmpIndent = preEditClass.children('.input_open').attr('indent');
+				mindmap_var.tmpIndent = preEditClass.children('.input_open').attr('indent');
 
 				tmpInputParent.remove();
 			}
@@ -525,7 +534,7 @@
 				
 				var preInputClass = preClass.children('.input_task:last');
 				preInputClass.attr('class', 'input_open');				
-				tmpIndent = preInputClass.attr('indent');
+				mindmap_var.tmpIndent = preInputClass.attr('indent');
 
 				preInputClass.children('.tmp_editing').trigger('focus');
 			
@@ -540,15 +549,15 @@
 				}						
 			}						
 			var delId = tmpInput.attr('taskid');
-			socket.emit('set_delete_tree_data', { group: tmpGroup, tool: tmpTool, id: delId  } );
+			mindmap_var.socket.emit('set_delete_tree_data', { group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: delId  } );
 		}
 	}
 
 	////  입력 시작할 경우 다른 클라이언트들에 표시  ////
 	function startInput() {
-		var tmpInput = $('.input_open');
+		var tmpInput = mindmap_var.tmpToolSelect.find('.input_open');
 		var tmpId = tmpInput.attr('taskid');
-		var tmpInputParent = $('.input_open').parent();
+		var tmpInputParent = mindmap_var.tmpToolSelect.find('.input_open').parent();
 		var tmpParentId = 0;
 		var tmpIndentStatus = tmpInput.attr('indent');
 		if( tmpIndentStatus != 0 ) {
@@ -556,12 +565,12 @@
 			tmpParentId = parentChildrenClass.prev('.input_task').attr('taskid');	// 부모 id 가져옴
 		}
 
-		var tmpBullet = $('.input_open a');
-		var tmpIndex = $('.bullet').index(tmpBullet);	 // 이전 Index 구함
+		var tmpBullet = mindmap_var.tmpToolSelect.find('.input_open a');
+		var tmpIndex = mindmap_var.tmpToolSelect.find('.bullet').index(tmpBullet);	 // 이전 Index 구함
 		
-		//console.log("Id: "+tmpId+"// addClient: "+tmpClient);
+		//console.log("Id: "+tmpId+"// addClient: "+mindmap_var.tmpClient);
 
-		socket.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: tmpClient } );
+		mindmap_var.socket.emit('set_input_tree_data', { group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: mindmap_var.tmpClient } );
 	}
 	
 
@@ -569,22 +578,22 @@
 	function mouseFocus(){
 		//alert("Mouse focus");
 			
-		var focusClass = $('input:focus').parent();
+		var focusClass = mindmap_var.tmpToolSelect.find('input:focus').parent();
 		//console.log(focusClass.attr('taskid'));
-		var tmpInputOpen = $('.list_space').find('.input_open');
+		var tmpInputOpen = mindmap_var.tmpToolSelect.find('.list_space').find('.input_open');
 		
 		if ( tmpInputOpen.length <= 0 )
 		{
 			////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
-			focusClass = $('input:focus');
-			tmpIndent = focusClass.parent('.input_task').attr('indent');
+			focusClass = mindmap_var.tmpToolSelect.find('input:focus');
+			mindmap_var.tmpIndent = focusClass.parent('.input_task').attr('indent');
 			focusClass.parent('.input_task').attr('class', 'input_open');
 		}
 		else if( focusClass.attr('class') != "input_open" )
 		{
-			inputFlag = 0;
+			mindmap_var.inputFlag = 0;
 			////  이전에 작성 중이던 데이터 저장  ////		
-			var preInput = $('.input_open');
+			var preInput = mindmap_var.tmpToolSelect.find('.input_open');
 			var preId = preInput.attr('taskid');		// 자신의 id 가져옴	
 			var parentId = 0;	 
 			var preIndentStatus =  preInput.attr('indent');
@@ -592,16 +601,16 @@
 				var parentChildrenClass = preInput.parent().parent();
 				parentId = parentChildrenClass.prev('.input_task').attr('taskid');	// 부모 id 가져옴
 			}		
-			var preBullet = $('.input_open a');
-			var preIndex = $('.bullet').index(preBullet);	 // 이전 Index 구함
-			var preVal = $('.input_open > .tmp_editing').val();	// 이전 값 구함
+			var preBullet = mindmap_var.tmpToolSelect.find('.input_open a');
+			var preIndex = mindmap_var.tmpToolSelect.find('.bullet').index(preBullet);	 // 이전 Index 구함
+			var preVal = mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').val();	// 이전 값 구함
 		
-			socket.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+			mindmap_var.socket.emit('set_insert_tree_data', { group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 			//서버 소켓으로 데이터 전송
 
 			////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
-			focusClass = $('input:focus');
-			tmpIndent = focusClass.parent('.input_task').attr('indent');
+			focusClass = mindmap_var.tmpToolSelect.find('input:focus');
+			mindmap_var.tmpIndent = focusClass.parent('.input_task').attr('indent');
 			focusClass.parent('.input_task').attr('class', 'input_open');
 			
 			preInput.attr('class', 'input_task');
@@ -614,8 +623,8 @@
 		if ( inputKey == 13 )	// Input Enter
 		{
 			//alert("Enter");
-			socket.emit('set_last_id', { group: tmpGroup, tool: tmpTool });		
-			inputFlag = 0;
+			mindmap_var.socket.emit('set_last_id', { group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool });		
+			mindmap_var.inputFlag = 0;
 		}
 		else if ( inputKey == 9 && event.shiftKey ) // Input Shift + Tab
 		{
@@ -634,9 +643,9 @@
 		else if ( inputKey == 8 )	// Input BackSpaceKey
 		{				
 			//alert("BackSpace");
-			var tmpVal = $('.input_open > .tmp_editing').val();
+			var tmpVal = mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').val();
 							
-			var bulletCount = $('.bullet').length;
+			var bulletCount = mindmap_var.tmpToolSelect.find('.bullet').length;
 			//console.log("bullet: "+bulletCount);
 
 			if( tmpVal == "" && bulletCount > 1 ) 
@@ -648,62 +657,62 @@
 		else if ( inputKey == 27 )	// Input ESCKey
 		{				
 			//alert("ESC");
-			$('.input_open > .tmp_editing').val('');
+			mindmap_var.tmpToolSelect.find('.input_open > .tmp_editing').val('');
 			
 		}
 		else	//그 외 키보드 입력시
 		{
-			if ( inputFlag == 0 ) {
-				inputFlag = 1;
+			if ( mindmap_var.inputFlag == 0 ) {
+				mindmap_var.inputFlag = 1;
 				startInput();
 			}
 		}
 	}
 	
 	function initMindmap() {
-		var svgSelect = $('#svg');
+		var svgSelect = mindmap_var.tmpToolSelect.find('#svg');
 		svgSelect.empty();
-		dataLinks = [];
-		dataNodes = [];
+		mindmap_var.dataLinks = [];
+		mindmap_var.dataNodes = [];
 	}
 
 	function addMindmapData(name, index, parentIndex, indent) {
 		var groupNum = parseInt(indent)+1;
 		if ( index == 0 ) {
-			dataNodes.push({"name":name, "group":groupNum});
+			mindmap_var.dataNodes.push({"name":name, "group":groupNum});
 		}
 		else {
-			dataNodes.push({"name":name, "group":groupNum});
-			dataLinks.push({"source":parentIndex, "target":index, "value":1});
+			mindmap_var.dataNodes.push({"name":name, "group":groupNum});
+			mindmap_var.dataLinks.push({"source":parentIndex, "target":index, "value":1});
 		}
 	}
 
 	function getListData() {
 		var i=0;
-		var countNum = $('input').size();
+		var countNum = mindmap_var.tmpToolSelect.find('input').size();
 		
 		////  리스트 값 순서대로 마인드맵 데이터로 저장  ////
 		for (i=0; i<countNum; i++)
 		{
-			var tmpInput = $('input:eq('+i+')');
+			var tmpInput = mindmap_var.tmpToolSelect.find('input:eq('+i+')');
 			var tmpName = tmpInput.val();
 			var tmpIndex = i;
-			var tmpIndent = tmpInput.parent().attr('indent');
+			var tmpIndentVal = tmpInput.parent().attr('indent');
 			var parentIndex = 0;
 			
-			if ( tmpIndent != 0 )
+			if ( mindmap_var.tmpIndent != 0 )
 			{
 				var tmpParent = tmpInput.parent().parent().parent().prev();
 				var tmpParentInput = tmpParent.children('.tmp_editing');			
-				parentIndex = $('.tmp_editing').index(tmpParentInput);	 //부모의 인덱스 구함
+				parentIndex = mindmap_var.tmpToolSelect.find('.tmp_editing').index(tmpParentInput);	 //부모의 인덱스 구함
 			}				
-			addMindmapData(tmpName, tmpIndex, parentIndex, tmpIndent);
+			addMindmapData(tmpName, tmpIndex, parentIndex, tmpIndentVal);
 		}
 	}
 
 	function draw() {
 		drawMindmap();
-		socket.emit('set_option_data', { group: tmpGroup, tool: tmpTool, id: '', option: 'draw', val: '' });
+		mindmap_var.socket.emit('set_option_data', { group: mindmap_var.tmpGroup, tool: mindmap_var.tmpTool, id: '', option: 'draw', val: '' });
 	}
 
 	function drawMindmap() {
@@ -728,18 +737,18 @@
 			.attr("height", height);
 
 		force
-			.nodes(dataNodes)
-			.links(dataLinks)
+			.nodes(mindmap_var.dataNodes)
+			.links(mindmap_var.dataLinks)
 			.start();
 
 		var link = svg.selectAll(".link")
-			.data(dataLinks)
+			.data(mindmap_var.dataLinks)
 			.enter().append("line")
 			.attr("class", "link")
 			.style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
 		var node = svg.selectAll(".node")
-			.data(dataNodes)
+			.data(mindmap_var.dataNodes)
 			.enter().append("circle")
 			.attr("class", "node")
 			.attr("r", 5)
@@ -747,7 +756,7 @@
 			.call(force.drag);
 
 		var text = svg.selectAll("text.node")
-			.data(dataNodes)
+			.data(mindmap_var.dataNodes)
 			.enter().append("text")
 			.attr("class", "node")
 			.text(function(d) { return d.name;});			
@@ -770,7 +779,8 @@
 </head>
 <body>
 
-<div class="toolwindow" id="mindmap1">
+<div class="mindmap_tool" id="mindmap1">
+
 <div id="list_tool">
 <div class="list_space">
 	<div class="children">
@@ -781,6 +791,7 @@
 </div>
 <svg id="svg" viewBox="150 100 600 400" >
 </svg>
+
 </div>
 
 </body>

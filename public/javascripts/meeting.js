@@ -164,8 +164,6 @@ function onFileDragEnter(event)
 	event.stopPropagation();
 	event.preventDefault();
 	
-	console.log(event);
-    
 	if (event.dataTransfer.dropEffect == "move")
     	event.preventDefault();                    
 }    
@@ -174,8 +172,6 @@ function onFileDragOver(event)
 {
     event.stopPropagation();
     event.preventDefault(); 
-    
-    console.log(event);
     
     if (event.dataTransfer.dropEffect == "move")
       event.preventDefault();      

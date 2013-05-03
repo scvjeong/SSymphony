@@ -91,7 +91,11 @@
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxtabs.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxexpander.js"></script>
+<<<<<<< HEAD
 <script src="/tools/postit/lib/socket.io.js"></script>
+=======
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxrating.js"></script>
+>>>>>>> v20130503-01
 <!-- /공통 스크립트 -->
   
   	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
@@ -376,7 +380,7 @@
 				<img src="" style="width:15px; height:15px; margin-right:15px" />Share Box
 			</span>
 		</div>
-		<div class="content"><div>
+		<div class="content" ondragenter="onFileDragEnter(event)"  ondragover="onFileDragOver(event)" ondrop="onFileDrop(event)"><div>
 			<div id="section_links">
 				<div class="section_title">
 					<span class="title_text">Links</span>

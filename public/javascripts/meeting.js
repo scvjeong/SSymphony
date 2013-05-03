@@ -158,6 +158,70 @@ var share_box = ( function() {
 		};
 	}()); 
 
+
+function onFileDragEnter(event)
+{
+	event.stopPropagation();
+	event.preventDefault();
+	
+	console.log(event);
+    
+	if (event.dataTransfer.dropEffect == "move")
+    	event.preventDefault();                    
+}    
+
+function onFileDragOver(event)
+{
+    event.stopPropagation();
+    event.preventDefault(); 
+    
+    console.log(event);
+    
+    if (event.dataTransfer.dropEffect == "move")
+      event.preventDefault();      
+}                  
+
+function onFileDrop(event)
+{
+    event.stopPropagation();
+    event.preventDefault(); 
+    
+	console.log(event);
+
+    var file = event.dataTransfer.files[0];      
+           
+    var imageType = /image.*/;
+    var textType = /text.*/;
+    var isImage;
+    
+    if(file.type.match(imageType)){
+      isImage = true; 
+    }
+    else if(file.type.match(textType)){
+      isImage = false;
+    } 
+             
+    var reader = new FileReader();    
+    
+    reader.onload = (function(aFile){return function(e) {         
+			var result = e.target.result;  
+			if(isImage)
+			{
+				dropImage.src = result;                                                                            
+				dropBox.appendChild(dropImage)
+			}
+			else
+			{
+				dropBox.innerHTML = result;
+			}        
+		};
+    })(file);
+      
+    if(isImage){ reader.readAsDataURL(file); }
+    else { reader.readAsText(file,"EUC-KR"); }
+}
+
+
 // 링크 추가
 function addLinkList(title, link)
 {
@@ -559,6 +623,49 @@ function transWindow(name)
 	$('#' + name).removeClass('toolwindow');
 	$('#' + name).addClass('toolwindow_trans');
 }
+
+
+function showEvaluateMeetingWindow()
+{
+	var html = "";
+		html += "<div>";
+			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
+			html += "<div>How are you satisfied with the meeting?"
+				html += "<div id=\"meeting_rating\"></div>";
+			html += "</div>";
+			html += "<div>How are you satisfied with the facilitation?";
+				html += "<div id=\"fac_rating\"></div>";
+			html += "</div>";
+			html += "<div>How are you satisfied with yourself in the meeting?";
+				html += "<div id=\"self_rating\"></div>";
+			html += "</div>";
+		html += "</div>";
+		
+	console.log(html);
+
+	dialog = bootbox.dialog(html, [{
+							"label" : "Finish",
+							"class" : "btn-success",
+							"callback": function() {
+								var meeting_satisfaction_point = $("#meeting_rating").jqxRating('getValue');
+								var fac_satisfaction_point = $("#fac_rating").jqxRating('getValue');
+								var self_satisfaction_point = $("#self_rating").jqxRating('getValue');
+								// 페이지 이동
+								return true;
+							}
+						}]);
+						
+	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+}
+
+
+
+
+
+
+
 
 
 function changePenColor(color)

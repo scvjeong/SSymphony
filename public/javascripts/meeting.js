@@ -248,7 +248,31 @@ function addTool(type)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<iframe src="../tools/postit/postit.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분		
+
+		/*
+
+
+			<header>
+				<div class="title_line">
+					<div id="title_text">Post-it Tool</div>
+					<div id="add_group" onClick="addGroup()">+</div>
+				</div>
+			</header>
+			<article>
+				<div class="group_container" groupid="0">
+					<input type="text" class="group_title" titleid="0" onKeyDown="keyInput()"/>
+					<div class="add_postit">+</div> 
+					<div class="container">
+								
+					</div>
+				</div>
+
+			</article>
+
+	
+
+		*/
+		tool['source'] = '<header><div class="title_line"><div id="title_text">Post-it Tool</div><div id="add_group" onClick="addGroup()">+</div></div></header>';	// 포스트잇 도구 소스 들어갈 부분		
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;

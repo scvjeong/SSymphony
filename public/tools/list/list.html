@@ -90,7 +90,7 @@
 			
 			if ( tmpParent == "0" )
 			{
-				var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
+				var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
 				list_var.tmpToolSelect.find('.list_space > .children').append(rootTag);
 			}
 			else
@@ -99,7 +99,7 @@
 				var childParent = childParentInput.parent();
 				var parentIndent = childParentInput.attr('indent');
 				var childIndent = parseInt(parentIndent) +1;
-				var childTag = "<div class='edit_task'><div class='input_add' indent="+childIndent+" taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
+				var childTag = "<div class='edit_task'><div class='input_add' indent="+childIndent+" taskId="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
 				if ( childParent.children('.children').length > 0 )
 				{
 					childParent.children('.children').append(childTag);		
@@ -110,7 +110,7 @@
 					childTag = "<div class='children'>"+childTag+"</div>";
 					childParent.append(childTag);			
 				}
-				setIndent(childIndent);	 // 들여쓰기 설정			
+				list_set_indent(childIndent);	 // 들여쓰기 설정			
 			}
 			list_var.tmpToolSelect.find('.input_open').attr('class', 'input_task');
 			var lastInput = list_var.tmpToolSelect.find('.input_task:last');
@@ -123,7 +123,7 @@
 		list_var.socket.on('get_last_id', function (data) {
 
 			list_var.tmpLastId = data.last;
-			addInputBox();
+			list_add_input_box();
 		});
 
 		////  변경된 들여쓰기 얻어오는 함수  ////
@@ -150,26 +150,26 @@
 					{
 						tmpInput.parent().remove();			
 						preClass.attr('class', "edit_open");
-						var addTag = "<div class='children'><div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div></div>";
+						var addTag = "<div class='children'><div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div></div>";
 						preClass.append(addTag);
 					}
 					
 					else if ( preClass.attr('class') == "edit_open" )	// 직전 클래스가 edit_open인 경우 태그만 추가
 					{
 						tmpInput.parent().remove();
-						var addTag = "<div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
+						var addTag = "<div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
 						preClass.children('.children').append(addTag);
 					}
 
 				}
 				else // 들여쓰기 제거한 경우 (Shift+Tab)
 				{
-					var addTag = "<div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";		
+					var addTag = "<div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";		
 					tmpInputParent.parent().parent().after(addTag);
 					tmpInputParent.remove();
 				}
 
-				setIndent(tmpChangeIndent);
+				list_set_indent(tmpChangeIndent);
 			}
 		});
 
@@ -202,7 +202,7 @@
 				var addTag = "";
 				if ( addParent == 0 )	// 현재 추가하려는 데이터의 부모가 Root일 때
 				{
-					addTag = "<div class='edit_task'><div class='input_task' indent='0' taskid="+addId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
+					addTag = "<div class='edit_task'><div class='input_task' indent='0' taskid="+addId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
 					if ( preEdit.length == 0 )	//정의 안 된경우
 					{
 						preEdit = list_var.tmpToolSelect.find('.list_space > .children');
@@ -227,7 +227,7 @@
 
 					//console.log( "Index: "+addIndex+" // add: "+addParentIndent+" // pre: "+preInputIndent);
 			
-					addTag = "<div class='edit_task'><div class='input_add' indent="+tmpIndentStatus+" taskid="+addId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
+					addTag = "<div class='edit_task'><div class='input_add' indent="+tmpIndentStatus+" taskid="+addId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
 								
 					if (addParentIndent == preInputIndent)	// 첫번째 자식일 경우	
 					{
@@ -257,7 +257,7 @@
 				var changeInput = list_var.tmpToolSelect.find('[taskid='+addId+']');
 				changeInput.css({ "background": list_var.clientColor[addClient] });
 				list_var.tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
-				setIndent(tmpIndentStatus);	// 들여쓰기 설정		
+				list_set_indent(tmpIndentStatus);	// 들여쓰기 설정		
 			}
 				
 		});
@@ -342,7 +342,7 @@
 			}	
 		});
 
-		function initData() {
+		function list_init_data() {
 			//alert("Init Data");
 			list_var.socket.emit('set_init_tool_data', { group: list_var.tmpGroup, tool: list_var.tmpTool });	
 			list_var.tmpToolSelect.find('.list_space > .children').children().remove();
@@ -350,7 +350,7 @@
 		}
 	
 		////  input 영역 마우스로 클릭시 호출되는 함수  ////
-		function mouseFocus(){
+		function list_mouse_focus(){
 			//alert("Mouse focus");
 				
 			var focusClass = list_var.tmpToolSelect.find('input:focus').parent();
@@ -393,7 +393,7 @@
 		}
 
 		////  들여쓰기 공백 설정해주는 함수  ////
-		function setIndent(indentStatus) {
+		function list_set_indent(indentStatus) {
 			var tmpInput = list_var.tmpToolSelect.find('.input_add');	// 추가된 태그인 경우
 			if ( tmpInput.length > 0 )
 			{
@@ -420,7 +420,7 @@
 		}
 		
 		////  현재 값 서버로 전송해주고 inputbox 추가  ////
-		function addInputBox(){
+		function list_add_input_box(){
 			var preInput = list_var.tmpToolSelect.find('.input_open');
 			var preId = preInput.attr('taskid');	// 자신의 id 가져옴		
 			var parentId = 0;	 	
@@ -442,7 +442,7 @@
 
 			preInput.attr('class', 'input_task');					
 
-			var addTag = "<div class='edit_task'><div class='input_open' indent="+list_var.tmpIndent+" taskid="+list_var.tmpLastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
+			var addTag = "<div class='edit_task'><div class='input_open' indent="+list_var.tmpIndent+" taskid="+list_var.tmpLastId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0'><input type='checkbox' class='check_box'></div></div>";
 			var preInputParent = preInput.parent(); 
 		
 			if( preInputParent.attr('class') == "edit_open" )	// 자식 노드 존재하는 경우 자식노드로 추가
@@ -458,12 +458,12 @@
 
 			list_var.tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
 			var tmpIndentStatus = list_var.tmpToolSelect.find('.input_open').attr('indent'); 
-			setIndent(tmpIndentStatus);	// 들여쓰기 설정
+			list_set_indent(tmpIndentStatus);	// 들여쓰기 설정
 			//resizeWindow();
 		}
 
 		////  들여쓰기 추가된 경우 호출되는 함수  ////
-		function addIndent() {
+		function list_add_indent() {
 			
 			var tmpInput = list_var.tmpToolSelect.find('.input_open');					
 			var tmpInputParent = tmpInput.parent();
@@ -481,10 +481,10 @@
 					tmpInput.parent().remove();			
 					preClass.attr('class', "edit_open");
 					
-					var addTag = "<div class='children'><div class=edit_task><div class='input_open' indent="+list_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div></div>";
+					var addTag = "<div class='children'><div class=edit_task><div class='input_open' indent="+list_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div></div>";
 					preClass.append(addTag);
 
-					setIndent(list_var.tmpIndent);
+					list_set_indent(list_var.tmpIndent);
 
 					list_var.socket.emit('set_change_depth', {  group: list_var.tmpGroup, tool: list_var.tmpTool, id: tmpId,  depth: list_var.tmpIndent });
 				}		
@@ -492,10 +492,10 @@
 				{
 					list_var.tmpIndent = parseInt(list_var.tmpIndent)+1;
 					tmpInput.parent().remove();
-					var addTag = "<div class=edit_task><div class='input_open' indent="+list_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
+					var addTag = "<div class=edit_task><div class='input_open' indent="+list_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";
 					preClass.children('.children').append(addTag);
 
-					setIndent(list_var.tmpIndent);
+					list_set_indent(list_var.tmpIndent);
 		
 					list_var.socket.emit('set_change_depth', {  group: list_var.tmpGroup, tool: list_var.tmpTool, id: tmpId,  depth: list_var.tmpIndent });
 				}
@@ -503,7 +503,7 @@
 		}
 	
 		////  들여쓰기 삭제했을 경우 호출되는 함수  ////
-		function removeIndent() {
+		function list_remove_indent() {
 			var tmpInput = list_var.tmpToolSelect.find('.input_open');
 			var tmpId = tmpInput.attr('taskid');
 			var tmpVal = list_var.tmpToolSelect.find('.input_open > .tmp_editing').val();					
@@ -513,21 +513,21 @@
 			{	
 				list_var.tmpIndent = parseInt(list_var.tmpIndent)-1;
 						
-				var addTag = "<div class=edit_task><div class='input_open' indent="+list_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mouseFocus()' onKeyDown='keyInput()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";		
+				var addTag = "<div class=edit_task><div class='input_open' indent="+list_var.tmpIndent+" taskid="+tmpId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='list_mouse_focus()' onKeyDown='list_key_input()' tabindex='0' value='"+tmpVal+"'><input type='checkbox' class='check_box'></div></div>";		
 
 				if( tmpInputParent.parent().attr('class') == "children" )
 				{
 					tmpInputParent.parent().parent().after(addTag);
 					tmpInputParent.remove();
 				}
-				setIndent(list_var.tmpIndent);	// 들여쓰기 설정 함수 호출
+				list_set_indent(list_var.tmpIndent);	// 들여쓰기 설정 함수 호출
 
 				list_var.socket.emit('set_change_depth', {  group: list_var.tmpGroup, tool: list_var.tmpTool, id: tmpId,  depth: list_var.tmpIndent });
 			}
 		}
 
 		////  현재 노드 삭제할 경우 호출되는 함수  ////
-		function delLine() {
+		function list_del_line() {
 			var tmpInput = list_var.tmpToolSelect.find('.input_open');
 			var tmpId = tmpInput.attr('taskid');
 			var tmpInputParent = list_var.tmpToolSelect.find('.input_open').parent();
@@ -579,7 +579,7 @@
 		}
 
 		////  입력 시작할 경우 다른 클라이언트들에 표시  ////
-		function startInput() {
+		function list_start_input() {
 			var tmpInput = list_var.tmpToolSelect.find('.input_open');
 			var tmpId = tmpInput.attr('taskid');
 			var tmpInputParent = list_var.tmpToolSelect.find('.input_open').parent();
@@ -599,7 +599,7 @@
 		}
 
 		//// input 영역에서 키보드 입력시 호출되는 함수  ////
-		function keyInput() {
+		function list_key_input() {
 			var inputKey = event.keyCode;
 			if ( inputKey == 13 )	// Input Enter
 			{
@@ -612,14 +612,14 @@
 				//alert("Shift+Tab");
 				event.returnValue = false;
 	
-				removeIndent();
+				list_remove_indent();
 			}
 			else if ( inputKey == 9 )	// Input Tab		
 			{
 				//alert("Tab");
 				event.returnValue = false;
 						
-				addIndent();
+				list_add_indent();
 			}	
 			else if ( inputKey == 8 )	// Input BackSpaceKey
 			{				
@@ -632,7 +632,7 @@
 				if( tmpVal == "" && bulletCount > 1 ) 
 				{
 					event.returnValue = false;			
-					delLine();			
+					list_del_line();			
 				}				
 			}
 			else if ( inputKey == 27 )	// Input ESCKey
@@ -646,17 +646,17 @@
 			{
 				if ( list_var.inputFlag == 0 ) {
 					list_var.inputFlag = 1;
-					startInput();
+					list_start_input();
 				}
 			}
 		}
 		
-		function addNewInput() {
+		function list_add_new_input() {
 			list_var.socket.emit('set_last_id', { group: list_var.tmpGroup, tool: list_var.tmpTool });		
 			list_var.inputFlag = 0;
 		}
 
-		function changeData() {
+		function list_change_data() {
 			list_var.socket.emit('set_change_tree_data', { group: list_var.tmpGroup, tool: list_var.tmpTool, change: 'mindmap1' });
 		}
 
@@ -675,11 +675,11 @@
 			<header>
 				<div class="home_line">
 					<div class="home_box">
-						<div id="homeButton" onClick="changeData()"><h2>Change</h2></div>
-						<div id="initButton" onClick="initData()"><h2>Clear</h2></div>
+						<div id="homeButton" onClick="list_change_data()"><h2>Change</h2></div>
+						<div id="initButton" onClick="list_init_data()"><h2>Clear</h2></div>
 					</div>
 					<div class="init_box">
-						<div id="addButton" onClick="addNewInput()">+</div>
+						<div id="addButton" onClick="list_add_new_input()">+</div>
 					</div>
 				</div>
 			</header>

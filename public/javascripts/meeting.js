@@ -8,6 +8,7 @@ var _common_window_top = 50;
 var _common_windot_left = 20;
 var _new_z_index = 0;
 var _drawtool = 'pen';
+var _group_id = null;
 
 $(document).ready(function() {
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
@@ -259,9 +260,79 @@ function setRightpanel(panel)
 }
 
 
+var _tool_source = "";
+/* 도구별 소스를 동적으로 가져옴 */
 function getToolSource(toolName, initFuncName)
 {
+	var source_url = "";
+	var tool_index = "";
 	
+	switch (toolName)
+	{
+	case "list":
+		source_url = "../tools/list/list.html";
+		tool_index = _tool_list_count++;
+		break;
+	case "postit":
+		source_url = "../tools/postit/postit.html";
+		tool_index = _tool_postit_count++;
+		break;
+	case "mindmap":
+		source_url = "../tools/d3_mindmap/mindmap.html";
+		tool_index = _tool_mindmap_count++;
+		break;
+	case "vote":
+		source_url = "../tools/vote/vote.html";
+		tool_index = _tool_vote_count++;
+		break;
+	case "matrix":
+		source_url = "../tools/matrix/matrix.html";
+		tool_index = _tool_matrix_count++;
+		break;
+	}
+	
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		data: {index: tool_index, group_id: _group_id},
+		dataType: "text",
+		success: function(data) {
+			initFuncName();
+			_tool_source = data.source;
+			includeFileDynamically(data.include_list)
+			addTool();
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+}
+
+/* 동적으로 파일 추가 */
+function includeFileDynamically(list) {
+	for (var i = 0; i < list.length; i++)
+	{
+		var include_target = list[i];
+	
+		if (include_target.indexOf(".js") != -1)
+		{
+			var oScript = document.createElement("script");
+			oScript.type = "text/javascript";
+			oScript.charset ='utf-8';
+			oScript.src = include_target;			
+			document.getElementsByTagName("head")[0].appendChild(oScript);
+		}
+		else if (include_target.indexOf(".css") != -1)
+		{
+			var oCSS = document.createElement("link");
+			oCSS.rel = "stylesheet";
+			oCSS.href = include_target;
+			oCSS.type = "text/css";
+			document.getElementsByTagName("head")[0].appendChild(oCSS);
+		}
+	}
+
 }
 
 

@@ -141,8 +141,6 @@ function resizeWhiteBoardControlBox()
 }
 
 
-
-
 function getFileTypeInfo(filetype)
 {
 	var result = {};

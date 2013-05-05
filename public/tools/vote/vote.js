@@ -2,7 +2,6 @@ var _voteid = "vote1";
 var _votelistnum = 0;
 
 var _socket;
-	_socket = io.connect('http://61.43.139.69:8000/group');
 var _tmpLastId = 100;
 var _tmpGroup = 0;
 var _clientId = 0;
@@ -130,10 +129,36 @@ function initSocket()
 {
 	console.log('Call initSocket()');
 	
+	_socket = io.connect('http://61.43.139.69:8000/group');
 	_tmpGroup = "group1";
 	
 	_socket.emit('join_room', {group: _tmpGroup});						// 그룹에 join
 	_socket.emit('set_data', {group: _tmpGroup, tool: _voteid});		// 서버에 초기 데이터 요청
+	
+	
+	_socket.on('get_client', function (data) {
+		_clientId = data.client;
+	});
+	
+	_socket.on('get_insert_data', function(data) {
+		console.log("get_insert_data : " + data);
+		if (data.id == "set_vote_process")
+		{
+			_votelist = data.val;
+			initVoteProcess();
+		}
+		else if (data.id == "end_vote")
+		{
+			
+		}
+	});
+	
+	_socket.on('get_option_data', function(data) {
+		if (data.option = "is_multi_vote")
+		{
+			_is_multi_vote = data.val;
+		}
+	});
 }
 
 /* 데이터를 서버로 전송함 */
@@ -177,28 +202,3 @@ function finishVote()
 	$('.vote_processing_container').css('display', 'none');
 	$('.vote_result_container').css('display', 'block');
 }
-
-
-_socket.on('get_client', function (data) {
-	_clientId = data.client;
-});
-
-_socket.on('get_insert_data', function(data) {
-	console.log("get_insert_data : " + data);
-	if (data.id == "set_vote_process")
-	{
-		_votelist = data.val;
-		initVoteProcess();
-	}
-	else if (data.id == "end_vote")
-	{
-		
-	}
-});
-
-_socket.on('get_option_data', function(data) {
-	if (data.option = "is_multi_vote")
-	{
-		_is_multi_vote = data.val;
-	}
-});

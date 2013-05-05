@@ -9,8 +9,14 @@ var _common_windot_left = 20;
 var _new_z_index = 0;
 var _drawtool = 'pen';
 var _group_id = null;
+var _is_rightpanel_open = true;
+var _window_width = 0;
+var _window_height = 0;
 
 $(document).ready(function() {
+	// 크기 조정
+	$(window).resize();
+
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
 	
 	// 콘텐트 관리 상자 초기화
@@ -24,7 +30,7 @@ $(document).ready(function() {
 	});
 	
 	// 화이트보드 초기화
-	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
+	//$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 	$('#meetingboard #btn_drawtool_pen').click(function() {
 		_drawtool = 'pen';
 	});
@@ -85,6 +91,33 @@ $(document).ready(function() {
 		return false;
     });
 });
+
+$(window).resize(function() {
+	resetSizeInfo();
+	resizeWhiteBoardControlBox();
+});
+
+function resetSizeInfo()
+{
+	_window_width = $(window).width();
+	_window_height = $(window).height();
+}
+
+function resizeWhiteBoardControlBox()
+{
+	var whiteboard_control_box = $("#whiteboard_control_box");
+
+	if (_is_rightpanel_open == true)
+	{
+		var rightpanel = $("#rightpanel");
+		var width = _window_width - rightpanel.width();
+		whiteboard_control_box.width(width);
+	}
+	else
+	{
+		whiteboard_control_box.width(_window_width);
+	}
+}
 
 
 
@@ -160,7 +193,7 @@ var share_box = ( function() {
 				_createWindow();
 			}
 		};
-	}()); 
+	}());
 
 
 function onFileDragEnter(event)

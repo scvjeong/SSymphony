@@ -13,11 +13,21 @@ var _is_rightpanel_open = true;
 var _window_width = 0;
 var _window_height = 0;
 
+var _socket_common;
+var _socket_list;
+var _socket_postit;
+var _socket_mindmap;
+var _socket_vote;
+var _socket_matrix;
+
 $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
 
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
+	
+	// 소켓 열기
+	openSocket();
 	
 	// 콘텐트 관리 상자 초기화
 	share_box.init();
@@ -96,6 +106,17 @@ $(window).resize(function() {
 	resetSizeInfo();
 	resizeWhiteBoardControlBox();
 });
+
+// 소켓 열기
+function openSocket()
+{
+	_socket_common = io.connect('http://61.43.139.69:50000/group');
+	_socket_list = io.connect('http://61.43.139.69:50001/group');
+	_socket_postit = io.connect('http://61.43.139.69:50002/group');
+	_socket_mindmap = io.connect('http://61.43.139.69:50003/group');
+	_socket_vote = io.connect('http://61.43.139.69:50004/group');
+	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
+}
 
 function resetSizeInfo()
 {

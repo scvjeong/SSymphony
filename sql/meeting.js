@@ -34,9 +34,67 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
-	console.log(sql);
+
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('get_meeting_result', err, rows);
 	});
+	return sql;
+}
+
+// set_meeting_save_data
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_tool']
+// params['delimiter']
+// params['key']
+// params['parent']
+// params['value']
+// params['type']
+// params['client']
+exports.dao_set_meeting_save_data = function(evt, mysql_conn, params){
+	var sql = "INSERT INTO `tools_data` SET ";
+	sql += "`idx_meeting` = '"+params['idx_meeting']+"', ";
+	sql += "`idx_group` = '"+params['idx_group']+"', ";
+	sql += "`idx_tool` = '"+params['idx_tool']+"', ";
+	sql += "`delimiter` = '"+params['delimiter']+"', ";
+	sql += "`key` = '"+params['key']+"', ";
+	sql += "`parent` = '"+params['parent']+"', ";
+	sql += "`value` = '"+params['value']+"', ";
+	sql += "`type` = '"+params['type']+"', ";
+	sql += "`client` = '"+params['client']+"' ";
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_meeting_save_data', err, rows);
+	});
+
+	return sql;
+}
+
+// set_meeting_save_options
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_tool']
+// params['delimiter']
+// params['key']
+// params['parent']
+// params['value']
+// params['type']
+// params['client']
+exports.dao_set_meeting_save_options = function(evt, mysql_conn, params){
+	var sql = "INSERT INTO `tools_data` SET ";
+	sql += "`idx_meeting` = '"+params['idx_meeting']+"', ";
+	sql += "`idx_group` = '"+params['idx_group']+"', ";
+	sql += "`idx_tool` = '"+params['idx_tool']+"', ";
+	sql += "`delimiter` = '"+params['delimiter']+"', ";
+	sql += "`key` = '"+params['key']+"', ";
+	sql += "`parent` = '"+params['parent']+"', ";
+	sql += "`value` = '"+params['value']+"', ";
+	sql += "`type` = '"+params['type']+"', ";
+	sql += "`client` = '"+params['client']+"' ";
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_meeting_save_options', err, rows);
+	});
+
 	return sql;
 }

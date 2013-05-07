@@ -142,8 +142,10 @@
 	<div class="container">
 		<div class="header">
 			<div>
-				<input type="button" value="회의록 생성">
-				<input type="button" value="공유하기">
+				<form action="/page/meeting_save" method="post">
+					<input type="submit" value="회의록 생성">
+					<input type="button" value="공유하기">
+				</form>
 			</div>
 		</div>
 		<div class="body">
@@ -169,8 +171,8 @@
 				%>
 			</div>
 			<div class="chart">
-				<div id="" class="bar-chart user_list_chart" style="width:200px;height:200px;"></div>
-				<div id="" class="bar-chart word_chart" style="width:200px;height:200px;"></div>
+				<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
+				<div id="placeholder" style="width:600px;height:300px;"></div>
 				<div id="" class=" input_chart"></div>
 			</div>
 			<div class="agenda">
@@ -201,12 +203,14 @@
 <script src="/javascripts/libs/flot/jquery.flot.js"></script>
 
 <!-- REQUIRED: Flot Chart Engine -->
-<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>			
-<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>		
-<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
-<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>	
-<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>	
+<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>	
+<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>
 <script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.JUMlib.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.bubbles.js"></script>
 <script src="/javascripts/orchestra.js"></script>
 <script>
 	var $chrt_border_color = "#efefef";
@@ -221,11 +225,25 @@
 
 	$(document).ready(function(){
 		setupUserListChart();
+		setupWordChart();
 	})
 	
+	function setupWordChart()
+	{
+		var d1 = [[20,20,10], [40,50,20], [70,10,5], [80,80,7]];
+		var d2 = [[60,25,15], [70,40,6], [30,80,4]];
+		var d3 = [[30,25,15], [24,40,6], [30,43,4]];
+		var d4 = [[20,23,10], [43,24,20], [23,65,5], [60,80,4]];
+		var options = { 
+			series:{bubbles:{active:true,show:true,linewidth:2},editMode:'xy'},
+			grid:{hoverable:true,clickable:true,editable:true }
+		};
+		$.plot( $("#placeholder") , [d1,d2,d3,d4], options );
+	}
+
 	function setupUserListChart()
 	{
-		if ($(".bar-chart.user_list_chart").length) {
+		if ($(".bar-chart").length) {
 			var data1 = [];
 			for (var i = 0; i <= 4; i += 1)
 				data1.push([i, parseInt(Math.random() * 100)]);
@@ -265,7 +283,7 @@
 				}
 			});
 			//Display graph
-			$.plot($(".bar-chart.user_list_chart"), ds, {
+			$.plot($(".bar-chart"), ds, {
 				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
 				grid : {
 					show : true,
@@ -282,103 +300,6 @@
 					defaultTheme : false
 				}
 			});
-			
-			$.plot($(".bar-chart.word_chart"), ds, {
-				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
-				grid : {
-					show : true,
-					hoverable : true,
-					clickable : true,
-					tickColor : $chrt_border_color,
-					borderWidth : 0,
-					borderColor : $chrt_border_color,
-				},
-				legend : true,
-				tooltip : true,
-				tooltipOpts : {
-					content : "<b>%x</b> = <span>%y</span>",
-					defaultTheme : false
-				}
-			});
-
-		}
-		
-		if ($(".bar-chart.user_list_chart").length) {
-			var data1 = [];
-			for (var i = 0; i <= 4; i += 1)
-				data1.push([i, parseInt(Math.random() * 100)]);
-
-			var data2 = [];
-			for (var i = 0; i <= 4; i += 1)
-				data2.push([i, parseInt(Math.random() * 100)]);
-
-			var data3 = [];
-			for (var i = 0; i <= 4; i += 1)
-				data3.push([i, parseInt(Math.random() * 100)]);
-
-			var ds = new Array();
-
-			ds.push({
-				data : data1,
-				bars : {
-					show : true,
-					barWidth : 0.2,
-					order : 1,
-				}
-			});
-			ds.push({
-				data : data2,
-				bars : {
-					show : true,
-					barWidth : 0.2,
-					order : 2
-				}
-			});
-			ds.push({
-				data : data3,
-				bars : {
-					show : true,
-					barWidth : 0.2,
-					order : 3
-				}
-			});
-			//Display graph
-			$.plot($(".bar-chart.user_list_chart"), ds, {
-				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
-				grid : {
-					show : true,
-					hoverable : true,
-					clickable : true,
-					tickColor : $chrt_border_color,
-					borderWidth : 0,
-					borderColor : $chrt_border_color,
-				},
-				legend : true,
-				tooltip : true,
-				tooltipOpts : {
-					content : "<b>%x</b> = <span>%y</span>",
-					defaultTheme : false
-				}
-			});
-			
-			$.plot($(".bar-chart.word_chart"), ds, {
-				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
-				grid : {
-					show : true,
-					hoverable : true,
-					clickable : true,
-					tickColor : $chrt_border_color,
-					borderWidth : 0,
-					borderColor : $chrt_border_color,
-				},
-				legend : true,
-				tooltip : true,
-				tooltipOpts : {
-					content : "<b>%x</b> = <span>%y</span>",
-					defaultTheme : false
-				}
-			});
-
 		}
 	}
 </script>

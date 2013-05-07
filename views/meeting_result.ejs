@@ -1,0 +1,385 @@
+<html lang="ko" class="canHaveFixedElements" id="facebook">
+<head>
+	<meta charset="utf-8">
+	<meta content="noodp, noydir" name="robots">
+	<meta id="meta_referrer" content="default" name="referrer">
+	<title>Orchestra에 오신 것을 환영합니다. 로그인, 가입 및 더 알아보기</title>
+	<link href="/stylesheets/tmp.css" rel="stylesheet">
+	<style>
+		*{
+			margin:0px;padding:0px;
+		}
+		.login .container{
+			width:100%;
+		}
+		.login{
+			font-family:"oxygen";
+		}
+		.login .context-box {
+			margin:0 auto;
+			width:1280px;
+		}
+		.login placeholder{
+			font-family:"oxygen";
+		}
+		.login .header{
+			width:100%;
+			height:62px;
+			background-color:#336699;
+			padding-top:15px;
+			padding-bottom:10px;
+		}
+		.login .header .logo{
+			float:left;
+			margin-left:10%;
+			font-size:3.3em;
+			font-weight:bold;
+			color:#ffffff;
+			line-height:62px;
+			width:50%;
+		}
+		.login .header .login-box{
+			float:left;
+			width:40%;
+			font-size:0.75em;
+			color:#ffffff;
+		}
+		.login .header .login-box-wrap{
+			float:left;
+			width:28%;
+			margin-right:5%;
+		}
+		.login .header .login-box-wrap div{
+			width:100%;
+			height:21px;
+			line-height:21px;
+		}
+		.login .header .login-box-wrap input{
+			width:100%;
+			height:20px;
+			line-height:20px;
+		}
+		.login .header .login-box-wrap .login-btn{
+			background-color:#003263;
+			padding:1px 9px;
+			border-radius:4px;
+		}
+		.login a:link {text-decoration: none; color: #ffffff;}
+		.login a:visited {text-decoration: none; color: #ffffff;}
+		.login a:active {text-decoration: none; color: #ffffff;}
+		.login a:hover {text-decoration: none; color: #ffffff;}
+		
+		.login .body{
+			width:100%;
+			background: url("/images/main/shape.png") repeat-x 0 0 transparent;
+		}
+		.login .body .login-bg{
+			margin-top:5%;
+			margin-left:10%;
+		}
+		.login .body .sign-up-box{
+			position:relative;
+			top:-100px;
+			padding-top:20px;
+			padding-left:60%;
+			padding-bottom:15px;
+			/*
+			opacity:0.2;
+			background-color:#000000;
+			*/
+		}
+		.login .body .sign-up-box .sign-up-box-wrap{
+			height:46px;
+			margin-bottom:5px;
+		}
+		.login .body .sign-up-box input{
+			padding:5px;
+			height:34px;
+			line-height:34px;
+			border:1px solid;
+			border-radius:6px;
+			border-color: #aaa #bbb #bbb #bbb;
+			-webkit-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			-moz-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+		}
+		.login .body .sign-up-box input.input-name{
+			width:180px;
+			margin-right:15px;
+		}
+		.login .body .sign-up-box input.input-order{
+			width:380px;
+		}
+		.login .body .sign-up-box .sign-up-btn{
+			float:left;
+			color:#ffffff;
+			background-color:#003263;
+			padding:7px 160px;
+			border-radius:6px;
+			-webkit-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			-moz-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+			box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
+		}
+
+		/* all */
+		::-webkit-input-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; }
+		::-moz-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; } /* firefox 19+ */
+		:-ms-input-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; } /* ie */
+		input:-moz-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; }
+
+		/* individual: webkit */
+		#field2::-webkit-input-placeholder { color:#00f; }
+		#field3::-webkit-input-placeholder { color:#090; background:lightgreen; text-transform:uppercase; }
+		#field4::-webkit-input-placeholder { font-family:"oxygen"; font-weight:bold; text-decoration:overline; letter-spacing:3px; color:#999; }
+
+		/* individual: mozilla */
+		#field2::-moz-placeholder { color:#00f; }
+		#field3::-moz-placeholder { color:#090; background:lightgreen; text-transform:uppercase; }
+		#field4::-moz-placeholder { font-family:"oxygen"; font-weight:bold; text-decoration:overline; letter-spacing:3px; color:#999; }
+	</style>
+</head>
+<body class="meeting_result">
+	<div class="container">
+		<div class="header">
+			<div>
+				<input type="button" value="회의록 생성">
+				<input type="button" value="공유하기">
+			</div>
+		</div>
+		<div class="body">
+			<div class="meta">
+				<div>회의 주제 - <%= result.meeting_result[0].subject %></div>
+				<div>회의 목표 - <%= result.meeting_result[0].goal %></div>
+				<div>시간 - <%= result.meeting_result[0].start_time %> ~ <%= result.meeting_result[0].end_time %> </div>
+				<div>참여자 - <%= result.meeting_result[0].user_list %></div>
+				<div>회의 평가</div>
+				<div>회의 만족도 - <%=result.meeting_result[0].satisfaction%></div>
+				<div>퍼실리테이션 평가 - <%=result.meeting_result[0].ft_appraisal%></div>
+				<div>MVP - <%=result.meeting_result[0].mvp%></div>
+				<div>자기 평가</div>
+				<%
+					var user_list = result.meeting_result[0].user_list.split(",");
+					var user_appraisal = result.meeting_result[0].user_appraisal.split(",");
+					for(var i=0;i<user_list.length;i++)
+					{
+				%>
+						<div><%=user_list[i]%> - <%=user_appraisal[i]%></div>
+				<%
+					}
+				%>
+			</div>
+			<div class="chart">
+				<div id="" class="bar-chart user_list_chart" style="width:200px;height:200px;"></div>
+				<div id="" class="bar-chart word_chart" style="width:200px;height:200px;"></div>
+				<div id="" class=" input_chart"></div>
+			</div>
+			<div class="agenda">
+				<% for(var i=0; i<result.meeting_result.length; i++) { %>
+					<div><%=result.meeting_result[i].agenda_subject%></div>
+					<div><%=result.meeting_result[i].agenda_goal%></div>
+					<div><%=result.meeting_result[i].agenda_start_time%> ~ <%=result.meeting_result[i].agenda_end_time%></div>
+					<div><%=result.meeting_result[i].user_list%></div>
+				<% } %>
+			</div>
+		</div>
+	</div>
+</body>
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
+<!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+		long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+		to to "classic" jQuery behavior -->
+<script>if ($ === undefined) $ = jQuery</script>
+<!-- /jQuery -->
+<!-- Bootstrap Components -->
+<script src="/javascripts/bootstrap.min.js"></script>
+<!-- Flot Plotting -->
+<script src="/javascripts/libs/flot/excanvas.min.js"></script>
+<script src="/javascripts/libs/flot/jquery.flot.js"></script>
+
+<!-- REQUIRED: Flot Chart Engine -->
+<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>			
+<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>		
+<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
+<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>	
+<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>	
+<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
+<script src="/javascripts/orchestra.js"></script>
+<script>
+	var $chrt_border_color = "#efefef";
+	var $chrt_grid_color = "#DDD"
+	
+	var $chrt_main = "#E24913";
+	var $chrt_second = "#4b99cb";
+	var $chrt_third = "#FF9F01";
+	var $chrt_fourth = "#87BA17";
+	var $chrt_fifth = "#BD362F";
+	var $chrt_mono = "#000";
+
+	$(document).ready(function(){
+		setupUserListChart();
+	})
+	
+	function setupUserListChart()
+	{
+		if ($(".bar-chart.user_list_chart").length) {
+			var data1 = [];
+			for (var i = 0; i <= 4; i += 1)
+				data1.push([i, parseInt(Math.random() * 100)]);
+
+			var data2 = [];
+			for (var i = 0; i <= 4; i += 1)
+				data2.push([i, parseInt(Math.random() * 100)]);
+
+			var data3 = [];
+			for (var i = 0; i <= 4; i += 1)
+				data3.push([i, parseInt(Math.random() * 100)]);
+
+			var ds = new Array();
+
+			ds.push({
+				data : data1,
+				bars : {
+					show : true,
+					barWidth : 0.2,
+					order : 1,
+				}
+			});
+			ds.push({
+				data : data2,
+				bars : {
+					show : true,
+					barWidth : 0.2,
+					order : 2
+				}
+			});
+			ds.push({
+				data : data3,
+				bars : {
+					show : true,
+					barWidth : 0.2,
+					order : 3
+				}
+			});
+			//Display graph
+			$.plot($(".bar-chart.user_list_chart"), ds, {
+				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
+				grid : {
+					show : true,
+					hoverable : true,
+					clickable : true,
+					tickColor : $chrt_border_color,
+					borderWidth : 0,
+					borderColor : $chrt_border_color,
+				},
+				legend : true,
+				tooltip : true,
+				tooltipOpts : {
+					content : "<b>%x</b> = <span>%y</span>",
+					defaultTheme : false
+				}
+			});
+			
+			$.plot($(".bar-chart.word_chart"), ds, {
+				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
+				grid : {
+					show : true,
+					hoverable : true,
+					clickable : true,
+					tickColor : $chrt_border_color,
+					borderWidth : 0,
+					borderColor : $chrt_border_color,
+				},
+				legend : true,
+				tooltip : true,
+				tooltipOpts : {
+					content : "<b>%x</b> = <span>%y</span>",
+					defaultTheme : false
+				}
+			});
+
+		}
+		
+		if ($(".bar-chart.user_list_chart").length) {
+			var data1 = [];
+			for (var i = 0; i <= 4; i += 1)
+				data1.push([i, parseInt(Math.random() * 100)]);
+
+			var data2 = [];
+			for (var i = 0; i <= 4; i += 1)
+				data2.push([i, parseInt(Math.random() * 100)]);
+
+			var data3 = [];
+			for (var i = 0; i <= 4; i += 1)
+				data3.push([i, parseInt(Math.random() * 100)]);
+
+			var ds = new Array();
+
+			ds.push({
+				data : data1,
+				bars : {
+					show : true,
+					barWidth : 0.2,
+					order : 1,
+				}
+			});
+			ds.push({
+				data : data2,
+				bars : {
+					show : true,
+					barWidth : 0.2,
+					order : 2
+				}
+			});
+			ds.push({
+				data : data3,
+				bars : {
+					show : true,
+					barWidth : 0.2,
+					order : 3
+				}
+			});
+			//Display graph
+			$.plot($(".bar-chart.user_list_chart"), ds, {
+				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
+				grid : {
+					show : true,
+					hoverable : true,
+					clickable : true,
+					tickColor : $chrt_border_color,
+					borderWidth : 0,
+					borderColor : $chrt_border_color,
+				},
+				legend : true,
+				tooltip : true,
+				tooltipOpts : {
+					content : "<b>%x</b> = <span>%y</span>",
+					defaultTheme : false
+				}
+			});
+			
+			$.plot($(".bar-chart.word_chart"), ds, {
+				colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
+				grid : {
+					show : true,
+					hoverable : true,
+					clickable : true,
+					tickColor : $chrt_border_color,
+					borderWidth : 0,
+					borderColor : $chrt_border_color,
+				},
+				legend : true,
+				tooltip : true,
+				tooltipOpts : {
+					content : "<b>%x</b> = <span>%y</span>",
+					defaultTheme : false
+				}
+			});
+
+		}
+	}
+</script>
+</html>

@@ -8,9 +8,26 @@ var _common_window_top = 50;
 var _common_windot_left = 20;
 var _new_z_index = 0;
 var _drawtool = 'pen';
+var _group_id = null;
+var _is_rightpanel_open = true;
+var _window_width = 0;
+var _window_height = 0;
+
+var _socket_common;
+var _socket_list;
+var _socket_postit;
+var _socket_mindmap;
+var _socket_vote;
+var _socket_matrix;
 
 $(document).ready(function() {
+	// 크기 조정
+	$(window).resize();
+
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
+	
+	// 소켓 열기
+	openSocket();
 	
 	// 콘텐트 관리 상자 초기화
 	share_box.init();
@@ -23,7 +40,7 @@ $(document).ready(function() {
 	});
 	
 	// 화이트보드 초기화
-	$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
+	//$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 	$('#meetingboard #btn_drawtool_pen').click(function() {
 		_drawtool = 'pen';
 	});
@@ -32,6 +49,10 @@ $(document).ready(function() {
 	});
 	$('#meetingboard #btn_drawtool_ellipse').click(function() {
 		_drawtool = 'ellipse';
+	});
+	
+	$('#meetingboard #btn_text_add').click(function() {
+		_drawtool = 'text';
 	});
 		
 	// 알림 예시
@@ -80,6 +101,46 @@ $(document).ready(function() {
 		return false;
     });
 });
+
+$(window).resize(function() {
+	resetSizeInfo();
+	resizeWhiteBoardControlBox();
+});
+
+// 소켓 열기
+function openSocket()
+{
+	_socket_common = io.connect('http://61.43.139.69:50000/group');
+	_socket_list = io.connect('http://61.43.139.69:50001/group');
+	_socket_postit = io.connect('http://61.43.139.69:50002/group');
+	_socket_mindmap = io.connect('http://61.43.139.69:50003/group');
+	_socket_vote = io.connect('http://61.43.139.69:50004/group');
+	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
+	_socket_board = io.connect('http://61.43.139.69:50006/group');
+}
+
+function resetSizeInfo()
+{
+	_window_width = $(window).width();
+	_window_height = $(window).height();
+}
+
+function resizeWhiteBoardControlBox()
+{
+	var whiteboard_control_box = $("#whiteboard_control_box");
+
+	if (_is_rightpanel_open == true)
+	{
+		var rightpanel = $("#rightpanel");
+		var width = _window_width - rightpanel.width();
+		whiteboard_control_box.width(width);
+	}
+	else
+	{
+		whiteboard_control_box.width(_window_width);
+	}
+}
+
 
 function getFileTypeInfo(filetype)
 {
@@ -152,7 +213,67 @@ var share_box = ( function() {
 				_createWindow();
 			}
 		};
-	}()); 
+	}());
+
+
+function onFileDragEnter(event)
+{
+	event.stopPropagation();
+	event.preventDefault();
+	
+	if (event.dataTransfer.dropEffect == "move")
+    	event.preventDefault();
+}    
+
+function onFileDragOver(event)
+{
+    event.stopPropagation();
+    event.preventDefault(); 
+    
+    if (event.dataTransfer.dropEffect == "move")
+      event.preventDefault();      
+}                  
+
+function onFileDrop(event)
+{
+    event.stopPropagation();
+    event.preventDefault(); 
+    
+	console.log(event);
+
+    var file = event.dataTransfer.files[0];      
+           
+    var imageType = /image.*/;
+    var textType = /text.*/;
+    var isImage;
+    
+    if(file.type.match(imageType)){
+      isImage = true; 
+    }
+    else if(file.type.match(textType)){
+      isImage = false;
+    } 
+             
+    var reader = new FileReader();    
+    
+    reader.onload = (function(aFile){return function(e) {         
+			var result = e.target.result;  
+			if(isImage)
+			{
+				dropImage.src = result;                                                                            
+				dropBox.appendChild(dropImage)
+			}
+			else
+			{
+				dropBox.innerHTML = result;
+			}        
+		};
+    })(file);
+      
+    if(isImage){ reader.readAsDataURL(file); }
+    else { reader.readAsText(file,"utf-8"); }
+}
+
 
 // 링크 추가
 function addLinkList(title, link)
@@ -191,7 +312,88 @@ function setRightpanel(panel)
 	$("#rightpanel #panelcontents #" + panel).show();
 }
 
-function addTool(type)
+
+var _tool_type = "";
+var _tool_source = "";
+/* 도구별 소스를 동적으로 가져옴 */
+function getToolSource(toolName, initFuncName)
+{
+	var source_url = "";
+	var tool_index = "";
+	_tool_type = toolName;
+	
+	switch (toolName)
+	{
+	case "list":
+		source_url = "../tools/list/list.html";
+		tool_index = _tool_list_count++;
+		break;
+	case "postit":
+		source_url = "../tools/postit/postit.html";
+		tool_index = _tool_postit_count++;
+		break;
+	case "mindmap":
+		source_url = "../tools/d3_mindmap/mindmap.html";
+		tool_index = _tool_mindmap_count++;
+		break;
+	case "vote":
+		source_url = "../tools/vote/vote.html";
+		tool_index = _tool_vote_count++;
+		break;
+	case "matrix":
+		source_url = "../tools/matrix/matrix.html";
+		tool_index = _tool_matrix_count++;
+		break;
+	}
+	
+	$.ajax({
+		type: "POST",
+		url: source_url,
+		data: {'index': tool_index, 'group_id': _group_id},
+		dataType: "json",
+		success: function(data) {
+			console.log(data);
+			initFuncName();
+			_tool_source = data.source;
+			includeFileDynamically(data.include_list);
+			addTool(_tool_type, _tool_source);
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+}
+
+/* 동적으로 파일 추가 */
+function includeFileDynamically(list) {
+	console.log("call lncludeFileDynamically");
+	for (var i = 0; i < list.length; i++)
+	{
+		var include_target = list[i];
+	
+		if (include_target.indexOf(".js") != -1)
+		{
+			var oScript = document.createElement("script");
+			oScript.type = "text/javascript";
+			oScript.charset ='utf-8';
+			oScript.src = include_target;			
+			document.getElementsByTagName("head")[0].appendChild(oScript);
+		}
+		else if (include_target.indexOf(".css") != -1)
+		{
+			var oCSS = document.createElement("link");
+			oCSS.rel = "stylesheet";
+			oCSS.href = include_target;
+			oCSS.type = "text/css";
+			document.getElementsByTagName("head")[0].appendChild(oCSS);
+		}
+	}
+
+}
+
+
+function addTool(type, source)
 {
 	var tool = new Array();
 
@@ -217,8 +419,8 @@ function addTool(type)
 		tool['width'] = list_window_width;
 		tool['height'] = list_window_height;
 		tool['left'] = _common_windot_left;
-		tool['top'] = _common_window_top;
-		tool['source'] = '<body><div class="list_tool" id="list1">';
+		tool['top'] = _common_window_top;                                                                                                                                                                  
+		tool['source'] = source;		/*tool['source'] = '<body><div class="list_tool" id="list1">';
 			tool['source'] += '<section id="main_section" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px">';
 				tool['source'] += '<article>';
 				tool['source'] += '<header>';
@@ -230,7 +432,7 @@ function addTool(type)
 							tool['source'] += '<div id="initButton" onClick="initData()"><h2>Clear</h2></div>';
 						tool['source'] += '</div>';
 					tool['source'] += '</div>';
-				tool['source'] += '</header>';*/
+				tool['source'] += '</header>';
 				tool['source'] += '<div class="list_space">';
 					tool['source'] += '<div class="children">';
 					tool['source'] += '</div>';
@@ -238,6 +440,7 @@ function addTool(type)
 				tool['source'] += '</article>';
 			tool['source'] += '</section>';
 		tool['source'] += '</div></body>'; 	// 리스트 도구 소스 들어갈 부분
+		*/
 		break;
 	case "postit":
 		_tool_postit_count++;
@@ -248,7 +451,8 @@ function addTool(type)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<div class="toolwindow" id="postit1">';
+		tool['source'] = source;		////////////
+		/*tool['source'] = '<div class="toolwindow" id="postit1">';
 		tool['source'] += 	'<header>';
 		tool['source'] += '<div class="title_line">';
 		tool['source'] += '<div id="title_text">Post-it Tool</div>';
@@ -264,6 +468,7 @@ function addTool(type)
 		tool['source'] += '</div>';
 		tool['source'] += '</article>';
 		tool['source'] += '</div>';		// 포스트잇 도구 소스 들어갈 부분			
+		*/
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;
@@ -274,6 +479,8 @@ function addTool(type)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
+		tool['source'] = source;
+		/*
 		tool['source'] = '<div class="mindmap_tool" id="mindmap1">';
 		tool['source'] = '<div id="list_tool">';
 		tool['source'] = '<div class="list_space">';
@@ -284,7 +491,7 @@ function addTool(type)
 		tool['source'] = '</div>';
 		tool['source'] = '<svg id="svg" viewBox="150 100 600 400" >';
 		tool['source'] = '</svg>';
-		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분
+		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분*/
 		break;
 	case "vote":
 		_tool_vote_count++;
@@ -306,6 +513,8 @@ function addTool(type)
 		tool['height'] = matrix_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
+		tool['source'] = source;
+		/*
 		tool['source'] = '<div class="matrix">';
 		tool['source'] += '<div class="container">';
 		tool['source'] += '<section class="main_section">';
@@ -328,6 +537,7 @@ function addTool(type)
 		tool['source'] += ' </section>';
 		tool['source'] += '</div>';
 		tool['source'] += '</div>';
+		*/
 		break;
 	}
 	_common_windot_left += 10;
@@ -557,6 +767,49 @@ function transWindow(name)
 }
 
 
+function showEvaluateMeetingWindow()
+{
+	var html = "";
+		html += "<div>";
+			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
+			html += "<div>How are you satisfied with the meeting?"
+				html += "<div id=\"meeting_rating\"></div>";
+			html += "</div>";
+			html += "<div>How are you satisfied with the facilitation?";
+				html += "<div id=\"fac_rating\"></div>";
+			html += "</div>";
+			html += "<div>How are you satisfied with yourself in the meeting?";
+				html += "<div id=\"self_rating\"></div>";
+			html += "</div>";
+		html += "</div>";
+		
+	console.log(html);
+
+	dialog = bootbox.dialog(html, [{
+							"label" : "Finish",
+							"class" : "btn-success",
+							"callback": function() {
+								var meeting_satisfaction_point = $("#meeting_rating").jqxRating('getValue');
+								var fac_satisfaction_point = $("#fac_rating").jqxRating('getValue');
+								var self_satisfaction_point = $("#self_rating").jqxRating('getValue');
+								// 페이지 이동
+								return true;
+							}
+						}]);
+						
+	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+}
+
+
+
+
+
+
+
+
+
 function changePenColor(color)
 {
 	_pen_color = color;
@@ -638,24 +891,24 @@ if(window.addEventListener) {
 		// 마우스 업시 등록한 마우스 이벤트 해지 
 		function onMouseUp_Canvas( event ){
 			console.log("Call onMouseUp_Canvas");
-			console.log(canvas);
+			var now_point = getMousePoint(event);
 			switch (_drawtool)
 			{
 				case 'pen':
+					console.log(now_point);
 					break;
 				case 'rect':
-					var now_point = getMousePoint(event);
-					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
 					var width = now_point.x - prev_point.x;
 					var height = now_point.y - prev_point.y;
 					GraphicRect('canvasView', prev_point.x, prev_point.y, width, height);
 					break;
 				case 'ellipse':
-					var now_point = getMousePoint(event);
-					console.log("[Now] x : " + now_point.x + ", y : " + now_point.y);
 					var width = now_point.x - prev_point.x;
 					var height = now_point.y - prev_point.y;
 					GraphicCircle('canvasView', prev_point.x, prev_point.y, width, height);
+					break;
+				case 'text':
+					addTextToCanvas(now_point.x, now_point.y);
 					break;
 			}
 			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
@@ -691,54 +944,71 @@ if(window.addEventListener) {
 	}
 }
 
+function addTextToCanvas(x, y)
+{
+	console.log("call addTextToCanvas");
+	var drawtext_container = $('#meetingboard #drawtext_container');
+	var inputbox = $('#meetingboard #drawtext_container #inputbox');
+	inputbox.val("");
+	inputbox.focus();
+	drawtext_container.css('display', 'block');
+	drawtext_container.css('left', x + 'px');
+	drawtext_container.css('top', y + 'px');
+	console.log();
+}
 
+	
+function GraphicPen(objBoard)
+{
+	this.pen	= objBoard.getContext('2d');
 
-
-	
-	function GraphicPen(objBoard)
-	{
-		this.pen	= objBoard.getContext('2d');
-	
-		this.moveTo	= function(point) {
-			this.pen.beginPath();
-			this.pen.strokeStyle = _pen_color;
-			this.pen.moveTo( point.x, point.y );
-		}
-	
-		this.draw = function(point) {
-			this.pen.lineTo( point.x, point.y );
-			this.pen.stroke();
-		}
-	
+	this.moveTo	= function(point) {
+		this.pen.beginPath();
+		this.pen.strokeStyle = _pen_color;
+		this.pen.moveTo( point.x, point.y );
 	}
 
-	function GraphicRect(objBoard, left, top, width, height)
-	{
-	    var canvas = document.getElementById(objBoard);
-	    if (canvas.getContext) {
-	      var context = canvas.getContext('2d');
-	      
-	      context.fillStyle = _fill_color;
-	      context.fillRect(left, top, width, height);
-	    } else {
-	    	console.log("canvas 안 됨");
-	    }
+	this.draw = function(point) {
+		this.pen.lineTo( point.x, point.y );
+		this.pen.stroke();
 	}
-	
-	function GraphicCircle(objBoard, x, y, width, height)
-	{
-		var canvas = document.getElementById(objBoard);
-		var ctx = canvas.getContext('2d');
-		var startAngle = 0;
-		var endAngle = 360 * Math.PI / 180;
-		
-		ctx.fillStyle = _fill_color;
-		ctx.fillRect(x, y, width, height);
-		ctx.beginPath();
-        ctx.arc(x, y, startAngle, endAngle, Math.PI*2, true);
-        
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        //ctx.closePath();
+
+}
+
+function GraphicRect(objBoard, left, top, width, height)
+{
+    var canvas = document.getElementById(objBoard);
+    if (canvas.getContext) {
+      var context = canvas.getContext('2d');
+      
+      context.fillStyle = _fill_color;
+      context.fillRect(left, top, width, height);
+    } else {
+    	console.log("canvas 안 됨");
     }
+}
+
+function GraphicCircle(objBoard, x, y, width, height)
+{
+	var canvas = document.getElementById(objBoard);
+	var ctx = canvas.getContext('2d');
+	var startAngle = 0;
+	var endAngle = 360 * Math.PI / 180;
+	
+	ctx.fillStyle = _fill_color;
+	ctx.fillRect(x, y, width, height);
+	ctx.beginPath();
+    ctx.arc(x, y, startAngle, endAngle, Math.PI*2, true);
+    
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    //ctx.closePath();
+}
+
+function GraphicText(objBoard, x, y, text)
+{
+	var canvas = document.getElementById(objBoard);
+	var canvas_context = canvas.getContext("2d");
+	canvas.fillText(text, x, y);
+}

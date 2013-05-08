@@ -45,7 +45,12 @@ app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
 app.post('/page/meeting_save', meeting.meeting_save);
 
-app.get('/tools/list/list', tools.list);
+/* 도구 관련 */
+app.get('/tools/list', tools.list);
+app.get('/tools/postit', tools.postit);
+app.get('/tools/mindmap', tools.mindmap);
+app.get('/tools/vote', tools.vote);
+app.get('/tools/matrix', tools.matrix);
 
 app.post('/lib/upload', function(req, res) {
 	console.log(JSON.stringify(req.files)); 

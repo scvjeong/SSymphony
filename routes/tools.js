@@ -5,7 +5,21 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 
 exports.list = function(req, res){
-	console.log("get list tool");
-	
-	res.render('tools/list/list', { title: 'Express' });
+	res.render('tools/list', { title: 'Express' });
+};
+
+exports.postit = function(req, res){
+	res.render('tools/postit', { title: 'Express' });
+};
+
+exports.mindmap = function(req, res){
+	res.render('tools/mindmap', { title: 'Express' });
+};
+
+exports.vote = function(req, res){
+	res.render('tools/vote', { title: 'Express' });
+};
+
+exports.matrix = function(req, res){
+	res.render('tools/matrix', { title: 'Express' });
 };

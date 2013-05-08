@@ -218,10 +218,10 @@ function addTool(type)
 		tool['height'] = list_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<div id="container" class="listtool" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px; overflow-y: scroll">';
+		tool['source'] = '<body><div class="list_tool" id="list1">';
 			tool['source'] += '<section id="main_section" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px">';
 				tool['source'] += '<article>';
-				/*tool['source'] += '<header>';
+				tool['source'] += '<header>';
 					tool['source'] += '<div class="home_line">';
 						tool['source'] += '<div class="home_box">';
 							tool['source'] += '<div id="homeButton"><h2>Home</h2></div>';
@@ -237,7 +237,7 @@ function addTool(type)
 				tool['source'] += '</div>';
 				tool['source'] += '</article>';
 			tool['source'] += '</section>';
-		tool['source'] += '</div>'; 	// 리스트 도구 소스 들어갈 부분
+		tool['source'] += '</div></body>'; 	// 리스트 도구 소스 들어갈 부분
 		break;
 	case "postit":
 		_tool_postit_count++;
@@ -248,31 +248,22 @@ function addTool(type)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-
-		/*
-
-
-			<header>
-				<div class="title_line">
-					<div id="title_text">Post-it Tool</div>
-					<div id="add_group" onClick="addGroup()">+</div>
-				</div>
-			</header>
-			<article>
-				<div class="group_container" groupid="0">
-					<input type="text" class="group_title" titleid="0" onKeyDown="keyInput()"/>
-					<div class="add_postit">+</div> 
-					<div class="container">
-								
-					</div>
-				</div>
-
-			</article>
-
-	
-
-		*/
-		tool['source'] = '<header><div class="title_line"><div id="title_text">Post-it Tool</div><div id="add_group" onClick="addGroup()">+</div></div></header>';	// 포스트잇 도구 소스 들어갈 부분		
+		tool['source'] = '<div class="toolwindow" id="postit1">';
+		tool['source'] += 	'<header>';
+		tool['source'] += '<div class="title_line">';
+		tool['source'] += '<div id="title_text">Post-it Tool</div>';
+		tool['source'] += '<div id="add_group" onClick="postit_add_group()">+</div>';
+		tool['source'] += '</div>';
+		tool['source'] += '</header>';
+		tool['source'] += '<article>';
+		tool['source'] += '<div class="group_container" groupid="0">';
+		tool['source'] += '<input type="text" class="group_title" titleid="0" onKeyDown="postit_key_input()"/>';
+		tool['source'] += '<div class="add_postit">+</div>';
+		tool['source'] += '<div class="container">';
+		tool['source'] += '</div>';
+		tool['source'] += '</div>';
+		tool['source'] += '</article>';
+		tool['source'] += '</div>';		// 포스트잇 도구 소스 들어갈 부분			
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;
@@ -283,11 +274,17 @@ function addTool(type)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		/*tool['source'] = '<div id="main">';
-			tool['source'] += '<div id="jinomap" tabindex="-1" style="outline:none; border: none; position:relative; overflow:hidden; background:#f4f4f4;">';
-			tool['source'] += '</div>';
-		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분*/
-		tool['source'] = '<iframe src="../mindmap/start.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분
+		tool['source'] = '<div class="mindmap_tool" id="mindmap1">';
+		tool['source'] = '<div id="list_tool">';
+		tool['source'] = '<div class="list_space">';
+		tool['source'] = '<div class="children">';
+			tool['source'] = '</div>';
+			tool['source'] = '</div>';
+			tool['source'] = '<div id="draw_button" onClick="mindmap_draw()">Draw</div>';
+		tool['source'] = '</div>';
+		tool['source'] = '<svg id="svg" viewBox="150 100 600 400" >';
+		tool['source'] = '</svg>';
+		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분
 		break;
 	case "vote":
 		_tool_vote_count++;

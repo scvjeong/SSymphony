@@ -1,5 +1,6 @@
-<tool_guide>
-	<if> </if>
+<?xml version="1.0" encoding="utf-8" ?>
+<tool_name>
+	<flag> </flag>
 	<name>Brainwriting</name>
 	<tool>postit</tool>
 	<image>이미지 경로</image>
@@ -21,10 +22,10 @@
 			5) 적절한 아이디어가 채워지면 분류 등 다른 작업 수행
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>6-3-5 Method</name>
 	<tool>matrix</tool>
 	<image>이미지 경로</image>
@@ -48,10 +49,10 @@
 			7) 마지막 줄까지 완료하면 30분 동안 108개의 아이디어 완성
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Random Word</name>
 	<tool>mindmap, postit</tool>
 	<image>이미지 경로</image>
@@ -68,10 +69,10 @@
 			2) 무작위로 추출된 단어와 주제를 연관지어 아이디어 도출
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Rich Picture</name>
 	<tool>whiteboard</tool>
 	<image>이미지 경로</image>
@@ -90,10 +91,10 @@
 			5) 표현이 불명확한 경우 그림을 보강하거나 설명 추가
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>SCAMPER</name>
 	<tool>list</tool>
 	<image>이미지 경로</image>
@@ -114,10 +115,10 @@
 			R - 재정리하기, 순서 바꾸기
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>SWOT</name>
 	<tool>matrix</tool>
 	<image>이미지 경로</image>
@@ -137,10 +138,10 @@
 			6) 도출된 전략은 조직의 미션, 비전, 목표 등에 비추어 적절성 검증
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Logic tree</name>
 	<tool>mindmap</tool>
 	<image>이미지 경로</image>
@@ -162,10 +163,10 @@
 			5) 토의를 통해 드러난 요인 중 가장 중요한 요인을 탐색
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>5 Why</name>
 	<tool>mindmap</tool>
 	<image>이미지 경로</image>
@@ -185,10 +186,10 @@
 			4) 주어진 문제에 대해서 계속해서 원인을 물어 가장 근본 원인이 무엇인지를 파악
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Stake Holder(이해관계자)</name>
 	<tool>matrix</tool>
 	<image>이미지 경로</image>
@@ -209,10 +210,10 @@
 			5) 분석 결과 갈등 요인을 파악한 후 이를 예방하고 해소할 수 있는 방법을 모색
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>T-chart</name>
 	<tool>matrix</tool>
 	<image>이미지 경로</image>
@@ -231,10 +232,10 @@
 			5) 내용을 보완하는 질문을 던져 추가 아이디어를 모은다.
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Pay-off Matrix</name>
 	<tool>matrix</tool>
 	<image>이미지 경로</image>
@@ -253,10 +254,10 @@
 			4) 평가된 과제들을 해당되는 사분면에 표시하고 GS 영역부터 차례로 우선순위화
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Decision Grid</name>
 	<tool>matrix</tool>
 	<image>이미지 경로</image>
@@ -277,10 +278,10 @@
 			6) 합산 및 결정
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Multi Voting</name>
 	<tool>list, vote</tool>
 	<image>이미지 경로</image>
@@ -299,10 +300,10 @@
 			4) 투표를 실시한 후 가장 투표를 많이 받은 아이디어를 선정
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Fist to Five</name>
 	<tool>vote</tool>
 	<image>이미지 경로</image>
@@ -321,10 +322,10 @@
 			4) 동률이 나왔을 경우 동률 항목만 다시 진행
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>
 
-<tool_guide>
-	<if> </if>
+<tool_name>
+	<flag> </flag>
 	<name>Gradient Scale of Agreement(동의 정도 확인)</name>
 	<tool>vote</tool>
 	<image>이미지 경로</image>
@@ -344,4 +345,4 @@
 			6) 참여자 모두 1~3의 범위에 속하면 합의되었음을 선언
 		</method>
 	</guide>
-</tool_guide>
+</tool_name>

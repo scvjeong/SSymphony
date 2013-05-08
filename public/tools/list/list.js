@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<head>
-	<meta charset="utf-8">
-	<title>List Tool</title>
-	<meta name="description" content="List Tool" />
-	<link rel="stylesheet" href="./css/list.css">
-	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-	<script src="./lib/socket.io.js"></script>	
-	<script>	
+
 		//var list_var = {};
 		
 		socket = io.connect('http://61.43.139.69:50001/group');	// socket.io 서버에 접속
@@ -662,40 +654,3 @@
 			socket.emit('set_change_tree_data', { group: tmpGroup, tool: tmpTool, change: 'mindmap1' });
 		}
 
-	</script>
-</head>
-<body>
-
-<div class="list_tool" id="list1">
-
-	<header id="main_header">
-		<h1>List Tool</h1>
-	</header>
-	<div id="container">
-    <section id="main_section">
-		<article>
-			<header>
-				<div class="home_line">
-					<div class="home_box">
-						<div id="homeButton" onClick="list_change_data()"><h2>Change</h2></div>
-						<div id="initButton" onClick="list_init_data()"><h2>Clear</h2></div>
-					</div>
-					<div class="init_box">
-						<div id="addButton" onClick="list_add_new_input()">+</div>
-					</div>
-				</div>
-			</header>
-			<div class="list_space">
-				<div class="children">
-				
-				</div>
-			</div>
-		</article>
-    </section>
-	</div>
-
-</div>
-
-
-</body>
-</html>

@@ -18,7 +18,8 @@
       -moz-box-pack: center;
       -webkit-box-pack: center;
     }
-    #wrapper{
+
+	.list_tool {
       max-width: 600px;
       margin: 5px 0px;
       display: -moz-box;
@@ -28,6 +29,7 @@
       -moz-box-flex: 1;
       -webkit-box-flex: 1;
     }
+
     #main_header {
 	  display: -moz-box;
 	  display: -webkit-box;
@@ -103,18 +105,29 @@
 		cursor:pointer;
 		background:#004596;
 	}
-
 	.home_box {
-		width: 88%;		
+		width: 95%;		
 	}
 	.init_box {
-		width: 12%;
+		width: 5%;
 	}
 	#homeButton {
-		width: 60px;
+		float: left;
+		width: 20%;
 		cursor:pointer;
 	}
+	
 	#initButton {
-		width: 60px;
+		float: right;
+		width: 80%;
+		cursor:pointer;
+	}
+
+	#addButton {
+		width: 20px;
+		font: bold 18px;
+		text-align: center;
+		background: #FFFBB9;
+		border: 1px solid #999999;
 		cursor:pointer;
 	}

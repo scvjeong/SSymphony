@@ -178,9 +178,9 @@ API References
 - Server
 	: on('set_change_parent', data)
 - Client API
-	: emit('set_change_parent', {group: 'group', tool: 'tool', id: 'id', parent: 'parent'}) 
+	: emit('set_change_parent', {group: 'group', tool: 'tool', id: 'id', parent: 'parent', val: 'val'}) 
 - Parameter
-	: group(그룹명), tool(도구명), id(Id 값), parent(Parent 값) 
+	: group(그룹명), tool(도구명), id(Id 값), parent(Parent 값), val(데이터 값) 
 
 
 

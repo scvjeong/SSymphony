@@ -116,6 +116,7 @@ function openSocket()
 	_socket_mindmap = io.connect('http://61.43.139.69:50003/group');
 	_socket_vote = io.connect('http://61.43.139.69:50004/group');
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
+	_socket_board = io.connect('http://61.43.139.69:50006/group');
 }
 
 function resetSizeInfo()
@@ -221,7 +222,7 @@ function onFileDragEnter(event)
 	event.preventDefault();
 	
 	if (event.dataTransfer.dropEffect == "move")
-    	event.preventDefault();                    
+    	event.preventDefault();
 }    
 
 function onFileDragOver(event)
@@ -270,7 +271,7 @@ function onFileDrop(event)
     })(file);
       
     if(isImage){ reader.readAsDataURL(file); }
-    else { reader.readAsText(file,"EUC-KR"); }
+    else { reader.readAsText(file,"utf-8"); }
 }
 
 
@@ -312,12 +313,14 @@ function setRightpanel(panel)
 }
 
 
+var _tool_type = "";
 var _tool_source = "";
 /* 도구별 소스를 동적으로 가져옴 */
 function getToolSource(toolName, initFuncName)
 {
 	var source_url = "";
 	var tool_index = "";
+	_tool_type = toolName;
 	
 	switch (toolName)
 	{
@@ -343,25 +346,23 @@ function getToolSource(toolName, initFuncName)
 		break;
 	}
 	
-	console.log("ajax start | source_url : " + source_url);
 	$.ajax({
-		type: "GET",
+		type: "POST",
 		url: source_url,
 		data: {'index': tool_index, 'group_id': _group_id},
-		dataType: "text",
+		dataType: "json",
 		success: function(data) {
 			console.log(data);
 			initFuncName();
 			_tool_source = data.source;
 			includeFileDynamically(data.include_list);
-			//addTool();
+			addTool(_tool_type, _tool_source);
 		},
 		error: function(err) {
 			console.log(err);
 			return false;
 		}
 	});
-	console.log("ajax end");
 }
 
 /* 동적으로 파일 추가 */
@@ -392,7 +393,7 @@ function includeFileDynamically(list) {
 }
 
 
-function addTool(type)
+function addTool(type, source)
 {
 	var tool = new Array();
 
@@ -418,8 +419,8 @@ function addTool(type)
 		tool['width'] = list_window_width;
 		tool['height'] = list_window_height;
 		tool['left'] = _common_windot_left;
-		tool['top'] = _common_window_top;
-		tool['source'] = '<body><div class="list_tool" id="list1">';
+		tool['top'] = _common_window_top;                                                                                                                                                                  
+		tool['source'] = source;		/*tool['source'] = '<body><div class="list_tool" id="list1">';
 			tool['source'] += '<section id="main_section" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px">';
 				tool['source'] += '<article>';
 				tool['source'] += '<header>';
@@ -431,7 +432,7 @@ function addTool(type)
 							tool['source'] += '<div id="initButton" onClick="initData()"><h2>Clear</h2></div>';
 						tool['source'] += '</div>';
 					tool['source'] += '</div>';
-				tool['source'] += '</header>';*/
+				tool['source'] += '</header>';
 				tool['source'] += '<div class="list_space">';
 					tool['source'] += '<div class="children">';
 					tool['source'] += '</div>';
@@ -439,6 +440,7 @@ function addTool(type)
 				tool['source'] += '</article>';
 			tool['source'] += '</section>';
 		tool['source'] += '</div></body>'; 	// 리스트 도구 소스 들어갈 부분
+		*/
 		break;
 	case "postit":
 		_tool_postit_count++;
@@ -449,7 +451,8 @@ function addTool(type)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<div class="toolwindow" id="postit1">';
+		tool['source'] = source;		////////////
+		/*tool['source'] = '<div class="toolwindow" id="postit1">';
 		tool['source'] += 	'<header>';
 		tool['source'] += '<div class="title_line">';
 		tool['source'] += '<div id="title_text">Post-it Tool</div>';
@@ -465,6 +468,7 @@ function addTool(type)
 		tool['source'] += '</div>';
 		tool['source'] += '</article>';
 		tool['source'] += '</div>';		// 포스트잇 도구 소스 들어갈 부분			
+		*/
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;
@@ -475,6 +479,8 @@ function addTool(type)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
+		tool['source'] = source;
+		/*
 		tool['source'] = '<div class="mindmap_tool" id="mindmap1">';
 		tool['source'] = '<div id="list_tool">';
 		tool['source'] = '<div class="list_space">';
@@ -485,7 +491,7 @@ function addTool(type)
 		tool['source'] = '</div>';
 		tool['source'] = '<svg id="svg" viewBox="150 100 600 400" >';
 		tool['source'] = '</svg>';
-		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분
+		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분*/
 		break;
 	case "vote":
 		_tool_vote_count++;
@@ -507,6 +513,8 @@ function addTool(type)
 		tool['height'] = matrix_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
+		tool['source'] = source;
+		/*
 		tool['source'] = '<div class="matrix">';
 		tool['source'] += '<div class="container">';
 		tool['source'] += '<section class="main_section">';
@@ -529,6 +537,7 @@ function addTool(type)
 		tool['source'] += ' </section>';
 		tool['source'] += '</div>';
 		tool['source'] += '</div>';
+		*/
 		break;
 	}
 	_common_windot_left += 10;
@@ -1021,5 +1030,9 @@ function GraphicText(objBoard, x, y, text)
 	var canvas = document.getElementById(objBoard);
 	var canvas_context = canvas.getContext("2d");
 	canvas.fillText(text, x, y);
+<<<<<<< HEAD
 }
 >>>>>>> v20130502-01
+=======
+}
+>>>>>>> v20130508-03

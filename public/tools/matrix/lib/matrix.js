@@ -9,6 +9,7 @@ var setupFlag = { data_init:true, row:false, col:false };
 var optionId = { set:999999, row:999998, col:999997 };
 var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
 var _key_code = null // 키 입력 값 저장
+var _box_count = 0;
 
 var inputFlag = 0;	//키입력 감지하기 위한 변수
 
@@ -84,8 +85,9 @@ function setDoMatrix(toolName) {
 	if( setupFlag.data_init && setupFlag.row && setupFlag.col )
 	{
 		setupFlag.data_init = false;
-		var tmpRow = setupData.row;
-		var tmpCol = setupData.col;
+		var tmpRow = setupData.row*1;
+		var tmpCol = setupData.col*1;
+		_box_count = 0;
 		var toolBox = $('#'+toolName);
 		var tmpMatrix = $('.matrix_table tbody', toolBox);
 		var colGroup =  $('.matrix_table colgroup', toolBox);
@@ -274,10 +276,11 @@ function addRemoteInputbox( lastId , val, parent, index, toolName )
 function setupBox(lastId, toolName)
 {
 	var toolBox = $('#'+toolName);
-	var boxCount = $('.matrix_table input', toolBox).length;
-	var $div = $(".matrix-box:not(input):eq("+boxCount+")", toolBox);
+	//var boxCount = $('.matrix_table input', toolBox).length;
+
+	var $div = $(".matrix-box:not(input):eq("+_box_count+")", toolBox);
 	$div.append(makeInputbox(lastId, "", toolName));
-	boxCount++;
+	_box_count++;
 }
 
 function focusInput(t)
@@ -352,13 +355,13 @@ _socket_matrix.on('get_delete_tree_data', function (data) {
 });
 
 _socket_matrix.on('get_last_id', function (data) {
+	
 	lastId = data.last;
 	var toolBox = $('#'+data.tool);
 	var totalBoxCount = $('td', toolBox).length;
-	var boxCount = $('.matrix_table input', toolBox).length;
-	console.log("toolName: "+data.tool);
+	//var boxCount = $('.matrix_table input', toolBox).length;
 	
-	if( totalBoxCount > boxCount )
+	if( totalBoxCount > _box_count )
 	{
 		setupBox(lastId, data.tool);
 		$(".matrix-input:first").focus();

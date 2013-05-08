@@ -343,26 +343,30 @@ function getToolSource(toolName, initFuncName)
 		break;
 	}
 	
+	console.log("ajax start | source_url : " + source_url);
 	$.ajax({
 		type: "GET",
 		url: source_url,
-		data: {index: tool_index, group_id: _group_id},
+		data: {'index': tool_index, 'group_id': _group_id},
 		dataType: "text",
 		success: function(data) {
+			console.log(data);
 			initFuncName();
 			_tool_source = data.source;
-			includeFileDynamically(data.include_list)
-			addTool();
+			includeFileDynamically(data.include_list);
+			//addTool();
 		},
 		error: function(err) {
 			console.log(err);
 			return false;
 		}
 	});
+	console.log("ajax end");
 }
 
 /* 동적으로 파일 추가 */
 function includeFileDynamically(list) {
+	console.log("call lncludeFileDynamically");
 	for (var i = 0; i < list.length; i++)
 	{
 		var include_target = list[i];

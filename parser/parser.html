@@ -10,13 +10,15 @@
 				url : "tool_guide.xml",
 				dataType : "xml",
 				success: function(xml) {
-					//console.log(xml);
 					$(xml).find("guide_name").each(function(){		
 						var flag = $(this).find("flag").text();
 						var name = $(this).find("name").text();
 						var tool = $(this).find("tool").text();
 						var imageUrl = $(this).find("image").text();
-						console.log(tool);
+						var purpose = $(this).find("purpose").text();
+						var rule = $(this).find("rule").text();
+						var method = $(this).find("method").text();
+						//console.log(method);
 					})
 				},
 				error: function(err) {

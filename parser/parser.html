@@ -4,18 +4,23 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script>	
 		$(document).ready(function() {
+
 			$.ajax({
 				type: "get",
 				url : "tool_guide.xml",
 				dataType : "xml",
 				success: function(xml) {
-					$(xml).find("tool_name").each(function(){		
+					//console.log(xml);
+					$(xml).find("guide_name").each(function(){		
 						var flag = $(this).find("flag").text();
 						var name = $(this).find("name").text();
 						var tool = $(this).find("tool").text();
 						var imageUrl = $(this).find("image").text();
 						console.log(tool);
-					});
+					})
+				},
+				error: function(err) {
+					console.log(err);
 				}
 			});
 		});

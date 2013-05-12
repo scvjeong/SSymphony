@@ -17,7 +17,15 @@ API References
 - Parameter
 	: group(그룹명)
 
-	ex) socket.emit('join_room', { group: 'group1' });
+
+
+◎ set_client : 자신의 클라이언트 번호 서버에 요청하는 함수
+- Server
+	: on('set_client', {group: 'group', user: 'user'})
+- Client API
+	: on('set_client', data) 
+- Parameter
+	: group(그룹명), user(유저 ID)
 
 
 

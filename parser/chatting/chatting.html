@@ -23,13 +23,10 @@
 			tmp_group = "group"+group;
 
 			socket.emit('join_room', { group: tmp_group });
+			socket.emit('set_client', { group: tmp_group, user: "godong" });
 			socket.emit('set_data', { group: tmp_group, tool: tmp_tool });
 		}
 
-		////  클라이언트 번호 얻어오는 부분  ////
-		socket.on('get_client', function (data) {
-			tmp_client = data.client;
-		});
 		
 		////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
 		socket.on('get_data', function (data) {

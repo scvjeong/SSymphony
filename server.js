@@ -32,7 +32,7 @@ function server(io)
 			client.llen(userInfo, function (err,reply) {
 				console.log("num: "+reply);
 				
-				rpush(userInfo, tmpUser);
+				client.rpush(userInfo, tmpUser);
 				
 			});
 

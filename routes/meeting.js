@@ -20,11 +20,15 @@ exports.main = function(req, res){
 
 exports.meeting_appraisal = function(req, res){
 	/** session start **/
-	if( !req.session.email || !req.session.email.length )
-		res.redirect("/");
+	//if( !req.session.email || !req.session.email.length )
+	//	res.redirect("/");
 	/** session end **/
 
-	res.render('appraisal', { title: 'Express' });
+	res.render('meeting_appraisal', { title: 'Express' });
+};
+
+exports.post_meeting_appraisal = function(req, res){
+	res.render('meeting_appraisal', { title: 'Express' });
 };
 
 exports.meeting_result = function(req, res){

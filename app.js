@@ -41,9 +41,12 @@ app.get('/page/quick_meeting', quick_meeting.quick_meeting);
 app.get('/page/meeting_template', meeting_planning.meeting_template);
 app.get('/page/setting_agenda', meeting_planning.setting_agenda);
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
+
+/* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
 app.post('/page/meeting_save', meeting.meeting_save);
+app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 
 /* 도구 관련 */
 app.get('/tools/list', tools.list);

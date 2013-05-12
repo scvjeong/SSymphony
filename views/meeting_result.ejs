@@ -9,133 +9,6 @@
 		*{
 			margin:0px;padding:0px;
 		}
-		.login .container{
-			width:100%;
-		}
-		.login{
-			font-family:"oxygen";
-		}
-		.login .context-box {
-			margin:0 auto;
-			width:1280px;
-		}
-		.login placeholder{
-			font-family:"oxygen";
-		}
-		.login .header{
-			width:100%;
-			height:62px;
-			background-color:#336699;
-			padding-top:15px;
-			padding-bottom:10px;
-		}
-		.login .header .logo{
-			float:left;
-			margin-left:10%;
-			font-size:3.3em;
-			font-weight:bold;
-			color:#ffffff;
-			line-height:62px;
-			width:50%;
-		}
-		.login .header .login-box{
-			float:left;
-			width:40%;
-			font-size:0.75em;
-			color:#ffffff;
-		}
-		.login .header .login-box-wrap{
-			float:left;
-			width:28%;
-			margin-right:5%;
-		}
-		.login .header .login-box-wrap div{
-			width:100%;
-			height:21px;
-			line-height:21px;
-		}
-		.login .header .login-box-wrap input{
-			width:100%;
-			height:20px;
-			line-height:20px;
-		}
-		.login .header .login-box-wrap .login-btn{
-			background-color:#003263;
-			padding:1px 9px;
-			border-radius:4px;
-		}
-		.login a:link {text-decoration: none; color: #ffffff;}
-		.login a:visited {text-decoration: none; color: #ffffff;}
-		.login a:active {text-decoration: none; color: #ffffff;}
-		.login a:hover {text-decoration: none; color: #ffffff;}
-		
-		.login .body{
-			width:100%;
-			background: url("/images/main/shape.png") repeat-x 0 0 transparent;
-		}
-		.login .body .login-bg{
-			margin-top:5%;
-			margin-left:10%;
-		}
-		.login .body .sign-up-box{
-			position:relative;
-			top:-100px;
-			padding-top:20px;
-			padding-left:60%;
-			padding-bottom:15px;
-			/*
-			opacity:0.2;
-			background-color:#000000;
-			*/
-		}
-		.login .body .sign-up-box .sign-up-box-wrap{
-			height:46px;
-			margin-bottom:5px;
-		}
-		.login .body .sign-up-box input{
-			padding:5px;
-			height:34px;
-			line-height:34px;
-			border:1px solid;
-			border-radius:6px;
-			border-color: #aaa #bbb #bbb #bbb;
-			-webkit-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
-			-moz-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
-			box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
-		}
-		.login .body .sign-up-box input.input-name{
-			width:180px;
-			margin-right:15px;
-		}
-		.login .body .sign-up-box input.input-order{
-			width:380px;
-		}
-		.login .body .sign-up-box .sign-up-btn{
-			float:left;
-			color:#ffffff;
-			background-color:#003263;
-			padding:7px 160px;
-			border-radius:6px;
-			-webkit-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
-			-moz-box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
-			box-shadow: inset 0 -1px 0 rgba(255,255,255,0.5), inset 0 2px 5px rgba(0,0,0,0.15);
-		}
-
-		/* all */
-		::-webkit-input-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; }
-		::-moz-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; } /* firefox 19+ */
-		:-ms-input-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; } /* ie */
-		input:-moz-placeholder { color:#000000; font-weight:bold; font-family:"oxygen"; }
-
-		/* individual: webkit */
-		#field2::-webkit-input-placeholder { color:#00f; }
-		#field3::-webkit-input-placeholder { color:#090; background:lightgreen; text-transform:uppercase; }
-		#field4::-webkit-input-placeholder { font-family:"oxygen"; font-weight:bold; text-decoration:overline; letter-spacing:3px; color:#999; }
-
-		/* individual: mozilla */
-		#field2::-moz-placeholder { color:#00f; }
-		#field3::-moz-placeholder { color:#090; background:lightgreen; text-transform:uppercase; }
-		#field4::-moz-placeholder { font-family:"oxygen"; font-weight:bold; text-decoration:overline; letter-spacing:3px; color:#999; }
 	</style>
 </head>
 <body class="meeting_result">
@@ -150,6 +23,9 @@
 		</div>
 		<div class="body">
 			<div class="meta">
+			<%
+				if( result.meeting_result.length > 0 ) { 
+			%>
 				<div>회의 주제 - <%= result.meeting_result[0].subject %></div>
 				<div>회의 목표 - <%= result.meeting_result[0].goal %></div>
 				<div>시간 - <%= result.meeting_result[0].start_time %> ~ <%= result.meeting_result[0].end_time %> </div>
@@ -158,17 +34,9 @@
 				<div>회의 만족도 - <%=result.meeting_result[0].satisfaction%></div>
 				<div>퍼실리테이션 평가 - <%=result.meeting_result[0].ft_appraisal%></div>
 				<div>MVP - <%=result.meeting_result[0].mvp%></div>
-				<div>자기 평가</div>
-				<%
-					var user_list = result.meeting_result[0].user_list.split(",");
-					var user_appraisal = result.meeting_result[0].user_appraisal.split(",");
-					for(var i=0;i<user_list.length;i++)
-					{
-				%>
-						<div><%=user_list[i]%> - <%=user_appraisal[i]%></div>
-				<%
-					}
-				%>
+			<%
+				}
+			%>
 			</div>
 			<div class="chart">
 				<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>

@@ -1,0 +1,72 @@
+<html lang="ko" class="canHaveFixedElements" id="facebook">
+<head>
+	<meta charset="utf-8">
+	<meta content="noodp, noydir" name="robots">
+	<meta id="meta_referrer" content="default" name="referrer">
+	<title>Orchestra</title>
+	<link href="/stylesheets/tmp.css" rel="stylesheet">
+	<style>
+		*{
+			margin:0px;padding:0px;
+		}
+	</style>
+</head>
+<body class="meeting_result">
+	<div class="container">
+		<form action="/page/meeting_appraisal" method="post">
+		<div class="header">
+			<div>
+					<input type="submit" value="평가 완료">
+			</div>
+		</div>
+		<div class="body">
+			<div>
+			회의 만족도 - 
+			<select name="satisfaction">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+			</div>
+			<div>
+			퍼실리테이션 평가 - 
+			<select name="ft_appraisal">
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+			</select>
+			</div>
+			<div>
+				MVP<br>
+				<input type="radio" name="mvp" value="Micheal Jeong">Micheal Jeong
+				<input type="radio" name="mvp" value="Godong9">Godong9
+				<input type="radio" name="mvp" value="K.T.H">K.T.H
+				<input type="radio" name="mvp" value="Startgt">Startgt
+				<input type="radio" name="mvp" value="B.C.H">B.C.H
+			</div>
+		</div>
+		</form>
+	</div>
+</body>
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
+<!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+		long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+		to to "classic" jQuery behavior -->
+<script>if ($ === undefined) $ = jQuery</script>
+<!-- /jQuery -->
+<!-- Bootstrap Components -->
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/orchestra.js"></script>
+<script>
+	$(document).ready(function(){
+	})
+</script>
+</html>

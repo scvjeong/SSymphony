@@ -26,3 +26,7 @@
 	cursor: text;
 }
 
+.chatting_user_id {
+
+	font: bold 14px verdana, sans-serif;
+}

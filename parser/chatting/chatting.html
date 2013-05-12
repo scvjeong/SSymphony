@@ -14,16 +14,16 @@
 		var client_color = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");		
 			
 		$(document).ready(function() {
-			initChatting("chatting", "group1");			
+			initChatting("chatting", "1");			
 		});
 
 		////  리스트 초기 설정해주는 함수  ////
 		function initChatting( tool, group ){
-			tmp_tool = "tool"+tool;
+			tmp_tool = tool;
 			tmp_group = "group"+group;
 
 			socket.emit('join_room', { group: tmp_group });
-			socket.emit('set_client', { group: tmp_group, user: "godong" });
+			socket.emit('set_client', { group: tmp_group, user: "godong4" });
 			socket.emit('set_data', { group: tmp_group, tool: tmp_tool });
 		}
 

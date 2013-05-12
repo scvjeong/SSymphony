@@ -28,23 +28,28 @@ function server(io)
 			var tmpUser = data.user;
 			
 			var userInfo = tmpGroup+":user";
+			var userNum = -1;
+			var countUser = 0;
 
-			client.llen(userInfo, function (err,reply) {
-				console.log("num: "+reply);
-				
-				client.rpush(userInfo, tmpUser);
+			////  해당 user가 리스트에 존재하는지 확인해서 없으면 추가  ////
+			client.llen(userInfo, function (err, num) {
+				countUser = num;					
+				client.lrange(userInfo, 0, -1, function (err, replies) {	
+					replies.forEach( function (user, index) {
+						console.log("user: "+user);
+						if ( user == tmpUser ) {		//해당 user가 존재할 때
+							userNum = index;
+						}
+					});
+					if ( userNum == -1 ) {	//user가 존재하지 않을 때
+						client.rpush(userInfo, tmpUser);
+						userNum =countUser;							
+					}
+					socket.emit('get_client', { client: userNum });
+				});
 				
 			});
-
-			/*
-			socket.emit('get_client', { client: lastClient });
-			if ( lastClient < 11 ) {
-				lastClient = lastClient + 1;
-			}
-			else {
-				lastClient = 1;
-			}
-			*/
+		
 		});
 
 		////  클라이언트 해당 tool의 lastId 요청 처리하는 함수  ////

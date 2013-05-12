@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<tool_name>
-	<flag> </flag>
-	<name>Brainwriting</name>
-	<tool>postit</tool>
-	<image>이미지 경로</image>
-	<guide>
+<root>
+	<guide_name>
+		<flag> </flag>
+		<name>Brainwriting</name>
+		<tool>postit</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			그룹의 창의적인 아이디어 생산
 		</purpose>
@@ -21,15 +21,13 @@
 			4) 다른 사람의 아이디어를 참조하여 자신의 아이디어를 발전시키도록 권장
 			5) 적절한 아이디어가 채워지면 분류 등 다른 작업 수행
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>6-3-5 Method</name>
-	<tool>matrix</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>6-3-5 Method</name>
+		<tool>matrix</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			발언이 제한되는 환경에서 동등하게 아이디어를 창출하고자 할 때
 		</purpose>
@@ -48,15 +46,13 @@
 			6) 5)를 반복
 			7) 마지막 줄까지 완료하면 30분 동안 108개의 아이디어 완성
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Random Word</name>
-	<tool>mindmap, postit</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Random Word</name>
+		<tool>mindmap, postit</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			새 아이디어를 내도록 자극하거나 생각을 확산시키고자 할 때
 		</purpose>
@@ -68,15 +64,13 @@
 			1) 무작위로 15개 정도의 단어를 추출 (잡지, 책 등 참고)
 			2) 무작위로 추출된 단어와 주제를 연관지어 아이디어 도출
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Rich Picture</name>
-	<tool>whiteboard</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Rich Picture</name>
+		<tool>whiteboard</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			복잡한 상황에서의 숨겨진 문제 표출
 		</purpose>
@@ -89,16 +83,14 @@
 			3) 자신이 경험한 사항을 그림이나 이미지로 표현
 			4) 각각 표현된 그림과 이미지 간의 관계와 영향 등을 추가하여 표현
 			5) 표현이 불명확한 경우 그림을 보강하거나 설명 추가
-		</method>
-	</guide>
-</tool_name>
+		</method>	
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>SCAMPER</name>
-	<tool>list</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>SCAMPER</name>
+		<tool>list</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			창의적인 아이디어를 낼 때
 		</purpose>
@@ -113,16 +105,14 @@
 			P - 다른 용도로 사용하기
 			E - 제거하기
 			R - 재정리하기, 순서 바꾸기
-		</method>
-	</guide>
-</tool_name>
+		</method>		
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>SWOT</name>
-	<tool>matrix</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>SWOT</name>
+		<tool>matrix</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			전략수립의 사전 절차로서 환경 분석
 		</purpose>
@@ -137,15 +127,13 @@
 			5) 강점+기회(SO), 약점+기회(WO), 강점+위협(ST), 약점+위협(WT) 요인을 묶어 생각하면서 전략 아이디어 도출
 			6) 도출된 전략은 조직의 미션, 비전, 목표 등에 비추어 적절성 검증
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Logic tree</name>
-	<tool>mindmap</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Logic tree</name>
+		<tool>mindmap</tool>
+		<image>이미지 경로</image>	
 		<purpose>
 			문제의 분석적 해결, 어떤 사안의 구성요인과 구조의 파악
 		</purpose>
@@ -161,16 +149,14 @@
 			3) 1단계 요인을 다시 MECE 원칙에 따라 2~4개로 분류
 			4) 같은 작업을 3~4단계에 이를 때까지 계속한다.
 			5) 토의를 통해 드러난 요인 중 가장 중요한 요인을 탐색
-		</method>
-	</guide>
-</tool_name>
+		</method>	
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>5 Why</name>
-	<tool>mindmap</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>5 Why</name>
+		<tool>mindmap</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			문제해결을 위한 모든 분야
 		</purpose>
@@ -185,15 +171,13 @@
 			3) 이유와 원인에 대해 5번씩 꼬리를 물어 질문 (왜 그런 문제가 발생하는가?)
 			4) 주어진 문제에 대해서 계속해서 원인을 물어 가장 근본 원인이 무엇인지를 파악
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Stake Holder(이해관계자)</name>
-	<tool>matrix</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Stake Holder(이해관계자)</name>
+		<tool>matrix</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			프로젝트 추진 또는 결정 절차의 개시에 앞서 참여 전략을 수립할 때
 		</purpose>
@@ -209,15 +193,13 @@
 			5) 사분면의 속성에 따라 대응 또는 참여 전략을 마련
 			5) 분석 결과 갈등 요인을 파악한 후 이를 예방하고 해소할 수 있는 방법을 모색
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>T-chart</name>
-	<tool>matrix</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>T-chart</name>
+		<tool>matrix</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			양쪽을 비교하면서 데이터를 모으고자 하는 모든 경우에 적용 가능
 		</purpose>
@@ -231,15 +213,13 @@
 			4) 각각 해당란에 아이디어를 기록
 			5) 내용을 보완하는 질문을 던져 추가 아이디어를 모은다.
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Pay-off Matrix</name>
-	<tool>matrix</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Pay-off Matrix</name>
+		<tool>matrix</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			해결 혹은 의사결정 해야할 다수의 과제들을 유형화하거나 우선순위화하고자 할 때
 		</purpose>
@@ -253,15 +233,13 @@
 			3) 주어진 과제들을 변수의 이분화된 기준에 따라 평가
 			4) 평가된 과제들을 해당되는 사분면에 표시하고 GS 영역부터 차례로 우선순위화
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Decision Grid</name>
-	<tool>matrix</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Decision Grid</name>
+		<tool>matrix</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			과제의 평가요소를 세분화하여 우선순위화하고자 할 때 
 		</purpose>
@@ -277,15 +255,13 @@
 			5) 평가 실시
 			6) 합산 및 결정
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Multi Voting</name>
-	<tool>list, vote</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Multi Voting</name>
+		<tool>list, vote</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			여러개의 아이디어에 동시에 투표해서 가장 선호도가 높은 아이디어 선정
 		</purpose>
@@ -299,15 +275,13 @@
 			3) 동일한 곳에 한 번만 투표할 수 있는지 여러 개 할 수 있는지 결정
 			4) 투표를 실시한 후 가장 투표를 많이 받은 아이디어를 선정
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Fist to Five</name>
-	<tool>vote</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Fist to Five</name>
+		<tool>vote</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			의사결정, 안건의 우선순위 결정
 		</purpose>
@@ -321,15 +295,13 @@
 			3) 점수가 높은 것부터 차례로 순위를 결정
 			4) 동률이 나왔을 경우 동률 항목만 다시 진행
 		</method>
-	</guide>
-</tool_name>
+	</guide_name>
 
-<tool_name>
-	<flag> </flag>
-	<name>Gradient Scale of Agreement(동의 정도 확인)</name>
-	<tool>vote</tool>
-	<image>이미지 경로</image>
-	<guide>
+	<guide_name>
+		<flag> </flag>
+		<name>Gradient Scale of Agreement(동의 정도 확인)</name>
+		<tool>vote</tool>
+		<image>이미지 경로</image>
 		<purpose>
 			속마음을 표현화시켜 합의에 이르게 하는 도구
 		</purpose>
@@ -343,6 +315,6 @@
 			4) 의견을 반영한 수정안이 1~3 범위로 동의하는지 확인
 			5) 모든 참여자가 1~3 범위에 포함될 때까지 반복
 			6) 참여자 모두 1~3의 범위에 속하면 합의되었음을 선언
-		</method>
-	</guide>
-</tool_name>
+		</method>	
+	</guide_name>
+</root>

@@ -91,31 +91,31 @@
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxtabs.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxexpander.js"></script>
-<script src="/tools/postit/lib/socket.io.js"></script>
+<script src="../javascripts/socket.io.js"></script>
 <!-- /공통 스크립트 -->
   
   	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 	<!-- 리스트 도구 -->
-		<link rel="stylesheet" href="/tools/list/css/list.css">
-		<script src="/tools/list/list.js"></script>
+		<link rel="stylesheet" href="../stylesheets/tools/list.css">
+		<script src="../javascripts/tools/list.js"></script>
 	<!-- /리스트 도구 -->
   
 	<!-- 포스트잇 도구 -->
-		<link href="/tools/postit/css/template.css" rel="stylesheet" type="text/css" />
-		<link href="/tools/postit/css/postit.css" rel="stylesheet" type="text/css" />
-		<script type="text/JavaScript" src="/tools/postit/lib/jquery.ui.touch-punch.min.js"></script>
-		<script type="text/JavaScript" src="/tools/postit/lib/jquery.shapeshift.js"></script>	
-		<script src="/tools/postit/postit.js"></script>
+		<link href="../stylesheets/tools/template.css" rel="stylesheet" type="text/css" />
+		<link href="../stylesheets/tools/postit.css" rel="stylesheet" type="text/css" />
+		<script type="text/JavaScript" src="../javascripts/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/JavaScript" src="../javascripts/jquery.shapeshift.js"></script>	
+		<script src="../javascripts/tools/postit.js"></script>
 	<!-- 포스트잇 도구 -->
 
 	<!-- 마인드맵 도구 -->
-		<link rel="stylesheet" href="/tools/mindmap/css/mindmap.css">
-		<script src="/tools/mindmap/lib/d3.v3.js"></script>
+		<link rel="stylesheet" href="../stylesheets/tools/mindmap.css">
+		<script src="../javascripts/d3.v3.js"></script>
 	<!-- /마인드맵 도구 -->
 
 	<!-- 매트릭스 도구 -->
-		<link href="/tools/matrix/css/matrix.css" rel="stylesheet" type="text/css" />
-		<script src="/tools/matrix/lib/matrix.js"></script>
+		<link href="../stylesheets/tools/matrix.css" rel="stylesheet" type="text/css" />
+		<script src="../javascripts/tools/matrix.js"></script>
 	<!-- 매트릭스 도구 -->
 
 </head>
@@ -276,23 +276,23 @@
 	</div>
 	<div id="tools">
 		<ul>
-			<li onclick="addTool('list')">
+			<li onclick="getToolSource('list', init_list)">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>리스트</span>
 			</li>
-			<li onclick="addTool('postit')">
+			<li onclick="getToolSource('postit'), alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>포스트잇</span>
 			</li>
-			<li onclick="addTool('mindmap')">
+			<li onclick="getToolSource('mindmap'), alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>마인드맵</span>
 			</li>
-			<li onclick="addTool('vote')">
+			<li onclick="getToolSource('vote'), alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>투표도구</span>
 			</li>
-			<li onclick="addTool('matrix')">
+			<li onclick="getToolSource('matrix'), alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>Matrix Tool</span>
 			</li>

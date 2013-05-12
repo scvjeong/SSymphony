@@ -6,6 +6,7 @@ var _tool_vote_count = 0;
 var _common_window_top = 50;
 var _common_windot_left = 20;
 var _new_z_index = 0;
+var _group_id = 1;
 
 $(document).ready(function() {
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
@@ -110,52 +111,46 @@ function setRightpanel(panel)
 	$("#rightpanel #panelcontents #" + panel).show();
 }
 
-<<<<<<< HEAD
-function addTool(type)
-=======
 
 var _tool_type = "";
 /* 도구별 소스를 동적으로 가져옴 */
-function getToolSource(toolName, initFuncName)
+function getToolSource(tool_type, initFuncName)
 {
 	var source_url = "";
 	var tool_index = "";
-	_tool_type = toolName;
+	_tool_type = tool_type;
 	
-	switch (toolName)
+	switch (tool_type)
 	{
 	case "list":
-		source_url = "../tools/list/list.html";
 		tool_index = _tool_list_count++;
 		break;
 	case "postit":
-		source_url = "../tools/postit/postit.html";
 		tool_index = _tool_postit_count++;
 		break;
 	case "mindmap":
-		source_url = "../tools/d3_mindmap/mindmap.html";
 		tool_index = _tool_mindmap_count++;
 		break;
 	case "vote":
-		source_url = "../tools/vote/vote.html";
 		tool_index = _tool_vote_count++;
 		break;
 	case "matrix":
-		source_url = "../tools/matrix/matrix.html";
 		tool_index = _tool_matrix_count++;
 		break;
 	}
 	
+	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_index;
+	console.log("부른 도구의 Source url :: " + source_url);
+	
 	$.ajax({
-		type: "POST",
+		type: "GET",
 		url: source_url,
-		data: {'index': tool_index, 'group_id': _group_id},
-		dataType: "json",
+//		data: {tool_index: tool_index, group_id: _group_id},
+		dataType: "html",
 		success: function(data) {
-			console.log(data);
-			initFuncName();
-			includeFileDynamically(data.include_list);
-			addTool(_tool_type, data.source);
+			initFuncName(_group_id, tool_index);
+//			includeFileDynamically(data.include_list);
+			addTool(_tool_type, data);
 		},
 		error: function(err) {
 			console.log(err);
@@ -193,8 +188,9 @@ function includeFileDynamically(list) {
 
 
 function addTool(type, source)
->>>>>>> node_stargt_02
 {
+	console.log("CALL addTool [type=" + type + ", source=" + source + "]");
+
 	var tool = new Array();
 
 	var list_window_width = 600;

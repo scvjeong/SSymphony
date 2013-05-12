@@ -1,3 +1,28 @@
+// set_meeting_appraisal
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_user']
+// params['satisfaction']
+// params['ft_appraisal']
+// params['mvp']
+exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
+	params['idx_meeting'] = 60;
+	params['idx_group'] = 1;
+	params['idx_user'] = 1;
+
+	var sql = "INSERT INTO `meeting_appraisal` ";
+	sql += "SET `idx_meeting` = '"+params['idx_meeting']+"', ";
+	sql += "`idx_group` = '"+params['idx_group']+"', ";
+	sql += "`idx_user` = '"+params['idx_user']+"', ";
+	sql += "`satisfaction` = '"+params['satisfaction']+"', ";
+	sql += "`ft_appraisal` = '"+params['ft_appraisal']+"', ";
+	sql += "`mvp` = '"+params['mvp']+"'";
+	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
+		evt.emit('set_meeting_appraisal', err, rows);
+	});
+	return sql;
+}
+
 // get_meeting_result
 // params['idx_meeting']
 // params['idx_group']
@@ -16,9 +41,9 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 	sql += "`B`.`start_time` AS `agenda_start_time`, ";
 	sql += "`B`.`end_time` AS `agenda_end_time`, ";
 	sql += "`B`.`order`, ";
-	sql += "`E`.`satisfaction`, ";
-	sql += "`E`.`ft_appraisal`, ";
-	sql += "`E`.`mvp`, ";
+//	sql += "`E`.`satisfaction`, ";
+//	sql += "`E`.`ft_appraisal`, ";
+//	sql += "`E`.`mvp`, ";
 	sql += "GROUP_CONCAT( DISTINCT `D`.`name` ORDER BY `D`.`name` ASC SEPARATOR ', ') AS `user_list` ";
 	sql += "FROM `meeting_planning` AS `A` ";
 	sql += "INNER JOIN `agenda` AS `B` ";
@@ -27,15 +52,30 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 	sql += "ON `A`.`idx` = `C`.`idx_meeting` ";	
 	sql += "INNER JOIN `user` AS `D` ";
 	sql += "ON `C`.`idx_user` = `D`.`idx` ";
-	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
-	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
+//	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
+//	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
 	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
-
+//console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('get_meeting_result', err, rows);
+	});
+	return sql;
+}
+
+exports.dao_get_meeting_result_appraisal = function(evt, mysql_conn, params){
+	params['idx_meeting'] = 60;
+	
+	var sql = "SELECT ";
+	sql += "`A`.`satisfaction`, ";
+	sql += "`A`.`ft_appraisal`, ";
+	sql += "`A`.`mvp` ";
+	sql += "FROM `meeting_appraisal` AS `A` ";
+	sql += "WHERE `A`.`idx_meeting` = '"+params['idx_meeting']+"'";
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('get_meeting_result_appraisal', err, rows);
 	});
 	return sql;
 }

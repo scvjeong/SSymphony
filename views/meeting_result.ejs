@@ -31,9 +31,33 @@
 				<div>시간 - <%= result.meeting_result[0].start_time %> ~ <%= result.meeting_result[0].end_time %> </div>
 				<div>참여자 - <%= result.meeting_result[0].user_list %></div>
 				<div>회의 평가</div>
-				<div>회의 만족도 - <%=result.meeting_result[0].satisfaction%></div>
-				<div>퍼실리테이션 평가 - <%=result.meeting_result[0].ft_appraisal%></div>
-				<div>MVP - <%=result.meeting_result[0].mvp%></div>
+				<%
+					var satisfaction = 0;
+					var ft_appraisal = 0;
+					var mvp_array = {};
+					var mvp = { user:"", vote:0 };
+					for(var i=0; i<result.meeting_result_appraisal.length; i++) {
+						satisfaction += result.meeting_result_appraisal[i].satisfaction;
+						ft_appraisal += result.meeting_result_appraisal[i].ft_appraisal;
+						if( typeof(mvp_array[result.meeting_result_appraisal[i].mvp]) === "undefined" ) 
+							mvp_array[result.meeting_result_appraisal[i].mvp] = 1;
+						else
+							mvp_array[result.meeting_result_appraisal[i].mvp]++;
+					}
+					satisfaction = Math.floor(satisfaction / i);
+					ft_appraisal = Math.floor(ft_appraisal / i);
+					for(key in mvp_array)
+					{
+						if( mvp['vote'] < mvp_array[key] )
+						{
+							mvp['user'] = key;
+							mvp['vote'] = mvp_array[key];
+						}
+					}
+				%>
+				<div>회의 만족도 - <%=satisfaction%></div>
+				<div>퍼실리테이션 평가 - <%=ft_appraisal%></div>
+				<div>MVP - <%=mvp['user']%></div>
 			<%
 				}
 			%>

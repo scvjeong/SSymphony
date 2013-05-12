@@ -4,7 +4,8 @@ var util = require('../lib/util');
 var check = require('validator').check,
     sanitize = require('validator').sanitize;
 
-var _COMPLETE_FLAG_CNT = 1;
+var _APPRAISAL_COMPLETE_FLAG_CNT = 1;
+var _RESULT_COMPLETE_FLAG_CNT = 2;
 
 exports.main = function(req, res){
 	/** session start **/
@@ -28,7 +29,23 @@ exports.meeting_appraisal = function(req, res){
 };
 
 exports.post_meeting_appraisal = function(req, res){
-	res.render('meeting_appraisal', { title: 'Express' });
+	var evt = new EventEmitter();
+	var dao_c = require('../sql/common');
+	var dao_m = require('../sql/meeting');
+	var params = { 
+		satisfaction:req.body.satisfaction,	 
+		ft_appraisal:req.body.ft_appraisal,
+		mvp:req.body.mvp
+	};
+	var complete_flag = 0;
+
+	dao_m.dao_set_meeting_appraisal(evt, mysql_conn, params);
+	evt.on('set_meeting_appraisal', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		if( complete_flag === _APPRAISAL_COMPLETE_FLAG_CNT )
+			res.redirect("/page/meeting_result");
+	});
 };
 
 exports.meeting_result = function(req, res){
@@ -41,7 +58,7 @@ exports.meeting_result = function(req, res){
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
 	var params = {};
-	var result = { meeting_result:{} };
+	var result = { meeting_result:{}, meeting_result_appraisal:{} };
 	var complete_flag = 0;
 
 	dao_m.dao_get_meeting_result(evt, mysql_conn, params);
@@ -49,7 +66,16 @@ exports.meeting_result = function(req, res){
 		if(err) throw err;
 		result.meeting_result = rows;
 		complete_flag++;
-		if( complete_flag === _COMPLETE_FLAG_CNT )
+		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
+			res.render('meeting_result', {result:result} );
+	});
+
+	dao_m.dao_get_meeting_result_appraisal(evt, mysql_conn, params);
+	evt.on('get_meeting_result_appraisal', function(err, rows){
+		if(err) throw err;
+		result.meeting_result_appraisal = rows;
+		complete_flag++;
+		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
 };

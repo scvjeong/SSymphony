@@ -49,11 +49,11 @@ app.post('/page/meeting_save', meeting.meeting_save);
 app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 
 /* 도구 관련 */
-app.get('/tools/list', tools.list);
-app.get('/tools/postit', tools.postit);
-app.get('/tools/mindmap', tools.mindmap);
-app.get('/tools/vote', tools.vote);
-app.get('/tools/matrix', tools.matrix);
+app.get('/tool/list/:group_id/:tool_index', tools.list);
+app.get('/tool/postit', tools.postit);
+app.get('/tool/mindmap', tools.mindmap);
+app.get('/tool/vote', tools.vote);
+app.get('/tool/matrix', tools.matrix);
 
 app.post('/lib/upload', function(req, res) {
 	console.log(JSON.stringify(req.files)); 
@@ -78,5 +78,5 @@ app.post('/lib/upload', function(req, res) {
 });
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+  console.log("Express server is started to listen on port " + app.get('port'));
 });

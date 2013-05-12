@@ -3,21 +3,25 @@
 		
 		socket = io.connect('http://61.43.139.69:50001/group');	// socket.io 서버에 접속
 		
-		tmpIndent = 0;	// 현재 들여쓰기 상태
-		tmpLastId = 100;	// 마지막 ID 관리
-		tmpClient = 0;	//현재 클라이언트 번호
-		tmpGroup = 0;	//현재 그룹
-		tmpTool = 0;  //현재 도구
-		tmpToolSelect = 0;
-		clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
-		inputFlag = 0;	//키입력 감지하기 위한 변수		
+		var tmpIndent = 0;	// 현재 들여쓰기 상태
+		var tmpLastId = 100;	// 마지막 ID 관리
+		var tmpClient = 0;	//현재 클라이언트 번호
+		var tmpGroup = 0;	//현재 그룹
+		var tmpTool = 0;  //현재 도구
+		var tmpToolSelect = 0;
+		var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
+		var inputFlag = 0;	//키입력 감지하기 위한 변수		
 			
+		/*
 		$(document).ready(function() {
 			init_list("list1", "group1");			
 		});
+		*/
 
 		////  리스트 초기 설정해주는 함수  ////
-		function init_list( tool, group ){
+		function init_list(tool, group){
+			tool = "list" + tool;
+			group = "group" + group;
 			tmpTool = tool;
 			tmpGroup = group;
 			

@@ -10,20 +10,11 @@ function server(io)
 			var tmpGroup = data.group;
 			socket.join(tmpGroup);
 			console.log("Join "+tmpGroup);
-		
-			////  클라이언트에게 Client 번호 전달 후 Clinet 번호 증가  ////
-			////  향후 세션으로 관리하도록 수정 필요  ////
-			socket.emit('get_client', { client: lastClient });
-			if ( lastClient < 11 ) {
-				lastClient = lastClient + 1;
-			}
-			else {
-				lastClient = 1;
-			}
 		});
 
 		////  유저 정보 리스트에 저장하여 관리하는 함수  ////
 		socket.on('set_client', function(data) {
+			console.log("Call: set_client");
 			var tmpGroup = data.group;
 			var tmpUser = data.user;
 			
@@ -47,9 +38,7 @@ function server(io)
 					}
 					socket.emit('get_client', { client: userNum });
 				});
-				
-			});
-		
+			});	
 		});
 
 		////  클라이언트 해당 tool의 lastId 요청 처리하는 함수  ////
@@ -361,12 +350,75 @@ function server(io)
 
 		////  다른 도구 형태로 데이터 변경  ////
 		socket.on('set_change_data', function(data) {
+			console.log("Call: set_change_data");
+			var tmpGroup = data.group;
+			var tmpTool = data.tool;
+			var newTool= data.change;	
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var newOrder = tmpGroup+":"+newTool+":order";		
+					
+			client.lindex(tmpOrder, 0, function (err,reply) {
+				if ( reply == null ) {
+		
+				}	
+				//console.log("tmpOrder: "+tmpOrder);
+				client.lrange(tmpOrder, 0, -1, function (err, replies) {	
+					//console.log("test: "+replies);
+					replies.forEach( function (idNum, index) {
+						client.get(idNum, function (err, val) {
+							var newId = idNum.toString().replace(tmpTool, newTool);			
+							var newVal = val;
 
+							client.rpush(newOrder, newId);
+							client.set(newId, newVal);
+						});
+					});
+				});
+			});	
+
+			////  클라이언트는 change 받아서 새로 도구 창 띄우면 될 듯  ////
+			socket.emit('get_change_data', { tool: tmpTool, change: newTool });	
+			socket.broadcast.to(tmpGroup).emit('get_change_data', { tool: tmpTool, change: newTool });
 		});
 
 		////  다른 도구 형태로 데이터 변경_tree  ////
 		socket.on('set_change_tree_data', function(data) {
+			console.log("Call: set_change_data");
+			var tmpGroup = data.group;
+			var tmpTool = data.tool;
+			var newTool = data.change;	
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var newOrder = tmpGroup+":"+newTool+":order";		
 
+			client.lindex(tmpOrder, 0, function (err,reply) {
+				if ( reply == null ) {
+
+				}
+
+				// order return 
+				client.lrange(tmpOrder, 0, -1, function (err, replies) {	
+					replies.forEach( function (idNum, index) {
+						//console.log("id: "+idNum);
+						client.hkeys(idNum, function (err, parentNum){
+							//console.log("parent: "+parentNum);
+							client.hget(idNum, parentNum, function (err, val) {
+								//console.dir("val: "+val);	
+								var newId = idNum.toString().replace(tmpTool, newTool);
+								var newParent = parentNum.toString().replace(tmpTool, newTool);
+								var newVal = val;
+							
+								client.rpush(newOrder, newId);
+								client.hset(newId, newParent, newVal);
+
+							});
+						});
+					});
+				});	
+			});	
+		
+			////  클라이언트는 change 받아서 새로 도구 창 띄우면 될 듯  ////
+			socket.emit('get_change_tree_data', { tool: tmpTool, change: newTool });	
+			socket.broadcast.to(tmpGroup).emit('get_change_tree_data', { tool: tmpTool, change: newTool });
 		});
 
 		////  해당 tool의 데이터 초기화  ////

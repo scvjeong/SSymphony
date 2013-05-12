@@ -24,20 +24,32 @@
 
 			socket.emit('join_room', { group: tmp_group });
 			socket.emit('set_client', { group: tmp_group, user: "godong4" });
-			socket.emit('set_data', { group: tmp_group, tool: tmp_tool });
+			socket.emit('set_data', { group: tmp_group, tool: "chatting" });
 		}
 
 		
 		////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
 		socket.on('get_data', function (data) {
 
-			var tmp_id = data.id;
+			var tmp_user = data.id;
 			var tmp_val = data.val;	
 
-			var tmp_tag = "<div id="+tmp_id+">"+tmp_val+"</div>";
+			var tmp_tag = "<div id="+tmp_user+">"+tmp_val+"</div>";
 
 			$('.chatting_space').append(tmp_tag);
-			//console.log("id: "+tmpId+"// val: "+tmpVal);	
+			$('.chatting_space').append(tmp_tag);
+			$('.chatting_space').append(tmp_tag);
+			$('.chatting_space').append(tmp_tag);
+			$('.chatting_space').append(tmp_tag);
+			$('.chatting_space').append(tmp_tag);
+
+
+			var offset = $('.chatting_space').offset().top;
+			console.log(offset);
+	
+			$('.chatting_space').animate({scrollTop: $('.chatting_space')[0].scrollHeight});
+
+
 		});
 
 	</script>
@@ -46,9 +58,9 @@
 
 	<div class="chatting_tool" id="chatting">
 		<div class="chatting_space">
-			
+
 		</div>
-		<div class="input_space">
+		<div class="chatting_input_space">
 			<input type="text" class="chatting_input"/>
 		</div>
 	</div>

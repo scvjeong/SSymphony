@@ -5,10 +5,13 @@
 }
 
 .chatting_space {
+	overflow-y: auto;
+	word-wrap: break-word;
 	margin : 1%;
 	width: 98%;
 	height: 88%;
 	border: 1px solid #999999;
+	cursor: text;
 }
 
 .input_space {

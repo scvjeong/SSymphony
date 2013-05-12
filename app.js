@@ -4,6 +4,7 @@ var express = require('express')
   , meeting = require('./routes/meeting')
   , quick_meeting = require('./routes/quick_meeting')
   , meeting_planning = require('./routes/meeting_planning')
+  , tools = require('./routes/tools')
   , http = require('http')
   , path = require('path');
 
@@ -40,10 +41,16 @@ app.get('/page/quick_meeting', quick_meeting.quick_meeting);
 app.get('/page/meeting_template', meeting_planning.meeting_template);
 app.get('/page/setting_agenda', meeting_planning.setting_agenda);
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
-
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
 app.post('/page/meeting_save', meeting.meeting_save);
+
+/* 도구 관련 */
+app.get('/tools/list', tools.list);
+app.get('/tools/postit', tools.postit);
+app.get('/tools/mindmap', tools.mindmap);
+app.get('/tools/vote', tools.vote);
+app.get('/tools/matrix', tools.matrix);
 
 app.post('/lib/upload', function(req, res) {
 	console.log(JSON.stringify(req.files)); 
@@ -65,26 +72,6 @@ app.post('/lib/upload', function(req, res) {
             filetype: req.files.uploadFile.type
 		});
 	});
- 
- 	// 권한 문제로 시스템마다 작동여부가 다름
-    /*require('fs').rename(
-		req.files.uploadFile.path,
-		'.' + serverPath,
-		//__dirname + "\\" + serverPath,
-		function(error) {
-            if(error) {
-            	console.log(error);
-				res.send({
-                    error: 'Ah crap! Something bad happened'
-				});
-                return;
-            }
- 
-            res.send({
-				path: serverPath
-            });
-		}
-    );*/
 });
 
 http.createServer(app).listen(app.get('port'), function(){

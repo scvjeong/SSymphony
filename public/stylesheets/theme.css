@@ -44,22 +44,21 @@ iframe {
 
 #meetingboard #whiteboard_control_box {
 	display: block;
-	position: absolute;
-	top: 50px;
-	left: 10px;
-	width: 60px;
-	height: 400px;
-	background-color: #dddddd;
-	border-style: ridge;
-	border-width: 2px;
+	position: fixed;
+	background-color: #eeeeee;
+	border-bottom-style: ridge;
+	border-bottom-width: 2px;
 }
 
-#meetingboard #whiteboard_control_box #titlebar {
-	height: 20px;
-	background-color: #ababab;
-	border-bottom-style: ridge:
-	border-bottom-width: 2px;
-	cursor: move;
+#meetingboard #drawtext_container {
+	display: none;
+	position: absolute;
+}
+
+#meetingboard #drawtext_container #inputbox {
+	background: none;
+	border: none;
+	outline: none;
 }
 
 #meetingboard #whiteboard_control_box #color_selector #color_list {

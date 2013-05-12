@@ -110,7 +110,90 @@ function setRightpanel(panel)
 	$("#rightpanel #panelcontents #" + panel).show();
 }
 
+<<<<<<< HEAD
 function addTool(type)
+=======
+
+var _tool_type = "";
+/* 도구별 소스를 동적으로 가져옴 */
+function getToolSource(toolName, initFuncName)
+{
+	var source_url = "";
+	var tool_index = "";
+	_tool_type = toolName;
+	
+	switch (toolName)
+	{
+	case "list":
+		source_url = "../tools/list/list.html";
+		tool_index = _tool_list_count++;
+		break;
+	case "postit":
+		source_url = "../tools/postit/postit.html";
+		tool_index = _tool_postit_count++;
+		break;
+	case "mindmap":
+		source_url = "../tools/d3_mindmap/mindmap.html";
+		tool_index = _tool_mindmap_count++;
+		break;
+	case "vote":
+		source_url = "../tools/vote/vote.html";
+		tool_index = _tool_vote_count++;
+		break;
+	case "matrix":
+		source_url = "../tools/matrix/matrix.html";
+		tool_index = _tool_matrix_count++;
+		break;
+	}
+	
+	$.ajax({
+		type: "POST",
+		url: source_url,
+		data: {'index': tool_index, 'group_id': _group_id},
+		dataType: "json",
+		success: function(data) {
+			console.log(data);
+			initFuncName();
+			includeFileDynamically(data.include_list);
+			addTool(_tool_type, data.source);
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+}
+
+/* 동적으로 파일 추가 */
+function includeFileDynamically(list) {
+	console.log("call lncludeFileDynamically");
+	for (var i = 0; i < list.length; i++)
+	{
+		var include_target = list[i];
+	
+		if (include_target.indexOf(".js") != -1)
+		{
+			var oScript = document.createElement("script");
+			oScript.type = "text/javascript";
+			oScript.charset ='utf-8';
+			oScript.src = include_target;			
+			document.getElementsByTagName("head")[0].appendChild(oScript);
+		}
+		else if (include_target.indexOf(".css") != -1)
+		{
+			var oCSS = document.createElement("link");
+			oCSS.rel = "stylesheet";
+			oCSS.href = include_target;
+			oCSS.type = "text/css";
+			document.getElementsByTagName("head")[0].appendChild(oCSS);
+		}
+	}
+
+}
+
+
+function addTool(type, source)
+>>>>>>> node_stargt_02
 {
 	var tool = new Array();
 
@@ -135,26 +218,6 @@ function addTool(type)
 		tool['height'] = list_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<div id="container" class="listtool" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px; overflow-y: scroll">';
-			tool['source'] += '<section id="main_section" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px">';
-				tool['source'] += '<article>';
-/*				tool['source'] += '<header>';
-					tool['source'] += '<div class="home_line">';
-						tool['source'] += '<div class="home_box">';
-							tool['source'] += '<div id="homeButton"><h2>Home</h2></div>';
-						tool['source'] += '</div>';
-						tool['source'] += '<div class="init_box">';
-							tool['source'] += '<div id="initButton" onClick="initData()"><h2>Clear</h2></div>';
-						tool['source'] += '</div>';
-					tool['source'] += '</div>';
-				tool['source'] += '</header>';*/
-				tool['source'] += '<div class="list_space">';
-					tool['source'] += '<div class="children">';
-					tool['source'] += '</div>';
-				tool['source'] += '</div>';
-				tool['source'] += '</article>';
-			tool['source'] += '</section>';
-		tool['source'] += '</div>'; 	// 리스트 도구 소스 들어갈 부분
 		break;
 	case "postit":
 		_tool_postit_count++;
@@ -165,7 +228,6 @@ function addTool(type)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '<iframe src="../tools/postit/postit.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분		
 		break;
 	case "mindmap":
 		_tool_mindmap_count++;
@@ -176,11 +238,6 @@ function addTool(type)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		/*tool['source'] = '<div id="main">';
-			tool['source'] += '<div id="jinomap" tabindex="-1" style="outline:none; border: none; position:relative; overflow:hidden; background:#f4f4f4;">';
-			tool['source'] += '</div>';
-		tool['source'] += '</div>';	// 마인드맵 도구 소스 들어갈 부분*/
-		tool['source'] = '<iframe src="../mindmap/start.html" width="' + tool['width'] + '" height="' + tool['height'] + '"></iframe>';	// 포스트잇 도구 소스 들어갈 부분
 		break;
 	case "vote":
 		_tool_vote_count++;
@@ -191,9 +248,20 @@ function addTool(type)
 		tool['height'] = vote_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '';	// 투표 도구 소스 들어갈 부분
+		break;
+	case "matrix":
+		_tool_matrix_count++;
+		tool['type'] = 'matrix';
+		tool['name'] = 'matrix' + _tool_matrix_count;
+		tool['title'] = 'matrix ' + _tool_matrix_count;
+		tool['width'] = matrix_window_width;
+		tool['height'] = matrix_window_height;
+		tool['left'] = _common_windot_left;
+		tool['top'] = _common_window_top;
 		break;
 	}
+	tool['source'] = source;
+	
 	_common_windot_left += 10;
 	_common_window_top += 10;
 

@@ -314,7 +314,6 @@ function setRightpanel(panel)
 
 
 var _tool_type = "";
-var _tool_source = "";
 /* 도구별 소스를 동적으로 가져옴 */
 function getToolSource(toolName, initFuncName)
 {
@@ -354,9 +353,8 @@ function getToolSource(toolName, initFuncName)
 		success: function(data) {
 			console.log(data);
 			initFuncName();
-			_tool_source = data.source;
 			includeFileDynamically(data.include_list);
-			addTool(_tool_type, _tool_source);
+			addTool(_tool_type, data.source);
 		},
 		error: function(err) {
 			console.log(err);
@@ -420,7 +418,7 @@ function addTool(type, source)
 		tool['height'] = list_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;                                                                                                                                                                  
-		tool['source'] = source;		/*tool['source'] = '<body><div class="list_tool" id="list1">';
+		/*tool['source'] = '<body><div class="list_tool" id="list1">';
 			tool['source'] += '<section id="main_section" style="height: ' + tool['height'] + 'px; width: ' + tool['width'] + 'px">';
 				tool['source'] += '<article>';
 				tool['source'] += '<header>';
@@ -451,8 +449,8 @@ function addTool(type, source)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = source;		////////////
-		/*tool['source'] = '<div class="toolwindow" id="postit1">';
+		/*
+		tool['source'] = '<div class="toolwindow" id="postit1">';
 		tool['source'] += 	'<header>';
 		tool['source'] += '<div class="title_line">';
 		tool['source'] += '<div id="title_text">Post-it Tool</div>';
@@ -479,7 +477,6 @@ function addTool(type, source)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = source;
 		/*
 		tool['source'] = '<div class="mindmap_tool" id="mindmap1">';
 		tool['source'] = '<div id="list_tool">';
@@ -502,7 +499,6 @@ function addTool(type, source)
 		tool['height'] = vote_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = '';	// 투표 도구 소스 들어갈 부분
 		break;
 	case "matrix":
 		_tool_matrix_count++;
@@ -513,7 +509,6 @@ function addTool(type, source)
 		tool['height'] = matrix_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['source'] = source;
 		/*
 		tool['source'] = '<div class="matrix">';
 		tool['source'] += '<div class="container">';
@@ -540,6 +535,8 @@ function addTool(type, source)
 		*/
 		break;
 	}
+	tool['source'] = source;
+	
 	_common_windot_left += 10;
 	_common_window_top += 10;
 

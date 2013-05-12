@@ -8,47 +8,52 @@
 	<script>	
 		
 		var socket = io.connect('http://61.43.139.69:50007/group');	// socket.io 서버에 접속
-		var tmpGroup = 0;
-		var tmpTool = 0;
-		var tmpClient = 0;
-		var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");		
+		var tmp_group = 0;
+		var tmp_tool = 0;
+		var tmp_client = 0;
+		var client_color = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");		
 			
 		$(document).ready(function() {
-			init_chatting("chatting", "group1");			
+			initChatting("chatting", "group1");			
 		});
 
 		////  리스트 초기 설정해주는 함수  ////
-		function init_chatting( tool, group ){
-			tmpTool = "tool"+tool;
-			
-			socket.emit('join_room', { group: tmpGroup });
-			socket.emit('set_data', { group: tmpGroup, tool: tmpTool });
+		function initChatting( tool, group ){
+			tmp_tool = "tool"+tool;
+			tmp_group = "group"+group;
+
+			socket.emit('join_room', { group: tmp_group });
+			socket.emit('set_data', { group: tmp_group, tool: tmp_tool });
 		}
 
 		////  클라이언트 번호 얻어오는 부분  ////
 		socket.on('get_client', function (data) {
-			tmpClient = data.client;
+			tmp_client = data.client;
 		});
 		
 		////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
 		socket.on('get_data', function (data) {
 
-			var tmpId = data.id;
-			var tmpVal = data.val;			
-			
-			console.log("id: "+tmpId+"// val: "+tmpVal);	
+			var tmp_id = data.id;
+			var tmp_val = data.val;	
+
+			var tmp_tag = "<div id="+tmp_id+">"+tmp_val+"</div>";
+
+			$('.chatting_space').append(tmp_tag);
+			//console.log("id: "+tmpId+"// val: "+tmpVal);	
 		});
 
 	</script>
 </head>
 <body>
 
-	<div class="chatting_tool" id="list1">
-		<article>
-			<div class="chatting_space">
-				
-			</div>
-		</article>
+	<div class="chatting_tool" id="chatting">
+		<div class="chatting_space">
+			
+		</div>
+		<div class="input_space">
+			<input type="text" class="chatting_input"/>
+		</div>
 	</div>
 
 </body>

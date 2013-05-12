@@ -6,8 +6,8 @@ function server(io)
 
 		////  그룹에 join하는 함수  ////
 		socket.on('join_room', function(data) {
-			var tmpGroup = data.group;
 			console.log("Call: join_room");
+			var tmpGroup = data.group;
 			socket.join(tmpGroup);
 			console.log("Join "+tmpGroup);
 		
@@ -20,6 +20,31 @@ function server(io)
 			else {
 				lastClient = 1;
 			}
+		});
+
+		////  유저 정보 리스트에 저장하여 관리하는 함수  ////
+		socket.on('set_client', function(data) {
+			var tmpGroup = data.group;
+			var tmpUser = data.user;
+			
+			var userInfo = tmpGroup+":user";
+
+			client.llen(userInfo, function (err,reply) {
+				console.log("num: "+reply);
+				
+				rpush(userInfo, tmpUser);
+				
+			});
+
+			/*
+			socket.emit('get_client', { client: lastClient });
+			if ( lastClient < 11 ) {
+				lastClient = lastClient + 1;
+			}
+			else {
+				lastClient = 1;
+			}
+			*/
 		});
 
 		////  클라이언트 해당 tool의 lastId 요청 처리하는 함수  ////
@@ -177,7 +202,15 @@ function server(io)
 			var setId = data.id;
 			var setParent = data.parent;
 
-			// Redis 데이터 변경하는 부분 필요...
+			////  부모 필드 존재하는지 검사  ////
+			client.hlen(storeId, function (err, num) {
+				client.hkeys(storeId, function (err, parent) {
+					multi = client.multi();
+					multi.hdel(storeId, parent);	
+					multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
+					multi.exec();
+				});		
+			});	
 
 			////  다른 클라이언트들에게 변경된 parent 전달_tree  ////
 			socket.broadcast.to(tmpGroup).emit('get_change_parent', { tool:tmpTool, id: setId, parent: setParent } );

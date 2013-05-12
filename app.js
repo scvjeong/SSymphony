@@ -41,6 +41,8 @@ app.get('/page/quick_meeting', quick_meeting.quick_meeting);
 app.get('/page/meeting_template', meeting_planning.meeting_template);
 app.get('/page/setting_agenda', meeting_planning.setting_agenda);
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
+app.get('/page/ft_help', meeting.ft_help);
+
 
 /* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);

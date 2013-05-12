@@ -200,3 +200,8 @@ exports.meeting_save = function(req, res){
 			res.redirect("/page/meeting_result");
 	});
 };
+
+exports.ft_help = function(req, res){
+	result = { title:"ft_help" };
+	res.render('ft_help', {result:result} );
+}

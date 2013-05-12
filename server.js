@@ -393,6 +393,7 @@ var io_mindmap = require('socket.io').listen(50003);
 var io_vote = require('socket.io').listen(50004);
 var io_matrix = require('socket.io').listen(50005);
 var io_board = require('socket.io').listen(50006);
+var io_chatting = require('socket.io').listen(50007);
 
 server(io_list);
 server(io_postit);
@@ -400,3 +401,4 @@ server(io_mindmap);
 server(io_vote);
 server(io_matrix);
 server(io_board);
+server(io_chatting);

@@ -73,7 +73,10 @@ exports.meeting_save = function(req, res){
 	var optionsFlag = false;
 	
 	// data 
-	client.keys("group1:*:order", function(err, replies) {	
+	client.keys("group1:*:order", function(err, replies) {
+		// data 가 없을 경우
+		if( replies.length < 1 )
+			dataFlag = true;
 		replies.forEach( function(key, index) {
 			var keySplit = key.toString().split(":");
 			client.lrange(key, 0, -1, function (err, replies) {	
@@ -97,6 +100,9 @@ exports.meeting_save = function(req, res){
 								params['type'] = 'data';
 								params['client'] = client;
 								dao_m.dao_set_meeting_save_data(evt, mysql_conn, params);
+								//var err = null;
+								//var rows = null;
+								//evt.emit('set_meeting_save_data', err, rows);
 							});
 						});
 					});
@@ -106,7 +112,10 @@ exports.meeting_save = function(req, res){
 	});
 	
 	// options
-	client.keys("group1:*:options", function(err, replies) {	
+	client.keys("group1:*:options", function(err, replies) {
+		// options 가 없을 경우
+		if( replies.length < 1 )
+			optionsFlag = true;
 		replies.forEach( function(key, index) {
 			var keySplit = key.toString().split(":");
 			client.hkeys(key, function (err, replies){
@@ -127,6 +136,9 @@ exports.meeting_save = function(req, res){
 						params['type'] = 'options';
 						params['client'] = 0;
 						dao_m.dao_set_meeting_save_options(evt, mysql_conn, params);
+						//var err = null;
+						//var rows = null;
+						//evt.emit('set_meeting_save_options', err, rows);
 					});
 				});
 			});
@@ -136,6 +148,7 @@ exports.meeting_save = function(req, res){
 	evt.on('set_meeting_save_data', function(err, sql){
 		if(err) throw err;
 		dataCompleteFlag++;
+		console.log("dataCompleteFlag : " + dataCompleteFlag + " / " + dataCnt);
 		if( dataCnt === dataCompleteFlag )
 			dataFlag = true;
 		var redirectFlag = optionsFlag && dataFlag;
@@ -146,6 +159,7 @@ exports.meeting_save = function(req, res){
 	evt.on('set_meeting_save_options', function(err, sql){
 		if(err) throw err;
 		optionsCompleteFlag++;
+		console.log("optionsCompleteFlag : " + optionsCompleteFlag + " / " + optionsCnt);
 		if( optionsCnt === optionsCompleteFlag )
 			optionsFlag = true;
 		var redirectFlag = optionsFlag && dataFlag;

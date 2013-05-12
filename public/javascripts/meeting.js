@@ -299,6 +299,7 @@ function showToolWindow(idx)
 		toolsource += _toolWindowList[idx]['source'];
 		$('#meetingboard').append(toolsource);
 	//	$('.' + _toolWindowList[idx]).show();
+	
 
 		newListTool();
 		$('#' + toolname).css('width', toolwidth);

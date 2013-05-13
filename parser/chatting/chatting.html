@@ -28,11 +28,13 @@
 			socket.emit('set_client', { group: tmp_group, user: tmp_user_id });
 			socket.emit('set_data', { group: tmp_group, tool: "chatting" });
 		}
-
+		
+		////  클라이언트 번호 받아오는 함수  ////
 		socket.on('get_client', function (data) {
 			tmp_client = data.client;
 		});
 
+		////  last Id 받아오는 함수  ////
 		socket.on('get_last_id', function (data) {
 			tmp_last_id = data.last;
 			chatting_input_enter();
@@ -40,7 +42,6 @@
 
 		////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수  ////
 		socket.on('get_data', function (data) {
-
 			var tmp_id = data.id;
 			var tmp_val = data.val;	
 			var id_array = tmp_id.split('/');

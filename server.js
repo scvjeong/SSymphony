@@ -84,7 +84,7 @@ function server(io)
 							var splitArray = idNum.toString().split(':');
 							var sendId = splitArray[2];						
 							var sendVal = val;
-
+							
 							////  클라이언트로 데이터 전달  ////
 							socket.emit('get_data', { tool: tmpTool, id: sendId, val: sendVal });	
 						});
@@ -235,18 +235,20 @@ function server(io)
 					//console.log("stroeId: "+storeId+ "// preId: " +preId);
 					if ( preId != storeId )	//Id 다를때
 					{
+						console.log("Index: " + tmpIndex)
 						client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
 							//console.log("tmpOrder: " + tmpOrder +"id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
 							client.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입		
 						});	
 					}
-
+			
 					////  다른 클라이언트들에게 추가된 값 전달  ////
 					socket.broadcast.to(tmpGroup).emit('get_insert_data', {tool: tmpTool, id: tmpId, index: tmpIndex, val: tmpVal, client: tmpClient });
 				});	
 			});
 		});
-		
+
+
 		////  클라이언트 해당 tool에 추가된 값을 DB에 저장_tree  ////
 		socket.on('set_insert_tree_data', function(data) {
 			console.log("Call: insert_tree_data");

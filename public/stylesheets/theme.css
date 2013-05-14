@@ -48,6 +48,8 @@ iframe {
 	background-color: #eeeeee;
 	border-bottom-style: ridge;
 	border-bottom-width: 2px;
+	
+	width: 100%;
 }
 
 #meetingboard #drawtext_container {

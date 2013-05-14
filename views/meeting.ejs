@@ -276,23 +276,23 @@
 	</div>
 	<div id="tools">
 		<ul>
-			<li onclick="getToolSource('list', init_list)">
+			<li onclick="getToolSource('list', initList)">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>리스트</span>
 			</li>
-			<li onclick="getToolSource('postit'), alert('test'))">
+			<li onclick="getToolSource('postit', alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>포스트잇</span>
 			</li>
-			<li onclick="getToolSource('mindmap'), alert('test'))">
+			<li onclick="getToolSource('mindmap', alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>마인드맵</span>
 			</li>
-			<li onclick="getToolSource('vote'), alert('test'))">
+			<li onclick="getToolSource('vote', alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>투표도구</span>
 			</li>
-			<li onclick="getToolSource('matrix'), alert('test'))">
+			<li onclick="getToolSource('matrix', alert('test'))">
 				<img src="" alt="" style="background-color:#eeeeee;" />
 				<span>Matrix Tool</span>
 			</li>
@@ -351,13 +351,12 @@
 			</ul>
 		</div>
 		
-		<input type="button" value="파일창 열기" id="btn_show_cm_box" />
+		<input type="button" value="파일창 열기" id="btn_show_share_box" />
 		
 		<div>
 			<input type="button" value="펜" id="btn_drawtool_pen" />
 			<input type="button" value="사각형" id="btn_drawtool_rect" />
 			<input type="button" value="원" id="btn_drawtool_ellipse" />
-			
 		</div>	
 	</div>
 	
@@ -407,7 +406,7 @@
 				<ul id="file_list">
 				</ul>
 			</div>
-		</div></div>
+		</div>
 	</div>
 	
 	<canvas id="canvasView" width="1400" height="1000" >

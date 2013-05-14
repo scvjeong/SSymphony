@@ -419,7 +419,19 @@ function addTool(type, source)
 		tool['height'] = list_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['variables'] = ""; 
+		tool['variables'] = {
+			tmpIndent: 0,	// 현재 들여쓰기 상태
+			tmpLastId: 0,	// 마지막 ID 관리
+			tmpClient: 0,	//현재 클라이언트 번호
+			tmpGroup: 0,	//현재 그룹
+			tmpTool: 0,  //현재 도구
+			tmpToolSelect: 0,
+			clientColor: new Array( "none", "#99FF99", "#CCCC99",
+									"#0099FF", "#CCFFCC", "#FFFF66",
+									"#FF9999", "#669999", "#9999FF",
+									"#00CCCC", "#CC9900"),
+			inputFlag: 0
+		}; 
 		break;
 	case "postit":
 		tool['type'] = 'postit';
@@ -595,15 +607,47 @@ function showToolWindow(idx)
 }
 
 var _now_toolname = "";
+var _pre_toolname = "";
 function switchToolVariables(toolname)
 {
+	_pre_toolname = _now_toolname;
 	_now_toolname = toolname;
-	console.log("CALL switchToolInstance : " + _now_toolname);	
-	/*
+	console.log("CALL switchToolInstance : " + _now_toolname);
+	
+	var pre_tool_idx;
+	var now_tool_idx;
+	for (var i = 0; i < _toolWindowList.length; i++)
+	{
+		if (_toolWindowList[i]['name'] == _pre_toolname)
+		{
+			pre_tool_idx = i;
+		}
+		
+		if (_toolWindowList[i]['name'] == _now_toolname)
+		{
+			now_tool_idx = i;
+		}
+	}
 
 	if (toolname.substr(0,4) == "list")
 	{
-		
+		// 기존 변수 저장하기
+		_toolWindowList[i]['variables'].tmpIndent = tmpIndent;
+		_toolWindowList[i]['variables'].tmpLastId = tmpLastId; // 마지막 ID 관리
+		_toolWindowList[i]['variables'].tmpClient = tmpClient;	//현재 클라이언트 번호
+		_toolWindowList[i]['variables'].tmpGroup = tmpGroup;	//현재 그룹
+		_toolWindowList[i]['variables'].tmpTool = tmpTool;  //현재 도구
+		_toolWindowList[i]['variables'].tmpToolSelect = tmpToolSelect;
+		_toolWindowList[i]['variables'].inputFlag = inputFlag;	//키입력 감지하기 위한 변수
+	
+		// 사용할 변수 불러오기
+		tmpIndent = _toolWindowList[i]['variables'].tmpIndent;
+		tmpLastId = _toolWindowList[i]['variables'].tmpLastId; // 마지막 ID 관리
+		tmpClient = _toolWindowList[i]['variables'].tmpClient;	//현재 클라이언트 번호
+		tmpGroup = _toolWindowList[i]['variables'].tmpGroup;	//현재 그룹
+		tmpTool = _toolWindowList[i]['variables'].tmpTool;  //현재 도구
+		tmpToolSelect = _toolWindowList[i]['variables'].tmpToolSelect;
+		inputFlag = _toolWindowList[i]['variables'].inputFlag;	//키입력 감지하기 위한 변수
 	}
 	else if (toolname.substr(0,6) == "postit")
 	{
@@ -613,7 +657,7 @@ function switchToolVariables(toolname)
 	{
 		
 	}
-	else if (toolname.substr(0,4) == "vote"")
+	else if (toolname.substr(0,4) == "vote")
 	{
 		
 	}
@@ -621,7 +665,6 @@ function switchToolVariables(toolname)
 	{
 		
 	}
-	*/
 }
 
 // 도구창 닫는 함수

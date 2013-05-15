@@ -1,13 +1,14 @@
 var width = 100;
 var height = 100;
 var tmpClient = 0;	//현재 클라이언트 번호
+var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
 //var _tmpGroup = "matrix-group-1";	//현재 그룹
-var _tmpGroup = "group1";	//현재 그룹
-var _toolName = "matrix";
+//var _tmpGroup = "group1";	//현재 그룹
+//var _toolName = "matrix";
 var setupData = { row:0, col:0 }; // matrix 행, 열
 var setupFlag = { data_init:true, row:false, col:false };
 var optionId = { set:999999, row:999998, col:999997 };
-var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
+
 var _key_code = null // 키 입력 값 저장
 var _box_count = 0;
 

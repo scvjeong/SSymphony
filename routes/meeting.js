@@ -19,6 +19,11 @@ exports.main = function(req, res){
 	res.render('meeting', { title: 'Express' });
 };
 
+exports.meeting_public = function(req, res){
+	
+	res.render('meeting_public', { title: 'Express' });
+};
+
 exports.meeting_appraisal = function(req, res){
 	/** session start **/
 	//if( !req.session.email || !req.session.email.length )

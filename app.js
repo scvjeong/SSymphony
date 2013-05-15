@@ -35,6 +35,7 @@ app.configure('development', function(){
 app.get('/', main.main);
 app.get('/page/meeting_list', routes.meeting_list);
 app.get('/page/meeting', meeting.main);
+app.get('/page/meeting_public', meeting.meeting_public);
 app.get('/page/meeting_appraisal', meeting.meeting_appraisal);
 app.get('/page/meeting_result', meeting.meeting_result);
 app.get('/page/quick_meeting', quick_meeting.quick_meeting);

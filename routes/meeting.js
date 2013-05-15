@@ -210,3 +210,8 @@ exports.ft_help = function(req, res){
 	result = { title:"ft_help" };
 	res.render('ft_help', {result:result} );
 }
+
+exports.need_help = function(req, res){
+	result = { title:"need_help" };
+	res.render('need_help', {result:result} );
+}

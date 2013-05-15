@@ -19,7 +19,8 @@
 		*/
 
 		////  리스트 초기 설정해주는 함수  ////
-		function initList(group, tool){
+		function initList(group, tool)
+		{
 			console.log("CALL initList(" + group + ", " + tool + ")");
 			
 			tool = "list" + tool;
@@ -31,9 +32,9 @@
 			
 			console.log(tmpToolSelect.attr('id'));
 
-			socket.emit('join_room', { group: tmpGroup });
+			_socket_list.emit('join_room', { group: tmpGroup });
 			
-			socket.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
+			_socket_list.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
 
 			////  Bullet 클릭 이벤트 등록 - 자식 노드 숨김  ////
 			tmpToolSelect.find('.list_space').delegate('.bullet', 'click', function() {
@@ -62,7 +63,7 @@
 					tmpSelectInput.children('.tmp_editing').css({ "text-decoration": "" });	
 				}
 				var tmpId = tmpSelectInput.attr('taskid');
-				socket.emit('set_option_data',  { group: tmpGroup, tool: tmpTool, id: tmpId }); 
+				_socket_list.emit('set_option_data',  { group: tmpGroup, tool: tmpTool, id: tmpId }); 
 				//console.log("Check ID: "+tmpId);
 				//socket.emit('set_check', { id: tmpId });
 			});		
@@ -73,18 +74,18 @@
 			console.log("CALL addSocketListenerForList");
 			
 			////  클라이언트 번호 얻어오는 부분  ////
-			socket.on('get_client', function (data) {
+			_socket_list.on('get_client', function (data) {
 				tmpClient = data.client;
 			});
 			
 			////  다른 클라이언트가 데이터 초기화했을 때  ////
-			socket.on('get_init_tool_data', function (data) {
+			_socket_list.on('get_init_tool_data', function (data) {
 				tmpToolSelect.find('.list_space > .children').children().remove();
-				socket.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
+				_socket_list.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
 			});
 			
 			////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
-			socket.on('get_tree_data', function (data) {
+			_socket_list.on('get_tree_data', function (data) {
 	
 				var tmpId = data.id;
 				var tmpParent = data.parent;
@@ -124,14 +125,14 @@
 			});
 	
 			////  lastId 얻어오는 함수  ////
-			socket.on('get_last_id', function (data) {
+			_socket_list.on('get_last_id', function (data) {
 	
 				tmpLastId = data.last;
 				list_add_input_box();
 			});
 	
 			////  변경된 들여쓰기 얻어오는 함수  ////
-			socket.on('get_change_depth', function (data) {
+			_socket_list.on('get_change_depth', function (data) {
 	
 				var tmpChangeId = data.id;
 				var tmpChangeIndent = data.depth;
@@ -178,7 +179,7 @@
 			});
 	
 			////  다른 클라이언트가 입력 시작할 경우 해당 라인 스타일 변경  ////
-			socket.on('get_input_tree_data', function (data) {
+			_socket_list.on('get_input_tree_data', function (data) {
 	
 				var addId = data.id;
 				var addParent = data.parent;
@@ -267,7 +268,7 @@
 			});
 	
 			////  다른 클라이언트가 추가한 리스트 data 서버에서 가져옴  ////
-			socket.on('get_insert_tree_data', function (data) {
+			_socket_list.on('get_insert_tree_data', function (data) {
 				//console.log(data);
 	
 				var addId = data.id;
@@ -293,7 +294,7 @@
 			});
 	
 			////  다른 클라이언트에서 삭제한 리스트 data ID 서버에서 가져와서 삭제  ////
-			socket.on('get_delete_tree_data', function (data) {
+			_socket_list.on('get_delete_tree_data', function (data) {
 				//console.log(data);
 	
 				var tmpDelId = data.id;
@@ -325,7 +326,7 @@
 			});
 			
 			////  check 상태 변화 서버에서 받아와서 적용  ////
-			socket.on('get_option_data', function (data) {
+			_socket_list.on('get_option_data', function (data) {
 		
 				var checkId = data.id;
 				var checkInput = tmpToolSelect.find('[taskid='+checkId+']');
@@ -349,9 +350,9 @@
 
 		function list_init_data() {
 			//alert("Init Data");
-			socket.emit('set_init_tool_data', { group: tmpGroup, tool: tmpTool });	
+			_socket_list.emit('set_init_tool_data', { group: tmpGroup, tool: tmpTool });	
 			tmpToolSelect.find('.list_space > .children').children().remove();
-			socket.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
+			_socket_list.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
 		}
 	
 		////  input 영역 마우스로 클릭시 호출되는 함수  ////
@@ -385,7 +386,7 @@
 				var preIndex = tmpToolSelect.find('.bullet').index(preBullet);	 // 이전 Index 구함
 				var preVal = tmpToolSelect.find('.input_open > .tmp_editing').val();	// 이전 값 구함
 			
-				socket.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+				_socket_list.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 				//서버 소켓으로 데이터 전송
 
 				////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
@@ -442,7 +443,7 @@
 		
 			preInput.css({ "background": clientColor[0] });
 
-			socket.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+			_socket_list.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 			//서버 소켓으로 데이터 전송
 
 			preInput.attr('class', 'input_task');					
@@ -491,7 +492,7 @@
 
 					list_set_indent(tmpIndent);
 
-					socket.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+					_socket_list.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
 				}		
 				else if ( preClass.attr('class') == "edit_open" )	//직전 클래스가 edit_open인 경우 태그만 추가
 				{
@@ -502,7 +503,7 @@
 
 					list_set_indent(tmpIndent);
 		
-					socket.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+					_socket_list.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
 				}
 			}	
 		}
@@ -527,7 +528,7 @@
 				}
 				list_set_indent(tmpIndent);	// 들여쓰기 설정 함수 호출
 
-				socket.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+				_socket_list.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
 			}
 		}
 
@@ -579,7 +580,7 @@
 					}						
 				}						
 				var delId = tmpInput.attr('taskid');
-				socket.emit('set_delete_tree_data', { group: tmpGroup, tool: tmpTool, id: delId  } );
+				_socket_list.emit('set_delete_tree_data', { group: tmpGroup, tool: tmpTool, id: delId  } );
 			}
 		}
 
@@ -600,7 +601,7 @@
 			
 			console.log("Id: "+tmpId+"// addClient: "+tmpClient);
 
-			socket.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: tmpClient } );
+			_socket_list.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: tmpClient } );
 		}
 
 		//// input 영역에서 키보드 입력시 호출되는 함수  ////
@@ -609,7 +610,7 @@
 			if ( inputKey == 13 )	// Input Enter
 			{
 				//alert("Enter");
-				socket.emit('set_last_id', { group: tmpGroup, tool: tmpTool });		
+				_socket_list.emit('set_last_id', { group: tmpGroup, tool: tmpTool });		
 				inputFlag = 0;
 			}
 			else if ( inputKey == 9 && event.shiftKey ) // Input Shift + Tab
@@ -657,11 +658,11 @@
 		}
 		
 		function list_add_new_input() {
-			socket.emit('set_last_id', { group: tmpGroup, tool: tmpTool });		
+			_socket_list.emit('set_last_id', { group: tmpGroup, tool: tmpTool });		
 			inputFlag = 0;
 		}
 
 		function list_change_data() {
-			socket.emit('set_change_tree_data', { group: tmpGroup, tool: tmpTool, change: 'mindmap1' });
+			_socket_list.emit('set_change_tree_data', { group: tmpGroup, tool: tmpTool, change: 'mindmap1' });
 		}
 

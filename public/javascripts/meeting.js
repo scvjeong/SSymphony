@@ -441,7 +441,9 @@ function addTool(type, source)
 		tool['height'] = postit_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['variables'] = "";
+		tool['variables'] = {
+				
+		};
 		break;
 	case "mindmap":
 		tool['type'] = 'mindmap';
@@ -451,7 +453,9 @@ function addTool(type, source)
 		tool['height'] = mindmap_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['variables'] = "";
+		tool['variables'] = {
+			
+		};
 		break;
 	case "vote":
 		tool['type'] = 'vote';
@@ -461,7 +465,9 @@ function addTool(type, source)
 		tool['height'] = vote_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['variables'] = "";
+		tool['variables'] = {
+			
+		};
 		break;
 	case "matrix":
 		tool['type'] = 'matrix';
@@ -471,7 +477,9 @@ function addTool(type, source)
 		tool['height'] = matrix_window_height;
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
-		tool['variables'] = "";
+		tool['variables'] = {
+			
+		};
 		break;
 	}
 	tool['source'] = source;
@@ -612,10 +620,10 @@ function switchToolVariables(toolname)
 {
 	_pre_toolname = _now_toolname;
 	_now_toolname = toolname;
-	console.log("CALL switchToolInstance : " + _now_toolname);
+	//console.log("CALL switchToolInstance : " + _now_toolname);
 	
-	var pre_tool_idx;
-	var now_tool_idx;
+	var pre_tool_idx = 0;
+	var now_tool_idx = 0;
 	for (var i = 0; i < _toolWindowList.length; i++)
 	{
 		if (_toolWindowList[i]['name'] == _pre_toolname)
@@ -628,26 +636,26 @@ function switchToolVariables(toolname)
 			now_tool_idx = i;
 		}
 	}
-
+	
 	if (toolname.substr(0,4) == "list")
 	{
-		// 기존 변수 저장하기
-		_toolWindowList[i]['variables'].tmpIndent = tmpIndent;
-		_toolWindowList[i]['variables'].tmpLastId = tmpLastId; // 마지막 ID 관리
-		_toolWindowList[i]['variables'].tmpClient = tmpClient;	//현재 클라이언트 번호
-		_toolWindowList[i]['variables'].tmpGroup = tmpGroup;	//현재 그룹
-		_toolWindowList[i]['variables'].tmpTool = tmpTool;  //현재 도구
-		_toolWindowList[i]['variables'].tmpToolSelect = tmpToolSelect;
-		_toolWindowList[i]['variables'].inputFlag = inputFlag;	//키입력 감지하기 위한 변수
+		// 기존 변수 저장하기 
+		_toolWindowList[pre_tool_idx]['variables'].tmpIndent = tmpIndent;
+		_toolWindowList[pre_tool_idx]['variables'].tmpLastId = tmpLastId; // 마지막 ID 관리
+		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;	//현재 클라이언트 번호
+		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;	//현재 그룹
+		_toolWindowList[pre_tool_idx]['variables'].tmpTool = tmpTool;  //현재 도구
+		_toolWindowList[pre_tool_idx]['variables'].tmpToolSelect = tmpToolSelect;
+		_toolWindowList[pre_tool_idx]['variables'].inputFlag = inputFlag;	//키입력 감지하기 위한 변수
 	
 		// 사용할 변수 불러오기
-		tmpIndent = _toolWindowList[i]['variables'].tmpIndent;
-		tmpLastId = _toolWindowList[i]['variables'].tmpLastId; // 마지막 ID 관리
-		tmpClient = _toolWindowList[i]['variables'].tmpClient;	//현재 클라이언트 번호
-		tmpGroup = _toolWindowList[i]['variables'].tmpGroup;	//현재 그룹
-		tmpTool = _toolWindowList[i]['variables'].tmpTool;  //현재 도구
-		tmpToolSelect = _toolWindowList[i]['variables'].tmpToolSelect;
-		inputFlag = _toolWindowList[i]['variables'].inputFlag;	//키입력 감지하기 위한 변수
+		tmpIndent = _toolWindowList[now_tool_idx]['variables'].tmpIndent;
+		tmpLastId = _toolWindowList[now_tool_idx]['variables'].tmpLastId; // 마지막 ID 관리
+		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;	//현재 클라이언트 번호
+		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;	//현재 그룹
+		tmpTool = _toolWindowList[now_tool_idx]['variables'].tmpTool;  //현재 도구
+		tmpToolSelect = _toolWindowList[now_tool_idx]['variables'].tmpToolSelect;
+		inputFlag = _toolWindowList[now_tool_idx]['variables'].inputFlag;	//키입력 감지하기 위한 변수
 	}
 	else if (toolname.substr(0,6) == "postit")
 	{

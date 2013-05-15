@@ -11,7 +11,6 @@ exports.list = function(req, res) {
 	
 	console.log(req.params);
 
-//	res.render('tools/list', { title: 'Express' });
 	res.render('tools/list',
 		{
 			group_id: group_id,
@@ -21,17 +20,57 @@ exports.list = function(req, res) {
 };
 
 exports.postit = function(req, res) {
-	res.render('tools/postit', { title: 'Express' });
+	var group_id = req.params.group_id;
+	var tool_index = req.params.tool_index;
+	
+	console.log(req.params);
+
+	res.render('tools/postit',
+		{
+			group_id: group_id,
+			tool_index: tool_index
+		}
+	);
 };
 
 exports.mindmap = function(req, res) {
-	res.render('tools/mindmap', { title: 'Express' });
+	var group_id = req.params.group_id;
+	var tool_index = req.params.tool_index;
+	
+	console.log(req.params);
+
+	res.render('tools/mindmap',
+		{
+			group_id: group_id,
+			tool_index: tool_index
+		}
+	);
 };
 
 exports.vote = function(req, res) {
-	res.render('tools/vote', { title: 'Express' });
+	var group_id = req.params.group_id;
+	var tool_index = req.params.tool_index;
+	
+	console.log(req.params);
+
+	res.render('tools/vote',
+		{
+			group_id: group_id,
+			tool_index: tool_index
+		}
+	);
 };
 
 exports.matrix = function(req, res) {
-	res.render('tools/matrix', { title: 'Express' });
+	var group_id = req.params.group_id;
+	var tool_index = req.params.tool_index;
+	
+	console.log(req.params);
+
+	res.render('tools/matrix',
+		{
+			group_id: group_id,
+			tool_index: tool_index
+		}
+	);
 };

@@ -16,7 +16,7 @@ var inputFlag = 0;	//키입력 감지하기 위한 변수
 ////  _socket_matrix.io 서버의 해당 그룹에 접속  ////
 //var _socket_matrix = io.connect('http://61.43.139.69:8000/group');	// socket.io 서버에 접속
 //var _socket_matrix = io.connect('http://lyd.kr:8000/group');	// socket.io 서버에 접속
-var _socket_matrix = io.connect('http://61.43.139.69:50005/group');
+//var _socket_matrix = io.connect('http://61.43.139.69:50005/group');
 
 
 ////  처음 창 오픈되었을 때 호출  ////
@@ -327,52 +327,54 @@ function setOption(data)
 		setDoClear(data.tool);
 }
 
-_socket_matrix.on('get_tree_data', function (data) {
-	setupFlag.data_init = true;
-	index = $(".matrix-box[parent="+data.parent+"]").length;
-	addRemoteInputbox(data.id, data.val, data.parent, index, data.tool);
-});
-_socket_matrix.on('get_client', function (data) {
-	tmpClient = data.client;
-});
-// matrix setup
-_socket_matrix.on('get_init_tool_data', function (data) {
-	setupFlag.data_init = true;
-});
-_socket_matrix.on('get_tree_option_data', function (data) {
-	setOption(data);
-});
-_socket_matrix.on('get_option_data', function (data) {
-	setOption(data);
-});
-
-_socket_matrix.on('get_insert_tree_data', function (data) {
-	addRemoteInputbox(data.id, data.val, data.parent, data.index, data.tool);
-});
-
-_socket_matrix.on('get_delete_tree_data', function (data) {
-	$("input[taskid="+data.id+"]").remove();
-});
-
-_socket_matrix.on('get_last_id', function (data) {
+function initMatrix(group, tool)
+{
+	_socket_matrix.on('get_tree_data', function (data) {
+		setupFlag.data_init = true;
+		index = $(".matrix-box[parent="+data.parent+"]").length;
+		addRemoteInputbox(data.id, data.val, data.parent, index, data.tool);
+	});
+	_socket_matrix.on('get_client', function (data) {
+		tmpClient = data.client;
+	});
+	// matrix setup
+	_socket_matrix.on('get_init_tool_data', function (data) {
+		setupFlag.data_init = true;
+	});
+	_socket_matrix.on('get_tree_option_data', function (data) {
+		setOption(data);
+	});
+	_socket_matrix.on('get_option_data', function (data) {
+		setOption(data);
+	});
 	
-	lastId = data.last;
-	var toolBox = $('#'+data.tool);
-	var totalBoxCount = $('td', toolBox).length;
-	//var boxCount = $('.matrix_table input', toolBox).length;
+	_socket_matrix.on('get_insert_tree_data', function (data) {
+		addRemoteInputbox(data.id, data.val, data.parent, data.index, data.tool);
+	});
 	
-	if( totalBoxCount > _box_count )
-	{
-		setupBox(lastId, data.tool);
-		$(".matrix-input:first").focus();
-	}
-	else
-		addInputbox(lastId, "", data.tool);
-});
-
-/*
-_socket_matrix.on('get_input_data', function (data) {
-//	console.log( data.client );
-//	console.log( data.id );
-});
-*/
+	_socket_matrix.on('get_delete_tree_data', function (data) {
+		$("input[taskid="+data.id+"]").remove();
+	});
+	
+	_socket_matrix.on('get_last_id', function (data) {
+		lastId = data.last;
+		var toolBox = $('#'+data.tool);
+		var totalBoxCount = $('td', toolBox).length;
+		//var boxCount = $('.matrix_table input', toolBox).length;
+		
+		if( totalBoxCount > _box_count )
+		{
+			setupBox(lastId, data.tool);
+			$(".matrix-input:first").focus();
+		}
+		else
+			addInputbox(lastId, "", data.tool);
+	});
+	
+	/*
+	_socket_matrix.on('get_input_data', function (data) {
+	//	console.log( data.client );
+	//	console.log( data.id );
+	});
+	*/
+}

@@ -52,10 +52,10 @@ app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 
 /* 도구 관련 */
 app.get('/tool/list/:group_id/:tool_index', tools.list);
-app.get('/tool/postit', tools.postit);
-app.get('/tool/mindmap', tools.mindmap);
-app.get('/tool/vote', tools.vote);
-app.get('/tool/matrix', tools.matrix);
+app.get('/tool/postit/:group_id/:tool_index', tools.postit);
+app.get('/tool/mindmap/:group_id/:tool_index', tools.mindmap);
+app.get('/tool/vote/:group_id/:tool_index', tools.vote);
+app.get('/tool/matrix/:group_id/:tool_index', tools.matrix);
 
 app.post('/lib/upload', function(req, res) {
 	console.log(JSON.stringify(req.files)); 

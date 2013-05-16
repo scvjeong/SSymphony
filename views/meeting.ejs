@@ -111,6 +111,7 @@
 	<!-- 마인드맵 도구 -->
 		<link rel="stylesheet" href="../stylesheets/tools/mindmap.css">
 		<script src="../javascripts/d3.v3.js"></script>
+		<script src="../javascripts/tools/mindmap.js"></script>
 	<!-- /마인드맵 도구 -->
 
 	<!-- 매트릭스 도구 -->
@@ -278,23 +279,23 @@
 		<ul>
 			<li onclick="getToolSource('list', initList)">
 				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>리스트</span>
+				<span>List</span>
 			</li>
-			<li onclick="getToolSource('postit', alert('test'))">
+			<li onclick="getToolSource('postit', initPostit)">
 				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>포스트잇</span>
+				<span>Postit</span>
 			</li>
-			<li onclick="getToolSource('mindmap', alert('test'))">
+			<li onclick="getToolSource('mindmap', initMindmap)">
 				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>마인드맵</span>
+				<span>Mindmap</span>
 			</li>
-			<li onclick="getToolSource('vote', alert('test'))">
+			<li onclick="getToolSource('vote', initVote)">
 				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>투표도구</span>
+				<span>Vote</span>
 			</li>
-			<li onclick="getToolSource('matrix', alert('test'))">
+			<li onclick="getToolSource('matrix', initMatrix)">
 				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>Matrix Tool</span>
+				<span>Matrix</span>
 			</li>
 		</ul>
 		</ul>

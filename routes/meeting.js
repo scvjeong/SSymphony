@@ -20,7 +20,6 @@ exports.main = function(req, res){
 };
 
 exports.meeting_public = function(req, res){
-	
 	res.render('meeting_public', { title: 'Express' });
 };
 

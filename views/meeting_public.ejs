@@ -1,0 +1,178 @@
+<html lang="ko" class="canHaveFixedElements" id="facebook">
+<head>
+	<meta charset="utf-8">
+	<meta content="noodp, noydir" name="robots">
+	<meta id="meta_referrer" content="default" name="referrer">
+	<title>Orchestra</title>
+	<link href="/stylesheets/tmp.css" rel="stylesheet">
+	<style>
+		*{
+			margin:0px;padding:0px;
+		}
+		.title-bar{
+			font-family:"Roboto";
+			color:#FFFFFF;
+			width:100%;
+			height:52px;
+			line-height:52px;
+			background-color: #23466a;
+			background-image: -moz-linear-gradient(top, #23466a 3%, #336699 20%);
+			background-image: -webkit-gradient(linear, 0 0, 0 15%, from(#23466a), to(#336699));
+			background-image: -webkit-linear-gradient(top, #23466a 3%, #336699 20%);
+			background-image: -o-linear-gradient(top, #23466a 3%, #336699 20%);
+			background-image: linear-gradient(to bottom, #23466a 3%, #336699 20%);
+			background-repeat: repeat-x;
+			filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff23466a', endColorstr='#ff336699', GradientType=0);
+			text-align:center;
+		}	
+		.title-bar .subject{
+			float:left;
+			padding-left:20px;
+			font-size:1.5em;
+			font-weight:bold;
+		}
+		.title-bar .time{
+			font-family:"Fjalla One";
+			float:right;
+			padding-right:20px;
+			font-weight:bold;
+		}
+		.white-board{
+			float:left;
+			width:75%;
+			height:500px;
+			background-color: #FFFFFF;
+			background-image: -moz-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-image: -webkit-gradient(linear, 0 0, 0 10%, from(#d7d7d7), to(#FFFFFF));
+			background-image: -webkit-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-image: -o-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-image: linear-gradient(to bottom, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-repeat: repeat-x;
+			filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
+		}
+		.right-box{
+			float:right;
+			width:25%;
+		}
+		.right-box-title-bar{
+			font-family:"Fjalla One";
+			color:#FFFFFF;
+			background-color: #5c8ab8;
+			padding-left:20px;
+			line-height:35px;
+		}
+		.right-box-content-box{
+			font-family:"Roboto";
+			line-height:25px;
+			color:#999999;
+			padding:10px 5px 5px 20px;
+			height:100px;
+			background-color: #FFFFFF;
+			background-image: -moz-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-image: -webkit-gradient(linear, 0 0, 0 10%, from(#d7d7d7), to(#FFFFFF));
+			background-image: -webkit-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-image: -o-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-image: linear-gradient(to bottom, #d7d7d7 0.1%, #FFFFFF 10%);
+			background-repeat: repeat-x;
+			filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
+			overflow-y:scroll;
+		}
+		.right-box-content-box .processing{
+			color:#2674a1;
+		}
+
+		.fancy-scrollbar::-webkit-scrollbar,
+		.fancy-scrollbar::-webkit-scrollbar-button:start:increment,
+		.fancy-scrollbar::-webkit-scrollbar-button:start:decrement,
+		.fancy-scrollbar::-webkit-scrollbar-button:end:increment,
+		.fancy-scrollbar::-webkit-scrollbar-button:end:decrement {
+			width: 9px;
+			height: 9px;
+			display: none;
+		}
+		.fancy-scrollbar::-webkit-scrollbar,
+		.fancy-scrollbar::-webkit-scrollbar-button:start:decrement,
+		.fancy-scrollbar::-webkit-scrollbar-button:end:increment {
+			display: block;
+		}
+		.fancy-scrollbar::-webkit-scrollbar-track {
+			border-radius: 4.5px;
+			background: rgba(0, 0, 0, .15);
+			:disabled {
+				display: none;
+			}
+		}
+		.fancy-scrollbar::-webkit-scrollbar-thumb {
+			border-radius: 4.5px;
+			background: rgba(0, 0, 0, .25);
+			border: 1px inset rgba(0, 0, 0, .15);
+			-webkit-transition: background-color 2.5s linear;
+		}
+		.fancy-scrollbar:hover::-webkit-scrollbar-thumb {
+			background: rgba(0, 0, 0, .35);
+		}
+		.fancy-scrollbar::-webkit-scrollbar-thumb:hover {
+			background: rgba(0, 0, 0, .55);
+		}
+
+	</style>
+</head>
+<body class="meeting">
+	<div class="container">
+		<div class="title-bar">
+			<div class="subject">Weekly Discussion</div>
+			<span class="sub-subject">How to make chicken more cute</span>
+			<div class="time">00:00:00 / 01:00:00</div>
+		</div>
+		<div class="white-board">
+			
+		</div>
+		<div class="right-box">
+			<div class="process-box">
+				<div class="right-box-title-bar">Process</div>
+				<div class="right-box-content-box fancy-scrollbar">
+					<div class="process-unit processing">Ice Breaking</div>
+					<div class="process-unit">Weekly Review</div>
+					<div class="process-unit">Clarify Agenda</div>
+					<div class="process-unit">Discussion</div>
+					<div class="process-unit">Burning Issue</div>
+					<div class="process-unit">Review</div>
+					<div class="process-unit">Closing Round</div>
+				</div>
+			</div>
+			<div class="tool-box">
+				<div class="right-box-title-bar">Tool</div>
+				<div class="right-box-content-box fancy-scrollbar">
+				</div>
+			</div>
+			<div class="member-box">
+				<div class="right-box-title-bar">Memeber 4/6</div>
+				<div class="right-box-content-box fancy-scrollbar">
+				</div>
+			</div>
+			<div class="facilitator-box">
+				<div class="right-box-title-bar">Facilitator</div>
+				<div class="right-box-content-box fancy-scrollbar">
+				</div>
+			</div>
+		</div>		
+	</div>
+</body>
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
+<!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+		long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+		to to "classic" jQuery behavior -->
+<script>if ($ === undefined) $ = jQuery</script>
+<!-- /jQuery -->
+<!-- Bootstrap Components -->
+<script src="/javascripts/bootstrap.min.js"></script>
+<script src="/javascripts/orchestra.js"></script>
+<script>
+	$(document).ready(function(){
+	})
+</script>
+</html>

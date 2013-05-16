@@ -375,7 +375,7 @@
 /* }=== MADMIN MENU === */
 /* === LAYOUT ==={ */
 body {
-  padding: 30px 0 40px 0;
+  padding: 52px 0 40px 0;
   min-height: 600px;
 }
 body.help-page {
@@ -386,11 +386,9 @@ body.help-page {
   top: 0;
   left: 0;
   width: 100%;
-  height: 30px;
-  padding: 0 3px;
+  height: 52px;
   border: 0;
   margin: 0;
-  text-align: center;
   z-index: 5000;
 }
 #topbar > li {
@@ -541,7 +539,7 @@ ul {
 }
 /* Top Bar */
 #topbar {
-  background: #3a4450;
+  background: #336699;
   color: #ffffff;
 }
 #topbar h1 {
@@ -1511,3 +1509,14 @@ h6 small {
 	.step_show{
 		display:block !important;
 	}
+
+
+/*** Design ***/
+
+#topbar #logo{
+	float:left;
+	font-family:"Oxygen";
+	margin:23px 0px 0px 30px;
+	font-size:3em;
+	font-weight:bold;
+}

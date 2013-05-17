@@ -313,6 +313,58 @@ function setRightpanel(panel)
 }
 
 
+var _tool_type = "";
+/* 도구별 소스를 동적으로 가져옴 */
+function getToolSource(tool_type, initFuncName)
+{
+	var source_url = "";
+	var tool_index = "";
+	_tool_type = tool_type;
+	
+	switch (tool_type)
+	{
+	case "list":
+		tool_index = _tool_list_count++;
+		break;
+	case "postit":
+		tool_index = _tool_postit_count++;
+		break;
+	case "mindmap":
+		tool_index = _tool_mindmap_count++;
+		break;
+	case "vote":
+		tool_index = _tool_vote_count++;
+		break;
+	case "matrix":
+		tool_index = _tool_matrix_count++;
+		break;
+	}
+	
+	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_index;
+	console.log("부른 도구의 Source url :: " + source_url);
+	
+	$.ajax({
+		type: "GET",
+		url: source_url,
+//		data: {tool_index: tool_index, group_id: _group_id},
+		dataType: "html",
+		success: function(data) {
+			initFuncName(tool_index, _group_id);
+			if (_is_added_socket_listener_for_list == false)
+			{
+				addSocketListenerForList();
+				_is_added_socket_listener_for_list = true;
+			}
+//			includeFileDynamically(data.include_list);
+			addTool(_tool_type, data);
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+}
+
 /* 동적으로 파일 추가 */
 function includeFileDynamically(list) {
 	console.log("call lncludeFileDynamically");
@@ -341,62 +393,9 @@ function includeFileDynamically(list) {
 }
 
 
-var _tool_type = "";
-/* 도구별 소스를 동적으로 가져옴 */
-function getToolSource(tool_type, initFuncName)
-{
-	var source_url = "";
-	var tool_index = "";
-	_tool_type = tool_type;
-	
-	switch (tool_type)
-	{
-	case "list":
-		tool_index = _tool_list_count;
-		break;
-	case "postit":
-		tool_index = _tool_postit_count;
-		break;
-	case "mindmap":
-		tool_index = _tool_mindmap_count;
-		break;
-	case "vote":
-		tool_index = _tool_vote_count;
-		break;
-	case "matrix":
-		tool_index = _tool_matrix_count;
-		break;
-	}
-	
-	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_index;
-	console.log("부른 도구의 Source url :: " + source_url);
-	
-	$.ajax({
-		type: "GET",
-		url: source_url,
-//		data: {tool_index: tool_index, group_id: _group_id},
-		dataType: "html",
-		success: function(data) {
-			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_index:" + tool_index + "]");
-			if (_is_added_socket_listener_for_list == false)
-			{
-				addSocketListenerForList();
-				_is_added_socket_listener_for_list = true;
-			}
-//			includeFileDynamically(data.include_list);
-			addTool(_tool_type, data);
-			initFuncName(_group_id, tool_index);
-		},
-		error: function(err) {
-			console.log(err);
-			return false;
-		}
-	});
-}
-
 function addTool(type, source)
 {
-	console.log("CALL addTool [type=" + type + "]");
+	console.log("CALL addTool [type=" + type + ", source=" + source + "]");
 
 	var tool = new Array();
 
@@ -408,8 +407,6 @@ function addTool(type, source)
 	var mindmap_window_height = 400;
 	var vote_window_width = 500;
 	var vote_window_height= 400;
-	var matrix_window_width = 500;
-	var matrix_window_height= 400;
 
 	console.log('addToolWindow 호출됨, type:' + type);
 	switch (type)
@@ -445,13 +442,7 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
-			tmpLastId: 100,
-			tmpGroup: 0,
-			tmpTool: 0,
-			tmpItemGroup: 0,
-			tmpClient: 0,
-			tmpToolSelect: 0,
-			preSelectGroup: 0
+				
 		};
 		break;
 	case "mindmap":
@@ -463,17 +454,7 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
-			moveFlag: 0,
-			preX: 0,
-			preY: 0,
-			dataLinks: [],
-			dataNodes: [],
-			tmpIndent: 0,	// 현재 들여쓰기 상태 
-			tmpLastId: 100,	// 마지막 ID 관리
-			tmpClient: 0,	//현재 클라이언트 번호
-			tmpGroup: 0,	//현재 그룹
-			tmpTool: 0,
-			inputFlag: 0	//키입력 감지하기 위한 변수	
+			
 		};
 		break;
 	case "vote":
@@ -497,30 +478,16 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
-			setupData: {
-						row: 0,
-						col: 0
-						}, // matrix 행, 열
-			setupFlag: {
-						data_init: true,
-						row: false,
-						col: false
-						},
-			optionId: {
-						set: 999999,
-						row: 999998,
-						col: 999997
-						},
-			_key_code: null, // 키 입력 값 저장
-			_box_count: 0,
-			inputFlag: 0	//키입력 감지하기 위한 변수
+			
 		};
 		break;
 	}
 	tool['source'] = source;
 	
-	_common_windot_left += 100;
-	_common_window_top += 100;
+	_common_windot_left += 10;
+	_common_window_top += 10;
+
+		console.log('addTool source : ', tool['source']);
 
 	_toolWindowList.push(tool);
 	showToolWindow(_toolWindowList.length - 1);
@@ -535,7 +502,7 @@ function showToolWindow(idx)
 	var tooltitle = _toolWindowList[idx]['title'];
 	var tooltop = _toolWindowList[idx]['top'];
 	var toolleft = _toolWindowList[idx]['left'];
-	var toolsource = '<div class="toolwindow" id="' + toolname + '" onclick="upToFrontWindow(\'' + toolname + '\')">';
+	var toolsource = '<div class="toolwindow" onmousemove="switchToolVariables(\'' + toolname + '\')" id="' + toolname + '" onclick="upToFrontWindow(\'' + toolname + '\')">';
 		toolsource += '<div class="title">';
 			toolsource += '<div class="title_text">' + tooltitle + '</div>';
 			//toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
@@ -556,31 +523,26 @@ function showToolWindow(idx)
 		$('#meetingboard').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
-		_tool_list_count++;
 		break;
 	case "postit":
 		$('#meetingboard').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
-		_tool_postit_count++;
 		break;
 	case "mindmap":
 		$('#meetingboard').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
-		_tool_mindmap_count++;
-		break;
-	case "vote":
-		$('#meetingboard').append(toolsource);
-		$('#' + toolname).css('width', toolwidth);
-		$('#' + toolname).css('height', toolheight);
-		_tool_vote_count++;
 		break;
 	case "matrix":
 		$('#meetingboard').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
-		_tool_matrix_count++;
+		break;
+	case "vote":
+		$('#meetingboard').append(toolsource);
+		$('#' + toolname).css('width', toolwidth);
+		$('#' + toolname).css('height', toolheight);
 		break;
 	}
 	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
@@ -648,23 +610,17 @@ function showToolWindow(idx)
                 
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
-	
-	$('#' + toolname).on('mouseenter', function() {
-		switchToolVariables(toolname);
-	});
-	
-	switchToolVariables(toolname);
+
+	console.log('toolsource : ' + toolsource);
 }
 
 var _now_toolname = "";
 var _pre_toolname = "";
 function switchToolVariables(toolname)
 {
-	if (toolname == _now_toolname)
-		return;
-
 	_pre_toolname = _now_toolname;
 	_now_toolname = toolname;
+	//console.log("CALL switchToolInstance : " + _now_toolname);
 	
 	var pre_tool_idx = 0;
 	var now_tool_idx = 0;
@@ -703,51 +659,11 @@ function switchToolVariables(toolname)
 	}
 	else if (toolname.substr(0,6) == "postit")
 	{
-		// 기존 변수 저장하기 
-		_toolWindowList[pre_tool_idx]['variables'].tmpLastId = tmpLastId;
-		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
-		_toolWindowList[pre_tool_idx]['variables'].tmpTool = tmpTool;
-		_toolWindowList[pre_tool_idx]['variables'].tmpItemGroup = tmpItemGroup;
-		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
-		_toolWindowList[pre_tool_idx]['variables'].tmpToolSelect = tmpToolSelect;
-		_toolWindowList[pre_tool_idx]['variables'].preSelectGroup = preSelectGroup;
 		
-		// 사용할 변수 불러오기
-		tmpLastId = _toolWindowList[now_tool_idx]['variables'].tmpLastId;
-		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
-		tmpTool = _toolWindowList[now_tool_idx]['variables'].tmpTool;
-		tmpItemGroup = _toolWindowList[now_tool_idx]['variables'].tmpItemGroup;
-		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
-		tmpToolSelect = _toolWindowList[now_tool_idx]['variables'].tmpToolSelect;
-		preSelectGroup = _toolWindowList[now_tool_idx]['variables'].preSelectGroup;
 	}
 	else if (toolname.substr(0,7) == "mindmap")
 	{
-		// 기존 변수 저장하기
-		_toolWindowList[pre_tool_idx]['variables'].moveFlag = moveFlag;
-		_toolWindowList[pre_tool_idx]['variables'].preX = preX;
-		_toolWindowList[pre_tool_idx]['variables'].preY = preY;
-		_toolWindowList[pre_tool_idx]['variables'].dataLinks = dataLinks;
-		_toolWindowList[pre_tool_idx]['variables'].dataNodes = dataNodes;
-		_toolWindowList[pre_tool_idx]['variables'].tmpIndent = tmpIndent;
-		_toolWindowList[pre_tool_idx]['variables'].tmpLastId = tmpLastId;
-		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
-		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
-		_toolWindowList[pre_tool_idx]['variables'].tmpTool = tmpTool;
-		_toolWindowList[pre_tool_idx]['variables'].inputFlag = inputFlag;
 		
-		// 사용할 변수 불러오기
-		moveFlag = _toolWindowList[now_tool_idx]['variables'].moveFlag;
-		preX = _toolWindowList[now_tool_idx]['variables'].preX;
-		preY = _toolWindowList[now_tool_idx]['variables'].preY;
-		dataLinks = _toolWindowList[now_tool_idx]['variables'].dataLinks;
-		dataNodes = _toolWindowList[now_tool_idx]['variables'].dataNodes;
-		tmpIndent = _toolWindowList[now_tool_idx]['variables'].tmpIndent;
-		tmpLastId = _toolWindowList[now_tool_idx]['variables'].tmpLastId;
-		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
-		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
-		tmpTool = _toolWindowList[now_tool_idx]['variables'].tmpTool;
-		inputFlag = _toolWindowList[now_tool_idx]['variables'].inputFlag;
 	}
 	else if (toolname.substr(0,4) == "vote")
 	{
@@ -755,31 +671,8 @@ function switchToolVariables(toolname)
 	}
 	else if (toolname.substr(0,6) == "matrix")
 	{
-		// 기존 변수 저장하기
-		console.log(_toolWindowList[pre_tool_idx]['variables']);
-		_toolWindowList[pre_tool_idx]['variables'].setupData = setupData;
-		_toolWindowList[pre_tool_idx]['variables'].setupFlag = setupFlag;
-		_toolWindowList[pre_tool_idx]['variables'].optionId = optionId;
-		_toolWindowList[pre_tool_idx]['variables']._key_code = _key_code;
-		_toolWindowList[pre_tool_idx]['variables']._box_count = _box_count;
-		_toolWindowList[pre_tool_idx]['variables'].inputFlag = inputFlag;
-
-		// 사용할 변수 불러오기
-		setupData = _toolWindowList[now_tool_idx]['variables'].setupData;
-		setupFlag = _toolWindowList[now_tool_idx]['variables'].setupFlag;
-		optionId = _toolWindowList[now_tool_idx]['variables'].optionId;
-		_key_code = _toolWindowList[now_tool_idx]['variables']._key_code;
-		_box_count = _toolWindowList[now_tool_idx]['variables']._box_count;
-		inputFlag = _toolWindowList[now_tool_idx]['variables'].inputFlag;	
+		
 	}
-	
-	console.log("CALL switchToolVariables [_pre_toolname : " + _pre_toolname 
-									+ " /  _now_toolname : " + _now_toolname
-									+ " / tmpToolSelect : ");
-									console.log(tmpToolSelect);
-									console.log("]");
-	//console.log("CALL switchToolInstance : " + _now_toolname);
-	
 }
 
 // 도구창 닫는 함수

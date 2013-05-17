@@ -5,7 +5,7 @@
 
 var tmpIndent = 0;	// 현재 들여쓰기 상태
 var tmpLastId = 100;	// 마지막 ID 관리
-var tmpClient = 0;	//현재 클라이언트 번호
+//var tmpClient = 0;	//현재 클라이언트 번호
 var tmpGroup = 0;	//현재 그룹
 var tmpTool = 0;  //현재 도구
 var tmpToolSelect = 0;
@@ -73,10 +73,6 @@ function addSocketListenerForList()
 {
 	console.log("CALL addSocketListenerForList");
 	
-	////  클라이언트 번호 얻어오는 부분  ////
-	_socket_list.on('get_client', function (data) {
-		tmpClient = data.client;
-	});
 	
 	////  다른 클라이언트가 데이터 초기화했을 때  ////
 	_socket_list.on('get_init_tool_data', function (data) {
@@ -599,9 +595,9 @@ function list_start_input() {
 	var tmpBullet = tmpToolSelect.find('.input_open a');
 	var tmpIndex = tmpToolSelect.find('.bullet').index(tmpBullet);	 // 이전 Index 구함
 	
-	console.log("Id: "+tmpId+"// addClient: "+tmpClient);
+	console.log("Id: "+tmpId+"// addClient: "+_client_id);
 
-	_socket_list.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: tmpClient } );
+	_socket_list.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
 }
 
 //// input 영역에서 키보드 입력시 호출되는 함수  ////

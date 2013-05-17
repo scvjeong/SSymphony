@@ -375,8 +375,7 @@
 /* }=== MADMIN MENU === */
 /* === LAYOUT ==={ */
 body {
-  padding: 52px 0 40px 0;
-  min-height: 600px;
+	min-height: 600px;
 }
 body.help-page {
   padding: 0;
@@ -1561,6 +1560,10 @@ h6 small {
 	background-image: linear-gradient(to bottom, #d7d7d7 0.1%, #FFFFFF 10%);
 	background-repeat: repeat-x;
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
+}
+#canvasView{
+	width:100%;
+	height:100%;
 }
 .rightpanel{
 	float:right;

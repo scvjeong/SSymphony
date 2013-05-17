@@ -88,8 +88,7 @@ iframe {
 #meetingboard #content_manage_box #content {
 	overflow: hidden;
 }
-/* /콘텐트 관리 상자 */
-
+/* 콘텐트 관리 상자 
 
 #rightpanel {
 	position: fixed;
@@ -120,7 +119,7 @@ iframe {
 #rightpanel > ul > li:hover {
 	background-color: #111111;
 }
-
+*/
 /* 참가자 */
 ul.users-online {
 	margin: 0;

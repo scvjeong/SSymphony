@@ -170,8 +170,6 @@ function getFileTypeInfo(filetype)
 	return result;
 }
 
-
-
 var share_box = ( function() {
 		function _addEventListeners() {
 			$('#whiteboard_control_box #btn_show_share_box').click(function() {

@@ -4,8 +4,12 @@
 	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 	<script>	
 		$(document).ready(function() {
-			
+			scrollLink(keyboard);
 		});
+		function scrollLink(obj) {
+			var position = $("."+obj).offset();
+			$( 'html, body' ).animate( { scrollTop: position.top }, 2000 ); 
+		}
 	</script>
 	<style>
 		

@@ -21,7 +21,7 @@ var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC",
 ////  리스트 초기 설정해주는 함수  ////
 function initMindmap(group, tool)
 {
-	tmpTool = tool;
+	tmpTool = 'mindmap' + tool;
 	tmpGroup = group;
 
 	tmpToolSelect = $('[id='+tmpTool+']');

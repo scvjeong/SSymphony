@@ -367,6 +367,7 @@ function getToolSource(tool_type, initFuncName)
 		tool_index = _tool_matrix_count;
 		break;
 	}
+	console.log("Now Creating " + tool_type + tool_index);
 	
 	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_index;
 	console.log("부른 도구의 Source url :: " + source_url);
@@ -385,6 +386,7 @@ function getToolSource(tool_type, initFuncName)
 			}
 //			includeFileDynamically(data.include_list);
 			addTool(_tool_type, data);
+			console.log("tool_index = " + tool_index);
 			initFuncName(_group_id, tool_index);
 		},
 		error: function(err) {

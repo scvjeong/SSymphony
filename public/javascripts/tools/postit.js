@@ -13,9 +13,11 @@ var preSelectGroup = 0;
 //});
 
 ////  포스트잇 초기 설정해주는 함수  ////
-function initPostit(tool, group)
+function initPostit(group, tool)
 {
-	tmpTool = tool;
+	console.log("CALL initPostit tool=" + tool);
+
+	tmpTool = 'postit' + tool;
 	tmpGroup = group;
 	
 	tmpToolSelect = $('[id='+tmpTool+']');
@@ -265,6 +267,8 @@ function postit_mouse_focus() {
 
 ////  그룹 추가하는 함수  ////
 function postit_add_group(groupId) {
+	console.log("CALL postit_add_group");
+	
 	var groupFlag = 0;
 	if (groupId >= 0) {	//groupId 매개변수 존재할 때
 		groupFlag = 1;
@@ -287,6 +291,8 @@ function postit_add_group(groupId) {
 
 //// input 영역에서 키보드 입력시 호출되는 함수  ////
 function postit_key_input() {
+	console.log("CALL postit_key_input");
+
 	var inputKey = event.keyCode;
 	if ( inputKey == 13 )	// Input Enter
 	{				

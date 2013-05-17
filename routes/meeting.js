@@ -20,7 +20,6 @@ exports.main = function(req, res){
 };
 
 exports.meeting_public = function(req, res){
-	
 	res.render('meeting_public', { title: 'Express' });
 };
 
@@ -209,4 +208,9 @@ exports.meeting_save = function(req, res){
 exports.ft_help = function(req, res){
 	result = { title:"ft_help" };
 	res.render('ft_help', {result:result} );
+}
+
+exports.need_help = function(req, res){
+	result = { title:"need_help" };
+	res.render('need_help', {result:result} );
 }

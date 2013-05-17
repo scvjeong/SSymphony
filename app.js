@@ -43,6 +43,7 @@ app.get('/page/meeting_template', meeting_planning.meeting_template);
 app.get('/page/setting_agenda', meeting_planning.setting_agenda);
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step);
 app.get('/page/ft_help', meeting.ft_help);
+app.get('/page/need_help', meeting.need_help);
 
 
 /* post */

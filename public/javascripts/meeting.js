@@ -618,26 +618,6 @@ function showToolWindow(idx)
 					////  서버에 초기 데이터 요청하는 함수  ////
 					_socket_matrix.emit('set_tree_data', { group: _tmpGroup, tool: _toolName });
 					_socket_matrix.emit('set_tree_option_data', { group: _tmpGroup, tool: _toolName });
-
-					/*
-					resizeMatrix();
-					$(window).resize(function(){
-						resizeMatrix();
-					});
-
-					socket.emit('join_room', { group: tmpGroup });
-					////  서버에 초기 데이터 요청하는 함수  ////
-					socket.emit('set_tree_data', { group: tmpGroup, tool: toolName });
-					socket.emit('set_tree_option_data', { group: tmpGroup, tool: toolName });
-
-					$(window).focus(function(){
-						$('.writing').focus();
-					});
-					$('.matrix').click(function(){
-						//console.log("focus");
-						//$('.writing').focus();
-					});
-					*/
 					break;
 			}
 			

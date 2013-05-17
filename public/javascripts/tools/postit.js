@@ -4,7 +4,7 @@ var tmpLastId = 100;
 var tmpGroup = 0;
 var tmpTool = 0;
 var tmpItemGroup = 0;
-var tmpClient = 0;
+//var tmpClient = 0;
 var tmpToolSelect = 0;
 var preSelectGroup = 0;
 
@@ -30,10 +30,10 @@ function initPostit(group, tool)
 	////  서버에 초기 데이터 요청하는 함수  ////
 	_socket_postit.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
 
-	_socket_postit.on('get_client', function (data) {
-		tmpClient = data.client;
-		//console.log("client: "+data.client);
-	});
+//	_socket_postit.on('get_client', function (data) {
+//		tmpClient = data.client;
+//		//console.log("client: "+data.client);
+//	});
 
 	////  X 버튼 클릭 이벤트 등록 - 포스트잇 삭제  ////
 	$('article').delegate('.del_button', 'click', function() {
@@ -78,7 +78,7 @@ function initPostit(group, tool)
 	
 		var addIndex = tmpToolSelect.find('.object').index(tmpSelect);	 // 현재 Index 구함
 		//console.log("index: "+addIndex);
-		_socket_postit.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpLastId, parent: tmpItemGroup, index: addIndex, val:"", client: tmpClient });
+		_socket_postit.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpLastId, parent: tmpItemGroup, index: addIndex, val:"", client: _client_id });
 	
 	});
 	
@@ -259,7 +259,7 @@ function postit_mouse_focus() {
 			var preParent = preClass.parent().parent().attr('groupid');
 		
 			////  추가된 데이터 서버에 전달  ////
-			_socket_postit.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preClassId, parent: preParent, index: preIndex, val: preVal, client: tmpClient });
+			_socket_postit.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preClassId, parent: preParent, index: preIndex, val: preVal, client: _client_id });
 		}
 	}
 	
@@ -314,7 +314,7 @@ function postit_key_input() {
 			var addParent = tmpSelect.parent().parent().attr('groupid');
 			
 			////  추가된 데이터 서버에 전달  ////
-			_socket_postit.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: addId, parent: addParent, index: addIndex, val: addVal, client: tmpClient });
+			_socket_postit.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: addId, parent: addParent, index: addIndex, val: addVal, client: _client_id });
 		}
 	}
 	else if ( inputKey == 8 )	// Input BackSpaceKey

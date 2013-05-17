@@ -13,6 +13,8 @@ var _is_rightpanel_open = true;
 var _window_width = 0;
 var _window_height = 0;
 
+var _client_id;	// 클라이언트 아이디
+
 var _socket_common;
 var _socket_list;
 var _socket_postit;
@@ -119,6 +121,11 @@ function openSocket()
 	_socket_vote = io.connect('http://61.43.139.69:50004/group');
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
+	
+	_socket_common.on('get_client', function (data) {
+		_client_id = data.client;
+		//console.log("client: "+data.client);
+	});
 }
 
 function resetSizeInfo()

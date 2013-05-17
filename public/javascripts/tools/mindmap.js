@@ -7,7 +7,7 @@ var dataLinks = [];
 var dataNodes = [];
 var tmpIndent = 0;	// 현재 들여쓰기 상태 
 var tmpLastId = 100;	// 마지막 ID 관리
-var tmpClient = 0;	//현재 클라이언트 번호
+//var tmpClient = 0;	//현재 클라이언트 번호
 var tmpGroup = 0;	//현재 그룹
 var tmpTool = 0;
 var inputFlag = 0;	//키입력 감지하기 위한 변수
@@ -97,12 +97,6 @@ function initMindmap(group, tool)
 	
 	///////////////////////////////////////////////////////////////////////////////////////////
 	
-	
-		
-	////  클라이언트 번호 얻어오는 부분  ////
-	_socket_matrix.on('get_client', function (data) {
-		tmpClient = data.client;
-	});
 	
 	////  lastId 얻어오는 함수  ////
 	_socket_matrix.on('get_last_id', function (data) {
@@ -566,7 +560,7 @@ function mindmap_start_input() {
 	
 	//console.log("Id: "+tmpId+"// addClient: "+tmpClient);
 
-	_socket_matrix.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: tmpClient } );
+	_socket_matrix.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
 }
 
 

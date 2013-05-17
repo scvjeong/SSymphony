@@ -42,18 +42,18 @@ $(document).ready(function() {
 	});
 
 	// 화이트보드 초기화
-	//$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
-	$('#meetingboard #btn_drawtool_pen').click(function() {
+	//$('#white-board #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
+	$('#white-board #btn_drawtool_pen').click(function() {
 		_drawtool = 'pen';
 	});
-	$('#meetingboard #btn_drawtool_rect').click(function() {
+	$('#white-board #btn_drawtool_rect').click(function() {
 		_drawtool = 'rect';
 	});
-	$('#meetingboard #btn_drawtool_ellipse').click(function() {
+	$('#white-board #btn_drawtool_ellipse').click(function() {
 		_drawtool = 'ellipse';
 	});
 
-	$('#meetingboard #btn_text_add').click(function() {
+	$('#white-board #btn_text_add').click(function() {
 		_drawtool = 'text';
 	});
 
@@ -546,38 +546,35 @@ function showToolWindow(idx)
 		toolsource += '</div>';
 	var toolwidth = _toolWindowList[idx]['width'];
 	var toolheight = _toolWindowList[idx]['height'] + titlebarHeight + statusbarHeight;
-
-	$('#' + toolname).css('z-index', _new_z_index);
-	_new_z_index++;
-
+    
 	switch (_toolWindowList[idx]['type'])
 	{
 	case "list":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		_tool_list_count++;
 		break;
 	case "postit":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		_tool_postit_count++;
 		break;
 	case "mindmap":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		_tool_mindmap_count++;
 		break;
 	case "vote":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		_tool_vote_count++;
 		break;
 	case "matrix":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		_tool_matrix_count++;
@@ -598,7 +595,6 @@ function showToolWindow(idx)
 		theme : share_box.config.theme,
         initContent: function () {
         	console.log('INIT #' + _toolWindowList[idx]['name']);
-        	
 			switch (_toolWindowList[idx]['type'])
 			{
 				case "list":
@@ -1048,8 +1044,8 @@ if(window.addEventListener) {
 function addTextToCanvas(x, y)
 {
 	console.log("call addTextToCanvas");
-	var drawtext_container = $('#meetingboard #drawtext_container');
-	var inputbox = $('#meetingboard #drawtext_container #inputbox');
+	var drawtext_container = $('#white-board #drawtext_container');
+	var inputbox = $('#white-board #drawtext_container #inputbox');
 	inputbox.val("");
 	inputbox.focus();
 	drawtext_container.css('display', 'block');

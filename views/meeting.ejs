@@ -128,7 +128,7 @@
 			<span class="sub-subject">How to make chicken more cute</span>
 			<div class="time">00:00:00 / 01:00:00</div>
 		</div>
-		<div class="white-board">
+		<div id="white-board" class="white-board">
 			
 			<div id="whiteboard_control_box">
 				<div id="titlebar"></div>
@@ -224,6 +224,10 @@
 			<div class="tool-box">
 				<div class="rightpanel-title-bar">Tool</div>
 				<div class="rightpanel-content-box fancy-scrollbar">
+					<div class="member-unit" onclick="getToolSource('list', initList);">list</div>
+					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap);">mindmap</div>
+					<div class="member-unit" onclick="getToolSource('postit', initPostit);">postit</div>
+					<div class="member-unit" onclick="getToolSource('matrix', initMatrix);">matrix</div>
 				</div>
 			</div>
 			<div class="member-box">

@@ -43,7 +43,7 @@ iframe {
 
 /* 화이트보드 */
 
-#meetingboard #whiteboard_control_box {
+.white-board #whiteboard_control_box {
 	display: block;
 	position: fixed;
 	background-color: #eeeeee;
@@ -53,28 +53,28 @@ iframe {
 	width: 100%;
 }
 
-#meetingboard #drawtext_container {
+.white-board #drawtext_container {
 	display: none;
 	position: absolute;
 }
 
-#meetingboard #drawtext_container #inputbox {
+.white-board #drawtext_container #inputbox {
 	background: none;
 	border: none;
 	outline: none;
 }
 
-#meetingboard #whiteboard_control_box #color_selector #color_list {
+.white-board #whiteboard_control_box #color_selector #color_list {
 	margin: 0;
 	padding: 0;
 }
 
-#meetingboard #whiteboard_control_box #color_selector #color_list li {
+.white-board #whiteboard_control_box #color_selector #color_list li {
 	height: 20px;
 	width: 40px;
 }
 
-#meetingboard #canvasView {
+.white-board #canvasView {
 	cursor: crosshair;
 }
 
@@ -82,10 +82,10 @@ iframe {
 
 
 /* 콘텐트 관리 상자 */
-#meetingboard #content_manage_box {
+.white-board #content_manage_box {
 }
 
-#meetingboard #content_manage_box #content {
+.white-board #content_manage_box #content {
 	overflow: hidden;
 }
 /* 콘텐트 관리 상자 
@@ -200,12 +200,6 @@ ul.users-online li a strong {
 	line-height: 10px;
 }
 /* /참가자 */
-
-
-#meetingboard {
-	margin-top: 30px;
-}
-
 
 /* 도구 */
 #tools > ul {

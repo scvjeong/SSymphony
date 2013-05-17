@@ -1511,6 +1511,9 @@ h6 small {
 
 
 /*** Design ***/
+.meeting{
+	padding-top:52px;
+}
 
 #topbar #logo{
 	float:left;
@@ -1521,6 +1524,9 @@ h6 small {
 }
 
 .title-bar{
+	position:fixed;
+	top:0;
+	left:0;
 	font-family:"Roboto Medium";
 	color:#FFFFFF;
 	width:100%;
@@ -1566,6 +1572,9 @@ h6 small {
 	height:100%;
 }
 .rightpanel{
+	position:fixed;
+	top:52px;
+	right:0px;
 	float:right;
 	width:25%;
 }

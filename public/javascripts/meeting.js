@@ -442,7 +442,11 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
+<<<<<<< HEAD
 				
+=======
+			
+>>>>>>> parent of d9ca760... 20130515_v3_stargt
 		};
 		break;
 	case "mindmap":
@@ -454,7 +458,11 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
+<<<<<<< HEAD
 			
+=======
+				
+>>>>>>> parent of d9ca760... 20130515_v3_stargt
 		};
 		break;
 	case "vote":
@@ -478,7 +486,27 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
+<<<<<<< HEAD
 			
+=======
+			setupData: {
+						row: 0,
+						col: 0
+						}, // matrix 행, 열
+			setupFlag: {
+						data_init: true,
+						row: false,
+						col: false
+						},
+			optionId: {
+						set: 999999,
+						row: 999998,
+						col: 999997
+						},
+			_key_code: null, // 키 입력 값 저장
+			box_count: 0,
+			inputFlag: 0	//키입력 감지하기 위한 변수
+>>>>>>> parent of d9ca760... 20130515_v3_stargt
 		};
 		break;
 	}
@@ -659,7 +687,7 @@ function switchToolVariables(toolname)
 	}
 	else if (toolname.substr(0,6) == "postit")
 	{
-		
+	
 	}
 	else if (toolname.substr(0,7) == "mindmap")
 	{
@@ -671,7 +699,21 @@ function switchToolVariables(toolname)
 	}
 	else if (toolname.substr(0,6) == "matrix")
 	{
-		
+		// 기존 변수 저장하기
+		_toolWindowList[pre_tool_idx]['variables'].setupData = setupData;
+		_toolWindowList[pre_tool_idx]['variables'].setupFlag = setupFlag;
+		_toolWindowList[pre_tool_idx]['variables'].optionId = optionId;
+		_toolWindowList[pre_tool_idx]['variables']._key_code = _key_code;
+		_toolWindowList[pre_tool_idx]['variables'].box_count = box_count;
+		_toolWindowList[pre_tool_idx]['variables'].inputFlag = inputFlag;
+
+		// 사용할 변수 불러오기
+		setupData = _toolWindowList[now_tool_idx]['variables'].setupData;
+		setupFlag = _toolWindowList[now_tool_idx]['variables'].setupFlag;
+		optionId = _toolWindowList[now_tool_idx]['variables'].optionId;
+		_key_code = _toolWindowList[now_tool_idx]['variables']._key_code;
+		box_count = _toolWindowList[now_tool_idx]['variables'].box_count;
+		inputFlag = _toolWindowList[now_tool_idx]['variables'].inputFlag;
 	}
 }
 

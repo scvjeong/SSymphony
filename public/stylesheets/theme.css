@@ -359,6 +359,10 @@ ul.users-online li a strong {
 
 
 /*  쉐어 박스 */
+#window_share_box {
+	display: none;
+}
+
 #window_share_box .content {
 	border: 1px solid #cccccc;
 }

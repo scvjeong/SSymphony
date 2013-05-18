@@ -23,6 +23,10 @@ var _socket_vote;
 var _socket_matrix;
 
 var _is_added_socket_listener_for_list = false;
+var _is_added_socket_listener_for_postit = false;
+var _is_added_socket_listener_for_mindmap = false;
+var _is_added_socket_listener_for_vote = false;
+var _is_added_socket_listener_for_matrix = false;
 
 $(document).ready(function() {
 	// 크기 조정
@@ -422,6 +426,27 @@ function getToolSource(tool_type, initFuncName, is_broadcaster)
 				addSocketListenerForList();
 				_is_added_socket_listener_for_list = true;
 			}
+			else if (_is_added_socket_listener_for_postit == false)
+			{
+				addSocketListenerForPostit();
+				_is_added_socket_listener_for_postit = true;
+			}
+			else if (_is_added_socket_listener_for_mindmap == false)
+			{
+				addSocketListenerForMindmap();
+				_is_added_socket_listener_for_mindmap = true;
+			}
+			else if (_is_added_socket_listener_for_vote == false)
+			{
+				addSocketListenerForVote();
+				_is_added_socket_listener_for_vote = true;
+			}
+			else if (_is_added_socket_listener_for_matrix == false)
+			{
+				addSocketListenerForMatrix();
+				_is_added_socket_listener_for_matrix = true;
+			}
+			
 //			includeFileDynamically(data.include_list);
 			addTool(_tool_type, data);
 			console.log("tool_index = " + tool_index);

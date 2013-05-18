@@ -899,7 +899,7 @@ function showEvaluateMeetingWindow()
 
 	dialog = bootbox.dialog(html, [{
 							"label" : "Finish",
-							"class" : "btn-success",
+							"class" : "test btn-success",
 							"callback": function() {
 								var meeting_satisfaction_point = $("#meeting_rating").jqxRating('getValue');
 								var fac_satisfaction_point = $("#fac_rating").jqxRating('getValue');

@@ -23,6 +23,10 @@ var _socket_vote;
 var _socket_matrix;
 
 var _is_added_socket_listener_for_list = false;
+var _is_added_socket_listener_for_postit = false;
+var _is_added_socket_listener_for_mindmap = false;
+var _is_added_socket_listener_for_vote = false;
+var _is_added_socket_listener_for_matrix = false;
 
 $(document).ready(function() {
 	// 크기 조정
@@ -358,6 +362,11 @@ function getToolSource(tool_type, initFuncName)
 	{
 	case "list":
 		tool_index = _tool_list_count;
+		if (_is_added_socket_listener_for_list == false)
+		{
+			addSocketListenerForList();
+			_is_added_socket_listener_for_list = true;
+		}
 		break;
 	case "postit":
 		tool_index = _tool_postit_count;
@@ -370,6 +379,11 @@ function getToolSource(tool_type, initFuncName)
 		break;
 	case "matrix":
 		tool_index = _tool_matrix_count;
+		if (_is_added_socket_listener_for_matrix == false)
+		{
+			addSocketListenerForMatrix();
+			_is_added_socket_listener_for_matrix = true;
+		}
 		break;
 	}
 	console.log("Now Creating " + tool_type + tool_index);
@@ -384,14 +398,8 @@ function getToolSource(tool_type, initFuncName)
 		dataType: "html",
 		success: function(data) {
 			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_index:" + tool_index + "]");
-			if (_is_added_socket_listener_for_list == false)
-			{
-				addSocketListenerForList();
-				_is_added_socket_listener_for_list = true;
-			}
 //			includeFileDynamically(data.include_list);
 			addTool(_tool_type, data);
-			console.log("tool_index = " + tool_index);
 			initFuncName(_group_id, tool_index);
 		},
 		error: function(err) {
@@ -504,6 +512,8 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
+			tmpClient: 0,	//현재 클라이언트 번호
+			tmpGroup: 0,	//현재 그룹
 			setupData: {
 						row: 0,
 						col: 0
@@ -556,40 +566,37 @@ function showToolWindow(idx)
     
 	switch (_toolWindowList[idx]['type'])
 	{
-	case "list":
-		$('#white-board').append(toolsource);
-		$('#' + toolname).css('width', toolwidth);
-		$('#' + toolname).css('height', toolheight);
-		_tool_list_count++;
-		break;
-	case "postit":
-		$('#white-board').append(toolsource);
-		$('#' + toolname).css('width', toolwidth);
-		$('#' + toolname).css('height', toolheight);
-		_tool_postit_count++;
-		break;
-	case "mindmap":
-		$('#white-board').append(toolsource);
-		$('#' + toolname).css('width', toolwidth);
-		$('#' + toolname).css('height', toolheight);
-		_tool_mindmap_count++;
-		break;
-	case "vote":
-		$('#white-board').append(toolsource);
-		$('#' + toolname).css('width', toolwidth);
-		$('#' + toolname).css('height', toolheight);
-		_tool_vote_count++;
-		break;
-	case "matrix":
+		case "list":
+			$('#white-board').append(toolsource);
+			$('#' + toolname).css('width', toolwidth);
+			$('#' + toolname).css('height', toolheight);
+			_tool_list_count++;
+			break;
+		case "postit":
+			$('#white-board').append(toolsource);
+			$('#' + toolname).css('width', toolwidth);
+			$('#' + toolname).css('height', toolheight);
+			_tool_postit_count++;
+			break;
+		case "mindmap":
+			$('#white-board').append(toolsource);
+			$('#' + toolname).css('width', toolwidth);
+			$('#' + toolname).css('height', toolheight);
+			_tool_mindmap_count++;
+			break;
+		case "vote":
+			$('#white-board').append(toolsource);
+			$('#' + toolname).css('width', toolwidth);
+			$('#' + toolname).css('height', toolheight);
+			_tool_vote_count++;
+			break;
+		case "matrix":
 		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		_tool_matrix_count++;
 		break;
 	}
-	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
-
-	//$('#' + _toolWindowList[idx]['name']).draggable(); // Jquery-ui 기본 드래그 기능
 
 	$('#' + _toolWindowList[idx]['name']).jqxWindow({
 		showCollapseButton : true,
@@ -601,34 +608,10 @@ function showToolWindow(idx)
 		width : 500,
 		theme : share_box.config.theme,
         initContent: function () {
-        	console.log('INIT #' + _toolWindowList[idx]['name']);
-			switch (_toolWindowList[idx]['type'])
-			{
-				case "list":
-					break;
-				case "postit":
-					break;
-				case "mindmap":
-					break;
-				case "matrix":
-					_tmpGroup = "group1";	//현재 그룹
-					_toolName = _toolWindowList[idx]['name'];
-					resizeMatrix();
-					$(window).resize(function(){
-						resizeMatrix();
-					});
-					_socket_matrix.emit('join_room', { group: _tmpGroup });
-					////  서버에 초기 데이터 요청하는 함수  ////
-					_socket_matrix.emit('set_tree_data', { group: _tmpGroup, tool: _toolName });
-					_socket_matrix.emit('set_tree_option_data', { group: _tmpGroup, tool: _toolName });
-					break;
-			}
-			
 			$('#window_share_box').jqxWindow('focus');
 		}
     });
 
-                
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
 	
@@ -706,7 +689,8 @@ function switchToolVariables(toolname)
 	}
 	else if (_pre_toolname.substr(0,6) == "matrix")
 	{
-		console.log(_toolWindowList[pre_tool_idx]['variables']);
+		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
+		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
 		_toolWindowList[pre_tool_idx]['variables'].setupData = setupData;
 		_toolWindowList[pre_tool_idx]['variables'].setupFlag = setupFlag;
 		_toolWindowList[pre_tool_idx]['variables'].optionId = optionId;
@@ -756,6 +740,8 @@ function switchToolVariables(toolname)
 	}
 	else if (_now_toolname.substr(0,6) == "matrix")
 	{
+		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
+		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
 		setupData = _toolWindowList[now_tool_idx]['variables'].setupData;
 		setupFlag = _toolWindowList[now_tool_idx]['variables'].setupFlag;
 		optionId = _toolWindowList[now_tool_idx]['variables'].optionId;
@@ -768,9 +754,6 @@ function switchToolVariables(toolname)
 									+ " /  _now_toolname : " + _now_toolname
 									+ " / tmpToolSelect : ");
 									console.log(tmpToolSelect);
-									console.log("]");
-	//console.log("CALL switchToolInstance : " + _now_toolname);
-	
 }
 
 // 도구창 닫는 함수

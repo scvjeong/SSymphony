@@ -479,6 +479,7 @@ var lastClient = 1;	//lastClient 변수
 client.flushdb();
 
 ////  socket.io 서버 오픈  ////
+var io_common = require('socket.io').listen(50000);
 var io_list = require('socket.io').listen(50001);
 var io_postit = require('socket.io').listen(50002);
 var io_mindmap = require('socket.io').listen(50003);

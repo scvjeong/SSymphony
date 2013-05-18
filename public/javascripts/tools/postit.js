@@ -67,8 +67,10 @@ function initPostit(group, tool)
 
 	
 	///////////////////////////////////////////////////////////////////////////////
+}
 
-
+function addSocketListenerForPostit()
+{
 	////  서버에서 lastID 받는 함수  ////
 	_socket_postit.on('get_last_id', function (data) {
 		tmpLastId = data.last;

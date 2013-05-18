@@ -127,13 +127,14 @@ function openSocket()
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
 	
+
 	_socket_common.emit('join_room', {group:_group_id});
 	
+
 	_socket_common.on('get_client', function (data) {
 		_client_id = data.client;
 		//console.log("client: "+data.client);
 	});
-	
 	_socket_common.on('get_option_data', function(data) {
 		// data.tool/id/option/val
 		console.log('GET get_option_data');
@@ -446,7 +447,6 @@ function getToolSource(tool_type, initFuncName, is_broadcaster)
 		dataType: "html",
 		success: function(data) {
 			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_index:" + tool_index + "]");
-			
 //			includeFileDynamically(data.include_list);
 			addTool(_tool_type, data);
 			console.log("tool_index = " + tool_index);
@@ -562,6 +562,8 @@ function addTool(type, source)
 		tool['left'] = _common_windot_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
+			tmpClient: 0,	//현재 클라이언트 번호
+			tmpGroup: 0,	//현재 그룹
 			setupData: {
 						row: 0,
 						col: 0
@@ -616,6 +618,7 @@ function showToolWindow(idx)
     
 	switch (_toolWindowList[idx]['type'])
 	{
+
 	case "list":
 		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
@@ -641,15 +644,13 @@ function showToolWindow(idx)
 		_tool_vote_count++;
 		break;
 	case "matrix":
+
 		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
 		_tool_matrix_count++;
 		break;
 	}
-	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
-
-	//$('#' + _toolWindowList[idx]['name']).draggable(); // Jquery-ui 기본 드래그 기능
 
 	$('#' + _toolWindowList[idx]['name']).jqxWindow({
 		showCollapseButton : true,
@@ -661,34 +662,10 @@ function showToolWindow(idx)
 		width : 500,
 		theme : share_box.config.theme,
         initContent: function () {
-        	console.log('INIT #' + _toolWindowList[idx]['name']);
-			switch (_toolWindowList[idx]['type'])
-			{
-				case "list":
-					break;
-				case "postit":
-					break;
-				case "mindmap":
-					break;
-				case "matrix":
-					_tmpGroup = "group1";	//현재 그룹
-					_toolName = _toolWindowList[idx]['name'];
-					resizeMatrix();
-					$(window).resize(function(){
-						resizeMatrix();
-					});
-					_socket_matrix.emit('join_room', { group: _tmpGroup });
-					////  서버에 초기 데이터 요청하는 함수  ////
-					_socket_matrix.emit('set_tree_data', { group: _tmpGroup, tool: _toolName });
-					_socket_matrix.emit('set_tree_option_data', { group: _tmpGroup, tool: _toolName });
-					break;
-			}
-			
 			$('#window_share_box').jqxWindow('focus');
 		}
     });
 
-                
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
 	
@@ -766,7 +743,9 @@ function switchToolVariables(toolname)
 	}
 	else if (_pre_toolname.substr(0,6) == "matrix")
 	{
-		console.log(_toolWindowList[pre_tool_idx]['variables']);
+		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
+		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
+
 		_toolWindowList[pre_tool_idx]['variables'].setupData = setupData;
 		_toolWindowList[pre_tool_idx]['variables'].setupFlag = setupFlag;
 		_toolWindowList[pre_tool_idx]['variables'].optionId = optionId;
@@ -816,6 +795,9 @@ function switchToolVariables(toolname)
 	}
 	else if (_now_toolname.substr(0,6) == "matrix")
 	{
+		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
+		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
+
 		setupData = _toolWindowList[now_tool_idx]['variables'].setupData;
 		setupFlag = _toolWindowList[now_tool_idx]['variables'].setupFlag;
 		optionId = _toolWindowList[now_tool_idx]['variables'].optionId;
@@ -828,9 +810,6 @@ function switchToolVariables(toolname)
 									+ " /  _now_toolname : " + _now_toolname
 									+ " / tmpToolSelect : ");
 									console.log(tmpToolSelect);
-									console.log("]");
-	//console.log("CALL switchToolInstance : " + _now_toolname);
-	
 }
 
 // 도구창 닫는 함수
@@ -957,17 +936,10 @@ function showEvaluateMeetingWindow()
 
 	console.log(html);
 
-	dialog = bootbox.dialog(html, [{
-							"label" : "Finish",
-							"class" : "btn-success",
-							"callback": function() {
-								var meeting_satisfaction_point = $("#meeting_rating").jqxRating('getValue');
-								var fac_satisfaction_point = $("#fac_rating").jqxRating('getValue');
-								var self_satisfaction_point = $("#self_rating").jqxRating('getValue');
-								// 페이지 이동
-								return true;
-							}
-						}]);
+	dialog = bootbox.dialog(html);
+	
+	var bootbox_select = $('.bootbox');
+	bootbox_select.addClass("evaluate_bootbox");
 
 	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
 	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});

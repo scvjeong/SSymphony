@@ -98,7 +98,8 @@ function initMindmap(group, tool)
 	
 function addSocketListenerForMindmap()
 {	
-	
+///////////////////////////////////////////////////////////////////////////////////////////
+
 	////  lastId 얻어오는 함수  ////
 	_socket_mindmap.on('get_last_id', function (data) {
 	
@@ -562,6 +563,7 @@ function mindmap_start_input() {
 	//console.log("Id: "+tmpId+"// addClient: "+tmpClient);
 
 	_socket_mindmap.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
+
 }
 
 

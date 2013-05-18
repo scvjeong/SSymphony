@@ -27,8 +27,8 @@ function initMindmap(group, tool)
 	tmpToolSelect = $('[id='+tmpTool+']');
 
 	////  socket.io 서버의 해당 그룹에 접속  ////
-	_socket_matrix.emit('join_room', { group: tmpGroup });	
-	_socket_matrix.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
+	_socket_mindmap.emit('join_room', { group: tmpGroup });	
+	_socket_mindmap.emit('set_tree_data', { group: tmpGroup, tool: tmpTool });
 
 	////  Bullet 클릭 이벤트 등록 - 자식 노드 숨김  ////
 	tmpToolSelect.find('.list_space').delegate('.bullet', 'click', function() {
@@ -92,21 +92,22 @@ function initMindmap(group, tool)
 			moveFlag = 0;
 		}
 	});
+}
 	
 	
 	
-	///////////////////////////////////////////////////////////////////////////////////////////
-	
+function addSocketListenerForMindmap()
+{	
 	
 	////  lastId 얻어오는 함수  ////
-	_socket_matrix.on('get_last_id', function (data) {
+	_socket_mindmap.on('get_last_id', function (data) {
 	
 		tmpLastId = data.last;
 		mindmap_add_input_box();
 	});
 	
 	////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
-	_socket_matrix.on('get_tree_data', function (data) {
+	_socket_mindmap.on('get_tree_data', function (data) {
 	
 	
 		var tmpId = data.id;
@@ -152,7 +153,7 @@ function initMindmap(group, tool)
 	});
 		
 	////  변경된 들여쓰기 얻어오는 함수  ////
-	_socket_matrix.on('get_change_depth', function (data) {
+	_socket_mindmap.on('get_change_depth', function (data) {
 	
 		var tmpChangeId = data.id;
 		var tmpChangeIndent = data.depth;
@@ -199,7 +200,7 @@ function initMindmap(group, tool)
 	});
 	
 	////  다른 클라이언트가 입력 시작할 경우 해당 라인 스타일 변경  ////
-	_socket_matrix.on('get_input_tree_data', function (data) {
+	_socket_mindmap.on('get_input_tree_data', function (data) {
 	
 		var addId = data.id;
 		var addParent = data.parent;
@@ -288,7 +289,7 @@ function initMindmap(group, tool)
 	});
 	
 	////  다른 클라이언트가 추가한 리스트 data 서버에서 가져옴  ////
-	_socket_matrix.on('get_insert_tree_data', function (data) {
+	_socket_mindmap.on('get_insert_tree_data', function (data) {
 		//console.log(data);
 	
 		var addId = data.id;
@@ -314,7 +315,7 @@ function initMindmap(group, tool)
 	});
 	
 	////  다른 클라이언트에서 삭제한 리스트 data ID 서버에서 가져와서 삭제  ////
-	_socket_matrix.on('get_delete_tree_data', function (data) {
+	_socket_mindmap.on('get_delete_tree_data', function (data) {
 		//console.log(data);
 	
 		var tmpDelId = data.id;
@@ -346,7 +347,7 @@ function initMindmap(group, tool)
 	});
 	
 	////  check 상태 변화 서버에서 받아와서 적용  ////
-	_socket_matrix.on('get_option_data', function (data) {
+	_socket_mindmap.on('get_option_data', function (data) {
 	
 		var tmpOption = data.option;
 		var tmpVal = data.val;
@@ -403,7 +404,7 @@ function mindmap_add_input_box(){
 
 	preInput.css({ "background": clientColor[0] });
 
-	_socket_matrix.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+	_socket_mindmap.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 	//서버 소켓으로 데이터 전송
 
 	preInput.attr('class', 'input_task');					
@@ -451,7 +452,7 @@ function mindmap_add_indent() {
 
 			mindmap_set_indent(tmpIndent);
 
-			_socket_matrix.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+			_socket_mindmap.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
 		}		
 		else if ( preClass.attr('class') == "edit_open" )	//직전 클래스가 edit_open인 경우 태그만 추가
 		{
@@ -462,7 +463,7 @@ function mindmap_add_indent() {
 
 			mindmap_set_indent(tmpIndent);
 
-			_socket_matrix.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+			_socket_mindmap.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
 		}
 	}	
 }
@@ -487,7 +488,7 @@ function mindmap_remove_indent() {
 		}
 		mindmap_set_indent(tmpIndent);	// 들여쓰기 설정 함수 호출
 
-		_socket_matrix.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
+		_socket_mindmap.emit('set_change_depth', {  group: tmpGroup, tool: tmpTool, id: tmpId,  depth: tmpIndent });
 	}
 }
 
@@ -539,7 +540,7 @@ function mindmap_del_line() {
 			}						
 		}						
 		var delId = tmpInput.attr('taskid');
-		_socket_matrix.emit('set_delete_tree_data', { group: tmpGroup, tool: tmpTool, id: delId  } );
+		_socket_mindmap.emit('set_delete_tree_data', { group: tmpGroup, tool: tmpTool, id: delId  } );
 	}
 }
 
@@ -560,7 +561,7 @@ function mindmap_start_input() {
 	
 	//console.log("Id: "+tmpId+"// addClient: "+tmpClient);
 
-	_socket_matrix.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
+	_socket_mindmap.emit('set_input_tree_data', { group: tmpGroup, tool: tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
 }
 
 
@@ -595,7 +596,7 @@ function mindmap_mouse_focus(){
 		var preIndex = tmpToolSelect.find('.bullet').index(preBullet);	 // 이전 Index 구함
 		var preVal = tmpToolSelect.find('.input_open > .tmp_editing').val();	// 이전 값 구함
 	
-		_socket_matrix.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+		_socket_mindmap.emit('set_insert_tree_data', { group: tmpGroup, tool: tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 		//서버 소켓으로 데이터 전송
 
 		////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
@@ -613,7 +614,7 @@ function mindmap_key_input() {
 	if ( inputKey == 13 )	// Input Enter
 	{
 		//alert("Enter");
-		_socket_matrix.emit('set_last_id', { group: tmpGroup, tool: tmpTool });		
+		_socket_mindmap.emit('set_last_id', { group: tmpGroup, tool: tmpTool });		
 		inputFlag = 0;
 	}
 	else if ( inputKey == 9 && event.shiftKey ) // Input Shift + Tab
@@ -703,7 +704,7 @@ function mindmap_get_list_data() {
 function mindmap_draw() {
 	console.log("CALL mindmap_draw");
 	mindmap_draw_mindmap();
-	_socket_matrix.emit('set_option_data', { group: tmpGroup, tool: tmpTool, id: '', option: 'draw', val: '' });
+	_socket_mindmap.emit('set_option_data', { group: tmpGroup, tool: tmpTool, id: '', option: 'draw', val: '' });
 }
 
 function mindmap_draw_mindmap() {

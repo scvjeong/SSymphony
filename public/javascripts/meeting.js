@@ -395,18 +395,43 @@ function getToolSource(tool_type, initFuncName, is_broadcaster)
 	{
 	case "list":
 		tool_index = _tool_list_count;
+		if (_is_added_socket_listener_for_list == false)
+		{
+			addSocketListenerForList();
+			_is_added_socket_listener_for_list = true;
+		}
 		break;
 	case "postit":
 		tool_index = _tool_postit_count;
+		if (_is_added_socket_listener_for_postit == false)
+		{
+			addSocketListenerForPostit();
+			_is_added_socket_listener_for_postit = true;
+		}
 		break;
 	case "mindmap":
 		tool_index = _tool_mindmap_count;
+		if (_is_added_socket_listener_for_mindmap == false)
+		{
+			addSocketListenerForMindmap();
+			_is_added_socket_listener_for_mindmap = true;
+		}
 		break;
 	case "vote":
 		tool_index = _tool_vote_count;
+		if (_is_added_socket_listener_for_vote == false)
+		{
+			addSocketListenerForVote();
+			_is_added_socket_listener_for_vote = true;
+		}
 		break;
 	case "matrix":
 		tool_index = _tool_matrix_count;
+		if (_is_added_socket_listener_for_matrix == false)
+		{
+			addSocketListenerForMatrix();
+			_is_added_socket_listener_for_matrix = true;
+		}
 		break;
 	}
 	console.log("Now Creating " + tool_type + tool_index);
@@ -421,31 +446,6 @@ function getToolSource(tool_type, initFuncName, is_broadcaster)
 		dataType: "html",
 		success: function(data) {
 			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_index:" + tool_index + "]");
-			if (_is_added_socket_listener_for_list == false)
-			{
-				addSocketListenerForList();
-				_is_added_socket_listener_for_list = true;
-			}
-			else if (_is_added_socket_listener_for_postit == false)
-			{
-				addSocketListenerForPostit();
-				_is_added_socket_listener_for_postit = true;
-			}
-			else if (_is_added_socket_listener_for_mindmap == false)
-			{
-				addSocketListenerForMindmap();
-				_is_added_socket_listener_for_mindmap = true;
-			}
-			else if (_is_added_socket_listener_for_vote == false)
-			{
-				addSocketListenerForVote();
-				_is_added_socket_listener_for_vote = true;
-			}
-			else if (_is_added_socket_listener_for_matrix == false)
-			{
-				addSocketListenerForMatrix();
-				_is_added_socket_listener_for_matrix = true;
-			}
 			
 //			includeFileDynamically(data.include_list);
 			addTool(_tool_type, data);

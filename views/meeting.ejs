@@ -91,6 +91,7 @@
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxtabs.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxexpander.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxrating.js"></script>
 <script src="../javascripts/socket.io.js"></script>
 <!-- /공통 스크립트 -->
   
@@ -118,7 +119,7 @@
 		<link href="../stylesheets/tools/matrix.css" rel="stylesheet" type="text/css" />
 		<script src="../javascripts/tools/matrix.js"></script>
 	<!-- 매트릭스 도구 -->
-
+	
 </head>
 
 <body class="meeting">
@@ -221,10 +222,10 @@
 			<div class="tool-box">
 				<div class="rightpanel-title-bar">Tool</div>
 				<div class="rightpanel-content-box fancy-scrollbar">
-					<div class="member-unit" onclick="getToolSource('list', initList);">list</div>
-					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap);">mindmap</div>
-					<div class="member-unit" onclick="getToolSource('postit', initPostit);">postit</div>
-					<div class="member-unit" onclick="getToolSource('matrix', initMatrix);">matrix</div>
+					<div class="member-unit" onclick="getToolSource('list', initList, true);">list</div>
+					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap, true);">mindmap</div>
+					<div class="member-unit" onclick="getToolSource('postit', initPostit, true);">postit</div>
+					<div class="member-unit" onclick="getToolSource('matrix', initMatrix, true);">matrix</div>
 				</div>
 			</div>
 			<div class="member-box">

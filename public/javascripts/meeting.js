@@ -37,6 +37,7 @@ $(document).ready(function() {
 	share_box.init();
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
+	addLinkList("인트라넷 소마", "http://intranet.swmaestro.kr");
 	$('#btn_addlink').click(function() {
 		var linktitle = $('#txt_linktitle').val();
 		var linkurl = $('#txt_linkurl').val();
@@ -122,9 +123,38 @@ function openSocket()
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
 	
+	_socket_common.emit('join_room', {group:_group_id});
+	
 	_socket_common.on('get_client', function (data) {
 		_client_id = data.client;
 		//console.log("client: "+data.client);
+	});
+	
+	_socket_common.on('get_option_data', function(data) {
+		// data.tool/id/option/val
+		console.log('GET get_option_data');
+		if (data.option == 'new_tool')
+		{
+			console.log('새 도구 도착 : ' + data)
+			switch (data.tool)
+			{
+			case 'list':
+				getToolSource('list', initList);
+				break;
+			case 'mindmap':
+				getToolSource('mindmap', initMindmap);
+				break;
+			case 'postit':
+				getToolSource('postit', initPostit);
+				break;
+			case 'matrix':
+				getToolSource('matrix', initMatrix);
+				break;
+			case 'vote':
+				getToolSource('vote', initVote);
+				break;
+			}
+		}
 	});
 }
 
@@ -290,7 +320,7 @@ function addLinkList(title, link)
 		newlink += "</span> ";
 		newlink += "<span><a href=\"";
 		newlink += link;
-		newlink += "\">";
+		newlink += "\" target=\"_blank\">";
 		newlink += link;
 		newlink += "</a></span>";
 		newlink += "</li>";
@@ -348,8 +378,11 @@ function includeFileDynamically(list) {
 
 var _tool_type = "";
 /* 도구별 소스를 동적으로 가져옴 */
-function getToolSource(tool_type, initFuncName)
+function getToolSource(tool_type, initFuncName, is_broadcaster)
 {
+	if (is_broadcaster == true)
+		_socket_common.emit('set_option_data', {group:_group_id, option:'new_tool', tool:tool_type, id:"0", val:"0"});
+
 	var source_url = "";
 	var tool_index = "";
 	_tool_type = tool_type;
@@ -531,6 +564,8 @@ function addTool(type, source)
 
 	_toolWindowList.push(tool);
 	showToolWindow(_toolWindowList.length - 1);
+	
+	console.log('AFTER _socket_common.emit-set_option_data : ' + type);
 }
 
 // 도구창 보여주는 함수

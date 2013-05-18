@@ -900,8 +900,7 @@ function showEvaluateMeetingWindow()
 	dialog = bootbox.dialog(html);
 	
 	var bootbox_select = $('.bootbox');
-	bootbox.addClass("evaluate_bootbox");
-	$('.modal-footer').css('display','none');
+	bootbox_select.addClass("evaluate_bootbox");
 
 	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
 	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});

@@ -128,8 +128,7 @@
 			<span class="sub-subject">How to make chicken more cute</span>
 			<div class="time">00:00:00 / 01:00:00</div>
 		</div>
-		<div class="white-board">
-			<!--
+		<div id="white-board" class="white-board">
 			<div id="whiteboard_control_box">
 				<div id="titlebar"></div>
 				<div id="color_selector">
@@ -153,7 +152,6 @@
 					<input type="button" value="원" id="btn_drawtool_ellipse" />
 				</div>	
 			</div>
-			-->
 			<div id="window_share_box">
 				<div id="titlebar">
 					<span>
@@ -202,7 +200,6 @@
 					</div>
 				</div>
 			</div>
-				
 			<canvas id="canvasView">
 				<p>브라우저에서 캔버스 지원이 안 됩니다.<br/>
 				</p>
@@ -224,6 +221,10 @@
 			<div class="tool-box">
 				<div class="rightpanel-title-bar">Tool</div>
 				<div class="rightpanel-content-box fancy-scrollbar">
+					<div class="member-unit" onclick="getToolSource('list', initList);">list</div>
+					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap);">mindmap</div>
+					<div class="member-unit" onclick="getToolSource('postit', initPostit);">postit</div>
+					<div class="member-unit" onclick="getToolSource('matrix', initMatrix);">matrix</div>
 				</div>
 			</div>
 			<div class="member-box">
@@ -244,33 +245,10 @@
 			</div>
 		</div>		
 	</div>
-</body>
-
 
 
 
 <!--============================= /Page Body ================================-->
-
-<!-- Javascript: placed at the end of the document to speed up page loading
-     (generally gives more consistent behavior than 'defer') -->
-
-  <!-- Scripts will most likely break in IE6 and below, so why bother loading them? -->
-  <!--[if lte IE 6]><noscript><![endif]-->
-
-  <!-- CMS/Framework scripts -->
-    <!-- ADD HERE -->
-  <!-- /CMS/Framework scripts -->
-
-  <!-- jQuery -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-    <script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
-    <!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
-            long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
-            to to "classic" jQuery behavior -->
-    <script>if ($ === undefined) $ = jQuery</script>
-  <!-- /jQuery -->
 	
   <!-- Bootstrap Components -->
   <script src="/javascripts/bootstrap.min.js"></script>

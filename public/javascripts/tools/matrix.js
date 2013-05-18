@@ -1,6 +1,6 @@
 var width = 100;
 var height = 100;
-var tmpClient = 0;	//현재 클라이언트 번호
+//var tmpClient = 0;	//현재 클라이언트 번호
 var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
 //var _tmpGroup = "matrix-group-1";	//현재 그룹
 //var _tmpGroup = "group1";	//현재 그룹
@@ -287,7 +287,7 @@ function setupBox(lastId, toolName)
 function focusInput(t)
 {
 	var taskId = $(t).attr("taskid");
-	_socket_matrix.emit('set_input_data', { group: _tmpGroup, tool: _toolName, id: taskId, index: 0, client: tmpClient });
+	_socket_matrix.emit('set_input_data', { group: _tmpGroup, tool: _toolName, id: taskId, index: 0, client: _client_id });
 	if( $(".writing") == t )
 		console.log("=");
 	$(".writing").each(function(){
@@ -334,9 +334,6 @@ function initMatrix(group, tool)
 		setupFlag.data_init = true;
 		index = $(".matrix-box[parent="+data.parent+"]").length;
 		addRemoteInputbox(data.id, data.val, data.parent, index, data.tool);
-	});
-	_socket_matrix.on('get_client', function (data) {
-		tmpClient = data.client;
 	});
 	// matrix setup
 	_socket_matrix.on('get_init_tool_data', function (data) {

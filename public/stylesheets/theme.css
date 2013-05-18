@@ -374,10 +374,7 @@ ul.users-online li a strong {
 /* /쉐어 박스 */
 
 
-
-
-
 .evaluate_bootbox {
-	background-color: red;
-	
+	width: 1074px; height: 680px;
+	background-color: #69c;
 }	

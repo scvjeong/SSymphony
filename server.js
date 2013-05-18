@@ -488,6 +488,7 @@ var io_matrix = require('socket.io').listen(50005);
 var io_board = require('socket.io').listen(50006);
 var io_chatting = require('socket.io').listen(50007);
 
+server(io_common);
 server(io_list);
 server(io_postit);
 server(io_mindmap);

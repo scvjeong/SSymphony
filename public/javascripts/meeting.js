@@ -897,17 +897,8 @@ function showEvaluateMeetingWindow()
 
 	console.log(html);
 
-	dialog = bootbox.dialog(html, [{
-							"label" : "Finish",
-							"class" : "test btn-success",
-							"callback": function() {
-								var meeting_satisfaction_point = $("#meeting_rating").jqxRating('getValue');
-								var fac_satisfaction_point = $("#fac_rating").jqxRating('getValue');
-								var self_satisfaction_point = $("#self_rating").jqxRating('getValue');
-								// 페이지 이동
-								return true;
-							}
-						}]);
+	dialog = bootbox.dialog(html);
+	
 
 	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
 	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});

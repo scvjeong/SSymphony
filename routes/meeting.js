@@ -84,6 +84,15 @@ exports.meeting_result = function(req, res){
 	});
 };
 
+exports.minutes = function(req, res){
+	/** session start **/
+	//if( !req.session.email || !req.session.email.length )
+	//	res.redirect("/");
+	/** session end **/
+
+	res.render('minutes', { title: '' });
+};
+
 exports.meeting_save = function(req, res){
 	/** session start **/
 	//if( !req.session.email || !req.session.email.length )

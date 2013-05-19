@@ -28,6 +28,8 @@ var _is_added_socket_listener_for_mindmap = false;
 var _is_added_socket_listener_for_vote = false;
 var _is_added_socket_listener_for_matrix = false;
 
+var _notice_bar_idx = 1;
+
 $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
@@ -109,6 +111,9 @@ $(document).ready(function() {
 
 		return false;
     });
+
+	// notice bar
+	noticeBarMoving();
 });
 
 $(window).resize(function() {
@@ -1147,4 +1152,22 @@ function GraphicText(objBoard, x, y, text)
 	var canvas = document.getElementById(objBoard);
 	var canvas_context = canvas.getContext("2d");
 	canvas.fillText(text, x, y);
+}
+
+function noticeBarMoving()
+{
+	var $notice_bar = $(".notice-bar ul");
+	var $notice_bar_li = $("li.list", $notice_bar).length;
+
+	if( ($notice_bar_li+1) === _notice_bar_idx )
+	{
+		$notice_bar.css({ top:"0px" });
+		console.log($notice_bar.css('top'));
+		_notice_bar_idx = 1;
+	}
+	var top_px = _notice_bar_idx*20;
+	_notice_bar_idx++;
+	$notice_bar.animate({ top:"-"+top_px+"px" }, 1500, function(){
+		noticeBarMoving();
+	});
 }

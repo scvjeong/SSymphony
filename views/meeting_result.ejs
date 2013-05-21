@@ -9,71 +9,210 @@
 		*{
 			margin:0px;padding:0px;
 		}
+		body {
+			width: 1281px;
+			height: 769px;
+			background-color: #000;
+		}
+
+		.meeting_result_bootbox {
+			position: absolute;
+			top: 40px;
+			left: 102px;
+			width: 1074px; height: 680px;
+			background-color: #69c;
+		}	
+		
+		#result_title_box {
+			width: 1074px;
+			height: 50px;
+		}
+		
+		#result_contents_box {
+			width: 1074px;
+			height: 607px;
+			margin: 0px;
+			background-color: #fff;
+		}
+
+		.result_contents {
+			padding-top: 25px;
+			padding-left: 40px;
+			padding-right: 40px;
+			padding-bottom: 5px;
+			background-color: #fff;
+		}
+
+		.result_icon {
+			float: right;
+			vertical-align: middle;
+			line-height:68px;
+			margin-right: 30px;
+		}
+
+		.result_icon_button {
+			margin-left: 12px;
+		}
+		
+		.result_title {
+			font-family: "Fjalla One";
+			font-size: 25px;
+			height: 35px;
+			color: #039;
+		}
+
+		.result_subject {
+			font-family: "Fjalla One";
+			font-size: 25px;
+			height: 35px;
+			color: #69c;	
+		}
+
+		.result_time {
+			margin-top: 18px;
+			height: 50px;
+		}
+
+		.result_evaluate {
+			height: 50px;
+		}
+		
+		.result_contents_button {
+			float: left;
+		}
+
+		#result_time_use {
+			margin-top: 1px;
+			margin-left: 20px;
+			margin-right: 5px;
+			float: left;
+			font-family: "Fjalla One";
+			font-size: 25px;
+			color: #039;
+		}
+
+		#result_time_set {
+			margin-top: 1px;
+			margin-right: 10px;
+			float: left;
+			font-family: "Fjalla One";
+			font-size: 25px;
+			color: #999;
+		}
+
+		#result_time_clock {
+			margin-top: 1px;
+			float: left;
+			font-family: "Fjalla One";
+			font-size: 23px;
+			color: #999;
+		}
+
+		#result_eval_meeting {
+			float: left;
+			margin-left: 20px;
+			font-family: "Fjalla One";
+			font-size: 24px;
+			color: #69c;	
+		}
+
+		#result_eval_proceed {
+			float: left;
+			margin-left: 40px;
+			font-family: "Fjalla One";
+			font-size: 24px;
+			color: #69c;	
+		}
+
+		#result_eval_best {
+			float: left;
+			margin-left: 40px;
+			font-family: "Fjalla One";
+			font-size: 24px;
+			color: #69c;	
+		}
 	</style>
 </head>
 <body class="meeting_result">
-	<div class="container">
-		<div class="header">
-			<div>
-				<form action="/page/meeting_save" method="post">
-					<input type="submit" value="회의록 생성">
-					<input type="button" value="공유하기">
-				</form>
+	<div class="meeting_result_bootbox">
+		
+		<div class="container">
+			<div class="header">
+				<div id="result_title_box">
+					<div class="result_icon">
+						<img class="result_icon_button" src="./img/minute.png" />
+						<img class="result_icon_button" src="./img/share.png" />
+						<img class="result_icon_button" src="./img/exit.png" />
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="body">
-			<div class="meta">
-			<%
-				if( result.meeting_result.length > 0 ) { 
-			%>
-				<div>회의 주제 - <%= result.meeting_result[0].subject %></div>
-				<div>회의 목표 - <%= result.meeting_result[0].goal %></div>
-				<div>시간 - <%= result.meeting_result[0].start_time %> ~ <%= result.meeting_result[0].end_time %> </div>
-				<div>참여자 - <%= result.meeting_result[0].user_list %></div>
-				<div>회의 평가</div>
+			<div class="body" id="result_contents_box">
+				<div class="meta">
 				<%
-					var satisfaction = 0;
-					var ft_appraisal = 0;
-					var mvp_array = {};
-					var mvp = { user:"", vote:0 };
-					for(var i=0; i<result.meeting_result_appraisal.length; i++) {
-						satisfaction += result.meeting_result_appraisal[i].satisfaction;
-						ft_appraisal += result.meeting_result_appraisal[i].ft_appraisal;
-						if( typeof(mvp_array[result.meeting_result_appraisal[i].mvp]) === "undefined" ) 
-							mvp_array[result.meeting_result_appraisal[i].mvp] = 1;
-						else
-							mvp_array[result.meeting_result_appraisal[i].mvp]++;
-					}
-					satisfaction = Math.floor(satisfaction / i);
-					ft_appraisal = Math.floor(ft_appraisal / i);
-					for(key in mvp_array)
-					{
-						if( mvp['vote'] < mvp_array[key] )
-						{
-							mvp['user'] = key;
-							mvp['vote'] = mvp_array[key];
-						}
+					if( result.meeting_result.length > 0 ) { 
+				%>
+					<div class="result_title">회의 주제 - <%= result.meeting_result[0].subject %></div>
+					<div class="result_subject">회의 목표 - <%= result.meeting_result[0].goal %></div>
+					<div class="result_time">
+						<img class="result_contents_button" src="./img/clock.png" />
+						<div id="result_time_use">02:31:00</div>
+						<div id="result_time_set">/ 2:00:00</div>	
+						<div id="result_time_clock">(<%= result.meeting_result[0].start_time %> - <%= result.meeting_result[0].end_time %>)</div>	
+					</div>
+					<div class="result_evaluate">
+						<%
+							var satisfaction = 0;
+							var ft_appraisal = 0;
+							var mvp_array = {};
+							var mvp = { user:"", vote:0 };
+							for(var i=0; i<result.meeting_result_appraisal.length; i++) {
+								satisfaction += result.meeting_result_appraisal[i].satisfaction;
+								ft_appraisal += result.meeting_result_appraisal[i].ft_appraisal;
+								if( typeof(mvp_array[result.meeting_result_appraisal[i].mvp]) === "undefined" ) 
+									mvp_array[result.meeting_result_appraisal[i].mvp] = 1;
+								else
+									mvp_array[result.meeting_result_appraisal[i].mvp]++;
+							}
+							satisfaction = Math.floor(satisfaction / i);
+							ft_appraisal = Math.floor(ft_appraisal / i);
+							for(key in mvp_array)
+							{
+								if( mvp['vote'] < mvp_array[key] )
+								{
+									mvp['user'] = key;
+									mvp['vote'] = mvp_array[key];
+								}
+							}
+						%>
+						<img class="result_contents_button" src="./img/badge.png" />
+						<div id="result_eval_meeting">Meeting</div>
+						<div>회의 만족도 - <%=satisfaction%></div>
+						<div id="result_eval_proceed">Proceeding</div>
+						<div>퍼실리테이션 평가 - <%=ft_appraisal%></div>
+						<div id="result_eval_best">Best Member</div>
+						<div>MVP - <%=mvp['user']%></div>
+					</div>
+
+					
+					
+					
+				<%
 					}
 				%>
-				<div>회의 만족도 - <%=satisfaction%></div>
-				<div>퍼실리테이션 평가 - <%=ft_appraisal%></div>
-				<div>MVP - <%=mvp['user']%></div>
-			<%
-				}
-			%>
-			</div>
-			<div class="chart">
-				<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
-				<div id="placeholder" style="width:600px;height:300px;"></div>
-				<div id="" class=" input_chart"></div>
-			</div>
-			<div class="agenda">
-				<% for(var i=0; i<result.meeting_result.length; i++) { %>
-					<div><%=result.meeting_result[i].agenda_subject%></div>
-					<div><%=result.meeting_result[i].agenda_goal%></div>
-					<div><%=result.meeting_result[i].agenda_start_time%> ~ <%=result.meeting_result[i].agenda_end_time%></div>
-					<div><%=result.meeting_result[i].user_list%></div>
-				<% } %>
+				</div>
+				<div class="chart">
+					<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
+					<div id="placeholder" style="width:600px;height:300px;"></div>
+					<div id="" class=" input_chart"></div>
+				</div>
+				<div class="agenda">
+					<% for(var i=0; i<result.meeting_result.length; i++) { %>
+						<div><%=result.meeting_result[i].agenda_subject%></div>
+						<div><%=result.meeting_result[i].agenda_goal%></div>
+						<div><%=result.meeting_result[i].agenda_start_time%> ~ <%=result.meeting_result[i].agenda_end_time%></div>
+						<div><%=result.meeting_result[i].user_list%></div>
+					<% } %>
+				</div>
 			</div>
 		</div>
 	</div>

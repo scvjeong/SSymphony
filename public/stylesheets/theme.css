@@ -385,6 +385,9 @@ ul.users-online li a strong {
 
 
 .evaluate_bootbox {
+	position: absolute;
+	top: 40;
+	left: 102;
 	width: 1074px; height: 680px;
 	background-color: #69c;
 }

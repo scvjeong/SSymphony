@@ -160,9 +160,9 @@
 			<div class="header">
 				<div id="result_title_box">
 					<div class="result_icon">
-						<img class="result_icon_button" src="./img/minute.png" />
-						<img class="result_icon_button" src="./img/share.png" />
-						<img class="result_icon_button" src="./img/exit.png" />
+						<img class="result_icon_button" src="/images/meeting_result/minute.png" />
+						<img class="result_icon_button" src="/images/meeting_result/share.png" />
+						<img class="result_icon_button" src="/images/meeting_result/exit.png" />
 					</div>
 				</div>
 			</div>
@@ -175,7 +175,7 @@
 						<div class="result_title">회의 주제 - <%= result.meeting_result[0].subject %></div>
 						<div class="result_subject">회의 목표 - <%= result.meeting_result[0].goal %></div>
 						<div class="result_time">
-							<img class="result_contents_button" src="./img/clock.png" />
+							<img class="result_contents_button" src="/images/meeting_result/clock.png" />
 							<div id="result_time_use">02:31:00</div>
 							<div id="result_time_set">/ 2:00:00</div>	
 							<div id="result_time_clock">(<%= result.meeting_result[0].start_time %> - <%= result.meeting_result[0].end_time %>)</div>	
@@ -205,7 +205,7 @@
 									}
 								}
 							%>
-							<img class="result_contents_button" src="./img/badge.png" />
+							<img class="result_contents_button" src="/images/meeting_result/badge.png" />
 							<div id="result_eval_meeting">Meeting</div>
 							<div id="meeting_val">회의 만족도 - <%=satisfaction%></div>
 							<div id="result_eval_proceed">Proceeding</div>
@@ -213,8 +213,7 @@
 							<div id="result_eval_best">Best Member</div>
 							<div id="best_member_val">MVP - <%=mvp['user']%></div>
 						</div>
-					
-						
+							
 					<%
 						}
 					%>

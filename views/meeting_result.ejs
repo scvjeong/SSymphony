@@ -131,6 +131,26 @@
 			font-size: 24px;
 			color: #69c;	
 		}
+
+		
+		#meeting_val {
+			float: left;
+			margin-left: 20px;
+	
+		}
+
+		#proceeding_val {
+			float: left;
+			margin-left: 20px;
+		
+		}
+
+		#best_member_val {
+			float: left;
+			margin-left: 20px;
+		
+		}
+
 	</style>
 </head>
 <body class="meeting_result">
@@ -186,15 +206,13 @@
 						%>
 						<img class="result_contents_button" src="./img/badge.png" />
 						<div id="result_eval_meeting">Meeting</div>
-						<div>회의 만족도 - <%=satisfaction%></div>
+						<div id="meeting_val">회의 만족도 - <%=satisfaction%></div>
 						<div id="result_eval_proceed">Proceeding</div>
-						<div>퍼실리테이션 평가 - <%=ft_appraisal%></div>
+						<div id="proceeding_val">퍼실리테이션 평가 - <%=ft_appraisal%></div>
 						<div id="result_eval_best">Best Member</div>
-						<div>MVP - <%=mvp['user']%></div>
+						<div id="best_member_val">MVP - <%=mvp['user']%></div>
 					</div>
-
-					
-					
+				
 					
 				<%
 					}

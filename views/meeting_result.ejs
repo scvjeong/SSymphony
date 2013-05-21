@@ -160,76 +160,78 @@
 			<div class="header">
 				<div id="result_title_box">
 					<div class="result_icon">
-						<img class="result_icon_button" src="/images/meeting_result/minute.png" />
-						<img class="result_icon_button" src="/images/meeting_result/share.png" />
-						<img class="result_icon_button" src="/images/meeting_result/exit.png" />
+						<img class="result_icon_button" src="./img/minute.png" />
+						<img class="result_icon_button" src="./img/share.png" />
+						<img class="result_icon_button" src="./img/exit.png" />
 					</div>
 				</div>
 			</div>
 			<div class="body" id="result_contents_box">
-				<div class="meta">
-				<%
-					if( result.meeting_result.length > 0 ) { 
-				%>
-					<div class="result_title">회의 주제 - <%= result.meeting_result[0].subject %></div>
-					<div class="result_subject">회의 목표 - <%= result.meeting_result[0].goal %></div>
-					<div class="result_time">
-						<img class="result_contents_button" src="/images/meeting_result/clock.png" />
-						<div id="result_time_use">02:31:00</div>
-						<div id="result_time_set">/ 2:00:00</div>	
-						<div id="result_time_clock">(<%= result.meeting_result[0].start_time %> - <%= result.meeting_result[0].end_time %>)</div>	
-					</div>
-					<div class="result_evaluate">
-						<%
-							var satisfaction = 0;
-							var ft_appraisal = 0;
-							var mvp_array = {};
-							var mvp = { user:"", vote:0 };
-							for(var i=0; i<result.meeting_result_appraisal.length; i++) {
-								satisfaction += result.meeting_result_appraisal[i].satisfaction;
-								ft_appraisal += result.meeting_result_appraisal[i].ft_appraisal;
-								if( typeof(mvp_array[result.meeting_result_appraisal[i].mvp]) === "undefined" ) 
-									mvp_array[result.meeting_result_appraisal[i].mvp] = 1;
-								else
-									mvp_array[result.meeting_result_appraisal[i].mvp]++;
-							}
-							satisfaction = Math.floor(satisfaction / i);
-							ft_appraisal = Math.floor(ft_appraisal / i);
-							for(key in mvp_array)
-							{
-								if( mvp['vote'] < mvp_array[key] )
-								{
-									mvp['user'] = key;
-									mvp['vote'] = mvp_array[key];
+				<div class="result_contents">
+					<div class="meta">
+					<%
+						if( result.meeting_result.length > 0 ) { 
+					%>
+						<div class="result_title">회의 주제 - <%= result.meeting_result[0].subject %></div>
+						<div class="result_subject">회의 목표 - <%= result.meeting_result[0].goal %></div>
+						<div class="result_time">
+							<img class="result_contents_button" src="./img/clock.png" />
+							<div id="result_time_use">02:31:00</div>
+							<div id="result_time_set">/ 2:00:00</div>	
+							<div id="result_time_clock">(<%= result.meeting_result[0].start_time %> - <%= result.meeting_result[0].end_time %>)</div>	
+						</div>
+						<div class="result_evaluate">
+							<%
+								var satisfaction = 0;
+								var ft_appraisal = 0;
+								var mvp_array = {};
+								var mvp = { user:"", vote:0 };
+								for(var i=0; i<result.meeting_result_appraisal.length; i++) {
+									satisfaction += result.meeting_result_appraisal[i].satisfaction;
+									ft_appraisal += result.meeting_result_appraisal[i].ft_appraisal;
+									if( typeof(mvp_array[result.meeting_result_appraisal[i].mvp]) === "undefined" ) 
+										mvp_array[result.meeting_result_appraisal[i].mvp] = 1;
+									else
+										mvp_array[result.meeting_result_appraisal[i].mvp]++;
 								}
-							}
-						%>
-						<img class="result_contents_button" src="/images/meeting_result/badge.png" />
-						<div id="result_eval_meeting">Meeting</div>
-						<div id="meeting_val">회의 만족도 - <%=satisfaction%></div>
-						<div id="result_eval_proceed">Proceeding</div>
-						<div id="proceeding_val">퍼실리테이션 평가 - <%=ft_appraisal%></div>
-						<div id="result_eval_best">Best Member</div>
-						<div id="best_member_val">MVP - <%=mvp['user']%></div>
-					</div>
-				
+								satisfaction = Math.floor(satisfaction / i);
+								ft_appraisal = Math.floor(ft_appraisal / i);
+								for(key in mvp_array)
+								{
+									if( mvp['vote'] < mvp_array[key] )
+									{
+										mvp['user'] = key;
+										mvp['vote'] = mvp_array[key];
+									}
+								}
+							%>
+							<img class="result_contents_button" src="./img/badge.png" />
+							<div id="result_eval_meeting">Meeting</div>
+							<div id="meeting_val">회의 만족도 - <%=satisfaction%></div>
+							<div id="result_eval_proceed">Proceeding</div>
+							<div id="proceeding_val">퍼실리테이션 평가 - <%=ft_appraisal%></div>
+							<div id="result_eval_best">Best Member</div>
+							<div id="best_member_val">MVP - <%=mvp['user']%></div>
+						</div>
 					
-				<%
-					}
-				%>
-				</div>
-				<div class="chart">
-					<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
-					<div id="placeholder" style="width:600px;height:300px;"></div>
-					<div id="" class=" input_chart"></div>
-				</div>
-				<div class="agenda">
-					<% for(var i=0; i<result.meeting_result.length; i++) { %>
-						<div><%=result.meeting_result[i].agenda_subject%></div>
-						<div><%=result.meeting_result[i].agenda_goal%></div>
-						<div><%=result.meeting_result[i].agenda_start_time%> ~ <%=result.meeting_result[i].agenda_end_time%></div>
-						<div><%=result.meeting_result[i].user_list%></div>
-					<% } %>
+						
+					<%
+						}
+					%>
+					</div>
+					<div class="chart">
+						<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
+						<div id="placeholder" style="width:600px;height:300px;"></div>
+						<div id="" class=" input_chart"></div>
+					</div>
+					<div class="agenda">
+						<% for(var i=0; i<result.meeting_result.length; i++) { %>
+							<div><%=result.meeting_result[i].agenda_subject%></div>
+							<div><%=result.meeting_result[i].agenda_goal%></div>
+							<div><%=result.meeting_result[i].agenda_start_time%> ~ <%=result.meeting_result[i].agenda_end_time%></div>
+							<div><%=result.meeting_result[i].user_list%></div>
+						<% } %>
+					</div>
 				</div>
 			</div>
 		</div>

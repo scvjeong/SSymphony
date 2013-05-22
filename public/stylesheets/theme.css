@@ -392,9 +392,9 @@ ul.users-online li a strong {
 	background-color: #69c;
 }
 
-
 		.meeting_result_bootbox {
 			width: 1074px; 
+			height: 900px;
 			padding: 0px;
 			background-color: #69c;
 		}	
@@ -420,6 +420,7 @@ ul.users-online li a strong {
 
 		.modal-body {
 			padding: 0px;
+			max-height: 680px;
 		}
 
 		.result_icon {

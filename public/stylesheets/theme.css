@@ -394,9 +394,7 @@ ul.users-online li a strong {
 
 
 .meeting_result_bootbox {
-			position: absolute;
-			top: 40px;
-			left: 102px;
+			
 			width: 1074px; height: 680px;
 			background-color: #69c;
 		}	

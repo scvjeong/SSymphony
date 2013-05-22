@@ -951,6 +951,34 @@ function showEvaluateMeetingWindow()
 	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
 }
 
+function showMeetingResultWindow()
+{
+	var html = "";
+		html += "<div>";
+			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
+			html += "<div>How are you satisfied with the meeting?"
+				html += "<div id=\"meeting_rating\"></div>";
+			html += "</div>";
+			html += "<div>How are you satisfied with the facilitation?";
+				html += "<div id=\"fac_rating\"></div>";
+			html += "</div>";
+			html += "<div>How are you satisfied with yourself in the meeting?";
+				html += "<div id=\"self_rating\"></div>";
+			html += "</div>";
+		html += "</div>";
+
+	console.log(html);
+
+	dialog = bootbox.dialog(html);
+	
+	var bootbox_select = $('.bootbox');
+	bootbox_select.addClass("meeting_result_bootbox");
+
+	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+}
+
 
 function changePenColor(color)
 {

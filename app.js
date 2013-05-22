@@ -33,6 +33,7 @@ app.configure('development', function(){
 });
 
 app.get('/', main.main);
+app.get('/page/group_select', main.group_select); // 회의 선택 페이지
 app.get('/page/meeting_list', routes.meeting_list); // 회의 선택 페이지
 app.get('/page/meeting', meeting.main); // 회의 진행 페이지
 app.get('/page/meeting_public', meeting.meeting_public);

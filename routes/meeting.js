@@ -12,10 +12,6 @@ exports.main = function(req, res){
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
 	/** session end **/
-	
-	console.log("CALL meeting.main");
-	console.log(req);
-
 	res.render('meeting', { title: 'Express' });
 };
 

@@ -534,3 +534,11 @@ ul.users-online li a strong {
 			font-size: 24px;
 			color: #039;
 		}
+		
+		#meeting_rating {
+			float: left;
+		}
+		
+		#ft_rating {
+			float: left;
+		}

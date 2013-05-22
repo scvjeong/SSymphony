@@ -953,31 +953,13 @@ function showEvaluateMeetingWindow()
 
 function showMeetingResultWindow()
 {
-	/*
-	var html = "";
-		html += "<div>";
-			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
-			html += "<div>How are you satisfied with the meeting?"
-				html += "<div id=\"meeting_rating\"></div>";
-			html += "</div>";
-			html += "<div>How are you satisfied with the facilitation?";
-				html += "<div id=\"fac_rating\"></div>";
-			html += "</div>";
-			html += "<div>How are you satisfied with yourself in the meeting?";
-				html += "<div id=\"self_rating\"></div>";
-			html += "</div>";
-		html += "</div>";
 
-	console.log(html);
-*/
 	var source_url = "/page/meeting_result";
 	$.ajax({
 		type: "GET",
 		url: source_url,
 		dataType: "html",
 		success: function(data) {
-			//includeFileDynamically(data.include_list);
-			//addTool(_tool_type, data);
 			dialog = bootbox.dialog(data);
 	
 			var bootbox_select = $('.bootbox');
@@ -986,9 +968,12 @@ function showMeetingResultWindow()
 			setupUserListChart();
 			setupWordChart();
 			
-			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic'});
-			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic'});
+			var meeting_val = $("#meeting_val").text();
+			var ft_val = $("#proceeding_val").text();
 
+			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: 'true', value: meeting_val });
+			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic' disabled: 'true', value: ft_val });
+	
 		},
 		error: function(err) {
 			console.log(err);

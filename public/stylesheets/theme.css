@@ -393,8 +393,8 @@ ul.users-online li a strong {
 }
 
 		.meeting_result_bootbox {
+			left: 45%;
 			width: 1074px; 
-			height: 900px;
 			padding: 0px;
 			background-color: #69c;
 		}	

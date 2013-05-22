@@ -953,6 +953,7 @@ function showEvaluateMeetingWindow()
 
 function showMeetingResultWindow()
 {
+	/*
 	var html = "";
 		html += "<div>";
 			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
@@ -968,11 +969,28 @@ function showMeetingResultWindow()
 		html += "</div>";
 
 	console.log(html);
-
-	dialog = bootbox.dialog(html);
+*/
+	var source_url = "../../views/meeting_result.ejs";
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			//includeFileDynamically(data.include_list);
+			//addTool(_tool_type, data);
+			dialog = bootbox.dialog(data);
 	
-	var bootbox_select = $('.bootbox');
-	bootbox_select.addClass("meeting_result_bootbox");
+			var bootbox_select = $('.bootbox');
+			bootbox_select.addClass("meeting_result_bootbox");
+
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+	
+	
 
 	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
 	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});

@@ -394,7 +394,7 @@ ul.users-online li a strong {
 
 
 		.meeting_result_bootbox {
-			width: 1074px; height: 680px;
+			width: 1074px; 
 			padding: 0px;
 			background-color: #69c;
 		}	
@@ -406,7 +406,6 @@ ul.users-online li a strong {
 		
 		#result_contents_box {
 			width: 1074px;
-			height: 607px;
 			margin: 0px;
 			background-color: #fff;
 		}

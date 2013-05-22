@@ -971,8 +971,8 @@ function showMeetingResultWindow()
 			var meeting_val = $("#meeting_val").text();
 			var ft_val = $("#proceeding_val").text();
 
-			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: 'true', value: meeting_val });
-			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: 'true', value: ft_val });
+			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
+			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
 	
 		},
 		error: function(err) {

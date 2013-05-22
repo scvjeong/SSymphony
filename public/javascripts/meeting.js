@@ -970,7 +970,7 @@ function showMeetingResultWindow()
 
 	console.log(html);
 */
-	var source_url = "../../views/meeting_result.ejs";
+	var source_url = "/page/meeting_result";
 	$.ajax({
 		type: "GET",
 		url: source_url,

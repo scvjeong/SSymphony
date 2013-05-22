@@ -5,7 +5,7 @@ var _tool_mindmap_count = 0;
 var _tool_vote_count = 0;
 var _tool_matrix_count = 0;
 var _common_window_top = 50;
-var _common_windot_left = 20;
+var _common_window_left = 20;
 var _new_z_index = 0;
 var _drawtool = 'pen';
 var _group_id = 1;
@@ -485,7 +485,7 @@ function addTool(type, source)
 		tool['title'] = '리스트 ' + _tool_list_count;
 		tool['width'] = list_window_width;
 		tool['height'] = list_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			tmpIndent: 0,	// 현재 들여쓰기 상태
@@ -507,7 +507,7 @@ function addTool(type, source)
 		tool['title'] = '포스트잇 ' + _tool_postit_count;
 		tool['width'] = postit_window_width;
 		tool['height'] = postit_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			tmpLastId: 100,
@@ -525,7 +525,7 @@ function addTool(type, source)
 		tool['title'] = '마인드맵 ' + _tool_mindmap_count;
 		tool['width'] = mindmap_window_width;
 		tool['height'] = mindmap_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			moveFlag: 0,
@@ -547,7 +547,7 @@ function addTool(type, source)
 		tool['title'] = '투표 ' + _tool_vote_count;
 		tool['width'] = vote_window_width;
 		tool['height'] = vote_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			
@@ -559,7 +559,7 @@ function addTool(type, source)
 		tool['title'] = 'matrix ' + _tool_matrix_count;
 		tool['width'] = matrix_window_width;
 		tool['height'] = matrix_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			tmpClient: 0,	//현재 클라이언트 번호
@@ -586,7 +586,7 @@ function addTool(type, source)
 	}
 	tool['source'] = source;
 	
-	_common_windot_left += 100;
+	_common_window_left += 100;
 	_common_window_top += 100;
 
 	_toolWindowList.push(tool);

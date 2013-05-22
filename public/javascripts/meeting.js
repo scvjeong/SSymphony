@@ -982,20 +982,97 @@ function showMeetingResultWindow()
 	
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_result_bootbox");
+			
+			setupUserListChart();
+			setupWordChart();
 
 		},
 		error: function(err) {
 			console.log(err);
 			return false;
 		}
-	});
-	
-	
+	});	
 
-	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	$("#meeting_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
+	$("#ft_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
 }
+
+
+function setupWordChart()
+{
+	var d1 = [[20,20,10], [40,50,20], [70,10,5], [80,80,7]];
+	var d2 = [[60,25,15], [70,40,6], [30,80,4]];
+	var d3 = [[30,25,15], [24,40,6], [30,43,4]];
+	var d4 = [[20,23,10], [43,24,20], [23,65,5], [60,80,4]];
+	var options = { 
+		series:{bubbles:{active:true,show:true,linewidth:2},editMode:'xy'},
+		grid:{hoverable:true,clickable:true,editable:true }
+	};
+	$.plot( $("#placeholder") , [d1,d2,d3,d4], options );
+}
+
+function setupUserListChart()
+{
+	if ($(".bar-chart").length) {
+		var data1 = [];
+		for (var i = 0; i <= 4; i += 1)
+			data1.push([i, parseInt(Math.random() * 100)]);
+
+		var data2 = [];
+		for (var i = 0; i <= 4; i += 1)
+			data2.push([i, parseInt(Math.random() * 100)]);
+
+		var data3 = [];
+		for (var i = 0; i <= 4; i += 1)
+			data3.push([i, parseInt(Math.random() * 100)]);
+
+		var ds = new Array();
+
+		ds.push({
+			data : data1,
+			bars : {
+				show : true,
+				barWidth : 0.2,
+				order : 1,
+			}
+		});
+		ds.push({
+			data : data2,
+			bars : {
+				show : true,
+				barWidth : 0.2,
+				order : 2
+			}
+		});
+		ds.push({
+			data : data3,
+			bars : {
+				show : true,
+				barWidth : 0.2,
+				order : 3
+			}
+		});
+		//Display graph
+		$.plot($(".bar-chart"), ds, {
+			colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
+			grid : {
+				show : true,
+				hoverable : true,
+				clickable : true,
+				tickColor : $chrt_border_color,
+				borderWidth : 0,
+				borderColor : $chrt_border_color,
+			},
+			legend : true,
+			tooltip : true,
+			tooltipOpts : {
+				content : "<b>%x</b> = <span>%y</span>",
+				defaultTheme : false
+			}
+		});
+	}
+}
+
 
 
 function changePenColor(color)

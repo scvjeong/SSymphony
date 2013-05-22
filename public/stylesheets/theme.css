@@ -394,6 +394,7 @@ ul.users-online li a strong {
 
 		.meeting_result_bootbox {
 			left: 45%;
+			top: 5%;
 			width: 1074px; 
 			padding: 0px;
 			background-color: #69c;
@@ -529,5 +530,7 @@ ul.users-online li a strong {
 		#best_member_val {
 			float: left;
 			margin-left: 20px;
-		
+			font-family: "Fjalla One";
+			font-size: 24px;
+			color: #039;
 		}

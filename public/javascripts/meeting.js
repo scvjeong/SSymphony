@@ -985,6 +985,9 @@ function showMeetingResultWindow()
 			
 			setupUserListChart();
 			setupWordChart();
+			
+			$("#meeting_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
+			$("#ft_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
 
 		},
 		error: function(err) {
@@ -993,8 +996,7 @@ function showMeetingResultWindow()
 		}
 	});	
 
-	$("#meeting_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
-	$("#ft_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
+	
 }
 
 

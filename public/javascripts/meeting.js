@@ -986,8 +986,8 @@ function showMeetingResultWindow()
 			setupUserListChart();
 			setupWordChart();
 			
-			$("#meeting_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
-			$("#ft_rating").jqxRating({ width: 400, height: 60, theme: 'classic'});
+			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic'});
+			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic'});
 
 		},
 		error: function(err) {

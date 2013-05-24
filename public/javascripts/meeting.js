@@ -90,20 +90,41 @@ $(document).ready(function() {
             	
             	var newfileitem = "";
             	var filetypeinfo = getFileTypeInfo(response.filetype);
+            	var target_list = "";
             	
-            	newfileitem += "<li>";
+            	/*
+				<li class="item">
+					<div class="icon"></div>
+					<div class="text">테스트</div>
+				</li>
+				*/
+				switch (filetypeinfo.category)
+            	{
+            	case "document":
+            		target_list = "section_documents";
+            		break;
+            	case "image":
+            		target_list = "section_photos";
+            		break;
+            	default:
+					target_list = "section_others";
+            	}
             	newfileitem += "<a href=\"";
             	newfileitem += "/tmp/";
             	newfileitem += response.filename;
-            	newfileitem += "\">";
-            	newfileitem += "<img src=\"";
-            	newfileitem += filetypeinfo.iconurl;
-            	newfileitem += "\" width=\"16\" height=\"16\" /> ";
-            	newfileitem += "[" + filetypeinfo.category + "]";
-            	newfileitem += response.filename;
+            	newfileitem += "\" target=\"_blank\">";
+	            	newfileitem += "<li class=\"item\">";
+		            	newfileitem += "<div class=\"icon\" style=\"background-image:url('";
+		            	newfileitem += filetypeinfo.iconurl;
+		            	newfileitem += "')\"></div>";
+		            	newfileitem += "<div class=\"text\">";
+			            	newfileitem += response.filename;
+		            	newfileitem += "</div>";
+	            	newfileitem += "</li>";
             	newfileitem += "</a>";
-            	newfileitem += "</li>";
-				$('#file_list').append(newfileitem);
+				//$('#file_list').append(newfileitem);
+				
+				$("#" + target_list + " .list").append(newfileitem);
             }
 		});
 
@@ -127,10 +148,8 @@ function openSocket()
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
 	
-
 	_socket_common.emit('join_room', {group:_group_id});
 	
-
 	_socket_common.on('get_client', function (data) {
 		_client_id = data.client;
 		//console.log("client: "+data.client);
@@ -644,7 +663,6 @@ function showToolWindow(idx)
 		_tool_vote_count++;
 		break;
 	case "matrix":
-
 		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);

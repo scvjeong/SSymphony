@@ -367,6 +367,27 @@ ul.users-online li a strong {
 	border: 1px solid #cccccc;
 }
 
+#window_share_box .content div .list {
+	margin: 10px;
+}
+
+#window_share_box .content div .list .item {
+	width: 64px;
+	display: inline-block;
+	cursor: pointer;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+#window_share_box .content div .list .item .icon {
+	width: 64px;
+	height: 64px;
+	background-size: contain;
+}
+
+#window_share_box .content div .list .item .text {
+	text-align: center;
+}
 
 #window_share_box .content .section_title {
 	padding: 0 0 0 10px;
@@ -374,14 +395,7 @@ ul.users-online li a strong {
 	font-weight: bold;
 	margin: 0;
 	border-top: 1px solid #cccccc;
+	padding-top: 3px;
+	padding-bottom: 3px;
 }
 /* /쉐어 박스 */
-
-
-
-
-
-.evaluate_bootbox {
-	background-color: red;
-	
-}	

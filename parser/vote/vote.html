@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="vote.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="./lib/socket.io.js"></script>	
+
+	<script>
+		var _voteid = "vote1";
+		var _votelistnum = 0;
+
+		var _socket;
+		var _tmpLastId = 100;
+		var _tmpGroup = 0;
+		var _clientId = 0;
+
+		/* 서버로부터 받는 변수들 */
+		var _question_title = "";
+		var _is_multi_vote = "";
+		var _votelist = [];
+
+		$(document).ready(function()
+		{
+			// 소켓 오픈
+			initSocket();
+			
+			// 투표 시작 버튼 작동
+			$('.btn_votestart').click(function() {
+				_socket.emit('set_last_id', { group: _tmpGroup, tool: _voteid });	
+			});
+			
+			$('btn_votefinish').click(function() {
+				finishVote();
+			});
+			
+			// 투표 옵션 추가하기
+			$('.underbar .txt_init_votereadylist').click(function() {
+				// 새 옵션 3개 추가
+				newVoteReadyList();
+				newVoteReadyList();
+				newVoteReadyList();
+				
+				// 체크박스 컨테이너 레이아웃 보이게
+				$('.underbar .txt_init_votereadylist').hide();
+				$('.underbar .container_checkboxes').show(); 
+			});
+		});
+
+		/* 투표 리스트에 항목 새로 추가 */
+		function newVoteReadyList()
+		{
+			var votereadylist = $('.voteReadyList');
+			var id_lastlist = "list_" + _voteid + "_" + _votelistnum++;
+			var id_thislist = "list_" + _voteid + "_" + _votelistnum;
+			var newlist = "<li id=\"";
+				 newlist += id_thislist;
+				 newlist += "\">";
+				 newlist += "<span class=\"plusicon\">+</span> <input type=\"text\" placeholder=\"옵션 추가하기\" />";
+				 newlist += "<span id=\"" + "btn_del_" + _voteid + "_" + _votelistnum + "\" class=\"del_votelist\">x</span>";
+				 newlist += "</li>";
+				
+			votereadylist.append(newlist);
+			
+			var countlist = $(".voteReadyList li").length;
+			for (var i = 0; i < countlist; i++)
+			{
+				$(".voteReadyList li .del_votelist:nth(" + i + ")").click(function() {
+					$(".voteReadyList li:nth(" + i + ")").remove();
+				});
+				
+				$(".voteReadyList li input:nth(" + i + ")").unbind('click', _newlist_to_last);
+				$(".voteReadyList li input:nth(" + i + ")").unbind('focus', _newlist_to_last);
+				
+				if (i == countlist - 1)
+				{
+					$(".voteReadyList li input:nth(" + i + ")").click(_newlist_to_last);
+					$(".voteReadyList li input:nth(" + i + ")").focus(_newlist_to_last);
+				}
+			}
+			/*
+			$("#btn_del_" + _voteid + "_" + _votelistnum).click(function() {
+				var countlist = $(".voteReadyList input").length;
+				if (countlist > 1)
+					$('#' + id_thislist).remove();
+			});
+				 
+			$("#" + id_lastlist + " input").unbind('click', _newlist_to_last);
+			$("#" + id_lastlist + " input").unbind('focus', _newlist_to_last);
+			$("#" + id_thislist + " input").click(_newlist_to_last);
+			$("#" + id_thislist + " input").focus(_newlist_to_last);*/
+		}
+		var _newlist_to_last = function() {
+			newVoteReadyList();
+		};
+		var _refresh_btn_del_votelist = function() {
+			$(".voteReadyList li input:nth(" + i + ")").unbind('click', _newlist_to_last);
+				$(".voteReadyList li input:nth(" + i + ")").unbind('focus', _newlist_to_last);
+				
+				if (i == countlist - 1)
+				{
+					$(".voteReadyList li input:nth(" + i + ")").click(_newlist_to_last);
+					$(".voteReadyList li input:nth(" + i + ")").focus(_newlist_to_last);
+				}
+		};
+
+		/* 투표 시작 */
+		function startVote()
+		{
+			var listcount = $('.voteReadyList input').length; //[1].value == ""
+			_question_title = $(".vote_make_container .question_title").val();
+			
+			console.log("listcount : " + listcount);
+			console.log("question_title : " + _question_title);
+			
+			_votelist = [];	// 투표 항목 목록 초기화
+			for (var i = 0; i < listcount; i++)
+			{
+				var this_title = $('.voteReadyList input')[i].value;
+				// 비어 있지 않으면 투표 리스트로 추가
+				if (this_title != "")
+				{
+					var newitem = {};
+					newitem["title"] = this_title;
+					newitem["vote"] = 0;
+					newitem["voterlist"] = [];
+					
+					_votelist.push(newitem);
+				
+					_socket.emit('set_insert_tree_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: i+1, index: i+1, val: this_title } );
+					console.log(this_title);
+				}
+			}
+			
+			sendVoteDataToServer();	// 서버로 투표데이터 전송
+
+			initVoteProcess();
+		}
+
+		/* 소켓 초기화 */
+		function initSocket()
+		{
+			console.log('Call initSocket()');
+			
+			_socket = io.connect('http://61.43.139.69:50004/group');
+			_tmpGroup = "group1";
+			
+			_socket.emit('join_room', {group: _tmpGroup});						// 그룹에 join
+			_socket.emit('set_tree_data', {group: _tmpGroup, tool: _voteid});		// 서버에 초기 데이터 요청
+			_socket.emit('set_client', {group: _tmpGroup, user: 'user1'});
+			
+			_socket.on('get_client', function (data) {
+				_clientId = data.client;
+			});
+	
+			
+			////  lastId 얻어오는 함수  ////
+			_socket.on('get_last_id', function (data) { 
+				//// 투표 도구에서 100번 ID는 버리는 ID ////
+				_tmpLastId = data.last;
+				$('.question_title').attr('id', _tmpLastId);
+				var title_val = $('.question_title').val();
+				_socket.emit('set_insert_tree_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: '0', index: '0', val: title_val } );
+				startVote();
+			});
+			
+			_socket.on('get_insert_tree_data', function(data) {
+				console.log("get_insert_tree_data : " + data);
+				
+				/*
+				if (data.id == "set_vote_process")
+				{
+					_votelist = data.val;
+					initVoteProcess();
+				}
+				else if (data.id == "end_vote")
+				{
+					
+				}*/
+			});
+			
+			_socket.on('get_option_data', function(data) {
+				console.log("get_option_data: "+data);
+				if (data.option = "is_multi_vote")
+				{
+					_is_multi_vote = data.val;
+				}
+			});
+		}
+
+		/* 데이터를 서버로 전송함 */
+		function sendVoteDataToServer()
+		{
+			
+			/*
+			var sendingData = JSON.stringify(_votelist);						// 투표 항목들
+			_is_multi_vote = $('#chk_multi_vote').is(":checked");	// 중복 투표 여부	
+				
+			_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid,
+															id: 0, option: 'is_multi_vote', val: _is_multi_vote});
+			_socket.emit('set_insert_data', {group: _tmpGroup, tool: _voteid,
+															id: 'set_vote_process', index: 0, val: sendingData, client: 0});
+			*/
+		}
+
+		function sendStartVote()
+		{
+			
+		}
+
+		/* 투표 진행 초기화 */
+		function initVoteProcess(data)
+		{
+			$('.vote_make_container').css('display', 'none');
+			$('.vote_processing_container').css('display', 'block');	
+			$('.vote_processing_container .question_title').html(_question_title);
+			
+			var question_list = $('.vote_processing_container .question_list ul');
+			question_list.html("");
+			for (var i = 0; i < _votelist.length; i++)
+			{
+				var newitem = "<li>";
+					if (_is_multi_vote == true) newitem += "<input type=\"checkbox\" class=\"verticalmiddle\" />";
+					else newitem += "<input type=\"radio\" class=\"verticalmiddle\" />";	
+					newitem += "<span class=\"item_text\">";
+					newitem += _votelist[i].title;
+					newitem += "</span>"
+					newitem += "</li>";
+					 
+				question_list.append(newitem);
+			
+				
+			}
+		}
+
+		/* 투표 완료 */
+		function finishVote()
+		{
+			$('.vote_processing_container').css('display', 'none');
+			$('.vote_result_container').css('display', 'block');
+		}
+		
+	</script>
+</head>
+<body>
+<div class="vote_make_container">
+	<div class="container_question_title">
+		<textarea class="question_title" placeholder="투표 내용을 입력해 주세요."></textarea>
+	</div>
+	<ul class="voteReadyList">
+		
+	</ul>
+	<div class="underbar">
+		<span class="txt_init_votereadylist">투표 옵션 추가하기</span>
+		<span class="container_checkboxes">
+			<!--<input type="checkbox" id="chk_addpermit_to_all" class="verticalmiddle" /><span>누구나 투표 항목 추가 가능</span>-->
+			<input type="checkbox" id="chk_multi_vote" class="verticalmiddle" /><span>중복 투표</span>
+			<!--<input type="checkbox" id="chk_realtime_result" class="verticalmiddle" /><span>실시간 투표 결과 공유</span>-->
+		</span>
+		<span class="container_btn_votestart">
+			<input type="button" class="btn_votestart button1" value="투표 시작" />
+		</span>
+		<div class="clearboth"></div>
+	</div>
+</div>
+
+<div class="vote_processing_container">
+	<h2 class="question_title"></h2>
+	<div class="question_list">
+		<ul>
+			
+		</ul>
+		<!--<div>
+			<span class="container_add_item"><span class="plusicon">+</span><input type="text" id="txt_add_item" placeholder="항목 추가하기" /><input type="button" id="btn_add_item" value="추가" /><span class="clearboth"></span></span>
+		</div>-->
+	</div>
+	<div class="underbar">
+		<span class="container_btn_votefinish">
+			<input type="button" id="btn_votefinish" class="btn_votefinish button1" value="투표 완료" />
+		</span>
+		<div class="clearboth"></div>
+	</div>
+</div>
+
+<div class="vote_result_container">
+	<h2 class="question_title"></h2>
+	<div class="question_list">
+		<ul>
+			
+		</ul>
+		<!--<div>
+			<span class="container_add_item"><span class="plusicon">+</span><input type="text" id="txt_add_item" placeholder="항목 추가하기" /><input type="button" id="btn_add_item" value="추가" /><span class="clearboth"></span></span>
+		</div>-->
+	</div>
+</div>
+</body>
+</html>
+

@@ -4,7 +4,7 @@
 exports.dao_meeting_list = function(evt, mysql_conn, params){
 	// group
 	var sql = "SELECT	`A`.`idx`, `A`.`subject`, `A`.`goal`, `A`.`date`, `A`.`start_time`, `A`.`end_time`,  ";
-	sql += "GROUP_CONCAT( DISTINCT `G`.`name` ORDER BY `G`.`name` ASC SEPARATOR ', ') AS `user_list` ";
+	sql += "GROUP_CONCAT( DISTINCT `G`.`first_name` ORDER BY `G`.`first_name` ASC SEPARATOR ', ') AS `user_list` ";
 	sql += "FROM `meeting_planning` AS `A` ";
 	sql += "INNER JOIN `relation_user_meeting` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting` ";

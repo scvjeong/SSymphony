@@ -23,7 +23,7 @@
     </div>
 	<div id="member-info">
 		<div class="profile-pic"></div>
-		<div class="id">Go DongHyun</div>
+		<div class="id"><%= result.group_info[0].first_name %> <%= result.group_info[0].last_name %></div>
 		<div class="info-menu">
 			<ul>
 				<li>Profile</li>
@@ -33,6 +33,30 @@
 		</div>
 		<div class="group-list-box">
 			<ul>
+				<% 
+					for(var i=0; i<result.group_info.length; i++) {
+						var user_list = result.group_info[i].user_list.split(",");
+				%>
+						<li class="group-list">
+							<div class="group-name group-<%= i+1 %>"><%= result.group_info[i].group_name %></div>
+							<div class="members">
+								<%
+									for(var j=0; j<user_list.length; j++) {
+										if( j === 0 ) {
+										%>
+											<span class="team-leader"><%= user_list[j].toString().trim() %></span>
+										<%
+										} else {
+										%>
+											<span class="team-member"><%= user_list[j].toString().trim() %>,</span>
+										<%	
+										}
+									}
+								%>
+							</div>
+						</li>
+				<% } %>
+				<!--
 				<li>
 					<div class="group-name group-1">SW Maestro Round 2</div>
 					<div class="members">
@@ -69,6 +93,7 @@
 						<span class="team-member">J Lee</span> 
 					</div>
 				</li>
+				-->
 			</ul>
 		</div>
 	</div>
@@ -94,9 +119,26 @@
 		var d = date.getDate();
 		var m = date.getMonth();
 		var y = date.getFullYear();
-		var events = [{}];
+		var events = [
+		<% 
+			for(var i=0; i<result.meeting.length; i++) {
+			var date = new Date(result.meeting[i].date);
+		%>
+			{
+				title: '<%=result.meeting[i].subject%>',
+				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
+				end: null
+			},
+		<%}%>
+		];
+
 		$(document).ready(function(){
 			setup_calendar();
+
+			for( var i =0;i<events.length; i++)
+			{
+				console.log(events[i].start);
+			}
 		})
 	</script>
 <!-- /Javascript -->

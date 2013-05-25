@@ -1713,6 +1713,7 @@ h6 small {
 }
 #member-info .group-list-box li{
 	padding:5px 0px;
+	cursor:pointer;
 }
 #member-info .team-leader{
 	font-family:"Roboto";

@@ -44,7 +44,7 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 //	sql += "`E`.`satisfaction`, ";
 //	sql += "`E`.`ft_appraisal`, ";
 //	sql += "`E`.`mvp`, ";
-	sql += "GROUP_CONCAT( DISTINCT `D`.`name` ORDER BY `D`.`name` ASC SEPARATOR ', ') AS `user_list` ";
+	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`first_name` ASC SEPARATOR ', ') AS `user_list` ";
 	sql += "FROM `meeting_planning` AS `A` ";
 	sql += "INNER JOIN `agenda` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";

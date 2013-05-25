@@ -1,6 +1,7 @@
 var express = require('express')
   , routes = require('./routes')
   , main = require('./routes/main')
+  , group_select = require('./routes/group_select')
   , meeting = require('./routes/meeting')
   , quick_meeting = require('./routes/quick_meeting')
   , meeting_planning = require('./routes/meeting_planning')
@@ -33,7 +34,7 @@ app.configure('development', function(){
 });
 
 app.get('/', main.main);
-app.get('/page/group_select', main.group_select); // 회의 선택 페이지
+app.get('/page/group_select', group_select.group_select); // 회의 선택 페이지
 app.get('/page/meeting_list', routes.meeting_list); // 회의 선택 페이지
 app.get('/page/meeting', meeting.main); // 회의 진행 페이지
 app.get('/page/meeting_public', meeting.meeting_public);
@@ -50,7 +51,8 @@ app.get('/page/minutes', meeting.minutes); // 회의록 페이지
 /* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
-app.post('/page/join', main.join);
+app.post('/page/sign_up', main.sign_up);
+app.post('/page/check_email', main.check_email);
 app.post('/page/meeting_save', meeting.meeting_save);
 app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 

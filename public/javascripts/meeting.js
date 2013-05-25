@@ -90,6 +90,8 @@ $(document).ready(function() {
             success: function(response) {
             	console.log(response);
             	
+            	_socket_common.emit('set_option_data', {group:_group_id, option:'new_share_box_item', tool:tool_type, id:"0", val:response});
+            	
             	var newfileitem = "";
             	var filetypeinfo = getFileTypeInfo(response.filetype);
             	var target_list = "";
@@ -184,7 +186,60 @@ function openSocket()
 				break;
 			}
 		}
+		else if (data.option == 'new_share_box_item')
+		{
+			console.log('새 쉐어박스 아이템 도착 : ' + data)
+			addShareItem(data);
+		}
+		else if (data.option == 'new_canvas_draw')
+		{
+			switch (data.tool)
+			{
+			case 'pen':
+				drawArrivedPen(data.val);
+				break;				
+			}
+		}
 	});
+}
+
+
+// 쉐어박스 아이템 추가
+function addShareItem(response)
+{
+	var newfileitem = "";
+	var filetypeinfo = getFileTypeInfo(response.filetype);
+	var target_list = "";
+	
+	switch (filetypeinfo.category)
+	{
+	case "document":
+		target_list = "section_documents";
+		break;
+	case "image":
+		target_list = "section_photos";
+		break;
+	default:
+		target_list = "section_others";
+	}
+	newfileitem += "<a href=\"";
+	newfileitem += "/tmp/";
+	newfileitem += response.filename;
+	newfileitem += "\" target=\"_blank\">";
+    	newfileitem += "<li class=\"item\">";
+        	newfileitem += "<div class=\"icon\" style=\"background-image:url('";
+        	newfileitem += filetypeinfo.iconurl;
+        	newfileitem += "')\"></div>";
+        	newfileitem += "<div class=\"text\">";
+            	newfileitem += response.filename;
+        	newfileitem += "</div>";
+    	newfileitem += "</li>";
+	newfileitem += "</a>";
+	//$('#file_list').append(newfileitem);
+	
+	$("#" + target_list + " .list").append(newfileitem);
+	
+	showPopupWindow(response.filename + " is added on Share Box.");
 }
 
 function resetSizeInfo()
@@ -1088,6 +1143,7 @@ function changePenColor(color)
 
 var _pen_color = "#000000";
 var _fill_color = "#000000";
+var sendingData = "";
 
 if(window.addEventListener) {
 	var dBoard;
@@ -1098,12 +1154,12 @@ if(window.addEventListener) {
 
 		if(!canvas)
 		{
-			alert('캔버스 참조 실패');
+			alert('캔버스 이상함');
 			return;
 		}
 
 		if(!canvas.getContext){
-			alert("canvas.getContext를 사용할 수 없음");
+			alert("canvas.getContext 이상함");
 			return;
 		}
 
@@ -1111,7 +1167,7 @@ if(window.addEventListener) {
 		dBoard.initBoard();
 	}
 
-	window.addEventListener( "load", init, false );
+	window.addEventListener("load", init, false );
 
 
 
@@ -1145,6 +1201,15 @@ if(window.addEventListener) {
 				case 'pen':
 					var point = getMousePoint(event);
 					pen.moveTo( point );
+	
+					sendingData = {
+				         id: _client_id,
+				         action: 'pen',
+				         undo: false,
+				         lineWidth: 1,
+				         color: _pen_color,
+				         data: [{x: point.x, y: point.y}]
+				        };
 					break;
 				case 'rect':
 					prev_point = getMousePoint(event);
@@ -1157,6 +1222,22 @@ if(window.addEventListener) {
 			}
 		}
 
+		// pen에 draw요청
+		function onMouseMove_Canvas( event ){
+			switch (_drawtool)
+			{
+				case 'pen':
+					var point = getMousePoint( event );
+					pen.draw( point );
+					
+					sendingData.data.push({x: point.x, y: point.y}); 
+					break;
+				case 'ellipse':
+
+					break;
+			}
+		}
+
 		// 마우스 업시 등록한 마우스 이벤트 해지 
 		function onMouseUp_Canvas( event ){
 			console.log("Call onMouseUp_Canvas");
@@ -1165,6 +1246,8 @@ if(window.addEventListener) {
 			{
 				case 'pen':
 					console.log(now_point);
+					sendingData.data.push({x: point.x, y: point.y});
+					_socket_common.emit('set_option_data', {group:_group_id, option:'new_canvas_draw', tool:'pen', id:"0", val:sendingData});
 					break;
 				case 'rect':
 					var width = now_point.x - prev_point.x;
@@ -1182,20 +1265,6 @@ if(window.addEventListener) {
 			}
 			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
 			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
-		}
-
-		// pen에 draw요청
-		function onMouseMove_Canvas( event ){
-			switch (_drawtool)
-			{
-				case 'pen':
-					var point = getMousePoint( event );
-					pen.draw( point );
-					break;
-				case 'ellipse':
-
-					break;
-			}
 		}
 
 		// 마우스 좌표를 브라우저에 따라 반환
@@ -1241,7 +1310,6 @@ function GraphicPen(objBoard)
 		this.pen.lineTo( point.x, point.y );
 		this.pen.stroke();
 	}
-
 }
 
 function GraphicRect(objBoard, left, top, width, height)
@@ -1281,6 +1349,15 @@ function GraphicText(objBoard, x, y, text)
 	var canvas_context = canvas.getContext("2d");
 	canvas.fillText(text, x, y);
 }
+
+
+function drawArrivedPen(data)
+{
+	var canvas = document.getElementById(objBoard);
+	var canvas_context = canvas.getContext("2d");
+	canvas.draw(data);
+}
+
 
 function noticeBarMoving()
 {

@@ -50,6 +50,7 @@ app.get('/page/minutes', meeting.minutes); // 회의록 페이지
 /* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
+app.post('/page/join', main.join);
 app.post('/page/meeting_save', meeting.meeting_save);
 app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 

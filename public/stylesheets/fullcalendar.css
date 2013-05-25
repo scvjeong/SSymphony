@@ -124,11 +124,12 @@ html .fc,
 
 .fc-widget-header,    /* <th>, usually */
 .fc-widget-content {  /* <td>, usually */
-	border: 1px solid #ccc;
+	border: 1px solid #dfdfdf;
 	}
 	
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
-	background: #ffc;
+	/*background: #ffc;*/
+	background: #ebebeb;
 	}
 	
 .fc-cell-overlay { /* semi-transparent rectangle while dragging */
@@ -420,6 +421,7 @@ a.fc-event {
 ------------------------------------------------------------*/
 
 table.fc-border-separate {
+	border: 1px solid #dfdfdf;
 	border-collapse: separate;
 	}
 	
@@ -448,6 +450,10 @@ table.fc-border-separate {
 /* Month View, Basic Week View, Basic Day View
 ------------------------------------------------------------------------*/
 
+.fc-sun .fc-day-number{
+	color:#ff626e !important;
+}
+
 .fc-grid th {
 	text-align: center;
 	}
@@ -455,11 +461,13 @@ table.fc-border-separate {
 .fc-grid .fc-day-number {
 	float: right;
 	padding: 0 2px;
+	color:#6d6e71;
 	}
 	
 .fc-grid .fc-other-month .fc-day-number {
-	opacity: 0.3;
-	filter: alpha(opacity=30); /* for IE */
+	color:#6d6e71 !important;
+	opacity: 0.2;
+	filter: alpha(opacity=20); /* for IE */
 	/* opacity with small font can sometimes look too faded
 	   might want to set the 'color' property instead
 	   making day-numbers bold also fixes the problem */
@@ -468,6 +476,7 @@ table.fc-border-separate {
 .fc-grid .fc-day-content {
 	clear: both;
 	padding: 2px 2px 1px; /* distance between events and day edges */
+	height:70px;
 	}
 	
 /* event styles */

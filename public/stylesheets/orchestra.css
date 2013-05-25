@@ -375,6 +375,8 @@
 /* }=== MADMIN MENU === */
 /* === LAYOUT ==={ */
 body {
+	padding:0px;
+	margin:0px;
 	min-height: 600px;
 }
 body.help-page {
@@ -1184,6 +1186,7 @@ h6 small {
 	}
 	
 	/* other month */
+	/*
 	td.fc-other-month {
 		background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0.25, rgba(0, 0, 0, 0.03)), color-stop(0.25, transparent), color-stop(0.5, transparent), color-stop(0.5, rgba(0, 0, 0, 0.03)), color-stop(0.75, rgba(0, 0, 0, 0.03)), color-stop(0.75, transparent), to(transparent));
 		background-image: -webkit-linear-gradient(135deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.03) 75%, transparent 75%, transparent);
@@ -1193,7 +1196,7 @@ h6 small {
 		background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.03) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.03) 50%, rgba(0, 0, 0, 0.03) 75%, transparent 75%, transparent);
 		background-color: #FAFCFD;
 		background-size: 16px 16px;
-	}
+	}*/
 
 
 	/* ---------------------------------------------------------------------- */
@@ -1519,8 +1522,9 @@ h6 small {
 	float:left;
 	font-family:"Oxygen";
 	margin:23px 0px 0px 30px;
-	font-size:3em;
+	font-size:37px;
 	font-weight:bold;
+	line-height: 20px;
 }
 
 .title-bar{
@@ -1652,3 +1656,82 @@ h6 small {
 .fancy-scrollbar::-webkit-scrollbar-thumb:hover {
 	background: rgba(0, 0, 0, .55);
 }
+
+/*** group_select ***/
+.container{
+	width:100%;
+	min-height: 600px;
+	background-color: #FFFFFF;
+	background-image: -moz-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 100%);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#d7d7d7), to(#FFFFFF));
+	background-image: -webkit-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 100%);
+	background-image: -o-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 100%);
+	background-image: linear-gradient(to bottom, #d7d7d7 0.1%, #FFFFFF 100%);
+	background-repeat: repeat-x;
+	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
+}
+#group-calendar{
+	float:left;
+	width:750px;
+	margin:85px 30px 10px 100px;
+	padding:10px;
+	background-color:#FFFFFF;
+}
+#member-info{
+	float:left;
+	width:280px;
+	margin:85px 0px 10px 0px;
+	padding:30px;
+	color:#999999;
+	background-color:#FFFFFF;
+}
+#member-info .profile-pic{
+	width:125px;
+	height:125px;
+	background-color:#cccccc;
+}
+#member-info .id{
+	font-family:"Roboto";
+	font-size:20px;
+	margin-top:10px;
+}
+#member-info .info-menu{
+	font-family:"Roboto";
+	font-size:18px;
+	margin:10px 0px;
+	padding:8px 0px;
+	border-top:2px solid #999999;
+	border-bottom:2px solid #999999;
+}
+#member-info .info-menu li{
+	margin:3px 0px;
+}
+#member-info ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#member-info .group-list-box li{
+	padding:5px 0px;
+}
+#member-info .team-leader{
+	font-family:"Roboto";
+	color:#333333;
+}
+#member-info .group-name {
+	font-family:"Roboto";
+	font-size:18px;
+}
+#member-info .group-1{
+	color:#339933;
+}
+#member-info .group-2{
+	color:#cc0000;
+}
+#member-info .group-3{
+	color:#3366cc;
+}
+#member-info .group-4{
+	color:#ff9900;
+}
+/*** group_select ***/

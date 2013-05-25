@@ -28,6 +28,8 @@ var _is_added_socket_listener_for_mindmap = false;
 var _is_added_socket_listener_for_vote = false;
 var _is_added_socket_listener_for_matrix = false;
 
+var _notice_bar_idx = 1;
+
 $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
@@ -130,6 +132,9 @@ $(document).ready(function() {
 
 		return false;
     });
+
+	// notice bar
+	noticeBarMoving();
 });
 
 $(window).resize(function() {
@@ -964,6 +969,116 @@ function showEvaluateMeetingWindow()
 	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
 }
 
+function showMeetingResultWindow()
+{
+
+	var source_url = "/page/meeting_result";
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			dialog = bootbox.dialog(data);
+	
+			var bootbox_select = $('.bootbox');
+			bootbox_select.addClass("meeting_result_bootbox");
+			
+			setupUserListChart();
+			setupWordChart();
+			
+			var meeting_val = $("#meeting_val").text();
+			var ft_val = $("#proceeding_val").text();
+
+			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
+			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
+	
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});	
+
+	
+}
+
+
+function setupWordChart()
+{
+	var d1 = [[20,20,10], [40,50,20], [70,10,5], [80,80,7]];
+	var d2 = [[60,25,15], [70,40,6], [30,80,4]];
+	var d3 = [[30,25,15], [24,40,6], [30,43,4]];
+	var d4 = [[20,23,10], [43,24,20], [23,65,5], [60,80,4]];
+	var options = { 
+		series:{bubbles:{active:true,show:true,linewidth:2},editMode:'xy'},
+		grid:{hoverable:true,clickable:true,editable:true }
+	};
+	$.plot( $("#placeholder") , [d1,d2,d3,d4], options );
+}
+
+function setupUserListChart()
+{
+	if ($(".bar-chart").length) {
+		var data1 = [];
+		for (var i = 0; i <= 4; i += 1)
+			data1.push([i, parseInt(Math.random() * 100)]);
+
+		var data2 = [];
+		for (var i = 0; i <= 4; i += 1)
+			data2.push([i, parseInt(Math.random() * 100)]);
+
+		var data3 = [];
+		for (var i = 0; i <= 4; i += 1)
+			data3.push([i, parseInt(Math.random() * 100)]);
+
+		var ds = new Array();
+
+		ds.push({
+			data : data1,
+			bars : {
+				show : true,
+				barWidth : 0.2,
+				order : 1,
+			}
+		});
+		ds.push({
+			data : data2,
+			bars : {
+				show : true,
+				barWidth : 0.2,
+				order : 2
+			}
+		});
+		ds.push({
+			data : data3,
+			bars : {
+				show : true,
+				barWidth : 0.2,
+				order : 3
+			}
+		});
+		//Display graph
+		$.plot($(".bar-chart"), ds, {
+			colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
+			grid : {
+				show : true,
+				hoverable : true,
+				clickable : true,
+				tickColor : $chrt_border_color,
+				borderWidth : 0,
+				borderColor : $chrt_border_color,
+			},
+			legend : true,
+			tooltip : true,
+			tooltipOpts : {
+				content : "<b>%x</b> = <span>%y</span>",
+				defaultTheme : false
+			}
+		});
+	}
+}
+
+
 
 function changePenColor(color)
 {
@@ -1165,4 +1280,22 @@ function GraphicText(objBoard, x, y, text)
 	var canvas = document.getElementById(objBoard);
 	var canvas_context = canvas.getContext("2d");
 	canvas.fillText(text, x, y);
+}
+
+function noticeBarMoving()
+{
+	var $notice_bar = $(".notice-bar ul");
+	var $notice_bar_li = $("li.list", $notice_bar).length;
+
+	if( ($notice_bar_li+1) === _notice_bar_idx )
+	{
+		$notice_bar.css({ top:"0px" });
+		console.log($notice_bar.css('top'));
+		_notice_bar_idx = 1;
+	}
+	var top_px = _notice_bar_idx*20;
+	_notice_bar_idx++;
+	$notice_bar.animate({ top:"-"+top_px+"px" }, 1500, function(){
+		noticeBarMoving();
+	});
 }

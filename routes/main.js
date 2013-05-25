@@ -30,3 +30,8 @@ exports.login = function(req, res){
 		}
 	});
 };
+
+exports.group_select = function(req, res){
+	var evt = new EventEmitter();
+	res.render('group_select', { title: '' });
+};

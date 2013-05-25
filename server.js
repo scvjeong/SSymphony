@@ -264,7 +264,7 @@ function server(io)
 			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
 			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
-			//console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);		
+			console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);		
 			
 			////  부모 필드 존재하는지 검사  ////
 			client.hlen(storeId, function (err, num) {

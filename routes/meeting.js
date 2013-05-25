@@ -12,10 +12,6 @@ exports.main = function(req, res){
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
 	/** session end **/
-	
-	console.log("CALL meeting.main");
-	console.log(req);
-
 	res.render('meeting', { title: 'Express' });
 };
 
@@ -82,6 +78,15 @@ exports.meeting_result = function(req, res){
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
+};
+
+exports.minutes = function(req, res){
+	/** session start **/
+	//if( !req.session.email || !req.session.email.length )
+	//	res.redirect("/");
+	/** session end **/
+
+	res.render('minutes', { title: '' });
 };
 
 exports.meeting_save = function(req, res){

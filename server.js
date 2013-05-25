@@ -1,3 +1,8 @@
+/*
+	종혁이 파괴 방지 주석
+	13.05.25 21시 - 투표 진행 함수 구현
+*/
+
 function server(io)
 {
 	////  group 채널 개설  ////
@@ -34,7 +39,8 @@ function server(io)
 					});
 					if ( userNum == -1 ) {	//user가 존재하지 않을 때
 						client.rpush(userInfo, tmpUser);
-						userNum =countUser;							
+						userNum =countUser;
+						lastClient = userNum;
 					}
 					socket.emit('get_client', { client: userNum });
 				});
@@ -259,7 +265,7 @@ function server(io)
 			var tmpIndex = data.index;
 			var tmpVal = data.val;
 			var tmpClient = data.client;
-
+		
 			var tmpOrder = tmpGroup+":"+tmpTool+":order";
 			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
@@ -464,6 +470,65 @@ function server(io)
 			////  다른 클라이언트들에게 tool의 옵션 데이터 전달  ////
 			socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal });
 		});
+		
+		////  클라이언트 투표 도구의 데이터 처리하는 함수  ////
+		socket.on('set_vote_data', function(data) {
+			console.log("Call: set_vote_data");
+			var tmpGroup = data.group;
+			var tmpTool = data.tool;
+			var tmpId = data.id;
+			var tmpParent = data.parent;
+			var tmpIndex = data.index;
+			var tmpVal = data.val;
+			var tmpClient = data.client;
+
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
+			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
+			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
+			console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);		
+			
+			////  부모 필드 존재하는지 검사  ////
+			client.hlen(storeId, function (err, num) {
+				if ( num > 0 )
+				{
+					client.hkeys(storeId, function (err, parent) {
+						multi = client.multi();
+						multi.hdel(storeId, parent);	
+						multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
+						multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+						multi.exec();
+					});
+				}
+				else
+				{
+					multi = client.multi();
+					multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
+					multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+					multi.exec();
+				}
+			});	
+			
+			////  list에서 현재 위치에 ID 중복되는지 확인  ////
+			client.llen(tmpOrder, function (err, idVal) {			
+				client.lindex(tmpOrder, tmpIndex, function (err, preId) {
+					//console.log("stroeId: "+storeId+ "// preId: " +preId);
+					if ( preId != storeId )	//Id 다를때
+					{
+						client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
+							//console.log("id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
+							client.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입			
+						});	
+					}
+					////  다른 클라이언트들에게 추가된 값 전달_tree  ////
+					socket.broadcast.to(tmpGroup).emit('get_insert_tree_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
+				});	
+			});
+
+
+
+		});
+
 
 	});
 }

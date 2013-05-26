@@ -41,9 +41,11 @@ $(document).ready(function() {
 
 	// 콘텐트 관리 상자 초기화
 	share_box.init();
+	/*
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
 	addLinkList("인트라넷 소마", "http://intranet.swmaestro.kr");
+	*/
 	$('#btn_addlink').click(function() {
 		var linktitle = $('#txt_linktitle').val();
 		var linkurl = $('#txt_linkurl').val();
@@ -208,10 +210,13 @@ function openSocket()
 
 
 // 쉐어박스 아이템 추가
+var testtest;
 function addShareItem(response)
 {
-	console.log("CALL addShareItem [response=" + response + "]");
+	console.log("CALL addShareItem [response:" + response + "]");
 	console.log("filename:" + response.filename);
+	response = JSON.parse(response);
+	testtest = response;
 	var newfileitem = "";
 	var filetypeinfo = getFileTypeInfo(response.filetype);
 	var target_list = "";

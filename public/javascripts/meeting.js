@@ -90,7 +90,9 @@ $(document).ready(function() {
             success: function(response) {
             	console.log(response);
             	
-            	_socket_common.emit('set_option_data', {group:_group_id, option:'new_share_box_item', tool:tool_type, id:"0", val:response});
+            	var fileObject = JSON.stringify(response);
+            	console.log("fileObject : " + fileObject);
+            	_socket_common.emit('set_option_data', {group:_group_id, option:'new_share_box_item', tool:"0", id:"0", val:fileObject});
             	
             	var newfileitem = "";
             	var filetypeinfo = getFileTypeInfo(response.filetype);
@@ -188,8 +190,9 @@ function openSocket()
 		}
 		else if (data.option == 'new_share_box_item')
 		{
-			console.log('새 쉐어박스 아이템 도착 : ' + data)
-			addShareItem(data);
+			console.log('새 쉐어박스 아이템 도착 : ');
+			console.log(data);
+			addShareItem(data.val);
 		}
 		else if (data.option == 'new_canvas_draw')
 		{
@@ -207,6 +210,8 @@ function openSocket()
 // 쉐어박스 아이템 추가
 function addShareItem(response)
 {
+	console.log("CALL addShareItem [response=" + response + "]");
+	console.log("filename:" + response.filename);
 	var newfileitem = "";
 	var filetypeinfo = getFileTypeInfo(response.filetype);
 	var target_list = "";
@@ -1228,7 +1233,7 @@ if(window.addEventListener) {
 			{
 				case 'pen':
 					var point = getMousePoint( event );
-					pen.draw( point );
+					pen.draw(point);
 					
 					sendingData.data.push({x: point.x, y: point.y}); 
 					break;
@@ -1246,7 +1251,7 @@ if(window.addEventListener) {
 			{
 				case 'pen':
 					console.log(now_point);
-					sendingData.data.push({x: point.x, y: point.y});
+					sendingData.data.push({x: now_point.x, y: now_point.y});
 					_socket_common.emit('set_option_data', {group:_group_id, option:'new_canvas_draw', tool:'pen', id:"0", val:sendingData});
 					break;
 				case 'rect':

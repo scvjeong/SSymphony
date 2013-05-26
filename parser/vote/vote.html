@@ -31,7 +31,7 @@
 				_socket.emit('set_last_id', { group: _tmpGroup, tool: _voteid });	
 			});
 			
-			$('btn_votefinish').click(function() {
+			$('#btn_votefinish').click(function() {
 				finishVote();
 			});
 			
@@ -79,17 +79,19 @@
 					$(".voteReadyList li input:nth(" + i + ")").focus(_newlist_to_last);
 				}
 			}
+	
 			/*
 			$("#btn_del_" + _voteid + "_" + _votelistnum).click(function() {
 				var countlist = $(".voteReadyList input").length;
 				if (countlist > 1)
 					$('#' + id_thislist).remove();
 			});
-				 
+			
 			$("#" + id_lastlist + " input").unbind('click', _newlist_to_last);
 			$("#" + id_lastlist + " input").unbind('focus', _newlist_to_last);
 			$("#" + id_thislist + " input").click(_newlist_to_last);
-			$("#" + id_thislist + " input").focus(_newlist_to_last);*/
+			$("#" + id_thislist + " input").focus(_newlist_to_last);
+			*/
 		}
 		var _newlist_to_last = function() {
 			newVoteReadyList();
@@ -113,7 +115,6 @@
 			_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid,
 															id: 0, option: 'is_multi_vote', val: _is_multi_vote});
 		
-
 			var listcount = $('.voteReadyList input').length; //[1].value == ""
 			_question_title = $(".vote_make_container .question_title").val();
 			
@@ -133,14 +134,11 @@
 					newitem["voterlist"] = [];
 					
 					_votelist.push(newitem);
-				
-					_socket.emit('set_insert_tree_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: i+1, index: i+1, val: this_title, client: _clientId } );
-					console.log(this_title);
+					console.log(i+1);
+					_socket.emit('set_insert_vote_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: i+1, index: 1, val: this_title, client: _clientId } );
 				}
 			}
 			
-			sendVoteDataToServer();	// 서버로 투표데이터 전송
-
 			initVoteProcess();
 		}
 
@@ -153,23 +151,24 @@
 			_tmpGroup = "group1";
 			
 			_socket.emit('join_room', {group: _tmpGroup});						// 그룹에 join
-			_socket.emit('set_tree_data', {group: _tmpGroup, tool: _voteid});		// 서버에 초기 데이터 요청
+			_socket.emit('set_vote_data', {group: _tmpGroup, tool: _voteid});		// 서버에 초기 데이터 요청
 			_socket.emit('set_client', {group: _tmpGroup, user: 'user1'});
-			
+			_socket.emit('set_tree_option_data', {group:_tmpGroup, tool: _voteid, option: 'is_multi_vote'});
+
 			_socket.on('get_client', function (data) {
 				_clientId = data.client;
 			});
 	
 			////  투표 데이터 불러오는 함수  ////
-			_socket.on('get_tree_data', function (data) { 
+			_socket.on('get_vote_data', function (data) { 
+				console.log("get_vote_data");
 				var tmpTool = data.tool;
 				var tmpId = data.id;
 				var tmpParent = data.parent;
 				var tmpVal = data.val;
 				console.log(tmpId);
 				if ( tmpId != 100 )
-				{
-					
+				{		
 					if ( _is_voting == false ) {
 						_question_title = data.val;
 						$('.vote_make_container').css('display', 'none');
@@ -182,12 +181,15 @@
 					else {
 						var question_list = $('.vote_processing_container .question_list ul');
 						var newitem = "<li>";
-							if (_is_multi_vote == true) newitem += "<input type=\"checkbox\" class=\"verticalmiddle\" />";
-							else newitem += "<input type=\"radio\" class=\"verticalmiddle\" />";	
-							newitem += "<span class=\"item_text\">";
-							newitem += tmpVal;
-							newitem += "</span>"
-							newitem += "</li>";
+				
+						if (_is_multi_vote == "true")							
+							newitem += "<input type=\"checkbox\" class=\"verticalmiddle\" />";
+						else 
+							newitem += "<input type=\"radio\" class=\"verticalmiddle\" />";	
+						newitem += "<span class=\"item_text\">";
+						newitem += tmpVal;
+						newitem += "</span>"
+						newitem += "</li>";
 							 
 						question_list.append(newitem);			
 					}		
@@ -200,12 +202,13 @@
 				_tmpLastId = data.last;
 				$('.question_title').attr('id', _tmpLastId);
 				var title_val = $('.question_title').val();
-				_socket.emit('set_insert_tree_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: '0', index: '0', val: title_val, client: _clientId} );
+				_socket.emit('set_insert_vote_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: '0', index: '0', val: title_val, client: _clientId} );
 				startVote();
 			});
 			
-			_socket.on('get_insert_tree_data', function(data) {
-				console.log("get_insert_tree_data : " + data.val);
+			/*	일단은 주석처리(필요할 수도?)
+			_socket.on('get_insert_vote_data', function(data) {
+				console.log("get_insert_vote_data : " + data.val);
 						
 				if ( _is_voting == false ) {
 					_question_title = data.val;
@@ -228,42 +231,12 @@
 						 
 					question_list.append(newitem);			
 				}
-							
-				
-				/*
-				var question_list = $('.vote_processing_container .question_list ul');
-				question_list.html("");
-				for (var i = 0; i < _votelist.length; i++)
-				{
-					var newitem = "<li>";
-						if (_is_multi_vote == true) newitem += "<input type=\"checkbox\" class=\"verticalmiddle\" />";
-						else newitem += "<input type=\"radio\" class=\"verticalmiddle\" />";	
-						newitem += "<span class=\"item_text\">";
-						newitem += _votelist[i].title;
-						newitem += "</span>"
-						newitem += "</li>";
-						 
-					question_list.append(newitem);
-				
-					
-				}
-
-				*/
-
-				/*
-				if (data.id == "set_vote_process")
-				{
-					_votelist = data.val;
-					initVoteProcess();
-				}
-				else if (data.id == "end_vote")
-				{
-					
-				}*/
+						
 			});
-			
-			_socket.on('get_option_data', function(data) {
-				console.log("get_option_data: "+data.val);
+			*/
+
+			_socket.on('get_tree_option_data', function(data) {
+				console.log("get_tree_option_data: "+data.val);
 				if (data.option = "is_multi_vote")
 				{
 					_is_multi_vote = data.val;
@@ -275,20 +248,43 @@
 		function sendVoteDataToServer()
 		{
 			//  옵션 데이터로 서버에 투표 결과 전송__투표 관리하는 함수 서버측에 새로 작성-> 클라이언트 번호로 투표 여부 확인(투표 완료되면 특정 이벤트 전송)  //
-			/*
-			var sendingData = JSON.stringify(_votelist);						// 투표 항목들
-			_is_multi_vote = $('#chk_multi_vote').is(":checked");	// 중복 투표 여부	
-				
-			_socket.emit('set_option_data', {group:_tmpGroup, tool: _voteid,
-															id: 0, option: 'is_multi_vote', val: _is_multi_vote});
-			_socket.emit('set_insert_data', {group: _tmpGroup, tool: _voteid,
-															id: 'set_vote_process', index: 0, val: sendingData, client: 0});
-			*/
-		}
+			var $question_list = $('.question_list');
+			var $question_item = $question_list.children('ul').children('li:first');
 
-		function sendStartVote()
-		{
+			var vote_result = [];
+
+			while ( $question_item.children('.item_text').length > 0  )
+			{
+				if ( $question_item.children('input').is(":checked") ) {
+					//console.log( $question_item.children('.item_text').text() );	
+					var vote_item = $question_item.children('.item_text').text();
+					vote_result.push(vote_item);
+				}
+
+				$question_item = $question_item.next();				
+			}
 			
+			var str_result = JSON.stringify(vote_result);
+			
+			_socket.emit('set_voting_data', {group: _tmpGroup, tool: _voteid,
+															id: _tmpLastId, val: str_result, option: _is_multi_vote, client: _clientId});
+			//var test_val = JSON.parse(str_result);
+			//console.log(test_val[0]);
+			
+			/*
+			
+			
+			var vote_item = {};
+			newitem["title"] = this_title;
+			newitem["vote"] = 0;
+					
+			
+
+			var sendingData = JSON.stringify(vote_result);						// 투표 항목들
+			
+			_socket.emit('set_voting_data', {group: _tmpGroup, tool: _voteid,
+															id: _tmpLastId, val: sendingData, option: _is_multi_vote, client: _clientId});
+			*/
 		}
 
 		/* 투표 진행 초기화 */
@@ -321,6 +317,8 @@
 		{
 			$('.vote_processing_container').css('display', 'none');
 			$('.vote_result_container').css('display', 'block');
+
+			sendVoteDataToServer();	// 서버로 투표데이터 전송
 		}
 
 		

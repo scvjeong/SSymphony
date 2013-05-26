@@ -280,10 +280,14 @@ a.fc-event {
 	}
 	
 .fc-event-skin {
-	border-color: #36c;     /* default BORDER color */
+	width:5px;
+	height:70px;
+	background-color:#339933;
+	/*
+	border-color: #36c;
 	border-color: #616161 #3F3F3F #363636;
-	border-color: #305F9C #305F9C #002A80; /* default BACKGROUND color */
-	color: #fff;            /* default TEXT color */
+	border-color: #305F9C #305F9C #002A80;
+	color: #fff;
 	
 	background: url(../img/csshack/blue-gradient.png) repeat-x #0A5DB8;
 	-webkit-background-size: 100% 100%;
@@ -298,15 +302,18 @@ a.fc-event {
 	background: url('/images/overlay-pattern.png'), linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
 	
 	cursor: move;
+	*/
 }
 	
 .fc-event-inner {
 	position: relative;
 	width: 100%;
 	height: 100%;
+	/*
 	border-style: solid;
 	border-width: 0;
 	overflow: hidden;
+	*/
 	}
 	
 .fc-event-time,
@@ -329,7 +336,7 @@ a.fc-event {
 ------------------------------------------------------------------------*/
 
 .fc-event-hori {
-	border-width: 1px 0;
+	/*border-width: 1px 0;*/
 	margin-bottom: 1px;
 	}
 	
@@ -398,7 +405,7 @@ a.fc-event {
 	
 /* Fake Rounded Corners SPECIFICALLY FOR EVENTS
 -----------------------------------------------------------------*/
-	
+	/*
 .fc-corner-left .fc-event-inner {
 	border-left-width: 1px;
 	}
@@ -414,7 +421,7 @@ a.fc-event {
 .fc-corner-bottom .fc-event-inner {
 	border-bottom-width: 1px;
 	}
-	
+	*/
 	
 	
 /* Reusable Separate-border Table

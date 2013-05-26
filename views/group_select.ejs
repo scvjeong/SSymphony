@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>Orchestra</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta name="description" content="" />
+	<meta name="author" content="" />
+	<link rel="stylesheet" href="/stylesheets/font.css" />
+	<link rel="stylesheet" href="/stylesheets/orchestra.css" />
+	<link rel="stylesheet" href="/stylesheets/fullcalendar.css?v=1">
+</head>
+
+<body>
+
+<!--============================= Page Body =================================-->
+
+<div id="topbar">
+	<div id="logo">orchestra</div>
+</div>
+<div class="container">
+    <div id="group-calendar">
+    </div>
+	<div id="member-info">
+		<div class="profile-pic"></div>
+		<div class="id"><%= result.group_info[0].first_name %> <%= result.group_info[0].last_name %></div>
+		<div class="info-menu">
+			<ul>
+				<li>Profile</li>
+				<li>My Account</li>
+				<li>Notice</li>
+			</ul>
+		</div>
+		<div class="group-list-box">
+			<ul>
+				<% 
+					for(var i=0; i<result.group_info.length; i++) {
+						var user_list = result.group_info[i].user_list.split(",");
+				%>
+						<li class="group-list">
+							<div class="group-name group-<%= i+1 %>"><%= result.group_info[i].group_name %></div>
+							<div class="members">
+								<%
+									for(var j=0; j<user_list.length; j++) {
+										if( j === 0 ) {
+										%>
+											<span class="team-leader"><%= user_list[j].toString().trim() %></span>
+										<%
+										} else {
+										%>
+											<span class="team-member"><%= user_list[j].toString().trim() %>,</span>
+										<%	
+										}
+									}
+								%>
+							</div>
+						</li>
+				<% } %>
+				<!--
+				<li>
+					<div class="group-name group-1">SW Maestro Round 2</div>
+					<div class="members">
+						<span class="team-leader">Dongu,</span>
+						<span class="team-member">Yongi,</span>
+						<span class="team-member">Maaknae,</span>
+						<span class="team-member">Heeon</span>
+					</div>
+				</li>
+				<li>
+					<div class="group-name group-2">School Project</div>
+					<div class="members">
+						<span class="team-leader">Sonya,</span>
+						<span class="team-member">Heeon,</span>
+						<span class="team-member">Baek,</span> 
+						<span class="team-member">J Jue</span>
+					</div>
+				</li>
+				<li>
+					<div class="group-name group-3">UI/UX Study</div>
+					<div class="members">
+						<span class="team-leader">Heeon,</span> 
+						<span class="team-member">Jaehun,</span> 
+						<span class="team-member">Choi,</span> 
+						<span class="team-member">J Lee</span> 
+					</div>
+				</li>
+				<li>
+					<div class="group-name group-4">CSS Works</div>
+					<div class="members">
+						<span class="team-leader">June,</span> 
+						<span class="team-member">Jaehun,</span> 
+						<span class="team-member">Choi,</span> 
+						<span class="team-member">J Lee</span> 
+					</div>
+				</li>
+				-->
+			</ul>
+		</div>
+	</div>
+</div>
+
+<!--============================= /Page Body ================================-->
+
+  <!-- jQuery -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
+    <!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+            long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+            to to "classic" jQuery behavior -->
+    <script>if ($ === undefined) $ = jQuery</script>
+  <!-- /jQuery -->
+	<script src="/javascripts/jquery.fullcalendar.min.js"></script>	
+
+	<script src="/javascripts/config.js"></script>	
+	<script type="text/javascript">
+		var date = new Date();
+		var d = date.getDate();
+		var m = date.getMonth();
+		var y = date.getFullYear();
+		var events = [
+		<% 
+			for(var i=0; i<result.meeting.length; i++) {
+			var date = new Date(result.meeting[i].date);
+		%>
+			{
+				title: '<%=result.meeting[i].subject%>',
+				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
+				end: null
+			},
+		<%}%>
+		];
+
+		$(document).ready(function(){
+			setup_calendar();
+
+			for( var i =0;i<events.length; i++)
+			{
+				console.log(events[i].start);
+			}
+		})
+	</script>
+<!-- /Javascript -->
+
+</body>
+</html>

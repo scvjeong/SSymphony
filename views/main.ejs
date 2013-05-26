@@ -170,6 +170,7 @@
 			margin-bottom:14px;
 		}
 		.login .body .sign-up-box input{
+			font-size:18px;
 			padding:2px 8px;
 			height:38px;
 			line-height:38px;
@@ -204,6 +205,11 @@
 			-moz-box-shadow: 0 -2px 5px rgba(0,0,0,.29), inset 0 -8px 5px rgba(0,0,0,.32); 
 			box-shadow: 0 -2px 5px rgba(0,0,0,.29), inset 0 -8px 5px rgba(0,0,0,.32); 
 			border: solid 1px rgba(204,204,204,.47);
+		}
+		.login .body .sign-up-box .alert-div{
+			padding-left:10px;
+			font-size:15px;
+			color:rgba(255, 0, 0, .4);
 		}
 
 		/* all */ 
@@ -258,14 +264,17 @@
 						<div class="main-comment-3">especially one that you would like to happen,<br> means to <span class="white">make it easier</span> or <span class="white">more likely to happen</span>.</div>
 					</div>
 					<div class="sign-up-box">
-						<div class="sign-up-box-wrap">
-							<input type="text" name="first_name" placeholder="First Name" class="input-name">
-							<input type="text" name="last_name" placeholder="Last Name" class="input-name">
-						</div>
-						<div class="sign-up-box-wrap"><input type="text" name="sign_up_email" placeholder="Your e-mail" class="input-order"></div>
-						<div class="sign-up-box-wrap"><input type="password" name="sign_up_password" placeholder="Enter Password" class="input-order"></div>
-						<div class="sign-up-box-wrap"><input type="password" name="sign_up_re_password" placeholder="Re-enter Password" class="input-order"></div>
-						<div class="sign-up-box-wrap"><a class="sign-up-btn" href="javascript:alert('준비중 입니다.');">SIGN UP</a></div>
+						<form name="sign-up-form" method="post" action="/page/sign_up">				
+							<div class="sign-up-box-wrap">
+								<input type="text" name="first_name" placeholder="First Name" class="input-name">
+								<input type="text" name="last_name" placeholder="Last Name" class="input-name">
+								<div class="first_name-alert alert-div"></div><div class="last_name-alert alert-div"></div>
+							</div>
+							<div class="sign-up-box-wrap"><input type="text" name="sign_up_email" placeholder="Your e-mail" class="input-order"> <div class="sign_up_email-alert alert-div"></div></div>
+							<div class="sign-up-box-wrap"><input type="password" name="sign_up_password" placeholder="Enter Password" class="input-order"><div class="sign_up_password-alert alert-div"></div></div>
+							<div class="sign-up-box-wrap"><input type="password" name="sign_up_re_password" placeholder="Re-enter Password" class="input-order"><div class="sign_up_re_password-alert alert-div"></div></div>
+							<div class="sign-up-box-wrap"><a class="sign-up-btn" href="javascript:signUp();">SIGN UP</a></div>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -283,6 +292,7 @@
 <script>if ($ === undefined) $ = jQuery</script>
 <!-- /jQuery -->
 <script src="/javascripts/orchestra.js"></script>
+<script src="/javascripts/jquery.form.js"></script>
 <script>
 	$(document).ready(function(){
 		if( $(window).width() < 1280 )
@@ -290,10 +300,60 @@
 		var status = $.getUrlVar('status');
 		if( status == "failed" )
 			alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+
+		checkEmail();
 	})
 	function login()
 	{
 		$('form[name=login-form]').submit();
+	}
+	function signUp()
+	{
+		var Options = {
+			url: '/page/sign_up',
+			type: 'POST',
+			dataType: 'json',
+			resetForm: false,
+			beforeSubmit: function(){},
+			success: function(json) {
+				if( json.result == "failed" )
+				{
+					$(".alert-div").html("");
+					$("."+json.target+"-alert").html(json.msg);
+					$("form[name=sign-up-form] input").css({border:"1px solid rgba(204, 204, 204, 0.47)"});
+					$("form[name=sign-up-form] input[name="+json.target+"]").css({border:"3px solid rgba(255, 0, 0, .4)"});
+					$("form[name=sign-up-form] input[name="+json.target+"]").focus();
+				}
+				else if( json.result == "successful" )
+					location.href="/page/group_list";
+			}
+		};
+		$('form[name=sign-up-form]').ajaxSubmit(Options);
+	}
+	function checkEmail()
+	{
+		$('form[name=sign-up-form] input[name=sign_up_email]').blur(function(){
+			var email = $(this).val();
+			var $t = $(this);
+			$.ajax({
+				url: '/page/check_email',
+				type: 'POST',
+				data: {email:email},
+				dataType: 'json',
+				success: function(json) {
+					if( json.result == "failed" )
+					{
+						$(".sign_up_email-alert").html(json.msg);
+						$t.css({border:"3px solid rgba(255, 0, 0, .4)"});
+					}
+					else if( json.result == "successful" )
+					{
+						$(".sign_up_email-alert").html("");
+						$t.css({border:"1px solid rgba(204, 204, 204, 0.47)"});
+					}
+				}
+			});
+		});
 	}
 </script>
 </html>

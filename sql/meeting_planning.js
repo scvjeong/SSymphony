@@ -52,7 +52,7 @@ exports.dao_load_agenda = function(evt, mysql_conn, params){
 }
 
 exports.dao_load_tools = function(evt, mysql_conn, params){
-	var sql = "SELECT `idx`, `name` FROM `tools` WHERE `use_flag` = 'Y'";
+	var sql = "SELECT `idx`, `first_name` FROM `tools` WHERE `use_flag` = 'Y'";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('load_tools', err, rows);
 	});

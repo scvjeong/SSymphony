@@ -11,7 +11,7 @@
 		var _votelistnum = 0;
 
 		var _socket;
-		var _tmpLastId = 100;
+		var _tmpLastId = 101;
 		var _tmpGroup = 0;
 		var _clientId = 0;
 
@@ -242,6 +242,14 @@
 					_is_multi_vote = data.val;
 				}
 			});
+
+			_socket.on('get_voting_data', function(data) {
+
+				var vote_text = data.text;
+				var vote_num = data.num;
+				console.log("text: "+vote_text+" // num: "+vote_num);
+				
+			});
 		}
 
 		/* 데이터를 서버로 전송함 */
@@ -266,25 +274,10 @@
 			
 			var str_result = JSON.stringify(vote_result);
 			
+			console.log("multi: "+_is_multi_vote);
+			console.log("lastId: "+_tmpLastId);
 			_socket.emit('set_voting_data', {group: _tmpGroup, tool: _voteid,
-															id: _tmpLastId, val: str_result, option: _is_multi_vote, client: _clientId});
-			//var test_val = JSON.parse(str_result);
-			//console.log(test_val[0]);
-			
-			/*
-			
-			
-			var vote_item = {};
-			newitem["title"] = this_title;
-			newitem["vote"] = 0;
-					
-			
-
-			var sendingData = JSON.stringify(vote_result);						// 투표 항목들
-			
-			_socket.emit('set_voting_data', {group: _tmpGroup, tool: _voteid,
-															id: _tmpLastId, val: sendingData, option: _is_multi_vote, client: _clientId});
-			*/
+															id: _tmpLastId, val: str_result, option: _is_multi_vote, user: 'user1'});
 		}
 
 		/* 투표 진행 초기화 */

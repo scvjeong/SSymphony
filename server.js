@@ -1,6 +1,6 @@
 /*
 	종혁이 파괴 방지 주석
-	13.05.25 21시 - 투표 진행 함수 구현
+	13.05.27 02시 - 투표 진행 함수 구현
 */
 
 function server(io)
@@ -40,7 +40,7 @@ function server(io)
 					if ( userNum == -1 ) {	//user가 존재하지 않을 때
 						client.rpush(userInfo, tmpUser);
 						userNum =countUser;
-						lastClient = userNum;
+						_lastClient = userNum;
 					}
 					socket.emit('get_client', { client: userNum });
 				});
@@ -54,15 +54,15 @@ function server(io)
 			var tmpTool = data.tool;
 			var tmpLastId = 101;
 			
-			var tmpCheckArray = idArray.toString();
+			var tmpCheckArray = _idArray.toString();
 			//console.log("tmpArray:  "+tmpCheckArray);
 			if ( tmpCheckArray.indexOf(tmpTool) < 0 ) {	//배열에 현재 도구 lastId 없을 때
-				idArray.push(tmpTool);
-				idArray[tmpTool] = 101;
+				_idArray.push(tmpTool);
+				_idArray[tmpTool] = 101;
 			}
 			else {
-				idArray[tmpTool] = parseInt(idArray[tmpTool]) + 1;	 //해당 도구의 lastId 1 증가
-				tmpLastId = idArray[tmpTool];	
+				_idArray[tmpTool] = parseInt(_idArray[tmpTool]) + 1;	 //해당 도구의 lastId 1 증가
+				tmpLastId = _idArray[tmpTool];	
 			}
 
 			////  클라이언트로 lastId 전달  ////
@@ -562,7 +562,6 @@ function server(io)
 			});	
 		});
 
-
 		////  클라이언트 투표 진행상황 및 투표 결과 함수  ////
 		socket.on('set_voting_data', function(data) {
 			console.log("Call: set_voting_data");
@@ -571,14 +570,75 @@ function server(io)
 			var tmpId = data.id;
 			var tmpResult = data.val;
 			var tmpOption = data.option;
-			var tmpClient = data.client;
+			var tmpUser = data.user;
 			
-			var test_val = JSON.parse(tmpResult);
-			console.log(test_val[0]);
+			var vote_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote";
+			var vote_user_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote:user";
 
 
-			//socket.emit('get_voting_data', { tool: tmpTool, id: sendId, parent: sendId, val: val });	
+			if ( _vote_flag == false ) {
+				_vote_flag = true;
+				setTimeout( function(){
+					console.log("setTimeout");
+					client.hkeys(vote_field, function (err, replies){
+						replies.forEach( function (vote_text, index) {
+							client.hget(vote_field, vote_text, function (err, vote_num) {
+								console.log("vote_text: "+vote_text);
+								console.log("vote_num: "+vote_num);
+
+								socket.emit('get_voting_data', { text: vote_text, num: vote_num });	
+								socket.broadcast.to(tmpGroup).emit('get_voting_data', { text: vote_text, num: vote_num });	
+							});
+						});
+					});
+				}, 8000);
+			}
+			
+			var result_val = JSON.parse(tmpResult);
+			var i=0;
+			
+
+				for ( i=0; i<result_val.length; i++ ) {			
+					
+					//console.log("vote_val: "+store_val);
+					//store_val_array.push(store_val);
+					
+						
+					//// 콜백함수 문제 해결해야함! - 타이밍 문제 ////		
+					(function ( ) {
+						
+						var store_val = tmpGroup + ":" + tmpTool + ":" + result_val[i];
+						var vote_user = tmpGroup + ":" + tmpTool + ":" + result_val[i] + ":user";
+				
+						client.hget(vote_field, store_val, function (err, val) {		
+							console.log("store_val: "+store_val);
+							console.log("val: "+val);
+							var vote_num = 1;
+							if ( val == null ) {		
+								client.hset(vote_field, store_val, vote_num);
+								client.hset(vote_user_field, vote_user, tmpUser);
+							}
+							else {
+								vote_num = parseInt(val)+1;
+								client.hset(vote_field, store_val, vote_num);
+								client.hset(vote_user_field, vote_user, tmpUser);
+							}
+						});
+						
+					})(i)
+		
+				}
+
+			////  for 문 돌면서 투표 결과 데이터 DB에 저장하는 부분
+			////  클라이언트 투표 여부 확인해서 투표 전부 완료되면 get_voting_data 전달
+			////  시간 제한 둬서 시간 지나면 전달
+			
+			
 		});
+		
+		function timeEnd() {
+			
+		}
 	});
 }
 
@@ -586,8 +646,9 @@ function server(io)
 var redis = require('redis'), 
 	client = redis.createClient(6379, '61.43.139.70'), multi;
 
-var idArray = new Array();	//lastId 배열
-var lastClient = 1;	//lastClient 변수
+var _idArray = new Array();	//lastId 배열
+var _lastClient = 1;	//_lastClient 변수
+var _vote_flag = false;
 
 ////  redis 데이터 초기화  ////
 client.flushdb();

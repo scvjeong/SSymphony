@@ -575,10 +575,10 @@ function server(io)
 			var vote_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote";
 			var vote_user_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote:user";
 
-
+			
 			if ( _vote_flag == false ) {
 				_vote_flag = true;
-				setTimeout( function(){
+				_vote_timer = setTimeout( function(){
 					console.log("setTimeout");
 					client.hkeys(vote_field, function (err, replies){
 						replies.forEach( function (vote_text, index) {
@@ -591,7 +591,7 @@ function server(io)
 							});
 						});
 					});
-				}, 8000);
+				}, 10000);
 			}
 			
 			var result_val = JSON.parse(tmpResult);
@@ -649,6 +649,7 @@ var redis = require('redis'),
 var _idArray = new Array();	//lastId 배열
 var _lastClient = 1;	//_lastClient 변수
 var _vote_flag = false;
+var _vote_timer = 0;
 
 ////  redis 데이터 초기화  ////
 client.flushdb();

@@ -79,19 +79,6 @@
 					$(".voteReadyList li input:nth(" + i + ")").focus(_newlist_to_last);
 				}
 			}
-	
-			/*
-			$("#btn_del_" + _voteid + "_" + _votelistnum).click(function() {
-				var countlist = $(".voteReadyList input").length;
-				if (countlist > 1)
-					$('#' + id_thislist).remove();
-			});
-			
-			$("#" + id_lastlist + " input").unbind('click', _newlist_to_last);
-			$("#" + id_lastlist + " input").unbind('focus', _newlist_to_last);
-			$("#" + id_thislist + " input").click(_newlist_to_last);
-			$("#" + id_thislist + " input").focus(_newlist_to_last);
-			*/
 		}
 		var _newlist_to_last = function() {
 			newVoteReadyList();
@@ -248,7 +235,7 @@
 				var vote_text = data.text;
 				var vote_num = data.num;
 				console.log("text: "+vote_text+" // num: "+vote_num);
-				
+				$('body').append("<div>val: "+vote_text+" // "+"num: "+vote_num+"</div>");
 			});
 		}
 

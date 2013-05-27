@@ -334,8 +334,8 @@
 		
 	function setup_calendar() {
 
-		if ($("#calendar").length) {
-			var calendar = $('#calendar').fullCalendar({
+		if ($("#meeting-calendar").length) {
+			var calendar = $('#meeting-calendar').fullCalendar({
 				header: {
 					left: 'title', //,today
 					center: 'prev, next, today',

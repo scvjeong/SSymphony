@@ -3,8 +3,9 @@ var express = require('express')
   , main = require('./routes/main')
   , group_select = require('./routes/group_select')
   , meeting = require('./routes/meeting')
-  , quick_meeting = require('./routes/quick_meeting')
+  , meeting_list = require('./routes/meeting_list')
   , meeting_planning = require('./routes/meeting_planning')
+  , quick_meeting = require('./routes/quick_meeting')
   , tools = require('./routes/tools')
   , http = require('http')
   , path = require('path');
@@ -35,7 +36,7 @@ app.configure('development', function(){
 
 app.get('/', main.main);
 app.get('/page/group_select', group_select.group_select); // 회의 선택 페이지
-app.get('/page/meeting_list', routes.meeting_list); // 회의 선택 페이지
+app.get('/page/meeting_list', meeting_list.meeting_list); // 회의 선택 페이지
 app.get('/page/meeting', meeting.main); // 회의 진행 페이지
 app.get('/page/meeting_public', meeting.meeting_public);
 app.get('/page/meeting_appraisal', meeting.meeting_appraisal); // 회의 평가 페이지

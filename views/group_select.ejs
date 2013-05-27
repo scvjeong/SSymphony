@@ -12,7 +12,6 @@
 </head>
 
 <body>
-
 <!--============================= Page Body =================================-->
 
 <div id="topbar">
@@ -37,7 +36,7 @@
 					for(var i=0; i<result.group_info.length; i++) {
 						var user_list = result.group_info[i].user_list.split(",");
 				%>
-						<li class="group-list">
+						<li class="group-list" idx="<%= result.group_info[i].idx %>">
 							<div class="group-name group-<%= i+1 %>"><%= result.group_info[i].group_name %></div>
 							<div class="members">
 								<%
@@ -127,14 +126,24 @@
 			{
 				title: '<%=result.meeting[i].subject%>',
 				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
-				end: null
+				end: null,
+				editable: false
 			},
 		<%}%>
 		];
 
 		$(document).ready(function(){
 			setup_calendar();
+			init_click_group();
 		})
+
+		function init_click_group()
+		{
+			$("#member-info .group-list-box .group-list").click(function(){
+				var idx = $(this).attr("idx");
+				location.href="/page/meeting_list?group="+idx;
+			});
+		}
 	</script>
 <!-- /Javascript -->
 

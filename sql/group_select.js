@@ -22,7 +22,6 @@ exports.dao_group_select = function(evt, mysql_conn, params){
 	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
 	sql += "GROUP BY `C`.`idx` ";
 	sql += "ORDER BY `C`.`date` DESC";
-	console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('group_select', err, rows);
 	});
@@ -36,6 +35,7 @@ exports.dao_group_info = function(evt, mysql_conn, params){
 	sql += "`A`.`id`, ";
 	sql += "`A`.`first_name`, ";
 	sql += "`A`.`last_name`, ";
+	sql += "`C`.`idx`, ";
 	sql += "`C`.`name` AS `group_name`, ";
 	sql += "GROUP_CONCAT( DISTINCT CONCAT(`E`.`first_name`,  ' ',  `E`.`last_name`) ORDER BY `E`.`first_name` ASC SEPARATOR ',') AS `user_list` ";
 	sql += "FROM `user` AS `A` ";

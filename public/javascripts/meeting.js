@@ -5,7 +5,7 @@ var _tool_mindmap_count = 0;
 var _tool_vote_count = 0;
 var _tool_matrix_count = 0;
 var _common_window_top = 50;
-var _common_windot_left = 20;
+var _common_window_left = 20;
 var _new_z_index = 0;
 var _drawtool = 'pen';
 var _group_id = 1;
@@ -41,9 +41,11 @@ $(document).ready(function() {
 
 	// 콘텐트 관리 상자 초기화
 	share_box.init();
+	/*
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
 	addLinkList("인트라넷 소마", "http://intranet.swmaestro.kr");
+	*/
 	$('#btn_addlink').click(function() {
 		var linktitle = $('#txt_linktitle').val();
 		var linkurl = $('#txt_linkurl').val();
@@ -90,22 +92,47 @@ $(document).ready(function() {
             success: function(response) {
             	console.log(response);
             	
+            	var fileObject = JSON.stringify(response);
+            	console.log("fileObject : " + fileObject);
+            	_socket_common.emit('set_option_data', {group:_group_id, option:'new_share_box_item', tool:"0", id:"0", val:fileObject});
+            	
             	var newfileitem = "";
             	var filetypeinfo = getFileTypeInfo(response.filetype);
+            	var target_list = "";
             	
-            	newfileitem += "<li>";
+            	/*
+				<li class="item">
+					<div class="icon"></div>
+					<div class="text">테스트</div>
+				</li>
+				*/
+				switch (filetypeinfo.category)
+            	{
+            	case "document":
+            		target_list = "section_documents";
+            		break;
+            	case "image":
+            		target_list = "section_photos";
+            		break;
+            	default:
+					target_list = "section_others";
+            	}
             	newfileitem += "<a href=\"";
             	newfileitem += "/tmp/";
             	newfileitem += response.filename;
-            	newfileitem += "\">";
-            	newfileitem += "<img src=\"";
-            	newfileitem += filetypeinfo.iconurl;
-            	newfileitem += "\" width=\"16\" height=\"16\" /> ";
-            	newfileitem += "[" + filetypeinfo.category + "]";
-            	newfileitem += response.filename;
+            	newfileitem += "\" target=\"_blank\">";
+	            	newfileitem += "<li class=\"item\">";
+		            	newfileitem += "<div class=\"icon\" style=\"background-image:url('";
+		            	newfileitem += filetypeinfo.iconurl;
+		            	newfileitem += "')\"></div>";
+		            	newfileitem += "<div class=\"text\">";
+			            	newfileitem += response.filename;
+		            	newfileitem += "</div>";
+	            	newfileitem += "</li>";
             	newfileitem += "</a>";
-            	newfileitem += "</li>";
-				$('#file_list').append(newfileitem);
+				//$('#file_list').append(newfileitem);
+				
+				$("#" + target_list + " .list").append(newfileitem);
             }
 		});
 
@@ -132,10 +159,8 @@ function openSocket()
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
 	
-
 	_socket_common.emit('join_room', {group:_group_id});
 	
-
 	_socket_common.on('get_client', function (data) {
 		_client_id = data.client;
 		//console.log("client: "+data.client);
@@ -165,7 +190,66 @@ function openSocket()
 				break;
 			}
 		}
+		else if (data.option == 'new_share_box_item')
+		{
+			console.log('새 쉐어박스 아이템 도착 : ');
+			console.log(data);
+			addShareItem(data.val);
+		}
+		else if (data.option == 'new_canvas_draw')
+		{
+			switch (data.tool)
+			{
+			case 'pen':
+				drawArrivedPen(data.val);
+				break;				
+			}
+		}
 	});
+}
+
+
+// 쉐어박스 아이템 추가
+var testtest;
+function addShareItem(response)
+{
+	console.log("CALL addShareItem [response:" + response + "]");
+	console.log("filename:" + response.filename);
+	response = JSON.parse(response);
+	testtest = response;
+	var newfileitem = "";
+	var filetypeinfo = getFileTypeInfo(response.filetype);
+	var target_list = "";
+	
+	switch (filetypeinfo.category)
+	{
+	case "document":
+		target_list = "section_documents";
+		break;
+	case "image":
+		target_list = "section_photos";
+		break;
+	default:
+		target_list = "section_others";
+	}
+	newfileitem += "<a href=\"";
+	newfileitem += "/tmp/";
+	newfileitem += response.filename;
+	newfileitem += "\" target=\"_blank\">";
+    	newfileitem += "<li class=\"item\">";
+        	newfileitem += "<div class=\"icon\" style=\"background-image:url('";
+        	newfileitem += filetypeinfo.iconurl;
+        	newfileitem += "')\"></div>";
+        	newfileitem += "<div class=\"text\">";
+            	newfileitem += response.filename;
+        	newfileitem += "</div>";
+    	newfileitem += "</li>";
+	newfileitem += "</a>";
+	//$('#file_list').append(newfileitem);
+	
+	$("#" + target_list + " .list").append(newfileitem);
+	
+	showPopupWindow(response.filename + " is added on Share Box.");
 }
 
 function resetSizeInfo()
@@ -490,7 +574,7 @@ function addTool(type, source)
 		tool['title'] = '리스트 ' + _tool_list_count;
 		tool['width'] = list_window_width;
 		tool['height'] = list_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			tmpIndent: 0,	// 현재 들여쓰기 상태
@@ -512,7 +596,7 @@ function addTool(type, source)
 		tool['title'] = '포스트잇 ' + _tool_postit_count;
 		tool['width'] = postit_window_width;
 		tool['height'] = postit_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			tmpLastId: 100,
@@ -530,7 +614,7 @@ function addTool(type, source)
 		tool['title'] = '마인드맵 ' + _tool_mindmap_count;
 		tool['width'] = mindmap_window_width;
 		tool['height'] = mindmap_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			moveFlag: 0,
@@ -552,7 +636,7 @@ function addTool(type, source)
 		tool['title'] = '투표 ' + _tool_vote_count;
 		tool['width'] = vote_window_width;
 		tool['height'] = vote_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			
@@ -564,7 +648,7 @@ function addTool(type, source)
 		tool['title'] = 'matrix ' + _tool_matrix_count;
 		tool['width'] = matrix_window_width;
 		tool['height'] = matrix_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			tmpClient: 0,	//현재 클라이언트 번호
@@ -591,7 +675,7 @@ function addTool(type, source)
 	}
 	tool['source'] = source;
 	
-	_common_windot_left += 100;
+	_common_window_left += 100;
 	_common_window_top += 100;
 
 	_toolWindowList.push(tool);
@@ -649,7 +733,6 @@ function showToolWindow(idx)
 		_tool_vote_count++;
 		break;
 	case "matrix":
-
 		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
@@ -1070,6 +1153,7 @@ function changePenColor(color)
 
 var _pen_color = "#000000";
 var _fill_color = "#000000";
+var sendingData = "";
 
 if(window.addEventListener) {
 	var dBoard;
@@ -1080,12 +1164,12 @@ if(window.addEventListener) {
 
 		if(!canvas)
 		{
-			alert('캔버스 참조 실패');
+			alert('캔버스 이상함');
 			return;
 		}
 
 		if(!canvas.getContext){
-			alert("canvas.getContext를 사용할 수 없음");
+			alert("canvas.getContext 이상함");
 			return;
 		}
 
@@ -1093,7 +1177,7 @@ if(window.addEventListener) {
 		dBoard.initBoard();
 	}
 
-	window.addEventListener( "load", init, false );
+	window.addEventListener("load", init, false );
 
 
 
@@ -1127,6 +1211,15 @@ if(window.addEventListener) {
 				case 'pen':
 					var point = getMousePoint(event);
 					pen.moveTo( point );
+	
+					sendingData = {
+				         id: _client_id,
+				         action: 'pen',
+				         undo: false,
+				         lineWidth: 1,
+				         color: _pen_color,
+				         data: [{x: point.x, y: point.y}]
+				        };
 					break;
 				case 'rect':
 					prev_point = getMousePoint(event);
@@ -1139,6 +1232,22 @@ if(window.addEventListener) {
 			}
 		}
 
+		// pen에 draw요청
+		function onMouseMove_Canvas( event ){
+			switch (_drawtool)
+			{
+				case 'pen':
+					var point = getMousePoint( event );
+					pen.draw(point);
+					
+					sendingData.data.push({x: point.x, y: point.y}); 
+					break;
+				case 'ellipse':
+
+					break;
+			}
+		}
+
 		// 마우스 업시 등록한 마우스 이벤트 해지 
 		function onMouseUp_Canvas( event ){
 			console.log("Call onMouseUp_Canvas");
@@ -1147,6 +1256,8 @@ if(window.addEventListener) {
 			{
 				case 'pen':
 					console.log(now_point);
+					sendingData.data.push({x: now_point.x, y: now_point.y});
+					_socket_common.emit('set_option_data', {group:_group_id, option:'new_canvas_draw', tool:'pen', id:"0", val:sendingData});
 					break;
 				case 'rect':
 					var width = now_point.x - prev_point.x;
@@ -1164,20 +1275,6 @@ if(window.addEventListener) {
 			}
 			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
 			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
-		}
-
-		// pen에 draw요청
-		function onMouseMove_Canvas( event ){
-			switch (_drawtool)
-			{
-				case 'pen':
-					var point = getMousePoint( event );
-					pen.draw( point );
-					break;
-				case 'ellipse':
-
-					break;
-			}
 		}
 
 		// 마우스 좌표를 브라우저에 따라 반환
@@ -1223,7 +1320,6 @@ function GraphicPen(objBoard)
 		this.pen.lineTo( point.x, point.y );
 		this.pen.stroke();
 	}
-
 }
 
 function GraphicRect(objBoard, left, top, width, height)
@@ -1263,6 +1359,15 @@ function GraphicText(objBoard, x, y, text)
 	var canvas_context = canvas.getContext("2d");
 	canvas.fillText(text, x, y);
 }
+
+
+function drawArrivedPen(data)
+{
+	var canvas = document.getElementById(objBoard);
+	var canvas_context = canvas.getContext("2d");
+	canvas.draw(data);
+}
+
 
 function noticeBarMoving()
 {

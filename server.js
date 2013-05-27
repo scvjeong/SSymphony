@@ -1,6 +1,6 @@
 /*
 	종혁이 파괴 방지 주석
-	13.05.25 21시 - 투표 진행 함수 구현
+	13.05.27 02시 - 투표 진행 함수 구현
 */
 
 function server(io)
@@ -40,7 +40,7 @@ function server(io)
 					if ( userNum == -1 ) {	//user가 존재하지 않을 때
 						client.rpush(userInfo, tmpUser);
 						userNum =countUser;
-						lastClient = userNum;
+						_lastClient = userNum;
 					}
 					socket.emit('get_client', { client: userNum });
 				});
@@ -54,15 +54,15 @@ function server(io)
 			var tmpTool = data.tool;
 			var tmpLastId = 101;
 			
-			var tmpCheckArray = idArray.toString();
+			var tmpCheckArray = _idArray.toString();
 			//console.log("tmpArray:  "+tmpCheckArray);
 			if ( tmpCheckArray.indexOf(tmpTool) < 0 ) {	//배열에 현재 도구 lastId 없을 때
-				idArray.push(tmpTool);
-				idArray[tmpTool] = 101;
+				_idArray.push(tmpTool);
+				_idArray[tmpTool] = 101;
 			}
 			else {
-				idArray[tmpTool] = parseInt(idArray[tmpTool]) + 1;	 //해당 도구의 lastId 1 증가
-				tmpLastId = idArray[tmpTool];	
+				_idArray[tmpTool] = parseInt(_idArray[tmpTool]) + 1;	 //해당 도구의 lastId 1 증가
+				tmpLastId = _idArray[tmpTool];	
 			}
 
 			////  클라이언트로 lastId 전달  ////
@@ -270,7 +270,7 @@ function server(io)
 			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
 			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
-			console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);		
+			console.log("Id: "+tmpId+" / Parent: "+tmpParent+" / Val: "+tmpVal);		
 			
 			////  부모 필드 존재하는지 검사  ////
 			client.hlen(storeId, function (err, num) {
@@ -306,6 +306,46 @@ function server(io)
 					}
 					////  다른 클라이언트들에게 추가된 값 전달_tree  ////
 					socket.broadcast.to(tmpGroup).emit('get_insert_tree_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
+				});	
+			});
+		});
+
+
+		////  클라이언트 해당 tool에 추가된 값을 DB에 저장_tree  ////
+		socket.on('set_insert_vote_data', function(data) {
+			console.log("Call: insert_tree_data");
+			var tmpGroup = data.group;
+			var tmpTool = data.tool;
+			var tmpId = data.id;	
+			var tmpParent = data.parent;
+			var tmpIndex = data.index;
+			var tmpVal = data.val;
+			var tmpClient = data.client;
+		
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
+			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
+			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
+			console.log("Id: "+tmpId+" / Parent: "+tmpParent+" / Val: "+tmpVal);		
+	
+			multi = client.multi();
+			multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
+			multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
+			multi.exec();
+		
+			////  list에서 현재 위치에 ID 중복되는지 확인  ////
+			client.llen(tmpOrder, function (err, idVal) {			
+				client.lindex(tmpOrder, tmpIndex, function (err, preId) {
+					console.log("stroeId: "+storeId+ "// preId: " +preId);
+					if ( preId != storeId )	//Id 다를때
+					{
+						client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
+							//console.log("id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
+							client.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입			
+						});	
+					}
+					////  다른 클라이언트들에게 추가된 값 전달_tree  ////
+					socket.broadcast.to(tmpGroup).emit('get_insert_vote_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
 				});	
 			});
 		});
@@ -471,65 +511,134 @@ function server(io)
 			socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal });
 		});
 		
-		////  클라이언트 투표 도구의 데이터 처리하는 함수  ////
+		////  클라이언트 투표 도구의 데이터 요청 처리하는 함수  ////
 		socket.on('set_vote_data', function(data) {
 			console.log("Call: set_vote_data");
 			var tmpGroup = data.group;
 			var tmpTool = data.tool;
-			var tmpId = data.id;
-			var tmpParent = data.parent;
-			var tmpIndex = data.index;
-			var tmpVal = data.val;
-			var tmpClient = data.client;
-
 			var tmpOrder = tmpGroup+":"+tmpTool+":order";
-			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
-			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
-			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
-			console.log("Id: "+tmpId+" / Index: "+tmpIndex+" / Val: "+tmpVal);		
+			var tmpOption = tmpGroup+":"+tmpTool+":options";
 			
-			////  부모 필드 존재하는지 검사  ////
-			client.hlen(storeId, function (err, num) {
-				if ( num > 0 )
-				{
-					client.hkeys(storeId, function (err, parent) {
-						multi = client.multi();
-						multi.hdel(storeId, parent);	
-						multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
-						multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
-						multi.exec();
+			client.lindex(tmpOrder, 0, function (err,reply) {
+				if ( reply == null ) {
+					var tmpId = tmpOrder.replace("order", "100");
+					var tmpParent = tmpOrder.replace("order", "0");
+					client.lpush(tmpOrder, tmpId);
+					client.hset(tmpId, tmpParent, "");
+				}
+			
+				// order return 
+				client.lrange(tmpOrder, 0, -1, function (err, replies) {	
+					replies.forEach( function (idNum, index) {
+						//console.log("id: "+idNum);
+						var split_array = idNum.toString().split(":");
+						var id_num = split_array[2];
+						if ( id_num != 100)
+						{
+							client.hkeys(idNum, function (err, parentNum){
+													
+								var split_array = parentNum.toString().split(",");
+								var i=0;
+								for ( i=0; i<split_array.length; i++)
+								{
+									//var tmp_parent = split_array[i];
+									client.hget(idNum, split_array[i], function (err, val) {
+										console.log("id: "+idNum);					
+										
+										var id_split = idNum.toString().split(":");
+										var sendId = id_split[2];
+										console.log("parent: "+val+" // "+"id: "+sendId);
+										var sendVal = val;
+										
+										////  클라이언트로 데이터 전달  ////
+										socket.emit('get_vote_data', { tool: tmpTool, id: sendId, parent: sendId, val: val });	
+										
+									});
+								}
+							});
+						}
 					});
-				}
-				else
-				{
-					multi = client.multi();
-					multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
-					multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
-					multi.exec();
-				}
-			});	
-			
-			////  list에서 현재 위치에 ID 중복되는지 확인  ////
-			client.llen(tmpOrder, function (err, idVal) {			
-				client.lindex(tmpOrder, tmpIndex, function (err, preId) {
-					//console.log("stroeId: "+storeId+ "// preId: " +preId);
-					if ( preId != storeId )	//Id 다를때
-					{
-						client.lindex(tmpOrder, tmpIndex-1, function (err, reply) {
-							//console.log("id: "+tmpId+"//  tmpVal: "+tmpVal+"// tmpIndex: "+tmpIndex );
-							client.linsert(tmpOrder, "after", reply, storeId);	//해당 인덱스 위치에 데이터 삽입			
-						});	
-					}
-					////  다른 클라이언트들에게 추가된 값 전달_tree  ////
-					socket.broadcast.to(tmpGroup).emit('get_insert_tree_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
 				});	
-			});
-
-
-
+			});	
 		});
 
+		////  클라이언트 투표 진행상황 및 투표 결과 함수  ////
+		socket.on('set_voting_data', function(data) {
+			console.log("Call: set_voting_data");
+			var tmpGroup = data.group;
+			var tmpTool = data.tool;
+			var tmpId = data.id;
+			var tmpResult = data.val;
+			var tmpOption = data.option;
+			var tmpUser = data.user;
+			
+			var vote_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote";
+			var vote_user_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote:user";
 
+			
+			if ( _vote_flag == false ) {
+				_vote_flag = true;
+				_vote_timer = setTimeout( function(){
+					console.log("setTimeout");
+					client.hkeys(vote_field, function (err, replies){
+						replies.forEach( function (vote_text, index) {
+							client.hget(vote_field, vote_text, function (err, vote_num) {
+								console.log("vote_text: "+vote_text);
+								console.log("vote_num: "+vote_num);
+
+								socket.emit('get_voting_data', { text: vote_text, num: vote_num });	
+								socket.broadcast.to(tmpGroup).emit('get_voting_data', { text: vote_text, num: vote_num });	
+							});
+						});
+					});
+				}, 10000);
+			}
+			
+			var result_val = JSON.parse(tmpResult);
+			var i=0;
+			
+
+				for ( i=0; i<result_val.length; i++ ) {			
+					
+					//console.log("vote_val: "+store_val);
+					//store_val_array.push(store_val);
+					
+						
+					//// 콜백함수 문제 해결해야함! - 타이밍 문제 ////		
+					(function ( ) {
+						
+						var store_val = tmpGroup + ":" + tmpTool + ":" + result_val[i];
+						var vote_user = tmpGroup + ":" + tmpTool + ":" + result_val[i] + ":user";
+				
+						client.hget(vote_field, store_val, function (err, val) {		
+							console.log("store_val: "+store_val);
+							console.log("val: "+val);
+							var vote_num = 1;
+							if ( val == null ) {		
+								client.hset(vote_field, store_val, vote_num);
+								client.hset(vote_user_field, vote_user, tmpUser);
+							}
+							else {
+								vote_num = parseInt(val)+1;
+								client.hset(vote_field, store_val, vote_num);
+								client.hset(vote_user_field, vote_user, tmpUser);
+							}
+						});
+						
+					})(i)
+		
+				}
+
+			////  for 문 돌면서 투표 결과 데이터 DB에 저장하는 부분
+			////  클라이언트 투표 여부 확인해서 투표 전부 완료되면 get_voting_data 전달
+			////  시간 제한 둬서 시간 지나면 전달
+			
+			
+		});
+		
+		function timeEnd() {
+			
+		}
 	});
 }
 
@@ -537,8 +646,10 @@ function server(io)
 var redis = require('redis'), 
 	client = redis.createClient(6379, '61.43.139.70'), multi;
 
-var idArray = new Array();	//lastId 배열
-var lastClient = 1;	//lastClient 변수
+var _idArray = new Array();	//lastId 배열
+var _lastClient = 1;	//_lastClient 변수
+var _vote_flag = false;
+var _vote_timer = 0;
 
 ////  redis 데이터 초기화  ////
 client.flushdb();

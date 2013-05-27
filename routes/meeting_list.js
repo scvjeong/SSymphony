@@ -7,7 +7,7 @@ var Validator = require('validator').Validator;
 
 var _GROUP_SELECT_COMPLETE_FLAG_CNT = 2;
 
-exports.group_select = function(req, res){
+exports.meeting_list = function(req, res){
 	/** session start **/
 	/*
 	if( !req.session.email || !req.session.email.length )
@@ -31,7 +31,7 @@ exports.group_select = function(req, res){
 		complete_flag++;
 		result.meeting = rows;
 		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
-			res.render('group_select', {result:result} );
+			res.render('meeting_list', {result:result} );
 	});
 	
 	dao_gs.dao_group_info(evt, mysql_conn, params);
@@ -40,6 +40,6 @@ exports.group_select = function(req, res){
 		complete_flag++;
 		result.group_info = rows;
 		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
-			res.render('group_select', {result:result} );
+			res.render('meeting_list', {result:result} );
 	});
 };

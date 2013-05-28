@@ -55,44 +55,6 @@
 							</div>
 						</li>
 				<% } %>
-				<!--
-				<li>
-					<div class="group-name group-1">SW Maestro Round 2</div>
-					<div class="members">
-						<span class="team-leader">Dongu,</span>
-						<span class="team-member">Yongi,</span>
-						<span class="team-member">Maaknae,</span>
-						<span class="team-member">Heeon</span>
-					</div>
-				</li>
-				<li>
-					<div class="group-name group-2">School Project</div>
-					<div class="members">
-						<span class="team-leader">Sonya,</span>
-						<span class="team-member">Heeon,</span>
-						<span class="team-member">Baek,</span> 
-						<span class="team-member">J Jue</span>
-					</div>
-				</li>
-				<li>
-					<div class="group-name group-3">UI/UX Study</div>
-					<div class="members">
-						<span class="team-leader">Heeon,</span> 
-						<span class="team-member">Jaehun,</span> 
-						<span class="team-member">Choi,</span> 
-						<span class="team-member">J Lee</span> 
-					</div>
-				</li>
-				<li>
-					<div class="group-name group-4">CSS Works</div>
-					<div class="members">
-						<span class="team-leader">June,</span> 
-						<span class="team-member">Jaehun,</span> 
-						<span class="team-member">Choi,</span> 
-						<span class="team-member">J Lee</span> 
-					</div>
-				</li>
-				-->
 			</ul>
 		</div>
 	</div>
@@ -121,15 +83,29 @@
 		var events = [
 		<% 
 			for(var i=0; i<result.meeting.length; i++) {
-			var date = new Date(result.meeting[i].date);
+				var date = new Date(result.meeting[i].date);
+				var start_date = new Date();
+				var end_Date = new Date();
+				if( date != "Invalid Date" && result.meeting[i].start_time !=null && result.meeting[i].end_time !=null )
+				{
+					var s_t = result.meeting[i].start_time.toString().split(":");
+					var e_t = result.meeting[i].end_time.toString().split(":");
+					var time = date.getTime();
+					var start_time = time + (s_t[0]*60*60 + s_t[1]*60 + s_t[2]*1)*1000;
+					var end_time = time + (e_t[0]*60*60 + e_t[1]*60 + e_t[2]*1)*1000;
+					start_date.setTime(start_time);
+					end_Date.setTime(end_time);
 		%>
-			{
-				title: '<%=result.meeting[i].subject%>',
-				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
-				end: null,
-				editable: false
-			},
-		<%}%>
+				{
+					title: '<%=result.meeting[i].subject%>',
+					start: new Date(<%=start_date.getFullYear()%>, <%=start_date.getMonth()%>, <%=start_date.getDate()%>, <%=start_date.getHours()%>, <%=start_date.getMinutes()%>, <%=start_date.getSeconds()%>),
+					end: null,
+					editable: false
+				},
+		<%
+				}
+			}
+		%>
 		];
 
 		$(document).ready(function(){

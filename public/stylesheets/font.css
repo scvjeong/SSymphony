@@ -33,3 +33,10 @@
   font-weight: 400;
   src: local('Oxygen'), local('Oxygen-Regular'), url(http://themes.googleusercontent.com/static/fonts/oxygen/v2/RzoNiRR1p2Mqyyz2RwqSMw.woff) format('woff');
 }
+
+@font-face {
+  font-family: 'Istok Web';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Istok Web Regular'), local('IstokWeb-Regular'), url(http://themes.googleusercontent.com/static/fonts/istokweb/v5/EvPKapBawcLZ3hbihjhqAT8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}

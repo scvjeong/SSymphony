@@ -1673,7 +1673,7 @@ h6 small {
 #group-calendar{
 	float:left;
 	width:750px;
-	margin:65px 30px 10px 100px;
+	margin:65px 30px 10px 135px;
 	padding:10px;
 	background-color:#FFFFFF;
 }
@@ -1777,4 +1777,192 @@ h6 small {
 	padding:10px;
 	background-color:#FFFFFF;
 }
+
+#meeting-list{
+	float:left;
+	width:280px;
+	margin:65px 0px 10px 0px;
+	padding:30px;
+	color:#666666;
+	background-color:#FFFFFF;
+	font-family:"Istok Web";
+}
+#meeting-list ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#meeting-list .meeting-node{
+	cursor:pointer;
+	margin-bottom:15px;
+}
+#meeting-list .color-bar{
+	float:left;
+	width:10px;
+	margin-right:10px;
+	background-color:#339933;
+}
+#meeting-list .subject{
+	line-height:25px;
+	font-size:19px;
+	color:#000000;
+}
+#meeting-list .date{
+	line-height:24px;
+	font-size:16px;
+}
+#meeting-list .time{
+	line-height:20px;
+	font-size:14px;
+}
+#meeting-list .member{
+	line-height:20px;
+	font-size:14px;
+}
 /*** meeting_list ***/
+
+.color-1{
+	color:#339933;
+}
+.back-color-1{
+	background-color:#339933 !important;
+}
+.color-2{
+	color:#cc0000;
+}
+.back-color-2{
+	background-color:#cc0000 !important;
+}
+.color-3{
+	color:#3366cc;
+}
+.back-color-3{
+	background-color:#3366cc !important;
+}
+.color-4{
+	color:#ff9900;
+}
+.back-color-4{
+	background-color:#ff9900 !important;
+}
+
+/*** modal ***/
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000000;
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+.modal-backdrop,
+.modal-backdrop.fade.in {
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
+
+.modal {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  z-index: 1050;
+  width: 70%;
+  margin-left: -35%;
+  background-color: #ffffff;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  *border: 1px solid #999;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  outline: none;
+  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+     -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  -webkit-background-clip: padding-box;
+     -moz-background-clip: padding-box;
+          background-clip: padding-box;
+}
+
+.modal.fade {
+  top: -25%;
+  -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
+     -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
+       -o-transition: opacity 0.3s linear, top 0.3s ease-out;
+          transition: opacity 0.3s linear, top 0.3s ease-out;
+}
+
+.modal.fade.in {
+  top: 10%;
+}
+
+.modal-header {
+  padding: 9px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.modal-header .close {
+  margin-top: 2px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  line-height: 30px;
+}
+
+.modal-body {
+  position: relative;
+  max-height: 400px;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.modal-form {
+  margin-bottom: 0;
+}
+
+.modal-footer {
+  padding: 14px 15px 15px;
+  margin-bottom: 0;
+  text-align: right;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  -webkit-border-radius: 0 0 6px 6px;
+     -moz-border-radius: 0 0 6px 6px;
+          border-radius: 0 0 6px 6px;
+  *zoom: 1;
+  -webkit-box-shadow: inset 0 1px 0 #ffffff;
+     -moz-box-shadow: inset 0 1px 0 #ffffff;
+          box-shadow: inset 0 1px 0 #ffffff;
+}
+
+.modal-footer:before,
+.modal-footer:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.modal-footer:after {
+  clear: both;
+}
+
+.modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+
+.modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+
+.modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+/*** modal ***/

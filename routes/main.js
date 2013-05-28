@@ -18,8 +18,9 @@ v.error = function(target) {
 	result = { result:"failed", msg:msg, target:target };
 }
 
-function register_session(req, id, first_name, last_name)
+function register_session(req, idx_user, id, first_name, last_name)
 {
+	req.session.idx_user = idx_user;
 	req.session.email = id;
 	req.session.nickname = first_name + " " + last_name;
 }
@@ -44,7 +45,7 @@ exports.login = function(req, res){
 		}
 		else
 		{
-			register_session(req, rows[0].id, rows[0].first_name, rows[0].last_name);
+			register_session(req, rows[0].idx_user, rows[0].id, rows[0].first_name, rows[0].last_name);
 			res.redirect("/page/group_select");
 		}
 	});
@@ -105,7 +106,8 @@ exports.sign_up = function(req, res){
 	});
 
 	evt.on('sign_up', function(err, rows){
-		register_session(req, sign_up_email, first_name, last_name);
+		var idx_user = rows.insertId;
+		register_session(req, idx_user, sign_up_email, first_name, last_name);
 		result = { result:"successful", msg:"successful" };
 		res.send(result);
 	});

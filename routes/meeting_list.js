@@ -5,41 +5,54 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 var Validator = require('validator').Validator;
 
-var _GROUP_SELECT_COMPLETE_FLAG_CNT = 2;
+var _MEETING_LIST_COMPLETE_FLAG_CNT = 1;
+var _MEETING_USER_COMPLETE_FLAG_CNT = 1;
 
 exports.meeting_list = function(req, res){
 	/** session start **/
-	/*
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
-	*/
 	/** session end **/
 
 	var evt = new EventEmitter();
-	var dao_gs = require('../sql/group_select');
-	var dao_gi = require('../sql/group_info');
+	var dao_ml = require('../sql/meeting_list');
 
 	// params['idx_user']
 	// params['idx_group']
 	var params = { idx_user:1, idx_group:1 }
-	var result = { meeting:{}, group_info:{} };
+	var result = { meeting_info:{}, meeting_user:{} };
 	var complete_flag = 0;
+	var meeting_user_complete_flag = 0;
+	var s_d = new Date();
+	var e_d = new Date();
+	e_d.setMonth(e_d.getMonth()+1);
+	params['start_date'] = s_d.getFullYear() + "-" + (s_d.getMonth()+1) + "-00";
+	params['end_date'] = e_d.getFullYear() + "-" + (e_d.getMonth()+1) + "-00";
 
-	dao_gs.dao_group_select(evt, mysql_conn, params);
-	evt.on('group_select', function(err, rows){
+	dao_ml.dao_meeting_list(evt, mysql_conn, params);
+	evt.on('meeting_list', function(err, rows){
 		if(err) throw err;
 		complete_flag++;
-		result.meeting = rows;
-		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
+		result.meeting_info = rows;
+		if( complete_flag === _MEETING_LIST_COMPLETE_FLAG_CNT && rows.length > 0 )
+		{
+			_MEETING_USER_COMPLETE_FLAG_CNT = rows.length;
+			for(var i=0; i<rows.length; i++)
+			{
+				params['idx_meeting'] = rows[i].idx_meeting;
+				result.meeting_user[rows[i].idx_meeting] = {};
+				dao_ml.dao_meeting_user(evt, mysql_conn, params);
+			}
+		}
+		else if( rows.length < 1)
 			res.render('meeting_list', {result:result} );
 	});
-	
-	dao_gs.dao_group_info(evt, mysql_conn, params);
-	evt.on('group_info', function(err, rows){
+
+	evt.on('meeting_user', function(err, rows){
 		if(err) throw err;
-		complete_flag++;
-		result.group_info = rows;
-		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
+		meeting_user_complete_flag++;
+		result.meeting_user[rows[0].idx_meeting] = rows;
+		if( meeting_user_complete_flag === _MEETING_USER_COMPLETE_FLAG_CNT )
 			res.render('meeting_list', {result:result} );
-	});
+	});	
 };

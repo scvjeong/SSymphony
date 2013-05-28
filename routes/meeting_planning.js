@@ -16,8 +16,8 @@ exports.set_meeting_planning = function(req, res){
 	var dao_c = require('../sql/common');
 	var dao_mp = require('../sql/meeting_planning');
 	var post = util.regroup_post_for_meeting_planning(req.body);
-	var unit_cnt = 0;
 	var unit_2_cnt = 0;
+	var unit_3_cnt = 0;
 	var complete_flag = 0;
 
 	// 트랜젝션 실행
@@ -26,7 +26,6 @@ exports.set_meeting_planning = function(req, res){
 	// 트랜젝션 실행 후
 	evt.on('begin_work', function(err, rows){
 		if(err) throw err;
-
 		// unit 쿼리 실행 - Insert meeting_planning
 		dao_mp.dao_set_meeting_planning(evt, mysql_conn, post[0]);
 
@@ -48,10 +47,11 @@ exports.set_meeting_planning = function(req, res){
 						dao_c.dao_rollback(evt, mysql_conn);
 					else
 					{
-						unit_cnt++;
-						if( post.length == unit_cnt )
+						unit_2_cnt++;
+						if( post.length == unit_2_cnt )
 						{
 							complete_flag++;
+							console.log("unit_2 complete_flag : " + complete_flag );
 							if( complete_flag == 2 )
 							{
 								// 트랜젝션 커밋 실행
@@ -65,31 +65,41 @@ exports.set_meeting_planning = function(req, res){
 						}
 					}
 				});
-				// unit_2 쿼리 실행 - Insert relation_user_meeting
+
+				// unit_3 쿼리 실행 - Insert relation_user_meeting
+				var unit_3_total_cnt = 1;
+				var users = new Array;
+				users[0] = { user:req.session.idx_user, idx_meeting:idx_meeting };
+
 				if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "string" )
 				{
-					var unit_2_total_cnt = 1;
-					post[0].users = { user:post[0].users, idx_meeting:idx_meeting };
-					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, post[0].users);
+					unit_3_total_cnt += 1;
+					users[1] = { user:post[0].users, idx_meeting:idx_meeting };
+					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users);
 				}
 				else if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "object" )
 				{
-					var unit_2_total_cnt = post[0].users.length;
-					for( var i=0; i<unit_2_total_cnt; i++ )
+					unit_3_total_cnt += post[0].users.length;
+					for( var i=0; i<unit_3_total_cnt; i++ )
 					{
-						post[0].users[i] = { user:post[0].users[i], idx_meeting:idx_meeting };
-						dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, post[0].users[i]);
+						users[i+1] = { user:post[0].users[i], idx_meeting:idx_meeting };
+						dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[i]);
 					}
 				}
+				else
+					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[0]);
+
 				evt.on('query_unit_3', function(err, rows){
 					if(err) 
 						dao_c.dao_rollback(evt, mysql_conn);
 					else
 					{
-						unit_2_cnt++;
-						if( unit_2_total_cnt == unit_2_cnt  )
+						unit_3_cnt++;
+						console.log("unit_3_cnt : " + unit_3_cnt);
+						if( unit_3_total_cnt == unit_3_cnt  )
 						{
 							complete_flag++;
+							console.log("complete_flag : " + complete_flag );
 							if( complete_flag == 2 )
 							{
 								// 트랜젝션 커밋 실행

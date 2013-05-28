@@ -9,6 +9,7 @@
 	<link rel="stylesheet" href="/stylesheets/font.css" />
 	<link rel="stylesheet" href="/stylesheets/orchestra.css" />
 	<link rel="stylesheet" href="/stylesheets/fullcalendar.css?v=1">
+	<link rel="stylesheet" href="/stylesheets/bootstrap_new.css" />
 </head>
 
 <body>
@@ -22,52 +23,53 @@
 		<ul>
 			<li id="start-btn">START</li>
 			<li id="meeting-list-btn">MEETING<br>LIST</li>
-			<li id="group-info-btn">GROUP<br>INFO</li>
-			<li id="need-any-help-btn">NEED<br>ANY<br>HELP</li>
+			<li id="group-info-btn" onclick="javascript:alert('준비중')">GROUP<br>INFO</li>
+			<li id="need-any-help-btn" onclick="javascript:alert('준비중')">NEED<br>ANY<br>HELP</li>
 		</ul>
 	</div>
     <div id="meeting-calendar">
     </div>
-	<div id="member-info">
-		<div class="profile-pic"></div>
-		<div class="id"><%= result.group_info[0].first_name %> <%= result.group_info[0].last_name %></div>
-		<div class="info-menu">
-			<ul>
-				<li>Profile</li>
-				<li>My Account</li>
-				<li>Notice</li>
-			</ul>
-		</div>
-		<div class="group-list-box">
-			<ul>
-				<% 
-					for(var i=0; i<result.group_info.length; i++) {
-						var user_list = result.group_info[i].user_list.split(",");
-				%>
-						<li class="group-list" idx="<%= result.group_info[i].idx %>">
-							<div class="group-name group-<%= i+1 %>"><%= result.group_info[i].group_name %></div>
-							<div class="members">
+	<div id="meeting-list">
+		<ul>
+			<% 
+				for(var i=0; i<result.meeting_info.length; i++) {
+					var idx = result.meeting_info[i].idx_meeting;
+			%>
+					<li class="meeting-node" idx="<%= idx %>">
+						<div class="color-bar back-color-<%=i+1%>"></div>
+						<ul>
+							<li class="subject"><%= result.meeting_info[i].subject %></li>
+							<li class="date color-<%=i+1%>"><%= result.meeting_info[i].date.toDateString() %> <%= result.meeting_info[i].start_time %></li>
+							<li class="time"><%= result.meeting_info[i].start_time %> ~ <%= result.meeting_info[i].end_time %></li>
+							<li class="member">
 								<%
-									for(var j=0; j<user_list.length; j++) {
-										if( j === 0 ) {
+									var len = result.meeting_user[idx].length;
+									for(var j=0; j<len; j++) {
+										var name = result.meeting_user[idx][j].first_name + result.meeting_user[idx][j].last_name;
+										if( len === (j+1) ) {
 										%>
-											<span class="team-leader"><%= user_list[j].toString().trim() %></span>
+											<span><%= name.trim() %></span>
 										<%
 										} else {
 										%>
-											<span class="team-member"><%= user_list[j].toString().trim() %>,</span>
+											<span><%= name.trim() %>,</span>
 										<%	
 										}
 									}
 								%>
-							</div>
-						</li>
-				<% } %>
-			</ul>
-		</div>
+							</li>
+						</ul>
+					</li>
+			<% } %>
+		</ul>		
 	</div>
 </div>
-
+<div id="myModal" class="modal hide fade">
+	<!-- dialog contents -->
+	<div class="modal-body">Hello world!</div>
+	<!-- dialog buttons -->
+	<div class="modal-footer"><a href="#" class="btn primary">OK</a></div>
+</div>
 <!--============================= /Page Body ================================-->
 
   <!-- jQuery -->
@@ -81,8 +83,15 @@
     <script>if ($ === undefined) $ = jQuery</script>
   <!-- /jQuery -->
 	<script src="/javascripts/jquery.fullcalendar.min.js"></script>	
-
-	<script src="/javascripts/config.js"></script>	
+	<script src="/javascripts/bootstrap.min.js"></script>
+	<script src="/javascripts/bootbox.min.js"></script>
+	<script src="/javascripts/bootstrap.wizard.min.js"></script>
+	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
+	<script src="/javascripts/bootstrap.datepicker.min.js"></script>
+	<script src="/javascripts/select2.js"></script>
+	<script src="/javascripts/jquery.uniform.js"></script>
+	<script src="/javascripts/jquery.form.js"></script>
+	<script src="/javascripts/config.js"></script>
 	<script type="text/javascript">
 		var date = new Date();
 		var d = date.getDate();
@@ -90,11 +99,11 @@
 		var y = date.getFullYear();
 		var events = [
 		<% 
-			for(var i=0; i<result.meeting.length; i++) {
-			var date = new Date(result.meeting[i].date);
+			for(var i=0; i<result.meeting_info.length; i++) {
+			var date = new Date(result.meeting_info[i].date);
 		%>
 			{
-				title: '<%=result.meeting[i].subject%>',
+				title: '<%=result.meeting_info[i].subject%>',
 				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
 				end: null,
 				editable: false
@@ -105,14 +114,21 @@
 		$(document).ready(function(){
 			setup_calendar();
 			init_click_group();
+			init_color_bar();
 		})
 
 		function init_click_group()
 		{
-			$("#member-info .group-list-box .group-list").click(function(){
+			$("#meeting-list .meeting-node").click(function(){
 				var idx = $(this).attr("idx");
-				location.href="/page/meeting_list?group="+idx;
+				location.href="/page/meeting?idx_meeting="+idx;
 			});
+		}
+
+		function init_color_bar()
+		{
+			var h = $(".color-bar").parent().height();
+			$(".color-bar").height(h);
 		}
 	</script>
 <!-- /Javascript -->

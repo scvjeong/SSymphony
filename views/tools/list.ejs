@@ -1,29 +1,88 @@
-<div class="list_tool" id="list<%= tool_index %>">
+<style>
+	.list_tool{
+		padding:0px;
+		margin:0px;
+		width:100%;
+		height:100%;
+	}
+	.list_tool .header{
+		width:100%;
+	}
+	.list_tool .main_section{
+		border:1px solid #CCCCCC;
+		border-radius:10px;
+		padding:20px;
+		box-shadow: 0px 0px 10px 5px #CCCCCC;
+	}
+	.list_tool .list_space{
+		float:left;
+		width:100%;
+	}
+	.list_tool .home_box{
+		width:100%;
+		text-align:right;
+		font-size:25px;
+		font-weight:bold;
+	}
+	.list_tool .home_box span{
+		cursor:pointer;
+	}
+	.list_tool .init_box{
+		width:100%;
+		text-align:right;
+		font-size:25px;
+		font-weight:bold;
+	}
+	.list_tool .init_box #addButton{
+		cursor:pointer;
+	}
+	.list_tool .input_task{
+		float:left;
+		width:100%;
+	}
+	.list_tool .bullet{
+		float:left;
+		font-size:24px;
+		margin:0px 5px 0px 0px;
+		line-height:28px;
+		color:#5C8AB8;
+	}
+	.list_tool .list_space input[type=text]{
+		float:left;
+		border:0px none;
+		height:29px;
+		line-height:28px;
+		margin:0px;
+		padding:0px;
+		width:100px;
+	}
 
-	<header id="main_header">
-		<h1>List Tool</h1>
-	</header>
-	<div id="container">
-    <section id="main_section">
-		<article>
-			<header>
-				<div class="home_line">
-					<div class="home_box">
-						<div id="homeButton" onClick="list_change_data()"><h2>Change</h2></div>
-						<div id="initButton" onClick="list_init_data()"><h2>Clear</h2></div>
-					</div>
-					<div class="init_box">
-						<div id="addButton" onClick="list_add_new_input()">+</div>
-					</div>
+	.list_tool .list_space input[type=checkbox]{
+		border:0px none;
+		height:26px;
+		line-height:28px;
+		margin:0px;
+		padding:0px;
+	}
+
+</style>
+<div class="list_tool" id="list<%= tool_index %>">
+    <div class="main_section">
+		<div class="header">
+			<div class="home_line">
+				<div class="home_box">
+					<span id="homeButton" onClick="list_change_data()">Change</span>
+					<span id="initButton" onClick="list_init_data()">Clear</span>
 				</div>
-			</header>
-			<div class="list_space">
-				<div class="children">
-				
+				<div class="init_box">
+					<span id="addButton" onClick="list_add_new_input()">+</span>
 				</div>
 			</div>
-		</article>
-    </section>
-	</div>
-
+		</div class="header">
+		<div class="list_space">
+			<div class="children">
+			</div>
+		</div>
+		&nbsp;
+    </div>
 </div>

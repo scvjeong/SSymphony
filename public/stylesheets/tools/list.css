@@ -1,121 +1,65 @@
-    h1 {
-      font: bold 20px verdana, sans-serif;
-    } 
-    h2 {
-      font: bold 18px verdana, sans-serif;
-    } 
-    header, section, footer, aside, nav, article, figure, figcaption, hgroup{
-      display: block;
-    }
-	.list_tool {
-      max-width: 600px;
-      margin: 5px 0px;
-      display: -moz-box;
-      display: -webkit-box;
-      -moz-box-orient: vertical;
-      -webkit-box-orient: vertical;
-      -moz-box-flex: 1;
-      -webkit-box-flex: 1;
-    }
-
-    #main_header {
-	  display: -moz-box;
-	  display: -webkit-box;
-	  box-orient: horizontal;
-      background: #FFFBB9;
-      border: 1px solid #999999;
-      padding: 10px;
-    } 
-    #container {
-      display: -moz-box;
-      display: -webkit-box;
-      -moz-box-orient: horizontal;
-      -webkit-box-orient: horizontal;
-    }
-    #main_section {
-      -moz-box-flex: 1;
-      -webkit-box-flex: 1;
-      margin: 5px 0px;
-    } 
-    article {
-	  max-width: 600px;
-	  height: 500px;
-      background: #FFFFFF;
-      border: 1px solid #999999;
-      padding: 10px;
-      margin-bottom: 5px;
-	  cursor: text;
-    } 
-
-	.home_line {
-		display: -moz-box;
-		display: -webkit-box;
-		border-bottom: 1px solid #999999;
-		margin-bottom: 10px;
+	.list_tool{
+		padding:0px;
+		margin:0px;
+		width:100%;
+		height:100%;
 	}
-
-	.tmp_editing {
-		width: 90%;
-		margin-left: 10px;
-		font: 14px verdana, sans-serif;
-		border: none;
-		background: none;
-		outline: none;
-		cursor: text;
-		vertical-align: middle;
+	.list_tool .header{
+		width:100%;
 	}
-
-
-	.bullet {
-		width: 3%;
-		text-indent: 0px !important;
-		margin-left: 5px;
-		vertical-align: middle;
+	.list_tool .main_section{
+		border:1px solid #CCCCCC;
+		border-radius:10px;
+		padding:20px;
+		box-shadow: 0px 0px 10px 5px #CCCCCC;
 	}
-
-	.check_box {
-		width: 3%;
-		margin-left: 5px;
-		margin-top: 3px;
-		float: right;	
+	.list_tool .list_space{
+		float:left;
+		width:100%;
 	}
-
-	.input_task:hover {
-		background: #66CCFF;
+	.list_tool .home_box{
+		width:100%;
+		text-align:right;
+		font-size:25px;
+		font-weight:bold;
 	}
-	.input_open:hover {
-
-		background: #66CCFF;
-	}
-
-	a:hover {
-		text-decoration:underline;
-		cursor:pointer;
-		background:#004596;
-	}
-	.home_box {
-		width: 95%;		
-	}
-	.init_box {
-		width: 5%;
-	}
-	#homeButton {
-		float: left;
-		width: 20%;
+	.list_tool .home_box span{
 		cursor:pointer;
 	}
-	
-	#initButton {
-		float: right;
-		width: 80%;
+	.list_tool .init_box{
+		width:100%;
+		text-align:right;
+		font-size:25px;
+		font-weight:bold;
+	}
+	.list_tool .init_box #addButton{
 		cursor:pointer;
 	}
+	.list_tool .input_task{
+		float:left;
+		width:100%;
+	}
+	.list_tool .bullet{
+		float:left;
+		font-size:24px;
+		margin:0px 5px 0px 0px;
+		line-height:28px;
+		color:#5C8AB8;
+	}
+	.list_tool .list_space input[type=text]{
+		float:left;
+		border:0px none;
+		height:29px;
+		line-height:28px;
+		margin:0px;
+		padding:0px;
+		width:100px;
+	}
 
-	#addButton {
-		width: 20px;
-		font: bold 18px;
-		text-align: center;
-		background: #FFFBB9;
-		border: 1px solid #999999;
-		cursor:pointer;
+	.list_tool .list_space input[type=checkbox]{
+		border:0px none;
+		height:26px;
+		line-height:28px;
+		margin:0px;
+		padding:0px;
 	}

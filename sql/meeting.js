@@ -27,7 +27,7 @@ exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
 // params['idx_meeting']
 // params['idx_group']
 exports.dao_get_meeting_result = function(evt, mysql_conn, params){
-	params['idx_meeting'] = 60;
+	params['idx_meeting'] = 19;
 	params['idx_group'] = 1;
 	
 	var sql = "SELECT ";
@@ -55,7 +55,7 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 //	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
 //	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
-	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
+//	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
 //console.log(sql);

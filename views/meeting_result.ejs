@@ -6,7 +6,7 @@
 					<div class="result_icon">
 						<img class="result_icon_button" src="/images/meeting_result/minute.png" />
 						<img class="result_icon_button" src="/images/meeting_result/share.png" />
-						<img class="result_icon_button" src="/images/meeting_result/exit.png" />
+						<img class="result_icon_button" id="result_icon_button_exit" src="/images/meeting_result/exit.png" onClick="hideMeetingResultWindow()"/>
 					</div>
 				</div>
 			</div>
@@ -20,8 +20,8 @@
 						<div class="result_subject">회의 목표 - <%= result.meeting_result[0].goal %></div>
 						<div class="result_time">
 							<img class="result_contents_button" src="/images/meeting_result/clock.png" />
-							<div id="result_time_use">02:31:00</div>
-							<div id="result_time_set">/ 2:00:00</div>	
+							<div id="result_time_use">01:00:00</div>
+							<div id="result_time_set">/ 00:50:00</div>	
 							<div id="result_time_clock">(<%= result.meeting_result[0].start_time %> - <%= result.meeting_result[0].end_time %>)</div>	
 						</div>
 						<div class="result_evaluate">
@@ -63,19 +63,49 @@
 					<%
 						}
 					%>
+					<br>
 					</div>
 					<div class="chart">
+						<div id="chart_title_box">Chart</div>
 						<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
-						<div id="placeholder" style="width:600px;height:300px;"></div>
-						<div id="" class=" input_chart"></div>
+						<div id="placeholder" style="width:600px;height:300px;display:none;"></div>
+						<!--<div id="" class=" input_chart" style="display:none;"></div> -->
 					</div>
 					<div class="agenda">
+						<div id="agenda_title_box">Agenda</div>
+						<!--
 						<% for(var i=0; i<result.meeting_result.length; i++) { %>
 							<div><%=result.meeting_result[i].agenda_subject%></div>
 							<div><%=result.meeting_result[i].agenda_goal%></div>
 							<div><%=result.meeting_result[i].agenda_start_time%> ~ <%=result.meeting_result[i].agenda_end_time%></div>
 							<div><%=result.meeting_result[i].user_list%></div>
 						<% } %>
+						-->
+						<div id="agenda1">
+							<div class="agenda_subject">Opening</div>
+							<div class="agenda_goal">Ice Breaking, 회의 주제 및 목표 전달, Ground Rule 작성</div>
+							<div class="agenda_time">16:10~16:20</div>
+						</div>
+						<div id="agenda2">
+							<div class="agenda_subject">문제 정의</div>
+							<div class="agenda_goal">문제 정의</div>
+							<div class="agenda_time">16:20~16:25</div>
+						</div>
+						<div id="agenda3">
+							<div class="agenda_subject">문제 분석</div>
+							<div class="agenda_goal">문제의 원인 분석</div>
+							<div class="agenda_time">16:25~16:40</div>
+						</div>
+						<div id="agenda4">
+							<div class="agenda_subject">아이디어 도출</div>
+							<div class="agenda_goal">문제 해결을 위하 아이디어 도출</div>
+							<div class="agenda_time">16:40~16:50</div>
+						</div>
+						<div id="agenda5">
+							<div class="agenda_subject">솔루션 도출</div>
+							<div class="agenda_goal">아이디어 활용하여 솔루션 도출</div>
+							<div class="agenda_time">16:50~17:00</div>
+						</div>
 					</div>
 				</div>
 			</div>

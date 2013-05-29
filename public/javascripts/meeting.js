@@ -1067,6 +1067,12 @@ function showMeetingResultWindow()
 	
 }
 
+function hideMeetingResultWindow()
+{
+	console.log("HIDE");
+
+}
+
 
 function setupWordChart()
 {

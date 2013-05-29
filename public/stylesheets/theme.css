@@ -590,7 +590,7 @@ ul.users-online li a strong {
 		}
 
 		.agenda_box {
-
+			margin-bottom: 10px;
 		}
 
 		.agenda_title_box {
@@ -606,11 +606,11 @@ ul.users-online li a strong {
 
 		.agenda_subject {
 			float: left;
+			width: 120px;
 			font-family: "Fjalla One";
 			font-size: 21px;
 			color: #004adf;
 			line-height: 40px;
-			padding-left: 12px;
 		}
 
 		.agenda_goal {
@@ -619,7 +619,6 @@ ul.users-online li a strong {
 			font-size: 17px;
 			color: #fff;
 			line-height: 40px;
-			padding-left: 12px;
 		}
 
 

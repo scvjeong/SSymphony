@@ -574,4 +574,15 @@ ul.users-online li a strong {
 			font-family: "Fjalla One";
 			font-size: 21px;
 			color: #fff;
+			line-height: 40px;
+		}
+
+		#agenda_title_box {
+			width: 994px;
+			height: 40px;
+			background-color: #9cf;
+			font-family: "Fjalla One";
+			font-size: 21px;
+			color: #fff;
+			line-height: 40px;
 		}

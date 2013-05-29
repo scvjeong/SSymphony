@@ -6,7 +6,7 @@
 					<div class="result_icon">
 						<img class="result_icon_button" src="/images/meeting_result/minute.png" />
 						<img class="result_icon_button" src="/images/meeting_result/share.png" />
-						<img class="result_icon_button" src="/images/meeting_result/exit.png" />
+						<img class="result_icon_button" id="result_icon_button_exit" src="/images/meeting_result/exit.png" onClick="hideMeetingResultWindow()"/>
 					</div>
 				</div>
 			</div>
@@ -71,6 +71,7 @@
 						<!--<div id="" class=" input_chart" style="display:none;"></div> -->
 					</div>
 					<div class="agenda">
+						<div id="agenda_title_box">Agenda</div>
 						<% for(var i=0; i<result.meeting_result.length; i++) { %>
 							<div><%=result.meeting_result[i].agenda_subject%></div>
 							<div><%=result.meeting_result[i].agenda_goal%></div>

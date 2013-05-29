@@ -416,8 +416,9 @@ ul.users-online li a strong {
 }
 
 		.meeting_result_bootbox {
+			position: absolute;
 			left: 45%;
-			top: 5%;
+			top: 10%;
 			width: 1074px; 
 			padding: 0px;
 			background-color: #69c;	
@@ -606,7 +607,7 @@ ul.users-online li a strong {
 
 		.agenda_subject {
 			float: left;
-			width: 120px;
+			width: 180px;
 			font-family: "Fjalla One";
 			font-size: 21px;
 			color: #004adf;

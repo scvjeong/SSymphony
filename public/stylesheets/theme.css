@@ -584,7 +584,43 @@ ul.users-online li a strong {
 			background-color: #9cf;
 			font-family: "Fjalla One";
 			font-size: 21px;
+			color: #004adf;
+			line-height: 40px;
+			padding-left: 12px;
+		}
+
+		.agenda_box {
+
+		}
+
+		.agenda_title_box {
+			width: 994px;
+			height: 40px;
+			background-color: #9cf;
+			font-family: "Fjalla One";
+			font-size: 21px;
+			color: #004adf;
+			line-height: 40px;
+			padding-left: 12px;
+		}
+
+		.agenda_subject {
+			float: left;
+			font-family: "Fjalla One";
+			font-size: 21px;
+			color: #004adf;
+			line-height: 40px;
+			padding-left: 12px;
+		}
+
+		.agenda_goal {
+			float: left;
+			font-family: "Fjalla One";
+			font-size: 17px;
 			color: #fff;
 			line-height: 40px;
 			padding-left: 12px;
 		}
+
+
+		

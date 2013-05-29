@@ -934,8 +934,8 @@ function closePopupWindow(idx)
 }
 
 setInterval("showRunTime()", 1000);
-var _runTime = 0;
-var _totalTime = "30:00:00";	// 회의 전체 시간
+var _runTime = 1000;
+var _totalTime = "00:50:00";	// 회의 전체 시간
 var _alarmList = new Array();
 function showRunTime()
 {
@@ -954,8 +954,7 @@ function showRunTime()
 	else	tSecond = second;
 
 	var nowRunTime = tHour + ":" + tMinute + ":" + tSecond;
-
-	$('#runTime').html(nowRunTime + " / " + _totalTime);
+	$('.meeting .time').html(nowRunTime + " / " + _totalTime);
 
 	catchAlarmTime();
 	

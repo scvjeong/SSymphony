@@ -1775,6 +1775,10 @@ h6 small {
 	float:right;
 	margin-top:24px;
 }
+#topbar #top-menu a:link {text-decoration: none; color: #FFFFFF;}
+#topbar #top-menu a:visited {text-decoration: none; color: #FFFFFF;}
+#topbar #top-menu a:active {text-decoration: none; color: #FFFFFF;}
+#topbar #top-menu a:hover {text-decoration: none; color: #FFFFFF;}
 #topbar #top-menu ul{
 	list-style:none;
 	margin:0px 300px 0px 0px;

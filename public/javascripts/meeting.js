@@ -1067,6 +1067,12 @@ function showMeetingResultWindow()
 	
 }
 
+function hideMeetingResultWindow()
+{
+	alert("Exit");
+
+}
+
 
 function setupWordChart()
 {

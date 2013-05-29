@@ -566,3 +566,12 @@ ul.users-online li a strong {
 		#ft_rating {
 			float: left;
 		}
+
+		#chart_title_box {
+			width: 994px;
+			height: 40px;
+			background-color: #9cf;
+			font-family: "Fjalla One";
+			font-size: 21px;
+			color: #fff;
+		}

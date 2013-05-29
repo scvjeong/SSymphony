@@ -576,7 +576,7 @@ ul.users-online li a strong {
 			font-size: 21px;
 			color: #fff;
 			line-height: 40px;
-			text-align: center;
+			padding-left: 12px;
 		}
 
 		#agenda_title_box {
@@ -587,5 +587,5 @@ ul.users-online li a strong {
 			font-size: 21px;
 			color: #fff;
 			line-height: 40px;
-			text-align: center;
+			padding-left: 12px;
 		}

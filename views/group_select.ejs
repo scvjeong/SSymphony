@@ -82,7 +82,14 @@
 		var y = date.getFullYear();
 		var events = [
 		<% 
+			var g_idx = 0;
+			var g_name = "";
 			for(var i=0; i<result.meeting.length; i++) {
+				if( g_name !== result.meeting[i].group_name )
+				{
+					g_name = result.meeting[i].group_name;
+					g_idx++;
+				}
 				var date = new Date(result.meeting[i].date);
 				var start_date = new Date();
 				var end_Date = new Date();
@@ -100,7 +107,8 @@
 					title: '<%=result.meeting[i].subject%>',
 					start: new Date(<%=start_date.getFullYear()%>, <%=start_date.getMonth()%>, <%=start_date.getDate()%>, <%=start_date.getHours()%>, <%=start_date.getMinutes()%>, <%=start_date.getSeconds()%>),
 					end: null,
-					editable: false
+					editable: false,
+					skinClass: "back-color-<%=g_idx%>"
 				},
 		<%
 				}

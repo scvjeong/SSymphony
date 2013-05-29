@@ -21,7 +21,7 @@ exports.dao_group_select = function(evt, mysql_conn, params){
 	sql += "ON `D`.`idx_group` = `E`.`idx` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
 	sql += "GROUP BY `C`.`idx` ";
-	sql += "ORDER BY `C`.`date` DESC";
+	sql += "ORDER BY `E`.`idx` DESC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('group_select', err, rows);
 	});

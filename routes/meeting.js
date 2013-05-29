@@ -66,6 +66,7 @@ exports.meeting_result = function(req, res){
 		if(err) throw err;
 		result.meeting_result = rows;
 		complete_flag++;
+		console.log(rows);
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});

@@ -176,8 +176,8 @@ exports.setting_agenda = function(req, res){
 			res.render('setting_agenda', {result:result} );
 	});
 	
-	dao_gi.dao_group_info_member(evt, mysql_conn, params);
-	evt.on('group_info_member', function(err, rows){
+	dao_gi.dao_group_info_user(evt, mysql_conn, params);
+	evt.on('group_info_user', function(err, rows){
 		if(err) throw err;
 		complete_flag++;
 		result.users = rows;

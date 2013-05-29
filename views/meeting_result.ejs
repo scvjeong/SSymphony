@@ -20,8 +20,8 @@
 						<div class="result_subject">회의 목표 - <%= result.meeting_result[0].goal %></div>
 						<div class="result_time">
 							<img class="result_contents_button" src="/images/meeting_result/clock.png" />
-							<div id="result_time_use">02:31:00</div>
-							<div id="result_time_set">/ 2:00:00</div>	
+							<div id="result_time_use">01:00:00</div>
+							<div id="result_time_set">/ 00:50:00</div>	
 							<div id="result_time_clock">(<%= result.meeting_result[0].start_time %> - <%= result.meeting_result[0].end_time %>)</div>	
 						</div>
 						<div class="result_evaluate">
@@ -65,9 +65,10 @@
 					%>
 					</div>
 					<div class="chart">
+						<div id="chart_title_box">Chart</div>
 						<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
-						<div id="placeholder" style="width:600px;height:300px;"></div>
-						<div id="" class=" input_chart"></div>
+						<!--<div id="placeholder" style="width:600px;height:300px;"></div>
+						<div id="" class=" input_chart"></div>-->
 					</div>
 					<div class="agenda">
 						<% for(var i=0; i<result.meeting_result.length; i++) { %>

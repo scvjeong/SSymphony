@@ -111,15 +111,18 @@
 		var y = date.getFullYear();
 		var events = [
 		<% 
+			var m_idx = 0;
+			var m_name = "";
 			for(var i=0; i<result.meeting_list.length; i++) {
-			var date = new Date(result.meeting_list[i].date);
+				var date = new Date(result.meeting_list[i].date);
 		%>
-			{
-				title: '<%=result.meeting_list[i].subject%>',
-				start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
-				end: null,
-				editable: false
-			},
+				{
+					title: '<%=result.meeting_list[i].subject%>',
+					start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
+					end: null,
+					editable: false,
+					skinClass: "back-color-<%=i+1%>"
+				},
 		<%}%>
 		];
 

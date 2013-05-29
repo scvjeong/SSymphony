@@ -1069,7 +1069,7 @@ function showMeetingResultWindow()
 
 function hideMeetingResultWindow()
 {
-	alert("Exit");
+	console.log("HIDE");
 
 }
 

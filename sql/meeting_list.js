@@ -1,3 +1,21 @@
+// group_info
+// params['idx_user']
+// params['idx_group']
+exports.dao_group_info = function(evt, mysql_conn, params){
+	var sql = "SELECT  ";
+	sql += "`C`.`name` ";
+	sql += "FROM `user` AS `A` ";
+	sql += "INNER JOIN `relation_user_group` AS `B` ";
+	sql += "ON `A`.`idx` = `B`.`idx_user` ";
+	sql += "INNER JOIN `group` AS `C` ";
+	sql += "ON `B`.`idx_group` = `C`.`idx` ";
+	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
+	sql += "AND `C`.`idx` = '"+params['idx_group']+"' ";
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('group_info', err, rows);
+	});
+	return sql;
+}
 // meeting_list
 // params['idx_user']
 // params['idx_group']

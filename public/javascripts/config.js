@@ -1051,7 +1051,9 @@
 	
 	function setup_datepicker() {
 		if ($('#datepicker-js').length){
-			$('#datepicker-js').datepicker()
+			var now = new Date();
+			$('#datepicker-js').datepicker();
+			$('#datepicker-js input').val(now.format("yyyy-mm-dd"));
 		}// end if
 	}	
 	

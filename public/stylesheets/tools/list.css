@@ -53,10 +53,11 @@
 		line-height:28px;
 		margin:0px;
 		padding:0px;
-		width:100px;
+		width:100%;
 	}
 
 	.list_tool .list_space input[type=checkbox]{
+		display:none;
 		border:0px none;
 		height:26px;
 		line-height:28px;

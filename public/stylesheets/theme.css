@@ -416,6 +416,7 @@ ul.users-online li a strong {
 }
 
 		.meeting_result_bootbox {
+			position: absolute;
 			left: 45%;
 			top: 5%;
 			width: 1074px; 
@@ -584,7 +585,42 @@ ul.users-online li a strong {
 			background-color: #9cf;
 			font-family: "Fjalla One";
 			font-size: 21px;
-			color: #fff;
+			color: #004adf;
 			line-height: 40px;
 			padding-left: 12px;
 		}
+
+		.agenda_box {
+			margin-bottom: 10px;
+		}
+
+		.agenda_title_box {
+			width: 994px;
+			height: 40px;
+			background-color: #9cf;
+			font-family: "Fjalla One";
+			font-size: 21px;
+			color: #004adf;
+			line-height: 40px;
+			padding-left: 12px;
+		}
+
+		.agenda_subject {
+			float: left;
+			width: 180px;
+			font-family: "Fjalla One";
+			font-size: 21px;
+			color: #004adf;
+			line-height: 40px;
+		}
+
+		.agenda_goal {
+			float: left;
+			font-family: "Fjalla One";
+			font-size: 17px;
+			color: #fff;
+			line-height: 40px;
+		}
+
+
+		

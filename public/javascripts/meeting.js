@@ -560,8 +560,8 @@ function addTool(type, source)
 	var postit_window_height = 400;
 	var mindmap_window_width = 600;
 	var mindmap_window_height = 400;
-	var vote_window_width = 500;
-	var vote_window_height= 400;
+	var vote_window_width = 650;
+	var vote_window_height= 600;
 	var matrix_window_width = 500;
 	var matrix_window_height= 400;
 
@@ -639,7 +639,15 @@ function addTool(type, source)
 		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
-			
+			_voteid: 0,
+			_votelistnum: 0,
+			_tmpLastId: 101,
+			_tmpGroup: 0,
+			_clientId: 0,
+			_question_title: "",
+			_is_multi_vote: "",
+			_votelist: [],
+			_is_voting: false
 		};
 		break;
 	case "matrix":
@@ -827,13 +835,20 @@ function switchToolVariables(toolname)
 	}
 	else if (_pre_toolname.substr(0,4) == "vote")
 	{
-		
+		_toolWindowList[pre_tool_idx]['variables']._voteid = _voteid;
+		_toolWindowList[pre_tool_idx]['variables']._votelistnum = _votelistnum;
+		_toolWindowList[pre_tool_idx]['variables']._tmpLastId = _tmpLastId;
+		_toolWindowList[pre_tool_idx]['variables']._tmpGroup = _tmpGroup;
+		_toolWindowList[pre_tool_idx]['variables']._clientId = _clientId;
+		_toolWindowList[pre_tool_idx]['variables']._question_title = _question_title;
+		_toolWindowList[pre_tool_idx]['variables']._is_multi_vote = _is_multi_vote;
+		_toolWindowList[pre_tool_idx]['variables']._votelist = _votelist;
+		_toolWindowList[pre_tool_idx]['variables']._is_voting = _is_voting;
 	}
 	else if (_pre_toolname.substr(0,6) == "matrix")
 	{
 		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
 		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
-
 		_toolWindowList[pre_tool_idx]['variables'].setupData = setupData;
 		_toolWindowList[pre_tool_idx]['variables'].setupFlag = setupFlag;
 		_toolWindowList[pre_tool_idx]['variables'].optionId = optionId;
@@ -879,13 +894,20 @@ function switchToolVariables(toolname)
 	}
 	else if (_now_toolname.substr(0,4) == "vote")
 	{
-		
+		_voteid = _toolWindowList[now_tool_idx]['variables']._voteid;
+		_votelistnum = _toolWindowList[now_tool_idx]['variables']._votelistnum;
+		_tmpLastId = _toolWindowList[now_tool_idx]['variables']._tmpLastId;
+		_tmpGroup = _toolWindowList[now_tool_idx]['variables']._tmpGroup;
+		_cliendId = _toolWindowList[now_tool_idx]['variables']._clientId;
+		_question_title = _toolWindowList[now_tool_idx]['variables']._question_title;
+		_is_multi_vote = _toolWindowList[now_tool_idx]['variables']._is_multi_vote;
+		_votelist = _toolWindowList[now_tool_idx]['variables']._votelist;
+		_is_voting = _toolWindowList[now_tool_idx]['variables']._is_voting;
 	}
 	else if (_now_toolname.substr(0,6) == "matrix")
 	{
 		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
 		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
-
 		setupData = _toolWindowList[now_tool_idx]['variables'].setupData;
 		setupFlag = _toolWindowList[now_tool_idx]['variables'].setupFlag;
 		optionId = _toolWindowList[now_tool_idx]['variables'].optionId;

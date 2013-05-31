@@ -5,6 +5,7 @@ var mysql_conn = require('../sql/mysql_server').mysql_conn;
 var util = require('../lib/util');
 var EventEmitter = require('events').EventEmitter;
 
+var _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT = 3;
 
 exports.set_meeting_planning = function(req, res){
 	/** session start **/
@@ -16,6 +17,7 @@ exports.set_meeting_planning = function(req, res){
 	var dao_c = require('../sql/common');
 	var dao_mp = require('../sql/meeting_planning');
 	var post = util.regroup_post_for_meeting_planning(req.body);
+	var params = {idx_group:req.session.idx_group}
 	var unit_2_cnt = 0;
 	var unit_3_cnt = 0;
 	var complete_flag = 0;
@@ -35,6 +37,7 @@ exports.set_meeting_planning = function(req, res){
 			else
 			{
 				var idx_meeting = rows.insertId;
+				params.idx_meeting = idx_meeting;
 				// unit 쿼리 실행 - Insert agenda
 				for( var i=0; i<post.length; i++ )
 				{
@@ -51,8 +54,7 @@ exports.set_meeting_planning = function(req, res){
 						if( post.length == unit_2_cnt )
 						{
 							complete_flag++;
-							console.log("unit_2 complete_flag : " + complete_flag );
-							if( complete_flag == 2 )
+							if( complete_flag === _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
 							{
 								// 트랜젝션 커밋 실행
 								dao_c.dao_commit(evt, mysql_conn);
@@ -95,12 +97,10 @@ exports.set_meeting_planning = function(req, res){
 					else
 					{
 						unit_3_cnt++;
-						console.log("unit_3_cnt : " + unit_3_cnt);
 						if( unit_3_total_cnt == unit_3_cnt  )
 						{
 							complete_flag++;
-							console.log("complete_flag : " + complete_flag );
-							if( complete_flag == 2 )
+							if( complete_flag == _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
 							{
 								// 트랜젝션 커밋 실행
 								dao_c.dao_commit(evt, mysql_conn);
@@ -110,6 +110,26 @@ exports.set_meeting_planning = function(req, res){
 									res.render('ajax/set_meeting_planning', {result:"successful"} );
 								});
 							}
+						}
+					}
+				});
+
+				dao_mp.dao_set_meeting_planning_group(evt, mysql_conn, params);
+				evt.on('set_meeting_planning_group', function(err, rows){
+					if(err) 
+						dao_c.dao_rollback(evt, mysql_conn);
+					else
+					{
+						complete_flag++;
+						if( complete_flag === _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
+						{
+							// 트랜젝션 커밋 실행
+							dao_c.dao_commit(evt, mysql_conn);
+							// 트랜젝션 커밋 실행 후
+							evt.on('commit', function(err, rows){
+								if(err) throw err;
+								res.render('ajax/set_meeting_planning', {result:"successful"} );
+							});
 						}
 					}
 				});

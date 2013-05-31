@@ -28,7 +28,6 @@ exports.group_select = function(req, res){
 		if(err) throw err;
 		complete_flag++;
 		result.meeting = rows;
-		console.log(rows);
 		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
 			res.render('group_select', {result:result} );
 	});
@@ -38,7 +37,6 @@ exports.group_select = function(req, res){
 		if(err) throw err;
 		complete_flag++;
 		result.group_info = rows;
-		console.log(rows);
 		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
 			res.render('group_select', {result:result} );
 	});

@@ -1556,6 +1556,8 @@ h6 small {
 	font-family:"Fjalla One";
 	float:right;
 	padding-right:20px;
+	width:200px;
+	text-align:right;
 }
 .white-board{
 	float:left;

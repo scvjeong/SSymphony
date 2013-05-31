@@ -1035,10 +1035,26 @@
 	
 	function setup_timepicker() {
 		if ($('.timepicker-input').length) {
-			$('.timepicker-input').timepicker({
-                minuteStep: 10,
-                showMeridian: false,
-				defaultTime: false
+			$('.timepicker-input').each(function(){
+				var d_t;
+				var name = $(this).attr("name");
+				var d = new Date();
+				switch(name)
+				{
+					case "meeting_start_time":
+						d_t = (d.getHours()+1)+":00";
+						break;
+					case "meeting_end_time":
+						d_t = (d.getHours()+2)+":00";
+						break;
+					default:
+						d_t = false;
+				}
+				$(this).timepicker({
+					minuteStep: 10,
+					showMeridian: false,
+					defaultTime: d_t
+				});
             });
 		}
 	}

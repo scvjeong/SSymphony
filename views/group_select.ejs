@@ -84,29 +84,26 @@
 		<% 
 			var g_idx = 0;
 			var g_name = "";
+			var date, start_date, end_date
 			for(var i=0; i<result.meeting.length; i++) {
 				if( g_name !== result.meeting[i].group_name )
 				{
 					g_name = result.meeting[i].group_name;
 					g_idx++;
 				}
-				var date = new Date(result.meeting[i].date);
-				var start_date = new Date();
-				var end_Date = new Date();
+				date = new Date(result.meeting[i].date);
 				if( date != "Invalid Date" && result.meeting[i].start_time !=null && result.meeting[i].end_time !=null )
 				{
 					var s_t = result.meeting[i].start_time.toString().split(":");
 					var e_t = result.meeting[i].end_time.toString().split(":");
 					var time = date.getTime();
-					var start_time = time + (s_t[0]*60*60 + s_t[1]*60 + s_t[2]*1)*1000;
-					var end_time = time + (e_t[0]*60*60 + e_t[1]*60 + e_t[2]*1)*1000;
-					start_date.setTime(start_time);
-					end_Date.setTime(end_time);
+					var start_time = time + (s_t[0]*60*60 + s_t[1]*60 + s_t[2]*1)*1000 - (60*60*9*1000);
+					var end_time = time + (e_t[0]*60*60 + e_t[1]*60 + e_t[2]*1)*1000 - (60*60*9*1000);
 		%>
 				{
 					title: '<%=result.meeting[i].subject%>',
-					start: new Date(<%=start_date.getFullYear()%>, <%=start_date.getMonth()%>, <%=start_date.getDate()%>, <%=start_date.getHours()%>, <%=start_date.getMinutes()%>, <%=start_date.getSeconds()%>),
-					end: null,
+					start: new Date(<%=start_time%>),
+					end: new Date(<%=end_time%>),
 					editable: false,
 					skinClass: "back-color-<%=g_idx%>"
 				},

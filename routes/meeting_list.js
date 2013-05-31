@@ -14,6 +14,9 @@ exports.meeting_list = function(req, res){
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
 	/** session end **/
+	
+	if( req.query.group.length > 0 )
+		req.session.idx_group = req.query.group;
 
 	var evt = new EventEmitter();
 	var dao_ml = require('../sql/meeting_list');

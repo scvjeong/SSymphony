@@ -22,6 +22,15 @@ exports.dao_set_meeting_planning_users = function(evt, mysql_conn, params){
 	return sql;
 }
 
+exports.dao_set_meeting_planning_group = function(evt, mysql_conn, params){
+	var sql = "INSERT INTO `relation_group_meeting` SET `idx_group` = '"+params['idx_group']+"', `idx_meeting` = '"+params['idx_meeting']+"'";
+	console.log(sql);
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_meeting_planning_group', err, rows);
+	});
+	return sql;
+}
+
 // select_meeting_template
 // params['idx_owner']
 // params['idx_owner_type']

@@ -12,9 +12,10 @@ var _MEETING_USER_COMPLETE_FLAG_CNT = 1;
 exports.meeting_list = function(req, res){
 	var agent = req.headers['user-agent'];
 	if( agent.toString().indexOf("MSIE") > 0 )
+	{
 		res.render('no_explorer', {} );
-	else
-		exit();
+		return;
+	}
 
 	/** session start **/
 	if( !req.session.email || !req.session.email.length )

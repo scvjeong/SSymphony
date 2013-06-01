@@ -12,9 +12,10 @@ exports.main = function(req, res){
 
 	var agent = req.headers['user-agent'];
 	if( agent.toString().indexOf("MSIE") > 0 )
+	{
 		res.render('no_explorer', {} );
-	else
-		exit();
+		return;
+	}
 
 	/** session start **/
 	if( !req.session.email || !req.session.email.length )

@@ -28,9 +28,12 @@ function register_session(req, idx_user, id, first_name, last_name)
 exports.main = function(req, res){
 	var agent = req.headers['user-agent'];
 	if( agent.toString().indexOf("MSIE") > 0 )
+	{
 		res.render('no_explorer', {} );
-	else
-		res.render('main', {} );
+		return;
+	}
+	
+	res.render('main', {} );
 };
 
 exports.login = function(req, res){

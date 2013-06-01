@@ -1076,7 +1076,7 @@ function hideMeetingResultWindow()
 {
 	console.log("HIDE");
 	var bootbox_select = $('.meeting_result_bootbox');
-	bootbox_select.fadeOut();
+	bootbox_select.modal('hide');
 }
 
 

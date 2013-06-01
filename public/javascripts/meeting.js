@@ -84,11 +84,11 @@ $(document).ready(function() {
             
 	$('#uploadForm').submit(function() { 
         $(this).ajaxSubmit({                                                                                                                 
- 
+
             error: function(xhr) {
 				status('Error: ' + xhr.status);
             },
- 
+
             success: function(response) {
             	console.log(response);
             	
@@ -141,6 +141,11 @@ $(document).ready(function() {
 
 	// notice bar
 	noticeBarMoving();
+	
+	// 회의 종료 버튼
+	$("#result-btn").click(function(){
+		showMeetingResultWindow();
+	});
 });
 
 $(window).resize(function() {

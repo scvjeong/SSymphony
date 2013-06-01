@@ -142,8 +142,11 @@
 
 		function init_color_bar()
 		{
-			var h = $(".color-bar").parent().height();
-			$(".color-bar").height(h);
+			var h;
+			$(".color-bar").each(function(){
+				h = $(this).parent().height();
+				$(this).height(h);
+			});
 		}
 	</script>
 <!-- /Javascript -->

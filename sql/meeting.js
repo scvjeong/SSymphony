@@ -1,3 +1,15 @@
+// get_meeting
+// params['idx_meeting']
+exports.dao_get_meeting = function(evt, mysql_conn, params){
+	var sql = "SELECT `idx`, `reg_time` ";
+	sql += "FROM `meeting_planning` ";
+	sql += "WHERE `idx` = '"+params['idx_meeting']+"' ";
+	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
+		evt.emit('get_meeting', err, rows);
+	});
+	return sql;
+}
+
 // set_meeting_appraisal
 // params['idx_meeting']
 // params['idx_group']

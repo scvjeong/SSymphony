@@ -140,7 +140,7 @@
 						"callback": function() {
 							pmp = 0;
 							set_meeting_planning();
-							//location.href="/page/meeting";
+							location.href="/page/meeting";
 							return true;
 						}
 					},{

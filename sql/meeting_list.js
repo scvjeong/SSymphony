@@ -39,7 +39,7 @@ exports.dao_meeting_list = function(evt, mysql_conn, params){
 	sql += "AND `C`.`idx` = '"+params['idx_group']+"' ";
 	sql += "AND `E`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
 	sql += "GROUP BY `E`.`idx` ";
-	sql += "ORDER BY `E`.`date` DESC";
+	sql += "ORDER BY `E`.`date` ASC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('meeting_list', err, rows);
 	});

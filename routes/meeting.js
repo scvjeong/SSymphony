@@ -6,13 +6,31 @@ var check = require('validator').check,
 
 var _APPRAISAL_COMPLETE_FLAG_CNT = 1;
 var _RESULT_COMPLETE_FLAG_CNT = 2;
+var _MEETING_FLAG_CNT = 1;
 
 exports.main = function(req, res){
 	/** session start **/
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
 	/** session end **/
-	res.render('meeting', { title: 'Express' });
+
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	var complete_flag = 0;
+	var params = { 
+		idx_meeting:req.param("idx_meeting")
+	};
+
+	dao_m.dao_get_meeting(evt, mysql_conn, params);
+	evt.on('get_meeting', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		console.log(rows);
+		if( complete_flag === _MEETING_FLAG_CNT )
+			res.render('meeting', { title: 'Express' });
+	});
+
+	//res.render('meeting', { title: 'Express' });
 };
 
 exports.meeting_public = function(req, res){
@@ -24,7 +42,6 @@ exports.meeting_appraisal = function(req, res){
 	//if( !req.session.email || !req.session.email.length )
 	//	res.redirect("/");
 	/** session end **/
-
 	res.render('meeting_appraisal', { title: 'Express' });
 };
 

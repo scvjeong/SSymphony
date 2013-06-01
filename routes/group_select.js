@@ -8,6 +8,14 @@ var Validator = require('validator').Validator;
 var _GROUP_SELECT_COMPLETE_FLAG_CNT = 2;
 
 exports.group_select = function(req, res){
+
+	var agent = req.headers['user-agent'];
+	if( agent.toString().indexOf("MSIE") > 0 )
+	{
+		res.render('no_explorer', {} );
+		return;
+	}
+
 	/** session start **/
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");

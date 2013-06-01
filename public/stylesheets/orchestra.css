@@ -1900,7 +1900,7 @@ h6 small {
   position: fixed;
   top: 10%;
   left: 50%;
-  z-index: 1050;
+  z-index: 10050;
   width: 70%;
   margin-left: -35%;
   background-color: #ffffff;

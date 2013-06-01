@@ -422,6 +422,7 @@ ul.users-online li a strong {
 			width: 1074px; 
 			padding: 0px;
 			background-color: #69c;	
+			z-index: 10000;
 		}	
 		
 		#result_title_box {

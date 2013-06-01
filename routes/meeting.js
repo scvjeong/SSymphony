@@ -9,6 +9,13 @@ var _RESULT_COMPLETE_FLAG_CNT = 2;
 var _MEETING_FLAG_CNT = 1;
 
 exports.main = function(req, res){
+
+	var agent = req.headers['user-agent'];
+	if( agent.toString().indexOf("MSIE") > 0 )
+		res.render('no_explorer', {} );
+	else
+		exit();
+
 	/** session start **/
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");

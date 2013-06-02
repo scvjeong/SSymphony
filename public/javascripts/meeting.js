@@ -133,6 +133,7 @@ $(document).ready(function() {
 				//$('#file_list').append(newfileitem);
 				
 				$("#" + target_list + " .list").append(newfileitem);
+				console.log("Added : " + "#" + target_list + " .list");
             }
 		});
 
@@ -216,13 +217,12 @@ function openSocket()
 
 
 // 쉐어박스 아이템 추가
-var testtest;
 function addShareItem(response)
 {
 	console.log("CALL addShareItem [response:" + response + "]");
 	console.log("filename:" + response.filename);
 	response = JSON.parse(response);
-	testtest = response;
+	//testtest = response;
 	var newfileitem = "";
 	var filetypeinfo = getFileTypeInfo(response.filetype);
 	var target_list = "";

@@ -396,13 +396,29 @@ ul.users-online li a strong {
 }
 
 #window_share_box .content .section_title {
-	padding: 0 0 0 10px;
+	padding: 0 10px 0 10px;
 	font-size: 11px;
 	font-weight: bold;
 	margin: 0;
 	border-top: 1px solid #cccccc;
 	padding-top: 3px;
 	padding-bottom: 3px;
+}
+
+#window_share_box .content div .section_title .title_text {
+	float: left;
+}
+
+#window_share_box .content div .section_title .btn_show_all {
+	float: right; 
+	display: inline;
+	cursor: pointer;
+}
+
+#window_share_box .content div .section_title .btn_hide {
+	float: right;
+	display: none;
+	cursor: pointer;
 }
 /* /쉐어 박스 */
 

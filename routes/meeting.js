@@ -82,6 +82,30 @@ exports.post_meeting_appraisal = function(req, res){
 	});
 };
 
+
+exports.post_meeting_evaluation = function(req, res) {
+	var evt = new EventEmitter();
+	var dao_c = require('../sql/common');
+	var dao_m = require('../sql/meeting');
+	var params = { 
+		satisfaction:req.body.satisfaction,	 
+		ft_appraisal:req.body.ft_appraisal,
+		mvp:req.body.mvp
+	};
+	var complete_flag = 0;
+
+	dao_m.dao_set_meeting_appraisal(evt, mysql_conn, params);
+	evt.on('set_meeting_appraisal', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		if( complete_flag === _APPRAISAL_COMPLETE_FLAG_CNT ) {
+			res.redirect("/page/meeting_result");
+		}
+	});
+
+};
+
+
 exports.meeting_result = function(req, res){
 	/** session start **/
 	//if( !req.session.email || !req.session.email.length )

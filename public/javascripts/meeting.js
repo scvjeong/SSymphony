@@ -1013,31 +1013,6 @@ function transWindow(name)
 
 function showEvaluateMeetingWindow()
 {
-	/*
-	var html = "";
-		html += "<div>";
-			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
-			html += "<div>How are you satisfied with the meeting?"
-				html += "<div id=\"meeting_rating\"></div>";
-			html += "</div>";
-			html += "<div>How are you satisfied with the facilitation?";
-				html += "<div id=\"fac_rating\"></div>";
-			html += "</div>";
-			html += "<div>How are you satisfied with yourself in the meeting?";
-				html += "<div id=\"self_rating\"></div>";
-			html += "</div>";
-		html += "</div>";
-
-	console.log(html);
-
-	dialog = bootbox.dialog(html);
-	
-	var bootbox_select = $('.bootbox');
-	bootbox_select.addClass("evaluate_bootbox");
-
-	*/
-
-
 	var source_url = "/page/meeting_evaluation";
 	$.ajax({
 		type: "GET",
@@ -1062,10 +1037,6 @@ function showEvaluateMeetingWindow()
 			return false;
 		}
 	});	
-
-
-
-
 
 }
 

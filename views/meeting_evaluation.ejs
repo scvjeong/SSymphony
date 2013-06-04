@@ -1,7 +1,10 @@
 	<div class="meeting_evaluate_box">
 		<div class="container">
+			<form action="/page/meeting_appraisal" method="post">
+
 			<div id="evaluate_title_box">
 				<div class="evaluate_icon">
+					<input type="submit" value="평가 완료">
 					<img class="evaluate_icon_button" src="/images/meeting_result/exit.png" onClick="hideEvaluateWindow()"/>
 				</div>
 			</div>
@@ -19,10 +22,12 @@
 						<div id="eval_result_time_set">/ 2:00:00</div>	
 						<div id="eval_result_time_clock">(9:00 am - 11:31 am)</div>	
 					</div>
+					
 					<img class="result_contents_button" src="/images/meeting_result/badge.png" />
 					<div class="input_evaluate_meeting_box">
 						<div class="input_evaluate_title">
 							<div class="input_evaluate_subject">Meeting</div>
+							<input type="hidden" name="satisfaction" value="1">
 							<div class="input_evaluate_rating_box">
 								<div id="eval_input_meeting_rating"></div>
 								<div id="eval_input_meeting_rating_val"></div>
@@ -43,6 +48,7 @@
 					<div class="input_evaluate_ft_box">
 						<div class="input_ft_title">
 							<div class="input_evaluate_subject">Facilitating</div>
+							<input type="hidden" name="ft_appraisal" value="1">
 							<div class="input_evaluate_rating_box">
 								<div id="eval_input_ft_rating"></div>
 								<div id="eval_input_ft_rating_val"></div>
@@ -63,6 +69,7 @@
 					<div class="input_evaluate_best_box">
 						<div class="input_best_title">
 							<div class="input_evaluate_subject">Best Member</div>
+							<input type="hidden" name="mvp" value="stargt">
 							<div class="input_best_rating_box">
 								
 								<div class="text_right">Today</div>
@@ -126,5 +133,7 @@
 
 				</div>
 			</div>
+
+			</form>
 		</div>
 	</div>

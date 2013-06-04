@@ -40,6 +40,7 @@ app.get('/page/meeting_list', meeting_list.meeting_list); // 회의 선택 페�
 app.get('/page/meeting', meeting.main); // 회의 진행 페이지
 app.get('/page/meeting_public', meeting.meeting_public);
 app.get('/page/meeting_appraisal', meeting.meeting_appraisal); // 회의 평가 페이지
+app.get('/page/meeting_evaluation', meeting.meeting_evaluation); // 회의 평가 페이지
 app.get('/page/meeting_result', meeting.meeting_result); // 회의 결과 페이지
 app.get('/page/quick_meeting', quick_meeting.quick_meeting); // 빠른 회의 시작
 app.get('/page/meeting_template', meeting_planning.meeting_template); // 회의 템플릿

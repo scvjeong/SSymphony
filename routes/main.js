@@ -52,7 +52,7 @@ exports.login = function(req, res){
 		}
 		else
 		{
-			register_session(req, rows[0].idx_user, rows[0].id, rows[0].first_name, rows[0].last_name);
+			register_session(req, rows[0].idx, rows[0].id, rows[0].first_name, rows[0].last_name);
 			res.redirect("/page/group_select");
 		}
 	});

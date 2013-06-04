@@ -55,6 +55,7 @@ app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
 app.post('/page/sign_up', main.sign_up);
 app.post('/page/check_email', main.check_email);
+app.post('/page/new_group', group_select.new_group);
 app.post('/page/meeting_save', meeting.meeting_save);
 app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 

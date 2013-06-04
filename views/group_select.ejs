@@ -22,18 +22,20 @@
     </div>
 	<div id="member-info">
 		<div class="profile-pic"></div>
-		<div class="id"><%= result.group_info[0].first_name %> <%= result.group_info[0].last_name %></div>
+		<div class="id"><%= result.user_info[0].first_name %> <%= result.user_info[0].last_name %></div>
 		<div class="info-menu">
 			<ul>
-				<li>Profile</li>
-				<li>My Account</li>
-				<li>Notice</li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="#">My Account</a></li>
+				<li><a href="#">Notice</a></li>
 			</ul>
 		</div>
 		<div class="group-list-box">
 			<ul>
+				<li><span class="my-groups">My Groups</span> <a href="javascript:newGroupPopup();" class="new-group">New Group...</a></li>
 				<% 
 					for(var i=0; i<result.group_info.length; i++) {
+						console.log("jeong");
 						var user_list = result.group_info[i].user_list.split(",");
 				%>
 						<li class="group-list" idx="<%= result.group_info[i].idx %>">
@@ -58,6 +60,21 @@
 			</ul>
 		</div>
 	</div>
+	<div id="light-popup">
+		<div class="light-popup-header">
+			<span class="light-popup-title">Create Group</span>
+			<a href="javascript:newGroupPopdown();" class="light-popup-close-btn"><span class="icon-close"></span></a>
+		</div>
+		<div class="light-popup-body">
+			<form id="create-new-group-form" name="create-new-group-form" method="post">
+			<label for="group_name">Group Name</label>
+			<input id="group_name" name="group_name" type="text" placeholder="Enter Group Name">
+			<label for=" Organization">Organization</label>
+			<div class="contents">Organizations make sharing and working within a group even easier. It doesn’t look like you are a member of any organizations</div>
+			<input type="button" onclick="javascript:createNewGroup();" value="Create" class="light-popup-submit">
+			</form>
+		</div>
+	</div>
 </div>
 
 <!--============================= /Page Body ================================-->
@@ -73,7 +90,7 @@
     <script>if ($ === undefined) $ = jQuery</script>
   <!-- /jQuery -->
 	<script src="/javascripts/jquery.fullcalendar.min.js"></script>	
-
+	<script src="/javascripts/jquery.form.js"></script>
 	<script src="/javascripts/config.js"></script>	
 	<script type="text/javascript">
 		var date = new Date();
@@ -115,15 +132,63 @@
 
 		$(document).ready(function(){
 			setup_calendar();
-			init_click_group();
+			initClickGroup();
 		})
 
-		function init_click_group()
+		function initClickGroup()
 		{
 			$("#member-info .group-list-box .group-list").click(function(){
 				var idx = $(this).attr("idx");
 				location.href="/page/meeting_list?group="+idx;
 			});
+		}
+		function createNewGroup()
+		{
+			var $form = $('form[name=create-new-group-form]');
+			var Options = {
+				url: '/page/new_group',
+				type: 'POST',
+				dataType: 'json',
+				resetForm: false,
+				beforeSubmit: function(){},
+				success: function(json) {
+					var html, len;
+					if( json.result == "failed" )
+					{
+						//$(".alert-div").html("");
+						//$("."+json.target+"-alert").html(json.msg);
+						$("input[name="+json.target+"]", $form).focus();
+					}
+					else if( json.result == "successful" )
+					{
+						len = $("#member-info .group-list").length + 1;
+						html = '<li><div class="group-name group-'+len+'">'+json.group_name+'</div>';
+						html += '<div class="members"><span class="team-leader">'+json.user_name+'</span></div></li>';
+						$("#member-info .group-list-box ul").append(html);
+						newGroupPopdown();
+					}
+				}
+			};
+			$form.ajaxSubmit(Options);
+		}
+		function newGroupPopup()
+		{
+			var w = $(window).width();
+			$("#light-popup").css({
+				display:"block",
+				top:"200px",
+				left: ((w/2)-155)+"px"
+			});
+			$("#light-popup #group_name").focus();
+		}
+		function newGroupPopdown()
+		{
+			$("#light-popup").css({
+				display:"none",
+				top:"0px",
+				left:"0px"
+			});
+			$("#light-popup #group_name").val("");
 		}
 	</script>
 <!-- /Javascript -->

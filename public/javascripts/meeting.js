@@ -1034,9 +1034,38 @@ function showEvaluateMeetingWindow()
 	var bootbox_select = $('.bootbox');
 	bootbox_select.addClass("evaluate_bootbox");
 
-	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	
+
+
+	var source_url = "/page/meeting_evaluate";
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			dialog = bootbox.dialog(data);
+	
+			var bootbox_select = $('.bootbox');
+			bootbox_select.addClass("meeting_evaluate_bootbox");
+			
+			
+		//	var meeting_val = $("#meeting_val").text();
+		//	var ft_val = $("#proceeding_val").text();
+
+		//	$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
+		//	$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
+	
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});	
+
+
+
+
+
 }
 
 function showMeetingResultWindow()

@@ -1013,6 +1013,7 @@ function transWindow(name)
 
 function showEvaluateMeetingWindow()
 {
+	/*
 	var html = "";
 		html += "<div>";
 			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
@@ -1034,10 +1035,10 @@ function showEvaluateMeetingWindow()
 	var bootbox_select = $('.bootbox');
 	bootbox_select.addClass("evaluate_bootbox");
 
-	
+	*/
 
 
-	var source_url = "/page/meeting_evaluate";
+	var source_url = "/page/meeting_evaluation";
 	$.ajax({
 		type: "GET",
 		url: source_url,

@@ -638,10 +638,12 @@ ul.users-online li a strong {
 
 .meeting_evaluate_bootbox {
 	position: absolute;
-	top: 40px;
-	left: 102px;
-	width: 1074px; height: 680px;
+	left: 45%;
+	top: 5%;
+	width: 1074px; 
+	padding: 0px;
 	background-color: #69c;
+	z-index: 10000;
 }	
 
 #evaluate_title_box {

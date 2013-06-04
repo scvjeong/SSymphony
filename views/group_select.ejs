@@ -35,7 +35,6 @@
 				<li><span class="my-groups">My Groups</span> <a href="javascript:newGroupPopup();" class="new-group">New Group...</a></li>
 				<% 
 					for(var i=0; i<result.group_info.length; i++) {
-						console.log("jeong");
 						var user_list = result.group_info[i].user_list.split(",");
 				%>
 						<li class="group-list" idx="<%= result.group_info[i].idx %>">

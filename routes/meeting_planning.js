@@ -21,6 +21,7 @@ exports.set_meeting_planning = function(req, res){
 	var unit_2_cnt = 0;
 	var unit_3_cnt = 0;
 	var complete_flag = 0;
+	var unit_3_total_cnt = 1;
 
 	// 트랜젝션 실행
 	dao_c.dao_begin_work(evt, mysql_conn);
@@ -30,116 +31,106 @@ exports.set_meeting_planning = function(req, res){
 		if(err) throw err;
 		// unit 쿼리 실행 - Insert meeting_planning
 		dao_mp.dao_set_meeting_planning(evt, mysql_conn, post[0]);
-
-		evt.on('query_unit_1', function(err, rows){
-			if(err)
-				dao_c.dao_rollback(evt, mysql_conn);
-			else
+	});
+	evt.on('query_unit_1', function(err, rows){
+		console.log("query_unit_1");
+		if(err)
+			dao_c.dao_rollback(evt, mysql_conn);
+		else
+		{
+			var idx_meeting = rows.insertId;
+			params.idx_meeting = idx_meeting;
+			// unit 쿼리 실행 - Insert agenda
+			for( var i=0; i<post.length; i++ )
 			{
-				var idx_meeting = rows.insertId;
-				params.idx_meeting = idx_meeting;
-				// unit 쿼리 실행 - Insert agenda
-				for( var i=0; i<post.length; i++ )
-				{
-					// set order 
-					post[i]['order'] = (i+1);
-					dao_mp.dao_set_meeting_planning_agenda(evt, mysql_conn, post[i]);
-				}
-				evt.on('query_unit_2', function(err, rows){
-					if(err) 
-						dao_c.dao_rollback(evt, mysql_conn);
-					else
-					{
-						unit_2_cnt++;
-						if( post.length == unit_2_cnt )
-						{
-							complete_flag++;
-							if( complete_flag === _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
-							{
-								// 트랜젝션 커밋 실행
-								dao_c.dao_commit(evt, mysql_conn);
-								// 트랜젝션 커밋 실행 후
-								evt.on('commit', function(err, rows){
-									if(err) throw err;
-									res.render('ajax/set_meeting_planning', {result:"successful"} );
-								});
-							}
-						}
-					}
-				});
-
-				// unit_3 쿼리 실행 - Insert relation_user_meeting
-				var unit_3_total_cnt = 1;
-				var users = new Array;
-				users[0] = { user:req.session.idx_user, idx_meeting:idx_meeting };
-
-				if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "string" )
-				{
-					unit_3_total_cnt += 1;
-					users[1] = { user:post[0].users, idx_meeting:idx_meeting };
-					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users);
-				}
-				else if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "object" )
-				{
-					unit_3_total_cnt += post[0].users.length;
-					for( var i=0; i<unit_3_total_cnt; i++ )
-					{
-						users[i+1] = { user:post[0].users[i], idx_meeting:idx_meeting };
-						dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[i]);
-					}
-				}
-				else
-					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[0]);
-
-				evt.on('query_unit_3', function(err, rows){
-					if(err) 
-						dao_c.dao_rollback(evt, mysql_conn);
-					else
-					{
-						unit_3_cnt++;
-						if( unit_3_total_cnt == unit_3_cnt  )
-						{
-							complete_flag++;
-							if( complete_flag == _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
-							{
-								// 트랜젝션 커밋 실행
-								dao_c.dao_commit(evt, mysql_conn);
-								// 트랜젝션 커밋 실행 후
-								evt.on('commit', function(err, rows){
-									if(err) throw err;
-									res.render('ajax/set_meeting_planning', {result:"successful"} );
-								});
-							}
-						}
-					}
-				});
-
-				dao_mp.dao_set_meeting_planning_group(evt, mysql_conn, params);
-				evt.on('set_meeting_planning_group', function(err, rows){
-					if(err) 
-						dao_c.dao_rollback(evt, mysql_conn);
-					else
-					{
-						complete_flag++;
-						if( complete_flag === _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
-						{
-							// 트랜젝션 커밋 실행
-							dao_c.dao_commit(evt, mysql_conn);
-							// 트랜젝션 커밋 실행 후
-							evt.on('commit', function(err, rows){
-								if(err) throw err;
-								res.render('ajax/set_meeting_planning', {result:"successful"} );
-							});
-						}
-					}
-				});
+				// set order 
+				post[i]['order'] = (i+1);
+				dao_mp.dao_set_meeting_planning_agenda(evt, mysql_conn, post[i]);
 			}
-		});
 
-		evt.on('rollback', function(err, rows){
-			if(err) throw err;
-			res.render('ajax/set_meeting_planning', {result:"failed"} );
-		});
+			// unit_3 쿼리 실행 - Insert relation_user_meeting
+			var users = new Array;
+			users[0] = { user:req.session.idx_user, idx_meeting:idx_meeting };
+
+			if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "string" )
+			{
+				unit_3_total_cnt += 1;
+				users[1] = { user:post[0].users, idx_meeting:idx_meeting };
+				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users);
+			}
+			else if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "object" )
+			{
+				unit_3_total_cnt += post[0].users.length;
+				for( var i=0; i<unit_3_total_cnt; i++ )
+				{
+					users[i+1] = { user:post[0].users[i], idx_meeting:idx_meeting };
+					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[i]);
+				}
+			}
+			else
+				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[0]);
+
+			dao_mp.dao_set_meeting_planning_group(evt, mysql_conn, params);
+		}
+	});
+	evt.on('query_unit_3', function(err, rows){
+		console.log("query_unit_3");
+		if(err) 
+			dao_c.dao_rollback(evt, mysql_conn);
+		else
+		{
+			unit_3_cnt++;
+			if( unit_3_total_cnt == unit_3_cnt  )
+			{
+				complete_flag++;
+				if( complete_flag == _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
+				{
+					// 트랜젝션 커밋 실행
+					dao_c.dao_commit(evt, mysql_conn);
+				}
+			}
+		}
+	});
+	evt.on('query_unit_2', function(err, rows){
+		console.log("query_unit_2");
+		if(err) 
+			dao_c.dao_rollback(evt, mysql_conn);
+		else
+		{
+			unit_2_cnt++;
+			if( post.length == unit_2_cnt )
+			{
+				complete_flag++;
+				if( complete_flag === _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
+				{
+					// 트랜젝션 커밋 실행
+					dao_c.dao_commit(evt, mysql_conn);
+				}
+			}
+		}
+	});
+	evt.on('set_meeting_planning_group', function(err, rows){
+		console.log("set_meeting_planning_group");
+		if(err) 
+			dao_c.dao_rollback(evt, mysql_conn);
+		else
+		{
+			complete_flag++;
+			if( complete_flag === _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT )
+			{
+				// 트랜젝션 커밋 실행
+				dao_c.dao_commit(evt, mysql_conn);
+			}
+		}
+	});
+	// 트랜젝션 커밋 실행 후
+	evt.on('commit', function(err, rows){
+		if(err) throw err;
+		res.render('ajax/set_meeting_planning', {result:"successful"} );
+	});
+	evt.on('rollback', function(err, rows){
+		if(err) throw err;
+		res.render('ajax/set_meeting_planning', {result:"failed"} );
 	});
 };
 

@@ -7,7 +7,7 @@ exports.dao_set_meeting_planning = function(evt, mysql_conn, params){
 }
 
 exports.dao_set_meeting_planning_agenda = function(evt, mysql_conn, params){
-	var sql = "INSERT INTO `agenda` SET `subject` = '"+params['subject']+"', `goal` = '"+params['goal']+"', `start_time` = '"+params['start_time']+"', `end_time` = '"+params['end_time']+"', `order` = '"+params['order']+"'";
+	var sql = "INSERT INTO `agenda` SET `subject` = '"+params['subject']+"', `goal` = '"+params['goal']+"', `start_time` = '"+params['start_time']+"', `end_time` = '"+params['end_time']+"', `order` = '"+params['order']+"', idx_meeting_planning='"+params['idx_meeting']+"'";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('query_unit_2', err, rows);
 	});
@@ -24,7 +24,6 @@ exports.dao_set_meeting_planning_users = function(evt, mysql_conn, params){
 
 exports.dao_set_meeting_planning_group = function(evt, mysql_conn, params){
 	var sql = "INSERT INTO `relation_group_meeting` SET `idx_group` = '"+params['idx_group']+"', `idx_meeting` = '"+params['idx_meeting']+"'";
-	console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('set_meeting_planning_group', err, rows);
 	});

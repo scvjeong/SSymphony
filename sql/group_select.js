@@ -1,3 +1,43 @@
+// check_group_name
+// params['group_name']
+exports.dao_check_group_name = function(evt, mysql_conn, params){
+	// group
+	var sql = "SELECT	COUNT(*) AS `cnt` ";
+	sql += "FROM `group` AS `A` ";
+	sql += "WHERE `A`.`name` = '"+params['group_name']+"' ";
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('check_group_name', err, rows);
+	});
+	return sql;
+}
+
+// new_group
+// params['group_name']
+exports.dao_new_group = function(evt, mysql_conn, params){
+	// group
+	var sql = "INSERT INTO `group` ";
+	sql += "SET `name` = '"+params['group_name']+"'";
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('new_group', err, rows);
+	});
+	return sql;
+}
+
+// set_relation_user_group
+// params['idx_group']
+// params['idx_user']
+exports.dao_set_relation_user_group = function(evt, mysql_conn, params){
+	// group
+	var sql = "INSERT INTO `relation_user_group` ";
+	sql += "SET `idx_user` = '"+params['idx_user']+"', ";
+	sql += "`idx_group` = '"+params['idx_group']+"' ";
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_relation_user_group', err, rows);
+	});
+	return sql;
+}
+
 // group_select
 // params['idx_user']
 exports.dao_group_select = function(evt, mysql_conn, params){
@@ -10,16 +50,17 @@ exports.dao_group_select = function(evt, mysql_conn, params){
 	sql += "`C`.`end_time`, ";
 	sql += "`E`.`name` AS `group_name` ";
 	sql += "FROM `user` AS `A` ";
-	sql += "LEFT OUTER JOIN `relation_user_meeting` AS `B` ";
+	sql += "INNER JOIN `relation_user_meeting` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_user` ";
-	sql += "LEFT OUTER JOIN `meeting_planning` AS `C` ";
+	sql += "INNER JOIN `meeting_planning` AS `C` ";
 	sql += "ON `B`.`idx_meeting` = `C`.`idx` ";
 	sql += "AND `C`.`idx_owner_type` = 'user' ";
-	sql += "LEFT OUTER JOIN `relation_group_meeting` AS `D` ";
+	sql += "INNER JOIN `relation_group_meeting` AS `D` ";
 	sql += "ON `C`.`idx` = `D`.`idx_meeting` ";
-	sql += "LEFT OUTER JOIN `group` AS `E` ";
+	sql += "INNER JOIN `group` AS `E` ";
 	sql += "ON `D`.`idx_group` = `E`.`idx` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
+	sql += "AND `C`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
 	sql += "GROUP BY `C`.`idx` ";
 	sql += "ORDER BY `E`.`idx` DESC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
@@ -39,13 +80,13 @@ exports.dao_group_info = function(evt, mysql_conn, params){
 	sql += "`C`.`name` AS `group_name`, ";
 	sql += "GROUP_CONCAT( DISTINCT CONCAT(`E`.`first_name`,  ' ',  `E`.`last_name`) ORDER BY `E`.`first_name` ASC SEPARATOR ',') AS `user_list` ";
 	sql += "FROM `user` AS `A` ";
-	sql += "LEFT OUTER JOIN `relation_user_group` AS `B` ";
+	sql += "INNER JOIN `relation_user_group` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_user` ";
-	sql += "LEFT OUTER JOIN `group` AS `C` ";
+	sql += "INNER JOIN `group` AS `C` ";
 	sql += "ON `B`.`idx_group` = `C`.`idx` ";
-	sql += "LEFT OUTER JOIN `relation_user_group` AS `D` ";
+	sql += "INNER JOIN `relation_user_group` AS `D` ";
 	sql += "ON `D`.`idx_group` = `C`.`idx` ";
-	sql += "LEFT OUTER JOIN `user` AS `E` ";
+	sql += "INNER JOIN `user` AS `E` ";
 	sql += "ON `D`.`idx_user` = `E`.`idx` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
 	sql += "GROUP BY `C`.`idx` ";

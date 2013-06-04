@@ -30,7 +30,7 @@ exports.meeting_list = function(req, res){
 
 	// params['idx_user']
 	// params['idx_group']
-	var params = { idx_user:1, idx_group:1 }
+	var params = { idx_user:req.session.idx_user, idx_group:req.session.idx_group }
 	var result = { group_info:{}, meeting_list:{}, meeting_user:{} };
 	var meeting_list_complete_flag = 0;
 	var group_info_complete_flag = 0;
@@ -38,7 +38,7 @@ exports.meeting_list = function(req, res){
 	var s_d = new Date();
 	var e_d = new Date();
 	e_d.setMonth(e_d.getMonth()+1);
-	params['start_date'] = s_d.getFullYear() + "-" + (s_d.getMonth()+1) + "-00";
+	params['start_date'] = s_d.getFullYear() + "-" + (s_d.getMonth()) + "-00";
 	params['end_date'] = e_d.getFullYear() + "-" + (e_d.getMonth()+1) + "-00";
 	
 	dao_ml.dao_group_info(evt, mysql_conn, params);

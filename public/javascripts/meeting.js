@@ -133,6 +133,7 @@ $(document).ready(function() {
 				//$('#file_list').append(newfileitem);
 				
 				$("#" + target_list + " .list").append(newfileitem);
+				console.log("Added : " + "#" + target_list + " .list");
             }
 		});
 
@@ -216,13 +217,12 @@ function openSocket()
 
 
 // 쉐어박스 아이템 추가
-var testtest;
 function addShareItem(response)
 {
 	console.log("CALL addShareItem [response:" + response + "]");
 	console.log("filename:" + response.filename);
 	response = JSON.parse(response);
-	testtest = response;
+	//testtest = response;
 	var newfileitem = "";
 	var filetypeinfo = getFileTypeInfo(response.filetype);
 	var target_list = "";
@@ -1013,6 +1013,7 @@ function transWindow(name)
 
 function showEvaluateMeetingWindow()
 {
+	/*
 	var html = "";
 		html += "<div>";
 			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
@@ -1034,9 +1035,38 @@ function showEvaluateMeetingWindow()
 	var bootbox_select = $('.bootbox');
 	bootbox_select.addClass("evaluate_bootbox");
 
-	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+	*/
+
+
+	var source_url = "/page/meeting_evaluation";
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			dialog = bootbox.dialog(data);
+	
+			var bootbox_select = $('.bootbox');
+			bootbox_select.addClass("meeting_evaluate_bootbox");
+			
+			
+		//	var meeting_val = $("#meeting_val").text();
+		//	var ft_val = $("#proceeding_val").text();
+
+			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
+			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
+	
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});	
+
+
+
+
+
 }
 
 function showMeetingResultWindow()
@@ -1074,9 +1104,15 @@ function showMeetingResultWindow()
 
 function hideMeetingResultWindow()
 {
-	console.log("HIDE");
 	var bootbox_select = $('.meeting_result_bootbox');
-	bootbox_select.fadeOut();
+	bootbox_select.modal('hide');
+}
+
+
+function hideEvaluateWindow()
+{
+	var bootbox_select = $('.meeting_evaluate_bootbox');
+	bootbox_select.modal('hide');
 }
 
 

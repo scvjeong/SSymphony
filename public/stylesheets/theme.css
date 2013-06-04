@@ -553,13 +553,11 @@ ul.users-online li a strong {
 #meeting_val {
 	float: left;
 	margin-left: 20px;
-
 }
 
 #proceeding_val {
 	float: left;
 	margin-left: 20px;
-
 }
 
 #best_member_val {
@@ -572,10 +570,12 @@ ul.users-online li a strong {
 
 #meeting_rating {
 	float: left;
+	margin-left: 10px;
 }
 
 #ft_rating {
 	float: left;
+	margin-left: 10px;
 }
 
 #chart_title_box {
@@ -914,7 +914,25 @@ ul.users-online li a strong {
 .pre_rating_result {
 	margin-top: 1px;
 	height: 30px;
-
 }
+
+#eval_input_meeting_rating {
+	float: left;
+	margin-left: 10px;
+}
+
+#eval_input_ft_rating {
+	float: left;
+	margin-left: 10px;
+}
+
+#eval_input_meeting_rating_val {
+	float: left;
+}
+
+#eval_input_ft_rating_val {
+	float: left;
+}
+
 
 /* /회의 평가 부트박스 */

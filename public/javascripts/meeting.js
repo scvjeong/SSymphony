@@ -1053,8 +1053,8 @@ function showEvaluateMeetingWindow()
 		//	var meeting_val = $("#meeting_val").text();
 		//	var ft_val = $("#proceeding_val").text();
 
-		//	$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
-		//	$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
+			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
+			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
 	
 		},
 		error: function(err) {
@@ -1104,8 +1104,14 @@ function showMeetingResultWindow()
 
 function hideMeetingResultWindow()
 {
-	console.log("HIDE");
 	var bootbox_select = $('.meeting_result_bootbox');
+	bootbox_select.modal('hide');
+}
+
+
+function hideEvaluateWindow()
+{
+	var bootbox_select = $('.meeting_evaluate_bootbox');
 	bootbox_select.modal('hide');
 }
 

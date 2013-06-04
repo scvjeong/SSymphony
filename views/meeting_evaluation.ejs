@@ -2,7 +2,7 @@
 		<div class="container">
 			<div id="evaluate_title_box">
 				<div class="evaluate_icon">
-					<img class="evaluate_icon_button" src="/images/meeting_result/exit.png" />
+					<img class="evaluate_icon_button" src="/images/meeting_result/exit.png" onClick="hideEvaluateWindow()"/>
 				</div>
 			</div>
 			<div id="evaluate_contents_box">
@@ -24,7 +24,8 @@
 						<div class="input_evaluate_title">
 							<div class="input_evaluate_subject">Meeting</div>
 							<div class="input_evaluate_rating_box">
-
+								<div id="eval_input_meeting_rating"></div>
+								<div id="eval_input_meeting_rating_val"></div>
 								<div class="text_right">Today</div>
 							</div>
 						</div>
@@ -43,7 +44,8 @@
 						<div class="input_ft_title">
 							<div class="input_evaluate_subject">Facilitating</div>
 							<div class="input_evaluate_rating_box">
-
+								<div id="eval_input_ft_rating"></div>
+								<div id="eval_input_ft_rating_val"></div>
 								<div class="text_right">Today</div>
 							</div>
 						</div>

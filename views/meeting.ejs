@@ -94,6 +94,7 @@
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxexpander.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxrating.js"></script>
+<!--<script type="text/javascript" src="../javascripts/jqwidgets/jqxcolorpicker.js"></script>-->
 <script src="../javascripts/socket.io.js"></script>
 <!-- /공통 스크립트 -->
   
@@ -141,37 +142,64 @@
 			<div class="navbar navbar-fixed-top" style="margin-top:52px">
 				<div class="navbar-inner">
 					<ul class="nav">
-						<li id="btn_show_share_box" class="active" style="margin-left: 10px"><a><img src="/images/whiteboard/btn_share_box.png" width="24" height="24" /></a></li>
+						<li id="btn_show_share_box" style="margin-left: 10px"><a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Share Box"><img src="/images/whiteboard/btn_share_box.png" width="24" height="24" /></a></li>
 						<li class="divider-vertical"></li>
-						<li id="btn_drawtool_pen" class="active"><a><img src="/images/whiteboard/btn_drawtool_pen.png" width="24" height="24" /></a></li>
-						<li id="btn_drawtool_rect"><a><img src="/images/whiteboard/btn_drawtool_rect.png" width="24" height="24" /></i></a></li>
-						<li id="btn_drawtool_ellipse"><a><img src="/images/whiteboard/btn_drawtool_ellipse.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_pen" class="active"><a onclick="switchDrawingTool('pen')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Pen"><img src="/images/whiteboard/btn_drawtool_pen.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_rect"><a onclick="switchDrawingTool('rect')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Rectangle"><img src="/images/whiteboard/btn_drawtool_rect.png" width="24" height="24" /></i></a></li>
+						<li id="btn_drawtool_ellipse"><a onclick="switchDrawingTool('ellipse')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Ellipse"><img src="/images/whiteboard/btn_drawtool_ellipse.png" width="24" height="24" /></a></li>
 						<li class="divider-vertical"></li>
+
+						<li class="dropdown">
+						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						    Fill Color <span id="fillcolor_preview" style=" display:inline-block; width:16px; height:16px; vertical-align:middle; border:1px solid #aaaaaa"></span>
+						    <b class="caret"></b>
+						    </a>
+						    <ul class="dropdown-menu">
+						    	<li onclick="changeFillColor('#000000')" style="background-color: #000000"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#ff0000')" style="background-color: #ff0000"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#0000ff')" style="background-color: #0000ff"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#00ff00')" style="background-color: #00ff00"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#f0f000')" style="background-color: #f0f000"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#0f0fa0')" style="background-color: #0f0fa0"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#00f0f0')" style="background-color: #00f0f0"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#ffffff')" style="background-color: #ffffff"><a style="height:20px"></a></li>
+						    </ul>
+					  	</li>
+
+					  	<li class="dropdown">
+						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						    Line Color <span id="linecolor_preview" style=" display:inline-block; width:16px; height:16px; vertical-align:middle; border:1px solid #aaaaaa"></span>
+						    <b class="caret"></b>
+						    </a>
+						    <ul class="dropdown-menu">
+						    	<li onclick="changeLineColor('#000000')" style="background-color: #000000"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#ff0000')" style="background-color: #ff0000"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#0000ff')" style="background-color: #0000ff"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#00ff00')" style="background-color: #00ff00"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#f0f000')" style="background-color: #f0f000"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#0f0fa0')" style="background-color: #0f0fa0"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#00f0f0')" style="background-color: #00f0f0"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#ffffff')" style="background-color: #ffffff"><a style="height:20px"></a></li>
+						    </ul>
+					  	</li>
+
+						<div class="notice-bar">
+							<ul>
+								<li class="list">오프닝</li>
+								<li class="list">의사결정</li>
+								<li class="list">갈등해결</li>
+								<li>오프닝</li>
+							</ul>
+						</div>
 					</ul>
 				</div>
 			</div>
 			<div id="whiteboard_control_box">
 				<div id="color_selector">
-					<ul id="color_list" style="display:inline">
-						<li onclick="changePenColor('#000000')" style="background-color: #000000"></li>
-						<li onclick="changePenColor('#ff0000')" style="background-color: #ff0000"></li>
-						<li onclick="changePenColor('#0000ff')" style="background-color: #0000ff"></li>
-						<li onclick="changePenColor('#00ff00')" style="background-color: #00ff00"></li>
-						<li onclick="changePenColor('#f0f000')" style="background-color: #f0f000"></li>
-						<li onclick="changePenColor('#0f0f00')" style="background-color: #0f0f00"></li>
-						<li onclick="changePenColor('#00f0f0')" style="background-color: #00f0f0"></li>
-						<li onclick="changePenColor('#ffffff')" style="background-color: #ffffff"></li>
+ 					<ul id="color_list" style="display:inline">
+						
 					</ul>
 				</div>
-			</div>
-
-			<div class="notice-bar">
-				<ul>
-					<li class="list">오프닝</li>
-					<li class="list">의사결정</li>
-					<li class="list">갈등해결</li>
-					<li>오프닝</li>
-				</ul>
 			</div>
 			
 			<!-- /Whiteboard control box -->

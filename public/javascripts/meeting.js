@@ -7,7 +7,7 @@ var _tool_matrix_count = 0;
 var _common_window_top = 50;
 var _common_window_left = 20;
 var _new_z_index = 0;
-var _drawtool = 'pen';
+//var _drawtool = 'pen';
 var _group_id = 1;
 var _is_rightpanel_open = true;
 var _window_width = 0;
@@ -53,6 +53,12 @@ $(document).ready(function() {
 	});
 
 	// 화이트보드 초기화
+	$("[data-toggle='tooltip']").tooltip();
+
+	changeFillColor('#000000');
+	changeLineColor('#000000');
+	//$("#colorPicker").jqxColorPicker({ color: "ffaabb", colorMode: 'hue', width: 220, height: 200, theme: null });
+
 	$("#white-board #btn_drawtool_pen").tooltip('show');
 	//$('#white-board #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 	$('#white-board #btn_drawtool_pen').click(function() {
@@ -153,6 +159,7 @@ $(document).ready(function() {
 $(window).resize(function() {
 	resetSizeInfo();
 	resizeWhiteBoardControlBox();
+	resizeWhiteBoardCanvas();
 });
 
 // 소켓 열기
@@ -281,6 +288,17 @@ function resizeWhiteBoardControlBox()
 	}
 }
 
+function resizeWhiteBoardCanvas()
+{
+	var width = $(document).width();
+	var height = $(document).height() - 52;
+
+	$('#white-board').width(width);
+	$('#white-board').height(height);
+	$('#cv_whiteboard').width(width);
+	$('#cv_whiteboard').height(height);
+}
+
 function getFileTypeInfo(filetype)
 {
 	var result = {};
@@ -308,11 +326,22 @@ function getFileTypeInfo(filetype)
 	return result;
 }
 
+var _is_share_box_open = false;
 var share_box = ( function() {
 		function _addEventListeners() {
-			$('#whiteboard_control_box #btn_show_share_box').click(function() {
-				$('#window_share_box').jqxWindow('open');
-				console.log("open share_box");
+			$('#btn_show_share_box').click(function() {
+				if (_is_share_box_open == false)
+				{
+					$('#window_share_box').jqxWindow('open');
+					$('#white-board .navbar .nav #btn_show_share_box').addClass('active');
+					_is_share_box_open = true;
+				}
+				else
+				{
+					$('#window_share_box').css('display', 'none');
+					$('#white-board .navbar .nav #btn_show_share_box').removeClass('active');
+					_is_share_box_open = false;
+				}
 			});
 		};
 		function _createElements() {
@@ -335,7 +364,14 @@ var share_box = ( function() {
 						width : '100%',
 						theme : share_box.config.theme
 					});
+
 					$('#window_share_box').jqxWindow('focus');
+
+					$('#window_share_box .jqx-window-close-button').click(function() {
+						_is_share_box_open = false;
+						$('#white-board .navbar .nav #btn_show_share_box').removeClass('active');
+						console.log("closed");
+					});
 				}
 			});
 		};
@@ -1164,16 +1200,34 @@ function setupUserListChart()
 }
 
 
+var _fill_color = "#000000";
+var _line_color = "#000000";
+var _drawing_tool = "pen";
+
 // 선 색상 변경
-function changeStrokeColor(color)
+function changeLineColor(color)
 {
-	
+	_line_color = color;
+	$('#linecolor_preview').css('background-color', color);
 }
 
 // 채우기 색상 변경
 function changeFillColor(color)
 {
-	
+	_fill_color = color;
+	$('#fillcolor_preview').css('background-color', color);
+}
+
+// 도구 선택
+function switchDrawingTool(tool)
+{
+	_drawing_tool = tool;
+
+	$('#white-board .navbar .nav #btn_drawtool_pen').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_rect').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_ellipse').removeClass('active');
+
+	$('#white-board .navbar .nav #btn_drawtool_' + _drawing_tool).addClass('active');
 }
 
 /*

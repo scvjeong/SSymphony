@@ -21,7 +21,7 @@ text.node {
 	width: 30%;
 	max-width: 200px;
 	max-height: 590px;
-	height: 80%;
+	height: 85%;
 	border: 1px solid #999999;
 	z-index: 2;
 	cursor: text;
@@ -39,8 +39,8 @@ text.node {
 }
 
 svg {
-	width: 95%;
-	height: 95%;
+	width: 70%;
+	height: 70%;
 	margin-top: 1px;
 	margin-left: 1px;
 	max-width: 900px;

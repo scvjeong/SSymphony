@@ -725,9 +725,9 @@ function mindmap_draw_mindmap() {
 		.size([width, height]);
 
 	var svg = d3.select("svg")
-		.attr("id", "svg")
-		.attr("width", width)
-		.attr("height", height);
+		.attr("id", "svg");
+		//.attr("width", width)
+		//.attr("height", height);
 
 	force
 		.nodes(dataNodes)

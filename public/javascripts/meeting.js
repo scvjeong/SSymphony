@@ -977,12 +977,10 @@ function closePopupWindow(idx)
 	$('#popup' + idx).fadeOut('slow');
 }
 
-<<<<<<< HEAD
-setInterval("showRunTime()", 1000);
+<!--setInterval("showRunTime()", 1000);
 var _runTime = 1000;
-var _totalTime = "00:50:00";	// 회의 전체 시간
-=======
->>>>>>> scvjeong
+var _totalTime = "00:50:00";	// 회의 전체 시간-->
+
 var _alarmList = new Array();
 function showRunTime()
 {
@@ -1001,10 +999,7 @@ function showRunTime()
 	else	tSecond = second;
 
 	var nowRunTime = tHour + ":" + tMinute + ":" + tSecond;
-<<<<<<< HEAD
-=======
 
->>>>>>> scvjeong
 	$('.meeting .time').html(nowRunTime + " / " + _totalTime);
 
 	catchAlarmTime();

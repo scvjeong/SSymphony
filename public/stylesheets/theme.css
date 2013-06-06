@@ -432,7 +432,6 @@ ul.users-online li a strong {
 
 /* /회의 결과 부트박스 */
 .meeting_result_bootbox {
-<<<<<<< HEAD
 	position: absolute;
 	left: 45%;
 	top: 5%;
@@ -645,15 +644,11 @@ ul.users-online li a strong {
 /* /회의 평가 부트박스 */
 
 .meeting_evaluate_bootbox {
-=======
->>>>>>> scvjeong
 	position: absolute;
 	left: 45%;
 	top: 5%;
 	width: 1074px; 
 	padding: 0px;
-<<<<<<< HEAD
-=======
 	background-color: #69c;	
 	z-index: 10000;
 }	
@@ -661,7 +656,6 @@ ul.users-online li a strong {
 #result_title_box {
 	width: 1074px;
 	height: 50px;
->>>>>>> scvjeong
 	background-color: #69c;
 	z-index: 10000;
 }	
@@ -688,8 +682,6 @@ ul.users-online li a strong {
 	color: #039;
 }
 
-<<<<<<< HEAD
-=======
 #result_contents_box {
 	width: 1074px;
 	margin: 0px;
@@ -918,7 +910,6 @@ ul.users-online li a strong {
 	color: #039;
 }
 
->>>>>>> scvjeong
 #eval_result_time_set {
 	margin-top: 1px;
 	margin-right: 10px;

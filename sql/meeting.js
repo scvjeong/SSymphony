@@ -1,13 +1,9 @@
 // get_meeting
 // params['idx_meeting']
 exports.dao_get_meeting = function(evt, mysql_conn, params){
-<<<<<<< HEAD
-	var sql = "SELECT `idx`, `reg_time` ";
-=======
 	var sql = "SELECT `idx`, `reg_time`, ";
 	sql += "`start_time`, ";
 	sql += "`end_time` ";
->>>>>>> scvjeong
 	sql += "FROM `meeting_planning` ";
 	sql += "WHERE `idx` = '"+params['idx_meeting']+"' ";
 	var query = mysql_conn.query(sql, params, function(err, rows, fields) {

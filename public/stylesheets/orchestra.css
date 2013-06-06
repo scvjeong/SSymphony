@@ -1734,7 +1734,6 @@ h6 small {
 #member-info .group-list-box li.group-list{
 	cursor:pointer;
 	padding:5px 0px;
-<<<<<<< HEAD
 }
 #member-info .info-menu a:link {text-decoration: none; color: #999999;}
 #member-info .info-menu a:visited {text-decoration: none; color: #999999;}
@@ -1759,32 +1758,6 @@ h6 small {
 	text-decoration: none; color: #111111;
 	background: url(/images/new_group_hover.png) no-repeat 0px 5px;
 }
-=======
-}
-#member-info .info-menu a:link {text-decoration: none; color: #999999;}
-#member-info .info-menu a:visited {text-decoration: none; color: #999999;}
-#member-info .info-menu a:active {text-decoration: none; color: #999999;}
-#member-info .info-menu a:hover {text-decoration: none; color: #111111;}
-
-#member-info .my-groups{
-	font-family: "Roboto";
-	color: #111111;
-}
-#member-info .new-group{
-	font-family: "Roboto";
-	margin-left:5px;
-	font-size:0.8em;
-	padding-left:22px;
-	background: url(/images/new_group.png) no-repeat 0px 5px;
-}
-#member-info .new-group:link {text-decoration: none; color: #999999;}
-#member-info .new-group:visited {text-decoration: none; color: #999999;}
-#member-info .new-group:active {text-decoration: none; color: #999999;}
-#member-info .new-group:hover {
-	text-decoration: none; color: #111111;
-	background: url(/images/new_group_hover.png) no-repeat 0px 5px;
-}
->>>>>>> scvjeong
 
 #member-info .team-leader{
 	font-family:"Roboto";

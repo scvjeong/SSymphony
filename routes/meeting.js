@@ -17,9 +17,6 @@ exports.main = function(req, res){
 		return;
 	}
 
-<<<<<<< HEAD
-	/** session start **/
-=======
 	/** session start 
 >>>>>>> scvjeong
 	if( !req.session.email || !req.session.email.length )
@@ -32,29 +29,23 @@ exports.main = function(req, res){
 	var params = { 
 		idx_meeting:req.param("idx_meeting")
 	};
-<<<<<<< HEAD
-=======
 	var result = { meeting:{} };
->>>>>>> scvjeong
 
 	dao_m.dao_get_meeting(evt, mysql_conn, params);
 	evt.on('get_meeting', function(err, rows){
 		if(err) throw err;
 		complete_flag++;
-<<<<<<< HEAD
 		console.log(rows);
 		if( complete_flag === _MEETING_FLAG_CNT )
 			res.render('meeting', { title: 'Express' });
 	});
 
 	//res.render('meeting', { title: 'Express' });
-=======
 		result.meeting = rows;
 		console.log(result);
 		if( complete_flag === _MEETING_FLAG_CNT )
 			res.render('meeting', { result:result });
 	});
->>>>>>> scvjeong
 };
 
 exports.meeting_public = function(req, res){

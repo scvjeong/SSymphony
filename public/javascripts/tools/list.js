@@ -118,6 +118,7 @@ function addSocketListenerForList()
 		lastInput.attr('class', 'input_open');
 		tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
 
+		var css_select = $('.tmp_editing').css({"margin-left": "10px"});
 	});
 
 	////  lastId 얻어오는 함수  ////

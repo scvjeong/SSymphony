@@ -939,19 +939,16 @@ function closePopupWindow(idx)
 	$('#popup' + idx).fadeOut('slow');
 }
 
-setInterval("showRunTime()", 1000);
-var _runTime = 1000;
-var _totalTime = "00:50:00";	// 회의 전체 시간
 var _alarmList = new Array();
 function showRunTime()
 {
 	var hour = parseInt(_runTime / 60 / 60);
-	var minute = parseInt(_runTime / 60);
+	var minute = parseInt((_runTime / 60) % 60);
 	var second = parseInt(_runTime % 60);
 	var tHour, tMinute, tSecond;
 
 	if (hour < 10)	tHour = "0" + hour;
-	else	tHour = tHour;
+	else	tHour = hour;
 
 	if (minute < 10)	tMinute = "0" + minute;
 	else	tMinute = minute;
@@ -960,6 +957,7 @@ function showRunTime()
 	else	tSecond = second;
 
 	var nowRunTime = tHour + ":" + tMinute + ":" + tSecond;
+
 	$('.meeting .time').html(nowRunTime + " / " + _totalTime);
 
 	catchAlarmTime();

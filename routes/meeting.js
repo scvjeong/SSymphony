@@ -17,7 +17,7 @@ exports.main = function(req, res){
 		return;
 	}
 
-	/** session start **/
+	/** session start 
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
 	/** session end **/
@@ -28,17 +28,17 @@ exports.main = function(req, res){
 	var params = { 
 		idx_meeting:req.param("idx_meeting")
 	};
+	var result = { meeting:{} };
 
 	dao_m.dao_get_meeting(evt, mysql_conn, params);
 	evt.on('get_meeting', function(err, rows){
 		if(err) throw err;
 		complete_flag++;
-		console.log(rows);
+		result.meeting = rows;
+		console.log(result);
 		if( complete_flag === _MEETING_FLAG_CNT )
-			res.render('meeting', { title: 'Express' });
+			res.render('meeting', { result:result });
 	});
-
-	//res.render('meeting', { title: 'Express' });
 };
 
 exports.meeting_public = function(req, res){

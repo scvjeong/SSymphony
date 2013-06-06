@@ -713,8 +713,8 @@ function mindmap_draw_mindmap() {
 	mindmap_init_mindmap();
 	mindmap_get_list_data();
 	
-	var width = 900,
-		height = 600;
+	var width = 500,
+		height = 300;
 
 	var color = d3.scale.category20();
 

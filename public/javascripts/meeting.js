@@ -977,19 +977,22 @@ function closePopupWindow(idx)
 	$('#popup' + idx).fadeOut('slow');
 }
 
+<<<<<<< HEAD
 setInterval("showRunTime()", 1000);
 var _runTime = 1000;
 var _totalTime = "00:50:00";	// 회의 전체 시간
+=======
+>>>>>>> scvjeong
 var _alarmList = new Array();
 function showRunTime()
 {
 	var hour = parseInt(_runTime / 60 / 60);
-	var minute = parseInt(_runTime / 60);
+	var minute = parseInt((_runTime / 60) % 60);
 	var second = parseInt(_runTime % 60);
 	var tHour, tMinute, tSecond;
 
 	if (hour < 10)	tHour = "0" + hour;
-	else	tHour = tHour;
+	else	tHour = hour;
 
 	if (minute < 10)	tMinute = "0" + minute;
 	else	tMinute = minute;
@@ -998,6 +1001,10 @@ function showRunTime()
 	else	tSecond = second;
 
 	var nowRunTime = tHour + ":" + tMinute + ":" + tSecond;
+<<<<<<< HEAD
+=======
+
+>>>>>>> scvjeong
 	$('.meeting .time').html(nowRunTime + " / " + _totalTime);
 
 	catchAlarmTime();
@@ -1069,6 +1076,17 @@ function showEvaluateMeetingWindow()
 			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
 			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
 	
+<<<<<<< HEAD
+=======
+			$('#eval_input_meeting_rating_val').bind('change', function (event) { 
+				$('#meeting_val').val(event.value);
+				//console.log($('#meeting_val').val());
+			}); 
+			$('#eval_input_ft_rating_val').bind('change', function (event) { 
+				$('#ft_val').val(event.value);
+				//console.log($('#ft_val').val());
+			}); 	
+>>>>>>> scvjeong
 		},
 		error: function(err) {
 			console.log(err);
@@ -1122,6 +1140,10 @@ function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');
 	bootbox_select.modal('hide');
+<<<<<<< HEAD
+=======
+	showMeetingResultWindow();
+>>>>>>> scvjeong
 }
 
 
@@ -1201,6 +1223,7 @@ function setupUserListChart()
 }
 
 
+<<<<<<< HEAD
 var _drawing_tool = "pen";
 var _fill_color = "#000000";
 var _line_color = "#000000";
@@ -1356,6 +1379,20 @@ function switchDrawingTool(tool)
 
 
 
+=======
+// 선 색상 변경
+function changeStrokeColor(color)
+{
+	
+}
+
+// 채우기 색상 변경
+function changeFillColor(color)
+{
+	
+}
+
+>>>>>>> scvjeong
 /*
 function changePenColor(color)
 {

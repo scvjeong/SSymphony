@@ -3,7 +3,7 @@
   float:left;
   margin: 0 1% 0 1%;
   position: relative;
-  width: 40%;
+  width:46%;
 }
 
 .container {
@@ -15,11 +15,20 @@
   border-radius: 3px;
   box-shadow: 0px 0px 4px 1px #ccc;
   position: absolute;
-  width: 180px;
+  left: 25px;
+  top: 30px;
+  width: 160px;
+  height: 140px;
+	background-color: #fffdd6;
+	background-image: -webkit-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: -moz-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: -o-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: -ms-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: linear-gradient(to top, rgba(255,240,71,.3), rgba(255,254,238,.4));
 }
 
 .container .object .placeholder {
-  width: 180px;
+  width: 160px;
 }
 
 .container .object.ss-moving {
@@ -37,11 +46,11 @@
 
 @media screen and (max-width: 1200px) {
   .container .object {
-    width: 180px;
+    width: 160px;
   }
 
   .container .object .placeholder {
-    width: 180px;
+    width: 160px;
   }
 }
 
@@ -64,7 +73,7 @@
 #title_text {
 	float:left;
 	text-align: left;
-	width: 92%;
+	width: 70%;
 	font: bold 18px verdana, sans-serif;
 }
 
@@ -77,6 +86,14 @@
 	cursor:pointer;
 }
 
+
+#title_right_text {
+	float:right;
+	margin-right: 4px;
+	line-height: 28px;
+}
+
+
 #init_data {
 	float:left;
 	margin-top: 5px;
@@ -88,9 +105,7 @@
 }
 
 .object {
-	height: 160px;
-	box-shadow: 5px 5px 5px 0px lightgray;
-	background: -webkit-linear-gradient(top, #ffffcc 0%,#ffff88 100%);
+	
 }
 
 .input_area {
@@ -106,7 +121,7 @@
 }
 
 .title_area {
-	background: #ffee77;
+	background-color: #fffaab;
 	border-radius: 3px;
 	width: 100%;
 	height: 14%;

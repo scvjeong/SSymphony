@@ -62,8 +62,13 @@
 	/* ---------------------------------------------------------------------- */
 	function setup_quick_meeting()
 	{
+<<<<<<< HEAD
 		if ($('#start-btn1').length){
 			$('#start-btn1').click(function(e) {
+=======
+		if ($('#start-btn1 .make').length){
+			$('#start-btn1 .make').click(function(e) {
+>>>>>>> scvjeong
 				e.preventDefault();
 				$.get("/page/quick_meeting",null,function(html){
 					dialog = bootbox.dialog(html, [{
@@ -115,9 +120,15 @@
 
 	function setup_meeting_template()
 	{
+<<<<<<< HEAD
 		if ($('#start-btn').length ){
 
 			$('#start-btn').click(function(e) {
+=======
+		if ($('#start-btn .make').length ){
+
+			$('#start-btn .make').click(function(e) {
+>>>>>>> scvjeong
 				e.preventDefault();
 				$.get("/page/meeting_template",null,function(html){
 					dialog = bootbox.dialog(html, [{

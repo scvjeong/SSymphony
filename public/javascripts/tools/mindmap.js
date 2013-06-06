@@ -78,9 +78,9 @@ function initMindmap(group, tool)
 				}
 				
 				////  이동 제한 900*600 으로  ////
-				if ( newX >= 0 && newX <= 300 && newY >= 0 && newY <= 200)
+				if ( newX >= 0 && newX <= 200 && newY >= 0 && newY <= 100)
 				{
-					var newViewVal = newX + " " + newY + " " +"600 400";
+					var newViewVal = newX + " " + newY + " " +"400 300";
 					svgSelect.attr('viewBox', newViewVal);
 					console.log(newViewVal);
 				}			
@@ -119,7 +119,7 @@ function addSocketListenerForMindmap()
 		
 		if ( tmpId == "100" )
 		{
-			var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><input type='text' class='tmp_editing' onClick='mindmap_mouse_focus()' onKeyDown='mindmap_key_input()' tabindex='0' value='"+tmpVal+"'></div></div>";
+			var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><input type='text' class='tmp_editing tmp_editing_title' onClick='mindmap_mouse_focus()' onKeyDown='mindmap_key_input()' tabindex='0' value='"+tmpVal+"'></div></div>";
 			tmpToolSelect.find('.list_space > .children').append(rootTag);		
 		}
 		else if ( tmpParent == "0" )
@@ -151,6 +151,7 @@ function addSocketListenerForMindmap()
 		lastInput.attr('class', 'input_open');
 		tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
 	
+		
 	});
 		
 	////  변경된 들여쓰기 얻어오는 함수  ////
@@ -178,7 +179,7 @@ function addSocketListenerForMindmap()
 					tmpInput.parent().remove();			
 					preClass.attr('class', "edit_open");
 					var addTag = "<div class='children'><div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mindmap_mouse_focus()' onKeyDown='mindmap_key_input()' tabindex='0' value='"+tmpVal+"'></div></div></div>";
-					preClass.append(addTag);2013-03-19
+					preClass.append(addTag);
 				}
 				
 				else if ( preClass.attr('class') == "edit_open" )	// 직전 클래스가 edit_open인 경우 태그만 추가
@@ -369,9 +370,8 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_add > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "margin-left": 1 });
-		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
+		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
+		tmpInput.css({ "width": (85-(5*parseInt(indentStatus)))+'%' });
 		tmpToolSelect.find('.input_add').attr('class', 'input_task');
 	}
 	else 
@@ -380,9 +380,8 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_open > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "margin-left": 1 });
-		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
+		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
+		tmpInput.css({ "width": (85-(5*parseInt(indentStatus)))+'%' });
 		tmpInput.trigger('focus');
 	}
 }
@@ -714,8 +713,8 @@ function mindmap_draw_mindmap() {
 	mindmap_init_mindmap();
 	mindmap_get_list_data();
 	
-	var width = 900,
-		height = 600;
+	var width = 450,
+		height = 300;
 
 	var color = d3.scale.category20();
 
@@ -726,9 +725,9 @@ function mindmap_draw_mindmap() {
 		.size([width, height]);
 
 	var svg = d3.select("svg")
-		.attr("id", "svg")
-		.attr("width", width)
-		.attr("height", height);
+		.attr("id", "svg");
+		//.attr("width", width)
+		//.attr("height", height);
 
 	force
 		.nodes(dataNodes)

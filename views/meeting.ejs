@@ -1,3 +1,27 @@
+<%
+	/* 시간 설정 */
+	var t = 0;
+	var limit_time = "00:00:00";
+	if( result.meeting.length > 0 )
+	{
+		var reg_time = result.meeting[0].reg_time;
+		var r_t = new Date(reg_time);
+		var c_t = new Date();
+		t = (c_t.getTime() - r_t.getTime()) / 1000;
+		var start_time = result.meeting[0].start_time;
+		var end_time = result.meeting[0].end_time;
+		var s_t = start_time.toString().split(":");
+		var e_t = end_time.toString().split(":");
+		var h = ((e_t[0]*1) - (s_t[0]*1));
+		if( h < 10 ) h = "0"+ h;
+		var m = ((e_t[1]*1) - (s_t[1]*1));
+		if( m < 10 ) m = "0"+ m;
+		var s = ((e_t[2]*1) - (s_t[2]*1));
+		if( s < 10 ) s = "0"+ s;
+		limit_time = h + ":" + m + ":" + s;
+	}
+	/* 시간 설정 */
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -135,7 +159,11 @@
 			<div class="subject">Weekly Discussion</div>
 			<span class="sub-subject">Service Design Meeting</span>
 			<div class="result-btn" id="result-btn">회의종료</div>
+<<<<<<< HEAD
 			<div class="time">00:00:00 / 00:00:00</div>
+=======
+			<div class="time">00:00:00 / <%=limit_time%></div>
+>>>>>>> scvjeong
 		</div>
 		<div id="white-board" class="white-board">
 			<!-- Whiteboard control box -->
@@ -364,9 +392,7 @@
 			</div>
 		</div>		
 	</div>
-
-
-
+	<div id="splashpopup_wrapper"></div>
 <!--============================= /Page Body ================================-->
 	
   <!-- Bootstrap Components -->
@@ -418,6 +444,14 @@
 
 	<script src="/javascripts/config.js"></script>
 	<script src="/javascripts/meeting.js"></script>	
+<<<<<<< HEAD
+=======
+	<script>
+		var _runTime = <%=t%>;
+		var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
+		setInterval("showRunTime()", 1000);
+	</script>
+>>>>>>> scvjeong
 <!-- /Javascript -->
 
 </body>

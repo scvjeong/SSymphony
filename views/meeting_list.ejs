@@ -32,7 +32,23 @@
 <div class="container">
 	<div id="menu">
 		<ul>
+<<<<<<< HEAD
 			<li id="start-btn">START</li>
+=======
+			<li id="start-btn">
+				<div class="make">START</div>
+				<div class="tool list">
+					LIST
+					<img src="/images/list_icon.png">
+				</div>
+				<div class="tool postit">
+					POSTIT
+				</div>
+				<div class="tool mindmap">MindMap</div>
+				<div class="tool matrix">Matrix</div>
+				<div class="tool vote">Vote</div>
+			</li>
+>>>>>>> scvjeong
 			<li id="meeting-list-btn">MEETING<br>LIST</li>
 			<li id="group-info-btn" onclick="javascript:alert('준비중')">GROUP<br>INFO</li>
 			<li id="need-any-help-btn" onclick="javascript:alert('준비중')">NEED<br>ANY<br>HELP</li>
@@ -130,6 +146,10 @@
 			setup_calendar();
 			init_click_group();
 			init_color_bar();
+<<<<<<< HEAD
+=======
+			init_start_btn();
+>>>>>>> scvjeong
 		})
 
 		function init_click_group()
@@ -148,6 +168,59 @@
 				$(this).height(h);
 			});
 		}
+<<<<<<< HEAD
+=======
+		function init_start_btn()
+		{	
+			$("#start-btn .list").click(function(){
+				location.href="/page/meeting?tool=list"
+			});
+			$("#start-btn .postit").click(function(){
+				location.href="/page/meeting?tool=postit"
+			});
+			$("#start-btn .mindmap").click(function(){
+				location.href="/page/meeting?tool=mindmap"
+			});
+			$("#start-btn .matrix").click(function(){
+				location.href="/page/meeting?tool=matrix"
+			});
+			$("#start-btn .vote").click(function(){
+				location.href="/page/meeting?tool=vote"
+			});
+			init_start_btn_mouseover();
+			init_start_btn_mouseout();
+		};
+		function init_start_btn_mouseover()
+		{
+			$("#start-btn").mouseover(function(e){
+				if( $(this).width() === 90 && e.target.nodeName === "LI")
+				{
+					$(this).unbind("mouseover");
+					$(".make", this).html("MAKE");
+					$(this).animate({
+						width: '640'
+					}, 640, function(){
+						init_start_btn_mouseover();
+					});
+				}
+			})
+		}
+		function init_start_btn_mouseout()
+		{
+			$("#start-btn").mouseout(function(e){
+				if( $(this).width() === 640 && e.target.nodeName === "LI" )
+				{
+					$(this).unbind("mouseout");
+					$(".make", this).html("START");
+					$(this).animate({
+						width: '90'
+					}, 640, function(){
+						init_start_btn_mouseout();
+					});
+				}
+			});
+		}
+>>>>>>> scvjeong
 	</script>
 <!-- /Javascript -->
 

@@ -78,9 +78,9 @@ function initMindmap(group, tool)
 				}
 				
 				////  이동 제한 900*600 으로  ////
-				if ( newX >= 0 && newX <= 300 && newY >= 0 && newY <= 200)
+				if ( newX >= 0 && newX <= 200 && newY >= 0 && newY <= 100)
 				{
-					var newViewVal = newX + " " + newY + " " +"600 400";
+					var newViewVal = newX + " " + newY + " " +"300 200";
 					svgSelect.attr('viewBox', newViewVal);
 					console.log(newViewVal);
 				}			
@@ -370,8 +370,8 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_add > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(0) + (6*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(6*parseInt(indentStatus)))+'%' });
+		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
+		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
 		tmpToolSelect.find('.input_add').attr('class', 'input_task');
 	}
 	else 
@@ -380,8 +380,8 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_open > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(0) + (6*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(6*parseInt(indentStatus)))+'%' });
+		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
+		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
 		tmpInput.trigger('focus');
 	}
 }

@@ -119,7 +119,7 @@ function addSocketListenerForMindmap()
 		
 		if ( tmpId == "100" )
 		{
-			var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><input type='text' class='tmp_editing' onClick='mindmap_mouse_focus()' onKeyDown='mindmap_key_input()' tabindex='0' value='"+tmpVal+"'></div></div>";
+			var rootTag = "<div class='edit_task'><div class='input_task' indent='0' taskId="+tmpId+"><input type='text' class='tmp_editing tmp_editing_title' onClick='mindmap_mouse_focus()' onKeyDown='mindmap_key_input()' tabindex='0' value='"+tmpVal+"'></div></div>";
 			tmpToolSelect.find('.list_space > .children').append(rootTag);		
 		}
 		else if ( tmpParent == "0" )

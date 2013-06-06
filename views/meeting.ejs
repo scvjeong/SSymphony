@@ -109,6 +109,7 @@
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script type="text/javascript" src="../javascripts/jquery.form.js"></script>
+<script type="text/javascript" src="../lib/JS3-0.3.2-min.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxwindow.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxbuttons.js"></script>
@@ -208,6 +209,23 @@
 								<li onclick="changeLineColor('#0f0fa0')" style="background-color: #0f0fa0"><a style="height:20px"></a></li>
 								<li onclick="changeLineColor('#00f0f0')" style="background-color: #00f0f0"><a style="height:20px"></a></li>
 								<li onclick="changeLineColor('#ffffff')" style="background-color: #ffffff"><a style="height:20px"></a></li>
+						    </ul>
+					  	</li>
+
+					  	<li class="dropdown">
+						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						    <span id="linewidth_preview" style="display:inline-block; width:100px; height:1px; background-color:#000000; vertical-align:middle;"></span>&nbsp;<span id="linewidth_text_preview">1px</span>
+						    <b class="caret"></b>
+						    </a>
+						    <ul class="dropdown-menu">
+						    	<li onclick="changeLineWidth(1)"><a style="height:20px"><span style="display:inline-block; width:100px; height:1px; background-color:#000000; vertical-align:middle;"></span>&nbsp;1px</a></li>
+						    	<li onclick="changeLineWidth(2)"><a style="height:20px"><span style="display:inline-block; width:100px; height:2px; background-color:#000000; vertical-align:middle;"></span>&nbsp;2px</a></li>
+						    	<li onclick="changeLineWidth(3)"><a style="height:20px"><span style="display:inline-block; width:100px; height:3px; background-color:#000000; vertical-align:middle;"></span>&nbsp;3px</a></li>
+						    	<li onclick="changeLineWidth(5)"><a style="height:20px"><span style="display:inline-block; width:100px; height:5px; background-color:#000000; vertical-align:middle;"></span>&nbsp;5px</a></li>
+						    	<li onclick="changeLineWidth(8)"><a style="height:20px"><span style="display:inline-block; width:100px; height:8px; background-color:#000000; vertical-align:middle;"></span>&nbsp;8px</a></li>
+						    	<li onclick="changeLineWidth(10)"><a style="height:20px"><span style="display:inline-block; width:100px; height:10px; background-color:#000000; vertical-align:middle;"></span>&nbsp;10px</a></li>
+						    	<li onclick="changeLineWidth(15)"><a style="height:20px"><span style="display:inline-block; width:100px; height:15px; background-color:#000000; vertical-align:middle;"></span>&nbsp;15px</a></li>
+						    	<li onclick="changeLineWidth(20)"><a style="height:20px"><span style="display:inline-block; width:100px; height:20px; background-color:#000000; vertical-align:middle;"></span>&nbsp;20px</a></li>
 						    </ul>
 					  	</li>
 
@@ -346,6 +364,9 @@
 				<p>브라우저에서 캔버스 지원이 안 됩니다.</p>
 			</canvas>
 			
+			<div id="drawtext_container">
+				<textarea id="inputbox" placeholder="Type here..."></textarea>
+			</div>
 		</div>
 		<div id="rightpanel" class="rightpanel">
 			<div class="process-box">
@@ -440,14 +461,11 @@
 
 	<script src="/javascripts/config.js"></script>
 	<script src="/javascripts/meeting.js"></script>	
-<<<<<<< HEAD
-=======
 	<script>
 		var _runTime = <%=t%>;
 		var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
 		setInterval("showRunTime()", 1000);
 	</script>
->>>>>>> scvjeong
 <!-- /Javascript -->
 
 </body>

@@ -214,12 +214,9 @@ function openSocket()
 		}
 		else if (data.option === 'new_canvas_draw')
 		{
-			switch (data.tool)
-			{
-			case 'pen':
-				drawArrivedPen(data.val);
-				break;				
-			}
+			console.log("GET_OPTION_DATA new_canvas_draw");
+			console.log(data);
+			drawArrived(data.tool, data.val);
 		}
 	});
 }
@@ -1071,8 +1068,6 @@ function showEvaluateMeetingWindow()
 			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
 			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
 	
-<<<<<<< HEAD
-=======
 			$('#eval_input_meeting_rating_val').bind('change', function (event) { 
 				$('#meeting_val').val(event.value);
 				//console.log($('#meeting_val').val());
@@ -1081,7 +1076,6 @@ function showEvaluateMeetingWindow()
 				$('#ft_val').val(event.value);
 				//console.log($('#ft_val').val());
 			}); 	
->>>>>>> scvjeong
 		},
 		error: function(err) {
 			console.log(err);
@@ -1135,10 +1129,7 @@ function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');
 	bootbox_select.modal('hide');
-<<<<<<< HEAD
-=======
 	showMeetingResultWindow();
->>>>>>> scvjeong
 }
 
 
@@ -1218,7 +1209,6 @@ function setupUserListChart()
 }
 
 
-<<<<<<< HEAD
 var _drawing_tool = "pen";
 var _fill_color = "#000000";
 var _line_color = "#000000";
@@ -1232,8 +1222,11 @@ var _is_mousedown = false;
 var _now_position = {x:0, y:0};
 var _pre_position = {x:0, y:0};
 
+var _pen_data = {points:[], line_width:1, line_color:"#000000"};
+var _drawtextbox = $('#drawtext_container #inputbox');
+
 _canvas.mousedown(function(e) {
-	console.log("mousedown");
+	//console.log("mousedown");
 	_is_mousedown = true;
 
 	_now_position.x = e.offsetX;
@@ -1242,8 +1235,10 @@ _canvas.mousedown(function(e) {
 	switch(_drawing_tool)
 	{
 	case "pen":
+		_pen_data.points = [];	// 펜 데이터 초기화
 		_canvas_context.beginPath();
 		_canvas_context.moveTo(_now_position.x, _now_position.y);
+		_pen_data.points.push({x: _now_position.x, y: _now_position.y});
 		break;
 	case "rect":
 		_pre_position.x = e.offsetX;
@@ -1254,11 +1249,26 @@ _canvas.mousedown(function(e) {
 		_pre_position.y = e.offsetY;
 		break;
 	case "text":
+		console.log(e);
+
+		$('#drawtext_container').css({
+			'display': 'block',
+			'left': e.clientX + 'px',
+			'top': (e.clientY - 15) + 'px'
+		});
+		_drawtextbox.css({
+			'color': _fill_color,
+			'font-family': _font_family,
+			'font-size': _font_size + 'pt'
+		});
+		_drawtextbox.val('');
+		_drawtextbox.focus();
+		
 		break;
 	}
 });
 _canvas.mousemove(function(e) {
-	console.log("mousemove");
+	//console.log("mousemove");
 
 	if (_is_mousedown == true)
 	{
@@ -1269,21 +1279,38 @@ _canvas.mousemove(function(e) {
 			_now_position.x = e.offsetX;
 			_now_position.y = e.offsetY;
 
+			_canvas_context.lineTo(_now_position.x, _now_position.y);
+			_pen_data.points.push({x: _now_position.x, y: _now_position.y});
 			_canvas_context.strokeStyle = _line_color;
 			_canvas_context.lineWidth = _line_width;
 			_canvas_context.stroke();
-			_canvas_context.lineTo(_now_position.x, _now_position.y);
 			break;
 		}
 	}
 });
 _canvas.mouseup(function(e) {
-	console.log("mouseup");
+	//console.log("mouseup");
 	_is_mousedown = false;
 
 	switch(_drawing_tool)
 	{
+	case "pen":
+		// 동기화 데이터 전송
+		_pen_data.line_width = _line_width;
+		_pen_data.line_color = _line_color;
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'pen',
+				id:"0",
+				val:_pen_data
+			});
+		_pen_data.points = [];	// 다음 사용을 위해 펜 데이터 초기화
+		break;
 	case "rect":
+		var rect_data = {};
+
 		_now_position.x = e.offsetX;
 		_now_position.y = e.offsetY;
 
@@ -1297,8 +1324,29 @@ _canvas.mouseup(function(e) {
 		_canvas_context.strokeStyle = _line_color;
 		_canvas_context.lineWidth = _line_width;
 		_canvas_context.stroke();
+
+
+		// 동기화 데이터 전송
+		rect_data.x = _pre_position.x;
+		rect_data.y = _pre_position.y;
+		rect_data.width = width;
+		rect_data.height = height;
+		rect_data.fill_color = _fill_color;
+		rect_data.line_color = _line_color;
+		rect_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'rect',
+				id:"0",
+				val:rect_data
+			});
 		break;
 	case "ellipse":
+		var ellipse_data = {};
+
 		_now_position.x = e.offsetX;
 		_now_position.y = e.offsetY;
 
@@ -1323,15 +1371,82 @@ _canvas.mouseup(function(e) {
 		_canvas_context.strokeStyle = _line_color;
 		_canvas_context.lineWidth = _line_width;
 		_canvas_context.stroke();
+
+		// 동기화 데이터 전송
+		ellipse_data.x = _pre_position.x;
+		ellipse_data.y = _pre_position.y;
+		ellipse_data.radius = radius;
+		ellipse_data.fill_color = _fill_color;
+		ellipse_data.line_color = _line_color;
+		ellipse_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'ellipse',
+				id:"0",
+				val:ellipse_data
+			});
 		break;
 	}
 });
+
+
+// 도착한 도구 그리기
+function drawArrived(tool, val)
+{
+	switch(tool)
+	{
+	case "pen":
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(val.points[0].x, val.points[0].y);
+
+		for (var i = 1; i < val.points.length; i++)
+		{
+			_canvas_context.lineTo(val.points[i].x, val.points[i].y);
+			_canvas_context.strokeStyle = val.line_color;
+			_canvas_context.lineWidth = val.line_width;
+			_canvas_context.stroke();
+		}
+		break;
+	case "rect":
+		_canvas_context.beginPath();
+		_canvas_context.rect(val.x, val.y, val.width, val.height);
+		_canvas_context.fillStyle = val.fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		break;
+	case "ellipse":
+		_canvas_context.beginPath();
+		_canvas_context.arc(val.x + val.radius, val.y + val.radius, val.radius, 0, 2 * Math.PI);
+		_canvas_context.fillStyle = val.fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		break;
+	case "text":
+		break;
+	}
+}
+
 
 // 선 색상 변경
 function changeLineColor(color)
 {
 	_line_color = color;
 	$('#linecolor_preview').css('background-color', color);
+}
+
+// 선 두께 변경
+function changeLineWidth(width)
+{
+	_line_width = width;
+	$('#linewidth_preview').css('height', width + 'px');
+	$('#linewidth_text_preview').html(width + 'px');
 }
 
 // 채우기 색상 변경
@@ -1363,6 +1478,7 @@ function switchDrawingTool(tool)
 	$('#white-board .navbar .nav #btn_drawtool_pen').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_rect').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_ellipse').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_text').removeClass('active');
 
 	$('#white-board .navbar .nav #btn_drawtool_' + _drawing_tool).addClass('active');
 
@@ -1373,21 +1489,6 @@ function switchDrawingTool(tool)
 }
 
 
-
-=======
-// 선 색상 변경
-function changeStrokeColor(color)
-{
-	
-}
-
-// 채우기 색상 변경
-function changeFillColor(color)
-{
-	
-}
-
->>>>>>> scvjeong
 /*
 function changePenColor(color)
 {

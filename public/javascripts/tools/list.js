@@ -404,7 +404,7 @@ function list_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_add > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(5) + (20*parseInt(indentStatus)) });
+		tmpBullet.css({"margin-left": parseInt(0) + (20*parseInt(indentStatus)) });
 		tmpInput.css({ "margin-left": 10 });
 		tmpInput.css({ "width": (90-(3*parseInt(indentStatus)))+'%' });
 		tmpToolSelect.find('.input_add').attr('class', 'input_task');
@@ -415,7 +415,7 @@ function list_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_open > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(5) + (20*parseInt(indentStatus)) });
+		tmpBullet.css({"margin-left": parseInt(0) + (20*parseInt(indentStatus)) });
 		tmpInput.css({ "margin-left": 10 });
 		tmpInput.css({ "width": (90-(3*parseInt(indentStatus)))+'%' });
 		tmpInput.trigger('focus');

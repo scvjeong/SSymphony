@@ -87,7 +87,7 @@ function initMindmap(group, tool)
 			}	
 		}
 	});
-	tmpToolSelect.find('#f').bind("mouseup", function(event) {
+	tmpToolSelect.find('#svg').bind("mouseup", function(event) {
 		if (moveFlag == 1) {
 			moveFlag = 0;
 		}

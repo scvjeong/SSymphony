@@ -1090,6 +1090,7 @@ function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');
 	bootbox_select.modal('hide');
+	showMeetingResultWindow();
 }
 
 

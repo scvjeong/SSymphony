@@ -1523,8 +1523,8 @@ _html2canvas.Parse = function (images, options) {
     tlv = borderRadius[0][1],
     trh = borderRadius[1][0],
     trv = borderRadius[1][1],
-    brv = borderRadius[2][0],
-    brh = borderRadius[2][1],
+    brh = borderRadius[2][0],
+    brv = borderRadius[2][1],
     blh = borderRadius[3][0],
     blv = borderRadius[3][1],
 
@@ -1773,7 +1773,7 @@ _html2canvas.Parse = function (images, options) {
 
   function getPseudoElement(el, which) {
     var elStyle = window.getComputedStyle(el, which);
-    if(!elStyle || !elStyle.content || elStyle.content === "none" || elStyle.content === "-moz-alt-content") {
+    if(!elStyle || !elStyle.content || elStyle.content === "none" || elStyle.content === "-moz-alt-content" || elStyle.display === "none") {
       return;
     }
     var content = elStyle.content + '',
@@ -2031,7 +2031,7 @@ _html2canvas.Parse = function (images, options) {
       case "INPUT":
         // TODO add all relevant type's, i.e. HTML5 new stuff
         // todo add support for placeholder attribute for browsers which support it
-        if (/^(text|url|email|submit|button|reset)$/.test(element.type) && (element.value || element.placeholder).length > 0){
+        if (/^(text|url|email|submit|button|reset)$/.test(element.type) && (element.value || element.placeholder || "").length > 0){
           renderFormValue(element, bounds, stack);
         }
         break;
@@ -2167,6 +2167,7 @@ function h2czContext(zindex) {
     children: []
   };
 }
+
 _html2canvas.Preload = function( options ) {
 
   var images = {
@@ -2181,7 +2182,7 @@ _html2canvas.Preload = function( options ) {
   count = 0,
   element = options.elements[0] || document.body,
   doc = element.ownerDocument,
-  domImages = doc.images, // TODO probably should limit it to images present in the element only
+  domImages = element.getElementsByTagName('img'), // Fetch images of the present element only
   imgLen = domImages.length,
   link = doc.createElement("a"),
   supportCORS = (function( img ){
@@ -2497,6 +2498,7 @@ _html2canvas.Preload = function( options ) {
   return methods;
 
 };
+
 _html2canvas.Renderer = function(parseQueue, options){
 
   function createRenderQueue(parseQueue) {

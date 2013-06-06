@@ -129,7 +129,7 @@
 	<!-- /투표 도구 -->
 	
 </head>
-<body class="meeting">
+<body class="meeting" ondragstart="return false" onselectstart="return false">
 	<div class="container">
 		<div class="title-bar">
 			<div class="subject">Weekly Discussion</div>
@@ -143,10 +143,14 @@
 				<div class="navbar-inner">
 					<ul class="nav">
 						<li id="btn_show_share_box" style="margin-left: 10px"><a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Share Box"><img src="/images/whiteboard/btn_share_box.png" width="24" height="24" /></a></li>
+
 						<li class="divider-vertical"></li>
+
 						<li id="btn_drawtool_pen" class="active"><a onclick="switchDrawingTool('pen')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Pen"><img src="/images/whiteboard/btn_drawtool_pen.png" width="24" height="24" /></a></li>
 						<li id="btn_drawtool_rect"><a onclick="switchDrawingTool('rect')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Rectangle"><img src="/images/whiteboard/btn_drawtool_rect.png" width="24" height="24" /></i></a></li>
 						<li id="btn_drawtool_ellipse"><a onclick="switchDrawingTool('ellipse')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Ellipse"><img src="/images/whiteboard/btn_drawtool_ellipse.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_text"><a onclick="switchDrawingTool('text')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Text"><img src="/images/whiteboard/btn_drawtool_text.png" width="24" height="24" /></a></li>
+						
 						<li class="divider-vertical"></li>
 
 						<li class="dropdown">
@@ -181,6 +185,40 @@
 								<li onclick="changeLineColor('#00f0f0')" style="background-color: #00f0f0"><a style="height:20px"></a></li>
 								<li onclick="changeLineColor('#ffffff')" style="background-color: #ffffff"><a style="height:20px"></a></li>
 						    </ul>
+					  	</li>
+
+					  	<li class="divider-vertical"></li>
+
+					  	<li>
+					  		<!--<span style="display:inline-block; vertical-align:middle; padding-top:6px;">Font</span>-->
+						  	<div class="btn-group">
+								<button class="btn"><span id="fontfamily_preview" style="font-family:serif; line-height:15px;">Serif</span></button>
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+							    	<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+							    	<li><a onclick="changeFontFamily('serif')" style="font-family:serif;">serif</a></li>
+							    	<li><a onclick="changeFontFamily('sans-serif')" style="font-family:sans-serif;">sans-serif</a></li>
+							    	<li><a onclick="changeFontFamily('cursive')" style="font-family:cursive">cursive</a></li>
+							    	<li><a onclick="changeFontFamily('fantasy')" style="font-family:fantasy">fantasy</a></li>
+							    	<li><a onclick="changeFontFamily('monospace')" style="font-family:monospace">monospace</a></li>
+								</ul>
+							</div>
+					  	</li>
+
+					  	<li>
+					  		<!--<span style="display:inline-block; vertical-align:middle; padding-top:6px;">Font</span>-->
+						  	<div class="btn-group">
+								<button class="btn"><span id="fontsize_preview">10pt</span></button>
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+							    	<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<% for (var i = 6; i < 40; i+=2) { %>
+							    		<li><a onclick="changeFontSize(<%=i%>)" style="font-family:serif;"><%=i%>pt</a></li>
+							    	<% } %>
+								</ul>
+							</div>
 					  	</li>
 
 						<div class="notice-bar">

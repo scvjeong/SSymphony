@@ -53,6 +53,7 @@ $(document).ready(function() {
 	});
 
 	// 화이트보드 초기화
+	switchDrawingTool('pen');
 	$("[data-toggle='tooltip']").tooltip();
 
 	changeFillColor('#000000');
@@ -295,8 +296,8 @@ function resizeWhiteBoardCanvas()
 
 	$('#white-board').width(width);
 	$('#white-board').height(height);
-	$('#cv_whiteboard').width(width);
-	$('#cv_whiteboard').height(height);
+	$('#cv_whiteboard').attr('width', width);
+	$('#cv_whiteboard').attr('height', height);
 }
 
 function getFileTypeInfo(filetype)
@@ -1200,9 +1201,113 @@ function setupUserListChart()
 }
 
 
+var _drawing_tool = "pen";
 var _fill_color = "#000000";
 var _line_color = "#000000";
-var _drawing_tool = "pen";
+var _line_width = "1";
+var _font_family = "serif";
+var _font_size = 10;
+var _canvas = $('#cv_whiteboard');
+var _canvas_context = document.getElementById('cv_whiteboard').getContext('2d');
+var _is_mousedown = false;
+
+var _now_position = {x:0, y:0};
+var _pre_position = {x:0, y:0};
+
+_canvas.mousedown(function(e) {
+	console.log("mousedown");
+	_is_mousedown = true;
+
+	_now_position.x = e.offsetX;
+	_now_position.y = e.offsetY;
+
+	switch(_drawing_tool)
+	{
+	case "pen":
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(_now_position.x, _now_position.y);
+		break;
+	case "rect":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
+		break;
+	case "ellipse":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
+		break;
+	case "text":
+		break;
+	}
+});
+_canvas.mousemove(function(e) {
+	console.log("mousemove");
+
+	if (_is_mousedown == true)
+	{
+		switch (_drawing_tool)
+		{
+		case "pen":
+			//_pre_position = _now_position;
+			_now_position.x = e.offsetX;
+			_now_position.y = e.offsetY;
+
+			_canvas_context.strokeStyle = _line_color;
+			_canvas_context.lineWidth = _line_width;
+			_canvas_context.stroke();
+			_canvas_context.lineTo(_now_position.x, _now_position.y);
+			break;
+		}
+	}
+});
+_canvas.mouseup(function(e) {
+	console.log("mouseup");
+	_is_mousedown = false;
+
+	switch(_drawing_tool)
+	{
+	case "rect":
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		var width = _now_position.x - _pre_position.x;
+		var height = _now_position.y - _pre_position.y;
+
+		_canvas_context.beginPath();
+		_canvas_context.rect(_pre_position.x, _pre_position.y, width, height);
+		_canvas_context.fillStyle = _fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+		break;
+	case "ellipse":
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		var width = _now_position.x - _pre_position.x;
+		var height = _now_position.y - _pre_position.y;
+		var radius;
+
+		_canvas_context.beginPath();
+		if (width <= height)
+		{
+			radius = width / 2;
+			_canvas_context.arc(_pre_position.x + radius, _pre_position.y + radius, radius, 0, 2 * Math.PI);
+		}
+		else
+		{
+			radius = height / 2;
+			_canvas_context.arc(_pre_position.x + radius, _pre_position.y + radius, radius, 0, 2 * Math.PI);
+		}
+
+		_canvas_context.fillStyle = _fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+		break;
+	}
+});
 
 // 선 색상 변경
 function changeLineColor(color)
@@ -1218,6 +1323,20 @@ function changeFillColor(color)
 	$('#fillcolor_preview').css('background-color', color);
 }
 
+// 글꼴 변경
+function changeFontFamily(font)
+{
+	_font_family = font;
+	$('#fontfamily_preview').css('font-family', font);
+	$('#fontfamily_preview').html(font);
+}
+
+function changeFontSize(size)
+{
+	_font_size = size;
+	$('#fontsize_preview').html(size + 'pt');
+}
+
 // 도구 선택
 function switchDrawingTool(tool)
 {
@@ -1228,7 +1347,14 @@ function switchDrawingTool(tool)
 	$('#white-board .navbar .nav #btn_drawtool_ellipse').removeClass('active');
 
 	$('#white-board .navbar .nav #btn_drawtool_' + _drawing_tool).addClass('active');
+
+	if (tool == 'text')
+		$('#cv_whiteboard').css('cursor', 'text');
+	else
+		$('#cv_whiteboard').css('cursor', 'crosshair');
 }
+
+
 
 /*
 function changePenColor(color)

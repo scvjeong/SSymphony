@@ -1093,6 +1093,34 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
+function makeCanvasImg()
+{
+	html2canvas( [ document.getElementById('list0') ], {
+		  width: 478,
+		  height: 242,
+          onrendered: function(canvas) {
+            document.body.appendChild(canvas);
+			$('canvas').attr('id', 'myCanvas');
+			var can =document.getElementById("myCanvas");
+			
+			var oCanvas = can.toDataURL();
+
+			//console.log(oCanvas);
+			var image = new Image();
+			image.src = oCanvas;
+			var ctx = can.getContext("2d");
+			ctx.drawImage(image,30,30,100,100);
+
+			/*
+			var ctx = can.getContext("2d");
+			//var imgData = ctx.getImageData(0, 0, 300, 300);
+			ctx.scale(3, 3);
+			//console.log(imgData);
+			//ctx.putImageData(imgData,300,300, 0, 0, 200, 200);
+			*/
+	}
+
+}
 
 function setupWordChart()
 {

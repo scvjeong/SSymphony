@@ -21,7 +21,7 @@ text.node {
 	width: 30%;
 	max-width: 200px;
 	max-height: 590px;
-	height: 85%;
+	height: 88%;
 	border: 1px solid #999999;
 	z-index: 2;
 	cursor: text;
@@ -76,12 +76,16 @@ svg {
 	position: relative;
 	width: 88%;
 	margin-left: 3px;
+	border:0px none;
 	font: 12px verdana, sans-serif;
 	cursor: text;
 	vertical-align: middle;
 	z-index: 6;
 }
 
+tmp_editing_title {
+	borde: 2px inset;
+}
 
 
 

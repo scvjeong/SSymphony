@@ -186,7 +186,7 @@ function postit_render_children(valId, groupId, valData) {
 		var $containers = tmpToolSelect.find('.container:eq('+groupId+')');
 		$containers.each(function(container_i) {
 			var $element = $("<div class='object task' taskid="+valId+"></div>"),
-					height = 160,
+					height = 140,
 					width = $containers.children().first().width();	
 			//$containers.children('.add_postit').before($element);		
 			$containers.append($element);		
@@ -199,7 +199,7 @@ function postit_render_children(valId, groupId, valData) {
 		});
 
 		$containers.shapeshift({
-			paddingY: 20
+			paddingY: 30
 		});
 		  
 		  // ----------------------------------------------------------------------

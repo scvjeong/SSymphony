@@ -179,7 +179,7 @@ function addSocketListenerForMindmap()
 					tmpInput.parent().remove();			
 					preClass.attr('class', "edit_open");
 					var addTag = "<div class='children'><div class=edit_task><div class='input_add' indent="+tmpChangeIndent+" taskid="+tmpChangeId+"><a class='bullet'>•</a><input type='text' class='tmp_editing' onClick='mindmap_mouse_focus()' onKeyDown='mindmap_key_input()' tabindex='0' value='"+tmpVal+"'></div></div></div>";
-					preClass.append(addTag);2013-03-19
+					preClass.append(addTag);
 				}
 				
 				else if ( preClass.attr('class') == "edit_open" )	// 직전 클래스가 edit_open인 경우 태그만 추가
@@ -370,8 +370,8 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_add > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
+		tmpBullet.css({"margin-left": parseInt(0) + (6*parseInt(indentStatus)) });
+		tmpInput.css({ "width": (85-(6*parseInt(indentStatus)))+'%' });
 		tmpToolSelect.find('.input_add').attr('class', 'input_task');
 	}
 	else 
@@ -380,8 +380,8 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBullet = tmpToolSelect.find('.input_open > .bullet');
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
-		tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
+		tmpBullet.css({"margin-left": parseInt(0) + (6*parseInt(indentStatus)) });
+		tmpInput.css({ "width": (85-(6*parseInt(indentStatus)))+'%' });
 		tmpInput.trigger('focus');
 	}
 }

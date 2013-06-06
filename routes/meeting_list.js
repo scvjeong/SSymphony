@@ -79,3 +79,58 @@ exports.meeting_list = function(req, res){
 	});	
 };
 
+exports.post_search_user = function (req, res){
+
+	/** session start 
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_ml = require('../sql/meeting_list');
+	var user_id = req.param("user_id");
+	var idx_group = req.session.idx_group;
+
+	if( idx_group > 0 )
+	{
+		// params['idx_group']
+		// params['user_id']
+		var params = { idx_group:idx_group, user_id:user_id }
+		
+		dao_ml.dao_search_user(evt, mysql_conn, params);
+		evt.on('search_user', function(err, rows){
+			if(err) throw err;
+			res.send(rows);
+		});	
+	}
+	else
+		res.send("");
+};
+
+exports.post_add_user = function (req, res){
+
+	/** session start 
+	if( !req.session.email || !req.session.email.length )
+		res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_ml = require('../sql/meeting_list');
+	var idx_user = req.param("idx_user");
+	var idx_group = req.session.idx_group;
+
+	if( idx_group > 0 )
+	{
+		// params['idx_group']
+		// params['user_id']
+		var params = { idx_group:idx_group, idx_user:idx_user }
+		
+		dao_ml.dao_add_user(evt, mysql_conn, params);
+		evt.on('add_user', function(err, rows){
+			if(err) throw err;
+			res.send(rows);
+		});	
+	}
+	else
+		res.send("");
+};

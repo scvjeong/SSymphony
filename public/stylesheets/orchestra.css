@@ -1867,6 +1867,47 @@ h6 small {
 	background-color:#FFFFFF;
 	font-family:"Istok Web";
 }
+#meeting-list .meeting-list-btn-wrap{
+	margin-bottom:10px;
+}
+#meeting-list .add-member-btn{
+	width:278px;
+	background-color:#FFFFFF;
+	border:1px solid #999999;
+	background:#ffffff;
+	background:-webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);
+	background:linear-gradient(to bottom, #ffffff 0%, #f3f3f3 100%);
+	border-radius:3px;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;border:1px solid #cecece;
+	border-bottom-color:#a0a0a0;
+	cursor:pointer;
+	display:block;
+	height:18px;
+	margin-top:6px;
+	max-width:250px;
+	overflow:hidden;
+	white-space:nowrap;
+	padding:6px;
+	position:relative;
+	text-decoration:none;
+	text-overflow:ellipsis;
+}
+#meeting-list .add-member-btn:hover{
+	background:#2887bd;
+	background:-webkit-linear-gradient(top, #2887bd 0%, #336699 100%);
+	background:linear-gradient(to bottom, #2887bd 0%, #336699 100%);
+	border-color:#2478a8;
+	color:#fff !important;
+}
+#meeting-list .add-member-btn:link {text-decoration: none; color: #666666;}
+#meeting-list .add-member-btn:visited {text-decoration: none; color: #666666;}
+#meeting-list .add-member-btn:active {text-decoration: none; color: #666666;}
+
 #meeting-list ul{
 	list-style:none;
 	margin:0px;
@@ -2147,6 +2188,33 @@ h6 small {
 }
 #light-popup .light-popup-body .contents{
 	color: #939393;
+}
+#light-popup .light-popup-body .contents-title{
+	line-height:30px;
+	color: #393939;
+	border-bottom: 1px solid #DCDCDC;
+	margin-bottom: 6px;
+}
+#light-popup .light-popup-body .contents .no-result{
+	line-height:50px;
+	width:100%;
+	text-align:center;
+}
+#light-popup .light-popup-body .contents ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#light-popup .light-popup-body .contents ul li{
+	padding:5px;
+	cursor:pointer;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+#light-popup .light-popup-body .contents ul li:hover{
+	color:#FFFFFF;
+	background-color:#2887bd;
 }
 #light-popup .light-popup-body .light-popup-submit{
 	margin:20px 0px 0px 80px;

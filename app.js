@@ -59,6 +59,8 @@ app.post('/page/new_group', group_select.new_group);
 app.post('/page/meeting_save', meeting.meeting_save);
 app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 app.post('/page/meeting_evaluation', meeting.post_meeting_evaluation);
+app.post('/page/search_user', meeting_list.post_search_user);
+app.post('/page/add_user', meeting_list.post_add_user);
 
 /* 도구 관련 */
 app.get('/tool/list/:group_id/:tool_index', tools.list);

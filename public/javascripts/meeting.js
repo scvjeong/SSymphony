@@ -1163,7 +1163,19 @@ function setupUserListChart()
 }
 
 
+// 선 색상 변경
+function changeStrokeColor(color)
+{
+	
+}
 
+// 채우기 색상 변경
+function changeFillColor(color)
+{
+	
+}
+
+/*
 function changePenColor(color)
 {
 	_pen_color = color;
@@ -1385,7 +1397,7 @@ function drawArrivedPen(data)
 	var canvas = document.getElementById(objBoard);
 	var canvas_context = canvas.getContext("2d");
 	canvas.draw(data);
-}
+}*/
 
 
 function noticeBarMoving()

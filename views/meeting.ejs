@@ -126,7 +126,6 @@
 	<!-- /투표 도구 -->
 	
 </head>
-
 <body class="meeting">
 	<div class="container">
 		<div class="title-bar">
@@ -135,15 +134,11 @@
 			<div class="result-btn" id="result-btn">회의종료</div>
 			<div class="time">00:00:00 / 00:00:00</div>
 		</div>
+		<div class="navbar">
+			<div_
+		</div>
 		<div id="white-board" class="white-board">
-			<div class="notice-bar">
-				<ul>
-					<li class="list">오프닝</li>
-					<li class="list">의사결정</li>
-					<li class="list">갈등해결</li>
-					<li>오프닝</li>
-				</ul>
-			</div>
+			<!-- Whiteboard control box -->
 			<div id="whiteboard_control_box">
 				<div id="titlebar"></div>
 				<div id="color_selector">
@@ -165,8 +160,19 @@
 					<input type="button" value="펜" id="btn_drawtool_pen" />
 					<input type="button" value="사각형" id="btn_drawtool_rect" />
 					<input type="button" value="원" id="btn_drawtool_ellipse" />
-				</div>	
+				</div>
+				
+				<div class="notice-bar" style="display:inline; width:300px;">
+					<ul>
+						<li class="list">오프닝</li>
+						<li class="list">의사결정</li>
+						<li class="list">갈등해결</li>
+						<li>오프닝</li>
+					</ul>
+				</div>
 			</div>
+			
+			<!-- /Whiteboard control box -->
 			<div id="window_share_box">
 				<div id="titlebar">
 					<span>
@@ -243,10 +249,11 @@
 					</div>
 				</div>
 			</div>
-			<canvas id="canvasView">
-				<p>브라우저에서 캔버스 지원이 안 됩니다.<br/>
-				</p>
+			
+			<canvas id="cv_whiteboard">
+				<p>브라우저에서 캔버스 지원이 안 됩니다.</p>
 			</canvas>
+			
 		</div>
 		<div id="rightpanel" class="rightpanel">
 			<div class="process-box">

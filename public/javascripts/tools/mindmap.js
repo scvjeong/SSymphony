@@ -371,7 +371,7 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
 		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
+		tmpInput.css({ "width": (85-(5*parseInt(indentStatus)))+'%' });
 		tmpToolSelect.find('.input_add').attr('class', 'input_task');
 	}
 	else 
@@ -381,7 +381,7 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
 		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
+		tmpInput.css({ "width": (85-(5*parseInt(indentStatus)))+'%' });
 		tmpInput.trigger('focus');
 	}
 }
@@ -713,8 +713,8 @@ function mindmap_draw_mindmap() {
 	mindmap_init_mindmap();
 	mindmap_get_list_data();
 	
-	var width = 500,
-		height = 300;
+	var width = 400,
+		height = 250;
 
 	var color = d3.scale.category20();
 

@@ -1118,7 +1118,9 @@ function makeCanvasImg()
 			//console.log(imgData);
 			//ctx.putImageData(imgData,300,300, 0, 0, 200, 200);
 			*/
-	}
+		  }
+	});
+	
 
 }
 

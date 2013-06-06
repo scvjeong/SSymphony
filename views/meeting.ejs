@@ -45,6 +45,8 @@
 	<!-- theme css -->
 	<link rel="stylesheet" href="/stylesheets/theme.css?v=1">
 
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+
   <!-- /Theme Styles -->
 
   <!-- CMS/Framework styles & scripts -->
@@ -134,15 +136,23 @@
 			<div class="result-btn" id="result-btn">회의종료</div>
 			<div class="time">00:00:00 / 00:00:00</div>
 		</div>
-		<div class="navbar">
-			<div_
-		</div>
 		<div id="white-board" class="white-board">
 			<!-- Whiteboard control box -->
+			<div class="navbar navbar-fixed-top" style="margin-top:52px">
+				<div class="navbar-inner">
+					<ul class="nav">
+						<li id="btn_show_share_box" class="active" style="margin-left: 10px"><a><img src="/images/whiteboard/btn_share_box.png" width="24" height="24" /></a></li>
+						<li class="divider-vertical"></li>
+						<li id="btn_drawtool_pen" class="active"><a><img src="/images/whiteboard/btn_drawtool_pen.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_rect"><a><img src="/images/whiteboard/btn_drawtool_rect.png" width="24" height="24" /></i></a></li>
+						<li id="btn_drawtool_ellipse"><a><img src="/images/whiteboard/btn_drawtool_ellipse.png" width="24" height="24" /></a></li>
+						<li class="divider-vertical"></li>
+					</ul>
+				</div>
+			</div>
 			<div id="whiteboard_control_box">
-				<div id="titlebar"></div>
 				<div id="color_selector">
-					<ul id="color_list">
+					<ul id="color_list" style="display:inline">
 						<li onclick="changePenColor('#000000')" style="background-color: #000000"></li>
 						<li onclick="changePenColor('#ff0000')" style="background-color: #ff0000"></li>
 						<li onclick="changePenColor('#0000ff')" style="background-color: #0000ff"></li>
@@ -153,23 +163,15 @@
 						<li onclick="changePenColor('#ffffff')" style="background-color: #ffffff"></li>
 					</ul>
 				</div>
-				
-				<input type="button" value="Open Share Box" id="btn_show_share_box" />
-				
-				<div>
-					<input type="button" value="펜" id="btn_drawtool_pen" />
-					<input type="button" value="사각형" id="btn_drawtool_rect" />
-					<input type="button" value="원" id="btn_drawtool_ellipse" />
-				</div>
-				
-				<div class="notice-bar" style="display:inline; width:300px;">
-					<ul>
-						<li class="list">오프닝</li>
-						<li class="list">의사결정</li>
-						<li class="list">갈등해결</li>
-						<li>오프닝</li>
-					</ul>
-				</div>
+			</div>
+
+			<div class="notice-bar">
+				<ul>
+					<li class="list">오프닝</li>
+					<li class="list">의사결정</li>
+					<li class="list">갈등해결</li>
+					<li>오프닝</li>
+				</ul>
 			</div>
 			
 			<!-- /Whiteboard control box -->

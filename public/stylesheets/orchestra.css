@@ -1590,6 +1590,12 @@ h6 small {
 	right:0px;
 	float:right;
 	width:25%;
+  
+  z-index: 1030;
+  border-left: 1px solid #dddddd;
+
+  -webkit-box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+  box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
 }
 .rightpanel-title-bar{
 	font-family:"Fjalla One";

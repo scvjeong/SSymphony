@@ -53,6 +53,7 @@ $(document).ready(function() {
 	});
 
 	// 화이트보드 초기화
+	$("#white-board #btn_drawtool_pen").tooltip('show');
 	//$('#white-board #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 	$('#white-board #btn_drawtool_pen').click(function() {
 		_drawtool = 'pen';

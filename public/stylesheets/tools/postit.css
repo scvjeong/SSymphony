@@ -89,8 +89,12 @@
 
 .object {
 	height: 160px;
-	box-shadow: 5px 5px 5px 0px lightgray;
-	background: -webkit-linear-gradient(top, #ffffcc 0%,#ffff88 100%);
+	background-color: #fffdd6;
+	background-image: -webkit-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: -moz-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: -o-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: -ms-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
+	background-image: linear-gradient(to top, rgba(255,240,71,.3), rgba(255,254,238,.4));
 }
 
 .input_area {

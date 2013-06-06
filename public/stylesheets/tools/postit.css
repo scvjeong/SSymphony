@@ -16,7 +16,7 @@
   box-shadow: 0px 0px 4px 1px #ccc;
   position: absolute;
   left: 2%;
-  top: 5%;
+  top: 7%;
   width: 160px;
   height: 140px;
 	background-color: #fffdd6;
@@ -75,6 +75,11 @@
 	text-align: left;
 	width: 92%;
 	font: bold 18px verdana, sans-serif;
+}
+
+#title_right_text {
+	float:right;
+	margin-right: 4px;
 }
 
 #add_group {

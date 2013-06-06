@@ -151,6 +151,7 @@ function addSocketListenerForMindmap()
 		lastInput.attr('class', 'input_open');
 		tmpToolSelect.find('.input_open > .tmp_editing').trigger('focus'); 
 	
+		
 	});
 		
 	////  변경된 들여쓰기 얻어오는 함수  ////
@@ -370,7 +371,6 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
 		tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "margin-left": 1 });
 		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
 		tmpToolSelect.find('.input_add').attr('class', 'input_task');
 	}
@@ -381,7 +381,6 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
 		tmpBullet.css({"margin-left": parseInt(3) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "margin-left": 1 });
 		tmpInput.css({ "width": (85-(4*parseInt(indentStatus)))+'%' });
 		tmpInput.trigger('focus');
 	}

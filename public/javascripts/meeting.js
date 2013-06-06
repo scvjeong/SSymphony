@@ -1031,6 +1031,15 @@ function showEvaluateMeetingWindow()
 			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
 			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
 	
+			$('#eval_input_meeting_rating_val').bind('change', function (event) { 
+				$('#meeting_val').val(event.value);
+				console.log($('#meeting_val').val());
+			}); 
+			$('#eval_input_ft_rating_val').bind('change', function (event) { 
+				$('#ft_val').val(event.value);
+				console.log($('#ft_val').val());
+			}); 
+	
 		},
 		error: function(err) {
 			console.log(err);

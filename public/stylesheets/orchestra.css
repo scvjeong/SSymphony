@@ -1796,7 +1796,23 @@ h6 small {
 	cursor:pointer;
 }
 #menu #start-btn{
+	position:relative;
+	top:0px;
+	left:0px;
+	height:130px;
+	padding:0px 10px;
+	z-index:999;
 	background-color:#336699;
+	overflow:hidden;
+}
+#menu #start-btn div{
+	float:left;
+	width:90px;
+	height:100px;
+	margin:15px 0px;
+}
+#menu #start-btn div.tool{
+	padding:0px 10px;
 }
 #menu #meeting-list-btn{
 	background-color:#6699cc;

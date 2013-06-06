@@ -17,7 +17,7 @@ exports.meeting_list = function(req, res){
 		return;
 	}
 
-	/** session start **/
+	/** session start 
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
 	/** session end **/

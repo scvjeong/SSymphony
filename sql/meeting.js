@@ -151,3 +151,19 @@ exports.dao_set_meeting_save_options = function(evt, mysql_conn, params){
 
 	return sql;
 }
+
+// set_meeting_close
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_user']
+exports.dao_set_meeting_close = function(evt, mysql_conn, params){
+	var sql = "UPDATE `meeting_planning` SET ";
+	sql += "`status` = 'closed' ";
+	sql += "WHERE `idx` = '"+params['idx_meeting']+"' ";
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_meeting_close', err, rows);
+	});
+
+	return sql;
+}

@@ -22,7 +22,9 @@
     </div>
 	<div id="member-info">
 		<div class="profile-pic"></div>
+		<%if(result.user_info.length > 0) {%>
 		<div class="id"><%= result.user_info[0].first_name %> <%= result.user_info[0].last_name %></div>
+		<%}%>
 		<div class="info-menu">
 			<ul>
 				<li><a href="#">Profile</a></li>
@@ -46,6 +48,10 @@
 										%>
 											<span class="team-leader"><%= user_list[j].toString().trim() %></span>
 										<%
+										} else if( j === (user_list.length-1) ) {
+										%>
+											<span class="team-member"><%= user_list[j].toString().trim() %></span>
+										<%	
 										} else {
 										%>
 											<span class="team-member"><%= user_list[j].toString().trim() %>,</span>

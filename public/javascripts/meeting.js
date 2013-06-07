@@ -138,7 +138,28 @@ $(document).ready(function() {
 	
 	// 회의 종료 버튼
 	$("#result-btn").click(function(){
-		showMeetingResultWindow();
+		if( confirm("Are you sure?") )
+		{
+			$.ajax({
+				url: '/page/meeting_close',
+				type: 'POST',
+				dataType: 'json',
+				success: function(json) {
+					if( json.result == "failed" )
+					{
+						console.log(json.msg);
+					}
+					else if( json.result == "successful" )
+					{
+						showMeetingResultWindow();
+					}
+				},
+				error: function(err) {
+					console.log(err);
+					return false;
+				}
+			});			
+		}
 	});
 });
 
@@ -1070,39 +1091,6 @@ function showEvaluateMeetingWindow()
 
 }
 
-function showMeetingResultWindow()
-{
-
-	var source_url = "/page/meeting_result";
-	$.ajax({
-		type: "GET",
-		url: source_url,
-		dataType: "html",
-		success: function(data) {
-			dialog = bootbox.dialog(data);
-	
-			var bootbox_select = $('.bootbox');
-			bootbox_select.addClass("meeting_result_bootbox");
-			
-			setupUserListChart();
-			setupWordChart();
-			
-			var meeting_val = $("#meeting_val").text();
-			var ft_val = $("#proceeding_val").text();
-
-			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
-			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
-	
-		},
-		error: function(err) {
-			console.log(err);
-			return false;
-		}
-	});	
-
-	
-}
-
 function hideMeetingResultWindow()
 {
 	var bootbox_select = $('.meeting_result_bootbox');
@@ -1117,6 +1105,31 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
+function makeCanvasImg(tool_name)
+{
+	html2canvas( [ document.getElementById(tool_name) ], {
+          onrendered: function(canvas) {
+			//$('.container').prepend(canvas);
+
+			//$('canvas:first').attr('id', 'myCanvas');
+			//var can =document.getElementById("myCanvas");
+			
+			var oCanvas = canvas.toDataURL();
+
+			console.log(oCanvas);
+			var image = new Image();
+			image.src = oCanvas;
+			
+			console.log(oCanvas);
+
+			//var ctx = can.getContext("2d");
+			//ctx.drawImage(image,10,10,250,200);
+
+		  }
+	});
+	
+
+}
 
 function setupWordChart()
 {

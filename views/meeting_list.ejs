@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="/stylesheets/bootstrap_new.css" />
 	<link rel="stylesheet" href="/stylesheets/datepicker.css?v=1">
 	<link rel="stylesheet" href="/stylesheets/select2.css?v=1">
+	<link rel="stylesheet" href="/stylesheets/theme.css">
 </head>
 
 <body>
@@ -53,17 +54,21 @@
     <div id="meeting-calendar">
     </div>
 	<div id="meeting-list">
+		<ul class="meeting-list-btn-wrap">
+			<li><a class="add-member-btn" href="javascript:initAddMemberPopup();">Add Memebers...</a>
+		</ul>
 		<ul>
 			<% 
 				for(var i=0; i<result.meeting_list.length; i++) {
 					var idx = result.meeting_list[i].idx_meeting;
 			%>
-					<li class="meeting-node" idx="<%= idx %>">
+					<li class="meeting-node" idx="<%= idx %>" status="<%=result.meeting_list[i].status%>">
 						<div class="color-bar back-color-<%=i+1%>"></div>
 						<ul>
 							<li class="subject"><%= result.meeting_list[i].subject %></li>
 							<li class="date color-<%=i+1%>"><%= result.meeting_list[i].date.toDateString() %> <%= result.meeting_list[i].start_time %></li>
 							<li class="time"><%= result.meeting_list[i].start_time %> ~ <%= result.meeting_list[i].end_time %></li>
+							<li><%=result.meeting_list[i].status%></li>
 							<li class="member">
 								<%
 									var len = result.meeting_user[idx].length;
@@ -92,6 +97,19 @@
 	<div class="modal-body">Hello world!</div>
 	<!-- dialog buttons -->
 	<div class="modal-footer"><a href="#" class="btn primary">OK</a></div>
+</div>
+
+<div id="light-popup">
+	<div class="light-popup-header">
+		<span class="light-popup-title">Members</span>
+		<a href="javascript:initAddMemberPopdown();" class="light-popup-close-btn"><span class="icon-close"></span></a>
+	</div>
+	<div class="light-popup-body">
+		<input id="member" name="member" type="text" autocomplete="off">
+		<div class="contents">
+			Search for a person in Orchestra by name or email address, or enter an email address to invite someone new.
+		</div>
+	</div>
 </div>
 <!--============================= /Page Body ================================-->
 
@@ -140,20 +158,24 @@
 
 		$(document).ready(function(){
 			setup_calendar();
-			init_click_group();
-			init_color_bar();
-			init_start_btn();
+			initClickMeeting();
+			initColorBar();
+			initMeetingListBtn();
 		})
 
-		function init_click_group()
+		function initClickMeeting()
 		{
 			$("#meeting-list .meeting-node").click(function(){
 				var idx = $(this).attr("idx");
-				location.href="/page/meeting?idx_meeting="+idx;
+				var status = $(this).attr("status");
+				if( status === "progress" )
+					location.href="/page/meeting?idx_meeting="+idx;
+				else if( status === "closed" )
+					showMeetingResultWindow();
 			});
 		}
 
-		function init_color_bar()
+		function initColorBar()
 		{
 			var h;
 			$(".color-bar").each(function(){
@@ -161,7 +183,13 @@
 				$(this).height(h);
 			});
 		}
-		function init_start_btn()
+		function initMeetingListBtn()
+		{
+			initStartBtn();
+			initAddMemberBtn();
+			initSearchMemberBtn();
+		}	
+		function initStartBtn()
 		{	
 			$("#start-btn .list").click(function(){
 				location.href="/page/meeting?tool=list"
@@ -178,36 +206,135 @@
 			$("#start-btn .vote").click(function(){
 				location.href="/page/meeting?tool=vote"
 			});
-			init_start_btn_mouseover();
-			init_start_btn_mouseout();
+			initStartBtnMouseOver();
+			initStartBtnMouseOut();
 		};
-		function init_start_btn_mouseover()
+		function initStartBtnMouseOver()
 		{
 			$("#start-btn").mouseover(function(e){
-				if( $(this).width() === 90 && e.target.nodeName === "LI")
-				{
-					$(this).unbind("mouseover");
-					$(".make", this).html("MAKE");
-					$(this).animate({
-						width: '640'
-					}, 640, function(){
-						init_start_btn_mouseover();
-					});
-				}
+				$(this).unbind("mouseover");
+				$(".make", this).html("MAKE");
+				$(this).animate({
+					width: '640'
+				}, 500, function(){
+					initStartBtnMouseOver();
+				});
 			})
 		}
-		function init_start_btn_mouseout()
+		function initStartBtnMouseOut()
 		{
 			$("#start-btn").mouseout(function(e){
-				if( $(this).width() === 640 && e.target.nodeName === "LI" )
+				var o = $(this).offset();
+				var w = $(this).width();
+				var h = $(this).height();
+				var b = (o.top >= e.clientY || (h+o.top) <= e.clientY);
+				var b2 = (o.left >= e.clientX || (w+10) <= e.clientX);
+				if( b || b2 )
 				{
 					$(this).unbind("mouseout");
 					$(".make", this).html("START");
 					$(this).animate({
 						width: '90'
 					}, 640, function(){
-						init_start_btn_mouseout();
+						initStartBtnMouseOut();
 					});
+				}
+			});
+		}
+		var _search_member_flag = false;
+		function initSearchMemberBtn()
+		{
+			var cb = function(t, val)
+			{
+				if( $(t).val() === val )
+				{
+					if( _search_member_flag )
+					{
+						_search_member_flag = false;
+						searchMember(val);
+					}
+				}
+			}
+
+			$("input[name=member]").keyup(function(){
+				var val = $(this).val();
+				_search_member_flag = true;
+				window.setTimeout(cb, 500, this, val)
+			});
+		}
+		function searchMember(user_id)
+		{
+			var html = "";
+			if( user_id.length > 0 )
+			{
+				$.ajax({
+					url: '/page/search_user',
+					type: 'POST',
+					data: {user_id:user_id},
+					dataType: 'json',
+					success: function(json) {
+						if( json.length > 0 )
+						{
+							html += '<div class="contents-title">Select to add.</div>';
+							html += '<ul>';
+							for(var i=0; i<json.length; i++)
+								html += '<li class="searched-user-node" idx="'+json[i].idx+'">'+json[i].id+'</li>';
+							html += '</ul>';
+						}
+						else
+							html = '<div class="no-result">No results</div>';
+						$("#light-popup .contents").html(html);
+						$("#light-popup .searched-user-node").on("click", function(){
+							var idx_user = $(this).attr("idx");
+							addMember(idx_user);
+						});
+					}
+				});
+			}
+			else
+			{
+				html = '<div class="no-result">No results</div>';
+				$("#light-popup .contents").html(html);
+			}
+		}
+		function initAddMemberBtn()
+		{
+			$(".add-member-btn").toggle(
+			function(){
+				initAddMemberPopup();
+			},function(){
+				initAddMemberPopdown();
+			});
+		}
+		function initAddMemberPopup()
+		{
+			var o = $(".add-member-btn").offset();
+			var w = $(window).width();
+			$("#light-popup").css({
+				display:"block",
+				top:o.top+35,
+				left:o.left-10
+			});
+			$("#light-popup #member").focus();
+		}
+		function initAddMemberPopdown()
+		{
+			$("#light-popup").css({
+				display:"none",
+				top:"0px",
+				left:"0px"
+			});
+			$("#light-popup #member").val("");
+		}
+		function addMember(idx_user)
+		{
+			$.ajax({
+				url: '/page/add_user',
+				type: 'POST',
+				data: {idx_user:idx_user},
+				dataType: 'json',
+				success: function(json) {
+					initAddMemberPopdown();
 				}
 			});
 		}

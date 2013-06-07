@@ -9,7 +9,7 @@ var _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT = 3;
 
 exports.set_meeting_planning = function(req, res){
 	/** session start **/
-	if( !req.session.email || !req.session.email.length )
+	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
 
@@ -136,7 +136,7 @@ exports.set_meeting_planning = function(req, res){
 
 exports.meeting_template = function(req, res){
 	/** session start **/
-	if( !req.session.email || !req.session.email.length )
+	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
 
@@ -154,7 +154,7 @@ exports.meeting_template = function(req, res){
 
 exports.setting_agenda = function(req, res){
 	/** session start **/
-	if( !req.session.email || !req.session.email.length )
+	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
 
@@ -201,7 +201,7 @@ exports.setting_agenda = function(req, res){
 
 exports.setting_agenda_step = function(req, res){
 	/** session start **/
-	if( !req.session.email || !req.session.email.length )
+	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
 

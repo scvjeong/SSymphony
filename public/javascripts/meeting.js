@@ -7,7 +7,7 @@ var _tool_matrix_count = 0;
 var _common_window_top = 50;
 var _common_window_left = 20;
 var _new_z_index = 0;
-var _drawtool = 'pen';
+//var _drawtool = 'pen';
 var _group_id = 1;
 var _is_rightpanel_open = true;
 var _window_width = 0;
@@ -53,6 +53,14 @@ $(document).ready(function() {
 	});
 
 	// 화이트보드 초기화
+	switchDrawingTool('pen');
+	$("[data-toggle='tooltip']").tooltip();
+
+	changeFillColor('#000000');
+	changeLineColor('#000000');
+	//$("#colorPicker").jqxColorPicker({ color: "ffaabb", colorMode: 'hue', width: 220, height: 200, theme: null });
+
+	$("#white-board #btn_drawtool_pen").tooltip('show');
 	//$('#white-board #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
 	$('#white-board #btn_drawtool_pen').click(function() {
 		_drawtool = 'pen';
@@ -173,6 +181,7 @@ $(document).ready(function() {
 $(window).resize(function() {
 	resetSizeInfo();
 	resizeWhiteBoardControlBox();
+	resizeWhiteBoardCanvas();
 });
 
 // 소켓 열기
@@ -226,12 +235,9 @@ function openSocket()
 		}
 		else if (data.option === 'new_canvas_draw')
 		{
-			switch (data.tool)
-			{
-			case 'pen':
-				drawArrivedPen(data.val);
-				break;				
-			}
+			console.log("GET_OPTION_DATA new_canvas_draw");
+			console.log(data);
+			drawArrived(data.tool, data.val);
 		}
 	});
 }
@@ -301,6 +307,17 @@ function resizeWhiteBoardControlBox()
 	}
 }
 
+function resizeWhiteBoardCanvas()
+{
+	var width = $(document).width();
+	var height = $(document).height() - 52;
+
+	$('#white-board').width(width);
+	$('#white-board').height(height);
+	$('#cv_whiteboard').attr('width', width);
+	$('#cv_whiteboard').attr('height', height);
+}
+
 function getFileTypeInfo(filetype)
 {
 	var result = {};
@@ -328,11 +345,22 @@ function getFileTypeInfo(filetype)
 	return result;
 }
 
+var _is_share_box_open = false;
 var share_box = ( function() {
 		function _addEventListeners() {
-			$('#whiteboard_control_box #btn_show_share_box').click(function() {
-				$('#window_share_box').jqxWindow('open');
-				console.log("open share_box");
+			$('#btn_show_share_box').click(function() {
+				if (_is_share_box_open == false)
+				{
+					$('#window_share_box').jqxWindow('open');
+					$('#white-board .navbar .nav #btn_show_share_box').addClass('active');
+					_is_share_box_open = true;
+				}
+				else
+				{
+					$('#window_share_box').css('display', 'none');
+					$('#white-board .navbar .nav #btn_show_share_box').removeClass('active');
+					_is_share_box_open = false;
+				}
 			});
 		};
 		function _createElements() {
@@ -355,7 +383,14 @@ var share_box = ( function() {
 						width : '100%',
 						theme : share_box.config.theme
 					});
+
 					$('#window_share_box').jqxWindow('focus');
+
+					$('#window_share_box .jqx-window-close-button').click(function() {
+						_is_share_box_open = false;
+						$('#white-board .navbar .nav #btn_show_share_box').removeClass('active');
+						console.log("closed");
+					});
 				}
 			});
 		};
@@ -960,6 +995,10 @@ function closePopupWindow(idx)
 	$('#popup' + idx).fadeOut('slow');
 }
 
+<!--setInterval("showRunTime()", 1000);
+var _runTime = 1000;
+var _totalTime = "00:50:00";	// 회의 전체 시간-->
+
 var _alarmList = new Array();
 function showRunTime()
 {
@@ -1081,6 +1120,31 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
+function makeCanvasImg(tool_name)
+{
+	html2canvas( [ document.getElementById(tool_name) ], {
+          onrendered: function(canvas) {
+			//$('.container').prepend(canvas);
+
+			//$('canvas:first').attr('id', 'myCanvas');
+			//var can =document.getElementById("myCanvas");
+			
+			var oCanvas = canvas.toDataURL();
+
+			console.log(oCanvas);
+			var image = new Image();
+			image.src = oCanvas;
+			
+			console.log(oCanvas);
+
+			//var ctx = can.getContext("2d");
+			//ctx.drawImage(image,10,10,250,200);
+
+		  }
+	});
+	
+
+}
 
 function setupWordChart()
 {
@@ -1158,17 +1222,285 @@ function setupUserListChart()
 }
 
 
-// 선 색상 변경
-function changeStrokeColor(color)
+var _drawing_tool = "pen";
+var _fill_color = "#000000";
+var _line_color = "#000000";
+var _line_width = "1";
+var _font_family = "serif";
+var _font_size = 10;
+var _canvas = $('#cv_whiteboard');
+var _canvas_context = document.getElementById('cv_whiteboard').getContext('2d');
+var _is_mousedown = false;
+
+var _now_position = {x:0, y:0};
+var _pre_position = {x:0, y:0};
+
+var _pen_data = {points:[], line_width:1, line_color:"#000000"};
+var _drawtextbox = $('#drawtext_container #inputbox');
+
+_canvas.mousedown(function(e) {
+	//console.log("mousedown");
+	_is_mousedown = true;
+
+	_now_position.x = e.offsetX;
+	_now_position.y = e.offsetY;
+
+	switch(_drawing_tool)
+	{
+	case "pen":
+		_pen_data.points = [];	// 펜 데이터 초기화
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(_now_position.x, _now_position.y);
+		_pen_data.points.push({x: _now_position.x, y: _now_position.y});
+		break;
+	case "rect":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
+		break;
+	case "ellipse":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
+		break;
+	case "text":
+		console.log(e);
+
+		$('#drawtext_container').css({
+			'display': 'block',
+			'left': e.clientX + 'px',
+			'top': (e.clientY - 15) + 'px'
+		});
+		_drawtextbox.css({
+			'color': _fill_color,
+			'font-family': _font_family,
+			'font-size': _font_size + 'pt'
+		});
+		_drawtextbox.val('');
+		_drawtextbox.focus();
+		
+		break;
+	}
+});
+_canvas.mousemove(function(e) {
+	//console.log("mousemove");
+
+	if (_is_mousedown == true)
+	{
+		switch (_drawing_tool)
+		{
+		case "pen":
+			//_pre_position = _now_position;
+			_now_position.x = e.offsetX;
+			_now_position.y = e.offsetY;
+
+			_canvas_context.lineTo(_now_position.x, _now_position.y);
+			_pen_data.points.push({x: _now_position.x, y: _now_position.y});
+			_canvas_context.strokeStyle = _line_color;
+			_canvas_context.lineWidth = _line_width;
+			_canvas_context.stroke();
+			break;
+		}
+	}
+});
+_canvas.mouseup(function(e) {
+	//console.log("mouseup");
+	_is_mousedown = false;
+
+	switch(_drawing_tool)
+	{
+	case "pen":
+		// 동기화 데이터 전송
+		_pen_data.line_width = _line_width;
+		_pen_data.line_color = _line_color;
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'pen',
+				id:"0",
+				val:_pen_data
+			});
+		_pen_data.points = [];	// 다음 사용을 위해 펜 데이터 초기화
+		break;
+	case "rect":
+		var rect_data = {};
+
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		var width = _now_position.x - _pre_position.x;
+		var height = _now_position.y - _pre_position.y;
+
+		_canvas_context.beginPath();
+		_canvas_context.rect(_pre_position.x, _pre_position.y, width, height);
+		_canvas_context.fillStyle = _fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+
+
+		// 동기화 데이터 전송
+		rect_data.x = _pre_position.x;
+		rect_data.y = _pre_position.y;
+		rect_data.width = width;
+		rect_data.height = height;
+		rect_data.fill_color = _fill_color;
+		rect_data.line_color = _line_color;
+		rect_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'rect',
+				id:"0",
+				val:rect_data
+			});
+		break;
+	case "ellipse":
+		var ellipse_data = {};
+
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		var width = _now_position.x - _pre_position.x;
+		var height = _now_position.y - _pre_position.y;
+		var radius;
+
+		_canvas_context.beginPath();
+		if (width <= height)
+		{
+			radius = width / 2;
+			_canvas_context.arc(_pre_position.x + radius, _pre_position.y + radius, radius, 0, 2 * Math.PI);
+		}
+		else
+		{
+			radius = height / 2;
+			_canvas_context.arc(_pre_position.x + radius, _pre_position.y + radius, radius, 0, 2 * Math.PI);
+		}
+
+		_canvas_context.fillStyle = _fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+
+		// 동기화 데이터 전송
+		ellipse_data.x = _pre_position.x;
+		ellipse_data.y = _pre_position.y;
+		ellipse_data.radius = radius;
+		ellipse_data.fill_color = _fill_color;
+		ellipse_data.line_color = _line_color;
+		ellipse_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'ellipse',
+				id:"0",
+				val:ellipse_data
+			});
+		break;
+	}
+});
+
+
+// 도착한 도구 그리기
+function drawArrived(tool, val)
 {
-	
+	switch(tool)
+	{
+	case "pen":
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(val.points[0].x, val.points[0].y);
+
+		for (var i = 1; i < val.points.length; i++)
+		{
+			_canvas_context.lineTo(val.points[i].x, val.points[i].y);
+			_canvas_context.strokeStyle = val.line_color;
+			_canvas_context.lineWidth = val.line_width;
+			_canvas_context.stroke();
+		}
+		break;
+	case "rect":
+		_canvas_context.beginPath();
+		_canvas_context.rect(val.x, val.y, val.width, val.height);
+		_canvas_context.fillStyle = val.fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		break;
+	case "ellipse":
+		_canvas_context.beginPath();
+		_canvas_context.arc(val.x + val.radius, val.y + val.radius, val.radius, 0, 2 * Math.PI);
+		_canvas_context.fillStyle = val.fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		break;
+	case "text":
+		break;
+	}
+}
+
+
+// 선 색상 변경
+function changeLineColor(color)
+{
+	_line_color = color;
+	$('#linecolor_preview').css('background-color', color);
+}
+
+// 선 두께 변경
+function changeLineWidth(width)
+{
+	_line_width = width;
+	$('#linewidth_preview').css('height', width + 'px');
+	$('#linewidth_text_preview').html(width + 'px');
 }
 
 // 채우기 색상 변경
 function changeFillColor(color)
 {
-	
+	_fill_color = color;
+	$('#fillcolor_preview').css('background-color', color);
 }
+
+// 글꼴 변경
+function changeFontFamily(font)
+{
+	_font_family = font;
+	$('#fontfamily_preview').css('font-family', font);
+	$('#fontfamily_preview').html(font);
+}
+
+function changeFontSize(size)
+{
+	_font_size = size;
+	$('#fontsize_preview').html(size + 'pt');
+}
+
+// 도구 선택
+function switchDrawingTool(tool)
+{
+	_drawing_tool = tool;
+
+	$('#white-board .navbar .nav #btn_drawtool_pen').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_rect').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_ellipse').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_text').removeClass('active');
+
+	$('#white-board .navbar .nav #btn_drawtool_' + _drawing_tool).addClass('active');
+
+	if (tool == 'text')
+		$('#cv_whiteboard').css('cursor', 'text');
+	else
+		$('#cv_whiteboard').css('cursor', 'crosshair');
+}
+
 
 /*
 function changePenColor(color)

@@ -69,7 +69,7 @@ iframe {
 .white-board #cv_whiteboard {
 	cursor: crosshair;
 	margin-top: 45px;
-	border: 1px solid #ababab;
+	border: none;
 }
 
 .notice-bar{

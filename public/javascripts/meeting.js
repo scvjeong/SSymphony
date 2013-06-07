@@ -56,7 +56,7 @@ $(document).ready(function() {
 	switchDrawingTool('pen');
 	$("[data-toggle='tooltip']").tooltip();
 
-	changeFillColor('#000000');
+	changeFillColor('#ffffff');
 	changeLineColor('#000000');
 	//$("#colorPicker").jqxColorPicker({ color: "ffaabb", colorMode: 'hue', width: 220, height: 200, theme: null });
 	$("#white-board #btn_drawtool_pen").tooltip('show');
@@ -1458,6 +1458,7 @@ function drawArrived(tool, val)
 		_canvas_context.stroke();
 		break;
 	case "text":
+
 		break;
 	}
 }
@@ -1468,6 +1469,11 @@ function changeLineColor(color)
 {
 	_line_color = color;
 	$('#linecolor_preview').css('background-color', color);
+
+	if (color == 'rgba(0,0,0,0)')
+		$('#linecolor_preview').css('background-image', 'url("../images/whiteboard/pattern_transparent.png")');
+	else
+		$('#linecolor_preview').css('background-image', '');
 }
 
 // 선 두께 변경
@@ -1483,6 +1489,11 @@ function changeFillColor(color)
 {
 	_fill_color = color;
 	$('#fillcolor_preview').css('background-color', color);
+
+	if (color == 'rgba(0,0,0,0)')
+		$('#fillcolor_preview').css('background-image', 'url("../images/whiteboard/pattern_transparent.png")');
+	else
+		$('#fillcolor_preview').css('background-image', '');
 }
 
 // 글꼴 변경

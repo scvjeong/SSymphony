@@ -1093,13 +1093,13 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
-function makeCanvasImg()
+function makeCanvasImg(tool_name)
 {
-	html2canvas( [ document.getElementById('list0') ], {
+	html2canvas( [ document.getElementById(tool_name) ], {
 		  width: 478,
 		  height: 242,
           onrendered: function(canvas) {
-            document.body.appendChild(canvas);
+            document.getElementsByClassName('white-board').appendChild(canvas);
 			$('canvas').attr('id', 'myCanvas');
 			var can =document.getElementById("myCanvas");
 			
@@ -1108,9 +1108,12 @@ function makeCanvasImg()
 			//console.log(oCanvas);
 			var image = new Image();
 			image.src = oCanvas;
+			
+			console.log(oCanvas);
+
 			var ctx = can.getContext("2d");
 			ctx.drawImage(image,30,30,100,100);
-
+			
 			/*
 			var ctx = can.getContext("2d");
 			//var imgData = ctx.getImageData(0, 0, 300, 300);

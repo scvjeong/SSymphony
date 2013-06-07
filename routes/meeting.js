@@ -18,7 +18,6 @@ exports.main = function(req, res){
 	}
 
 	/** session start 
->>>>>>> scvjeong
 	if( !req.session.email || !req.session.email.length )
 		res.redirect("/");
 	/** session end **/
@@ -35,12 +34,6 @@ exports.main = function(req, res){
 	evt.on('get_meeting', function(err, rows){
 		if(err) throw err;
 		complete_flag++;
-		console.log(rows);
-		if( complete_flag === _MEETING_FLAG_CNT )
-			res.render('meeting', { title: 'Express' });
-	});
-
-	//res.render('meeting', { title: 'Express' });
 		result.meeting = rows;
 		console.log(result);
 		if( complete_flag === _MEETING_FLAG_CNT )

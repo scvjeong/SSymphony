@@ -1099,7 +1099,7 @@ function makeCanvasImg(tool_name)
 		  width: 478,
 		  height: 242,
           onrendered: function(canvas) {
-			$('.white-board').appendChild(canvas);
+			$('.white-board').append(canvas);
             //document.getElementsByClassName('white-board'
 			$('canvas').attr('id', 'myCanvas');
 			var can =document.getElementById("myCanvas");

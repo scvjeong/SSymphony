@@ -1590,6 +1590,12 @@ h6 small {
 	right:0px;
 	float:right;
 	width:25%;
+  
+  z-index: 1030;
+  border-left: 1px solid #dddddd;
+
+  -webkit-box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+  box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
 }
 .rightpanel-title-bar{
 	font-family:"Fjalla One";
@@ -1796,6 +1802,9 @@ h6 small {
 	cursor:pointer;
 }
 #menu #start-btn{
+<<<<<<< HEAD
+	background-color:#336699;
+=======
 	position:relative;
 	top:0px;
 	left:0px;
@@ -1813,6 +1822,7 @@ h6 small {
 }
 #menu #start-btn div.tool{
 	padding:0px 10px;
+>>>>>>> scvjeong
 }
 #menu #meeting-list-btn{
 	background-color:#6699cc;

@@ -3,26 +3,66 @@
 	{
 		"selected_items":
 		[
+			[
+				"_line",
+				"_line_color"
+			],
+			[
+				"offs",
+				"offsetY"
+			],
+			[
+				"_line_",
+				"_line_width"
+			],
+			[
+				"now_po",
+				"_now_position"
+			],
+			[
+				"_canvas",
+				"_canvas_context"
+			],
+			[
+				"_canva",
+				"_canvas_context"
+			],
+			[
+				"_can",
+				"_canvas_context"
+			],
+			[
+				"off",
+				"offsetY"
+			],
+			[
+				"_draw",
+				"_drawing_tool"
+			],
+			[
+				"btn_drawtool_e",
+				"btn_drawtool_ellipse"
+			],
+			[
+				"btn_drawtool_",
+				"btn_drawtool_rect"
+			],
+			[
+				"_dr",
+				"_drawing_tool"
+			],
+			[
+				"_is_",
+				"_is_share_box_open"
+			],
+			[
+				"resize",
+				"resizeWhiteBoardCanvas"
+			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "views/meeting.ejs",
-			"settings":
-			{
-				"buffer_size": 14091,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "app.js",
-			"settings":
-			{
-				"buffer_size": 3467,
-				"line_ending": "Windows"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -56,9 +96,22 @@
 	},
 	"file_history":
 	[
+		"/Users/stargt/workspace/SSymphony/public/javascripts/config.js",
+		"/Users/stargt/workspace/SSymphony/public/javascripts/meeting.js",
+		"/Users/stargt/workspace/SSymphony/views/meeting.ejs",
+		"/Users/stargt/workspace/SSymphony/app.js",
+		"/Users/stargt/workspace/SSymphony/public/stylesheets/orchestra.css",
+		"/Users/stargt/workspace/SSymphony/public/stylesheets/theme.css",
+		"/Users/stargt/workspace/SSymphony/public/stylesheets/tools/list.css",
+		"/Users/stargt/workspace/SSymphony/routes/meeting.js",
+		"/Users/stargt/workspace/SSymphony/routes/meeting_list.js",
+		"/Users/stargt/workspace/SSymphony/sql/meeting.js",
+		"/Users/stargt/workspace/SSymphony/views/group_select.ejs",
+		"/Users/stargt/workspace/SSymphony/views/meeting_evaluation.ejs",
+		"/Users/stargt/workspace/SSymphony/views/meeting_list.ejs",
+		"/Users/stargt/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
 		"/Users/stargt/workspace/SSymphony/sftp-config.json",
 		"/var/folders/zq/5zh4wrt55xlbsvldzklpd0bc0000gn/T/sublime-sftp-browse-1370416091/stargt.com/home/hosting_users/stargt/www/index.html",
-		"/Users/stargt/workspace/SSymphony/app.js",
 		"/Users/stargt/Library/Application Support/Sublime Text 2/Packages/User/sftp_servers/stargt.com",
 		"/Users/stargt/Library/Application Support/Sublime Text 2/Packages/SFTP/SFTP.sublime-settings",
 		"/Users/stargt/workspace/SSymphony/socket.io.js",
@@ -76,6 +129,7 @@
 		"height": 0.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -83,6 +137,28 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"HEAD",
+			">>",
+			"HEAD",
+			"splashwrap",
+			"showpopup",
+			"resize",
+			"beginPa",
+			"switchD",
+			"drawtool",
+			"ControlBox",
+			"share_box",
+			"sharebox",
+			"resetSize",
+			"resize",
+			"resizecontrol",
+			"resizeWhite",
+			"resizeWhiteboard",
+			"cv_whiteboard",
+			"cv_white",
+			"changeFillColor",
+			"rightpanel",
+			"bootstrap",
 			"stylesheets",
 			"util"
 		],
@@ -92,6 +168,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"changeLineColor"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -102,69 +179,8 @@
 	"groups":
 	[
 		{
-			"selected": 1,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "views/meeting.ejs",
-					"settings":
-					{
-						"buffer_size": 14091,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"origin_encoding": "UTF-8",
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 401.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "app.js",
-					"settings":
-					{
-						"buffer_size": 3467,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								529,
-								529
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"origin_encoding": "UTF-8",
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -205,7 +221,7 @@
 	},
 	"replace":
 	{
-		"height": 0.0
+		"height": 64.0
 	},
 	"save_all_on_build": true,
 	"select_file":

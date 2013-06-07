@@ -1138,9 +1138,9 @@ function makeCanvasImg(tool_name)
 		  width: 478,
 		  height: 242,
           onrendered: function(canvas) {
-			$('.white-board').append(canvas);
+			$('.container').prepend(canvas);
             //document.getElementsByClassName('white-board'
-			$('canvas').attr('id', 'myCanvas');
+			$('canvas:first').attr('id', 'myCanvas');
 			var can =document.getElementById("myCanvas");
 			
 			var oCanvas = can.toDataURL();
@@ -1152,7 +1152,7 @@ function makeCanvasImg(tool_name)
 			console.log(oCanvas);
 
 			var ctx = can.getContext("2d");
-			ctx.drawImage(image,30,30,100,100);
+			ctx.drawImage(image,10,10,350,200);
 			
 			/*
 			var ctx = can.getContext("2d");

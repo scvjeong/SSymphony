@@ -293,6 +293,25 @@
 					</span>
 				</div>
 				<div class="content"><div>
+					<div>
+						<input type="text" id="txt_linktitle" placeholder="링크 제목" />
+						<input type="text" id="txt_linkurl" placeholder="링크 주소" />
+						<input type="button" value="등록" id="btn_addlink" />
+						<ul id="link_list">
+						</ul>
+					</div>
+					<div>
+						<form id="uploadForm"
+							  enctype="multipart/form-data"
+							  action="/lib/upload"
+							  method="post">
+						  <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
+						  <input type="button" id="btn_uploadFile" value="업로드" />
+						</form>
+						<ul id="file_list">
+						</ul>
+					</div>
+					
 					<div id="section_links">
 						<div class="section_title">
 							<span class="title_text">Links</span>
@@ -341,26 +360,7 @@
 						</div>
 						<ul class="list"></ul>
 					</div>
-					</div>
-					<div>
-						<input type="text" id="txt_linktitle" placeholder="링크 제목" />
-						<input type="text" id="txt_linkurl" placeholder="링크 주소" />
-						<input type="button" value="등록" id="btn_addlink" />
-						<ul id="link_list">
-						</ul>
-					</div>
-					<div>
-						<form id="uploadForm"
-							  enctype="multipart/form-data"
-							  action="/lib/upload"
-							  method="post">
-						  <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
-						  <input type="button" id="btn_uploadFile" value="업로드" />
-						</form>
-						<ul id="file_list">
-						</ul>
-					</div>
-				</div>
+				</div></div>
 			</div>
 			
 			<canvas id="cv_whiteboard">

@@ -1225,7 +1225,7 @@ var _pen_data = {points:[], line_width:1, line_color:"#000000"};
 var _drawtextbox = $('#drawtext_container #inputbox');
 
 _canvas.mousedown(function(e) {
-	//console.log("mousedown");
+	console.log("mousedown");
 	_is_mousedown = true;
 
 	_now_position.x = e.offsetX;
@@ -1271,7 +1271,7 @@ _canvas.mousedown(function(e) {
 	}
 });
 _canvas.mousemove(function(e) {
-	//console.log("mousemove");
+	console.log("mousemove");
 
 	if (_is_mousedown == true)
 	{
@@ -1292,7 +1292,7 @@ _canvas.mousemove(function(e) {
 	}
 });
 _canvas.mouseup(function(e) {
-	//console.log("mouseup");
+	console.log("mouseup");
 	_is_mousedown = false;
 
 	switch(_drawing_tool)
@@ -1469,9 +1469,6 @@ function drawArrived(tool, val)
 		_canvas_context.strokeStyle = val.line_color;
 		_canvas_context.lineWidth = val.line_width;
 		_canvas_context.stroke();
-		break;
-	case "text":
-
 		break;
 	}
 }

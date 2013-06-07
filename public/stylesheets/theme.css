@@ -99,6 +99,14 @@ iframe {
 	background-color: #61b0e9;
 	z-index: 5000;
 }
+#rightpanel #process_list {
+	list-style: none;
+}
+#rightpanel #process_list .process-unit {
+	height: 25px;
+	line-height: 25px;
+	margin-bottom: 10px;
+}
 #rightpanel > ul {
 	list-style: none;
 	margin: 0;

@@ -375,17 +375,23 @@
 			<div class="process-box">
 				<div class="rightpanel-title-bar">Process</div>
 				<div class="rightpanel-content-box fancy-scrollbar">
-					<div class="process-unit processing">Ice Breaking</div>
-					<div class="process-unit">Weekly Review</div>
-					<div class="process-unit">Clarify Agenda</div>
-					<div class="process-unit">Discussion</div>
-					<div class="process-unit">Burning Issue</div>
-					<div class="process-unit">Review</div>
-					<div class="process-unit">Closing Round</div>
+					<ul id="process_list" style="margin: 0;">
+						<li class="process-unit processing">
+							<span>Ice Breaking</span>
+							<div style="height:2px; background-color:#dddddd;"></div>
+							<div></div>
+						</li>
+						<li class="process-unit"><span>Weekly Review</span></li>	
+						<li class="process-unit"><span>Clarify Agenda</span></li>
+						<li class="process-unit"><span>Discussion</span></li>
+						<li class="process-unit"><span>Burning Issue</span></li>
+						<li class="process-unit"><span>Review</span></li>
+						<li class="process-unit"><span>Closing Round</span></li>
+					</ul>
 				</div>
 			</div>
 			<div class="tool-box">
-				<div class="rightpanel-title-bar">Tool</div>
+				<div class="rightpanel-title-bar">Add Tool</div>
 				<div class="rightpanel-content-box fancy-scrollbar">
 					<div class="member-unit" onclick="getToolSource('list', initList, true);">list</div>
 					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap, true);">mindmap</div>

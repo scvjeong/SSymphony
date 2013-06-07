@@ -1135,32 +1135,23 @@ function hideEvaluateWindow()
 function makeCanvasImg(tool_name)
 {
 	html2canvas( [ document.getElementById(tool_name) ], {
-		  width: 478,
-		  height: 242,
           onrendered: function(canvas) {
-			$('.container').prepend(canvas);
-            //document.getElementsByClassName('white-board'
-			$('canvas:first').attr('id', 'myCanvas');
-			var can =document.getElementById("myCanvas");
-			
-			var oCanvas = can.toDataURL();
+			//$('.container').prepend(canvas);
 
-			//console.log(oCanvas);
+			//$('canvas:first').attr('id', 'myCanvas');
+			//var can =document.getElementById("myCanvas");
+			
+			var oCanvas = canvas.toDataURL();
+
+			console.log(oCanvas);
 			var image = new Image();
 			image.src = oCanvas;
 			
 			console.log(oCanvas);
 
-			var ctx = can.getContext("2d");
-			ctx.drawImage(image,10,10,350,200);
-			
-			/*
-			var ctx = can.getContext("2d");
-			//var imgData = ctx.getImageData(0, 0, 300, 300);
-			ctx.scale(3, 3);
-			//console.log(imgData);
-			//ctx.putImageData(imgData,300,300, 0, 0, 200, 200);
-			*/
+			//var ctx = can.getContext("2d");
+			//ctx.drawImage(image,10,10,250,200);
+
 		  }
 	});
 	

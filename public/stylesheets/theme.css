@@ -68,12 +68,9 @@ iframe {
 
 .white-board #cv_whiteboard {
 	cursor: crosshair;
-<<<<<<< HEAD
 	width: 100%;
 	height: 100%;
 	margin-top: 45px;
-=======
->>>>>>> scvjeong
 	border: 1px solid #ababab;
 }
 

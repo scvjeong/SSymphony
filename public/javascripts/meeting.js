@@ -59,22 +59,7 @@ $(document).ready(function() {
 	changeFillColor('#000000');
 	changeLineColor('#000000');
 	//$("#colorPicker").jqxColorPicker({ color: "ffaabb", colorMode: 'hue', width: 220, height: 200, theme: null });
-
 	$("#white-board #btn_drawtool_pen").tooltip('show');
-	//$('#white-board #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
-	$('#white-board #btn_drawtool_pen').click(function() {
-		_drawtool = 'pen';
-	});
-	$('#white-board #btn_drawtool_rect').click(function() {
-		_drawtool = 'rect';
-	});
-	$('#white-board #btn_drawtool_ellipse').click(function() {
-		_drawtool = 'ellipse';
-	});
-
-	$('#white-board #btn_text_add').click(function() {
-		_drawtool = 'text';
-	});
 
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
@@ -1218,6 +1203,7 @@ var _font_size = 10;
 var _canvas = $('#cv_whiteboard');
 var _canvas_context = document.getElementById('cv_whiteboard').getContext('2d');
 var _is_mousedown = false;
+//var _is_text_typing = false;
 
 var _now_position = {x:0, y:0};
 var _pre_position = {x:0, y:0};
@@ -1239,6 +1225,10 @@ _canvas.mousedown(function(e) {
 		_canvas_context.beginPath();
 		_canvas_context.moveTo(_now_position.x, _now_position.y);
 		_pen_data.points.push({x: _now_position.x, y: _now_position.y});
+		break;
+	case "line":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
 		break;
 	case "rect":
 		_pre_position.x = e.offsetX;
@@ -1307,6 +1297,36 @@ _canvas.mouseup(function(e) {
 				val:_pen_data
 			});
 		_pen_data.points = [];	// 다음 사용을 위해 펜 데이터 초기화
+		break;
+	case "line":
+		var line_data = {};
+
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(_pre_position.x, _pre_position.y);
+		_canvas_context.lineTo(_now_position.x, _now_position.y);
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+
+		// 동기화 데이터 전송
+		line_data.x1 = _pre_position.x;
+		line_data.y1 = _pre_position.y;
+		line_data.x2 = _now_position.x;
+		line_data.y2 = _now_position.y;
+		line_data.line_color = _line_color;
+		line_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'line',
+				id:"0",
+				val:line_data
+			});
 		break;
 	case "rect":
 		var rect_data = {};
@@ -1410,6 +1430,15 @@ function drawArrived(tool, val)
 			_canvas_context.stroke();
 		}
 		break;
+	case "line":
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(val.x1, val.y1);
+		_canvas_context.lineTo(val.x2, val.y2);
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		console.log("line draw");
+		break;
 	case "rect":
 		_canvas_context.beginPath();
 		_canvas_context.rect(val.x, val.y, val.width, val.height);
@@ -1476,6 +1505,7 @@ function switchDrawingTool(tool)
 	_drawing_tool = tool;
 
 	$('#white-board .navbar .nav #btn_drawtool_pen').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_line').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_rect').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_ellipse').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_text').removeClass('active');

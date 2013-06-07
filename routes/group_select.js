@@ -17,7 +17,7 @@ exports.group_select = function(req, res){
 	}
 
 	/** session start **/
-	if( !req.session.email || !req.session.email.length )
+	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
 
@@ -66,7 +66,7 @@ exports.group_select = function(req, res){
 
 exports.new_group = function(req, res){
 	/** session start **/
-	if( !req.session.email || !req.session.email.length )
+	if( !req.session.email || typeof req.session.email === "undefined" )
 	{
 		result = { result:"failed", msg:"You must be logged.", target:"group_name" };
 		res.send(result);

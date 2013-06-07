@@ -25,7 +25,8 @@ exports.dao_meeting_list = function(evt, mysql_conn, params){
 	sql += "`C`.`subject`, ";
 	sql += "`C`.`date`, ";
 	sql += "`C`.`start_time`, ";
-	sql += "`C`.`end_time` ";
+	sql += "`C`.`end_time`, ";
+	sql += "`C`.`status` ";
 	sql += "FROM `group` AS `A` ";
 	sql += "INNER JOIN `relation_group_meeting` AS `B` ";
 	sql += "ON `B`.`idx_group` = `A`.`idx` ";

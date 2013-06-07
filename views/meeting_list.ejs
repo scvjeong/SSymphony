@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="/stylesheets/bootstrap_new.css" />
 	<link rel="stylesheet" href="/stylesheets/datepicker.css?v=1">
 	<link rel="stylesheet" href="/stylesheets/select2.css?v=1">
+	<link rel="stylesheet" href="/stylesheets/theme.css">
 </head>
 
 <body>
@@ -61,12 +62,13 @@
 				for(var i=0; i<result.meeting_list.length; i++) {
 					var idx = result.meeting_list[i].idx_meeting;
 			%>
-					<li class="meeting-node" idx="<%= idx %>">
+					<li class="meeting-node" idx="<%= idx %>" status="<%=result.meeting_list[i].status%>">
 						<div class="color-bar back-color-<%=i+1%>"></div>
 						<ul>
 							<li class="subject"><%= result.meeting_list[i].subject %></li>
 							<li class="date color-<%=i+1%>"><%= result.meeting_list[i].date.toDateString() %> <%= result.meeting_list[i].start_time %></li>
 							<li class="time"><%= result.meeting_list[i].start_time %> ~ <%= result.meeting_list[i].end_time %></li>
+							<li><%=result.meeting_list[i].status%></li>
 							<li class="member">
 								<%
 									var len = result.meeting_user[idx].length;
@@ -156,16 +158,20 @@
 
 		$(document).ready(function(){
 			setup_calendar();
-			initClickGroup();
+			initClickMeeting();
 			initColorBar();
 			initMeetingListBtn();
 		})
 
-		function initClickGroup()
+		function initClickMeeting()
 		{
 			$("#meeting-list .meeting-node").click(function(){
 				var idx = $(this).attr("idx");
-				location.href="/page/meeting?idx_meeting="+idx;
+				var status = $(this).attr("status");
+				if( status === "progress" )
+					location.href="/page/meeting?idx_meeting="+idx;
+				else if( status === "closed" )
+					showMeetingResultWindow();
 			});
 		}
 

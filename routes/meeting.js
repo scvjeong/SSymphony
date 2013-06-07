@@ -18,9 +18,14 @@ exports.main = function(req, res){
 	}
 
 	/** session start 
-	if( !req.session.email || !req.session.email.length )
+	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
+
+	if( typeof req.param("idx_meeting") === "undefined" )
+		res.redirect("/");
+	else
+		req.session.idx_meeting = req.param("idx_meeting");
 
 	var evt = new EventEmitter();
 	var dao_m = require('../sql/meeting');
@@ -47,7 +52,7 @@ exports.meeting_public = function(req, res){
 
 exports.meeting_appraisal = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
 	res.render('meeting_appraisal', { title: 'Express' });
@@ -56,7 +61,7 @@ exports.meeting_appraisal = function(req, res){
 
 exports.meeting_evaluation = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
 	res.render('meeting_evaluation', { title: 'Express' });
@@ -82,7 +87,6 @@ exports.post_meeting_appraisal = function(req, res){
 	});
 };
 
-
 exports.post_meeting_evaluation = function(req, res) {
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
@@ -102,13 +106,46 @@ exports.post_meeting_evaluation = function(req, res) {
 			res.redirect("/page/meeting_result");
 		}
 	});
-
 };
 
+exports.post_meeting_close = function(req, res){
+	
+	/** session start **
+	if( !req.session.email || typeof req.session.email === "undefined" )
+	{
+		result = { result:"failed", msg:"You should be logged.", target:"" };
+		res.send(result);
+	}
+	/** session end **/
+
+	var evt = new EventEmitter();
+	var dao_c = require('../sql/common');
+	var dao_m = require('../sql/meeting');
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_user:req.session.idx_user
+	};
+	var complete_flag = 0;
+
+	if( params['idx_meeting'].length < 1 )
+	{
+		result = { result:"failed", msg:"You should select meeting", target:"" };
+		res.send(result);
+	}
+	else
+		dao_m.dao_set_meeting_close(evt, mysql_conn, params);
+
+	evt.on('set_meeting_close', function(err, rows){
+		if(err) throw err;
+		result = { result:"successful", msg:"successful"  };
+		res.send(result);
+	});
+};
 
 exports.meeting_result = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
 
@@ -124,7 +161,6 @@ exports.meeting_result = function(req, res){
 		if(err) throw err;
 		result.meeting_result = rows;
 		complete_flag++;
-		console.log(rows);
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
@@ -141,7 +177,7 @@ exports.meeting_result = function(req, res){
 
 exports.minutes = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
 
@@ -150,7 +186,7 @@ exports.minutes = function(req, res){
 
 exports.meeting_save = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
 	

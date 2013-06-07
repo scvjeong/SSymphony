@@ -139,3 +139,33 @@ dateFormat.i18n = {
 Date.prototype.format = function (mask, utc) {
 	return dateFormat(this, mask, utc);
 };
+
+function showMeetingResultWindow()
+{
+	var source_url = "/page/meeting_result";
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			dialog = bootbox.dialog(data);
+	
+			var bootbox_select = $('.bootbox');
+			bootbox_select.addClass("meeting_result_bootbox");
+			
+			setupUserListChart();
+			setupWordChart();
+			
+			var meeting_val = $("#meeting_val").text();
+			var ft_val = $("#proceeding_val").text();
+
+			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
+			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
+	
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});		
+}

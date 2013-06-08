@@ -1141,7 +1141,7 @@ function makeCanvasImg(params)
 		case 'mindmap' : send_params['idx_tool'] = 3; break;
 		case 'vote' : send_params['idx_tool'] = 4; break;
 		case 'matrix' : send_params['idx_tool'] = 5; break;	
-		default break;
+		default : send_params['idx_tool'] = -1; break;
 	}
 	send_params['idx_process'] = '1';
 	send_params['tool_num'] = tool_idx;

@@ -1119,8 +1119,6 @@ function makeCanvasImg(tool_name)
 			console.log(oCanvas);
 			var image = new Image();
 			image.src = oCanvas;
-			
-			console.log(oCanvas);
 
 			//var ctx = can.getContext("2d");
 			//ctx.drawImage(image,10,10,250,200);

@@ -38,6 +38,10 @@ text.node {
 	cursor: pointer;
 }
 
+.edit_task {
+	margin-bottom: 5px;
+}
+
 svg {
 	width: 95%;
 	height: 95%;
@@ -62,7 +66,6 @@ svg {
 }
 
 .bullet {
-
 	font-size:18px;
 	margin:0px;
 	color:#5C8AB8;
@@ -71,10 +74,10 @@ svg {
 	vertical-align: middle;
 }
 
-
 .tmp_editing {
 	position: relative;
-	width: 88%;
+	width: 80%;
+	margin:0px;
 	margin-left: 3px;
 	border:0px none;
 	font: 12px verdana, sans-serif;

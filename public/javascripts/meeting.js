@@ -1164,7 +1164,7 @@ function makeCanvasImg(params)
 			//image.src = canvas_image;
 			//var ctx = can.getContext("2d");
 			//ctx.drawImage(image,10,10,250,200);
-			console.log("Params: "+params);
+			console.log("Image: "+send_params['image_value']);
 
 			$.ajax( {
 				type: 'POST',
@@ -1173,8 +1173,7 @@ function makeCanvasImg(params)
 				data: send_params,
 				dataType: 'json',
 				success: function(json_data) {
-
-
+					console.log("Success");
 				}
 			});
 

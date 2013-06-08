@@ -183,7 +183,7 @@ exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
 	sql += "`idx_process` = '"+params['idx_process']+"', ";
 	sql += "`tool_num` = '"+params['tool_num']+"', ";
 	sql += "`image_value` = '"+params['image_value']+"' ";
-
+	
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('set_meeting_tools_image', err, rows);
 	});

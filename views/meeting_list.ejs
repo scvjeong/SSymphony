@@ -37,7 +37,6 @@
 				<div class="make">START</div>
 				<div class="tool list">
 					LIST
-					<img src="/images/list_icon.png">
 				</div>
 				<div class="tool postit">
 					POSTIT
@@ -54,10 +53,19 @@
     <div id="meeting-calendar">
     </div>
 	<div id="meeting-list">
+		<ul class="member-list">
+		<% 
+			for(var i=0; i<result.group_info.length; i++) {
+		%>
+			<li title="<%=result.group_info[i].user_name%>" idx="<%=result.group_info[i].idx_user%>"><%=result.group_info[i].user_name.toString().substring(0,1)%></li>
+		<%
+			}
+		%>
+		</ul>
 		<ul class="meeting-list-btn-wrap">
 			<li><a class="add-member-btn" href="javascript:initAddMemberPopup();">Add Memebers...</a>
 		</ul>
-		<ul>
+		<ul class="meeting-list-main">
 			<% 
 				for(var i=0; i<result.meeting_list.length; i++) {
 					var idx = result.meeting_list[i].idx_meeting;
@@ -109,6 +117,22 @@
 		<div class="contents">
 			Search for a person in Orchestra by name or email address, or enter an email address to invite someone new.
 		</div>
+	</div>
+</div>
+<div id="user-info-popup">
+	<div class="user-info-popup-header">
+		<div class="user-info-popup-img"></div>
+		<span class="user-info-popup-name"></span>
+		<span class="user-info-popup-id"></span>
+		<span class="user-info-popup-edit">Edit profile info</span>
+		<a href="javascript:initUserInfoPopdown();" class="user-info-popup-close-btn"><span class="icon-close"></span></a>
+	</div>
+	<div class="user-info-popup-body">
+		<ul>
+			<li class="change-perm">Change permissions</li>
+			<li class="view-activity">View Member's Group Activity</li>
+			<li class="remove-from-group">Remove From Group</li>
+		</ul>
 	</div>
 </div>
 <!--============================= /Page Body ================================-->
@@ -188,6 +212,7 @@
 			initStartBtn();
 			initAddMemberBtn();
 			initSearchMemberBtn();
+			initUserInfoBtn();
 		}	
 		function initStartBtn()
 		{	
@@ -275,10 +300,20 @@
 					success: function(json) {
 						if( json.length > 0 )
 						{
+							var id_name;
+							var id_name_html;
 							html += '<div class="contents-title">Select to add.</div>';
 							html += '<ul>';
 							for(var i=0; i<json.length; i++)
-								html += '<li class="searched-user-node" idx="'+json[i].idx+'">'+json[i].id+'</li>';
+							{
+								id_name_html = '<span class="user_id">'+json[i].id+'</span>';
+								if( json[i].last_name.length < 1 )
+									id_name_html += '<span class="user_name">('+json[i].first_name.trim()+')</span>';
+								else
+									id_name_html += '<span class="user_name">('+json[i].first_name.trim()+' '+json[i].last_name.trim()+')</span>';
+								id_name = json[i].id+'('+json[i].first_name+' '+json[i].last_name+')';
+								html += '<li class="searched-user-node" idx="'+json[i].idx+'" title="'+id_name+'">'+id_name_html+'</li>';
+							}
 							html += '</ul>';
 						}
 						else
@@ -286,7 +321,8 @@
 						$("#light-popup .contents").html(html);
 						$("#light-popup .searched-user-node").on("click", function(){
 							var idx_user = $(this).attr("idx");
-							addMember(idx_user);
+							var user_name = $(".user_name", this).html();
+							addMember(idx_user, user_name);
 						});
 					}
 				});
@@ -313,7 +349,7 @@
 			$("#light-popup").css({
 				display:"block",
 				top:o.top+35,
-				left:o.left-10
+				left:o.left
 			});
 			$("#light-popup #member").focus();
 		}
@@ -325,18 +361,102 @@
 				left:"0px"
 			});
 			$("#light-popup #member").val("");
+			$("#light-popup .contents").html("Search for a person in Orchestra by email address, or enter an email address to invite someone new.");
 		}
-		function addMember(idx_user)
+		function addMember(idx_user, user_name)
 		{
+			var params = { 
+				idx_user:idx_user, 
+				user_name:user_name 
+			};
 			$.ajax({
 				url: '/page/add_user',
+				type: 'POST',
+				data: params,
+				dataType: 'json',
+				success: function(json) {
+					if( json.result == "successful" )
+					{
+						var html = '<li title="'+json.user_name+'">'+json.user_name.toString().substring(1,2)+'</li>';
+						$("#meeting-list .member-list").append(html);
+					}
+					initAddMemberPopdown();
+				}
+			});
+		}
+
+		function initUserInfoBtn()
+		{
+			var idx_user;
+			$("#meeting-list .member-list li").toggle(
+			function(){
+				initUserInfoPopup($(this));
+			},function(){
+				initUserInfoPopdown($(this));
+			});
+			$("#user-info-popup .change-perm").click(function(){
+				alert("Is coming soon.");
+			});
+			$("#user-info-popup .view-activity").click(function(){
+				alert("Is coming soon.");
+			});
+			$("#user-info-popup .remove-from-group").click(function(){
+				var idx_user = $(this).attr("idx");
+				removeFromGroup(idx_user);
+			});
+		}
+		function initUserInfoPopup(obj)
+		{
+			var idx_user = obj.attr("idx");
+			var o = obj.offset();
+			var w = $(window).width();
+			$.ajax({
+				url: '/page/user_info',
 				type: 'POST',
 				data: {idx_user:idx_user},
 				dataType: 'json',
 				success: function(json) {
-					initAddMemberPopdown();
+					if( json.length > 0 )
+					{
+						$("#user-info-popup .user-info-popup-img").html(json[0].first_name.toString().substring(0, 1));
+						$("#user-info-popup .user-info-popup-name").html(json[0].first_name+" "+json[0].last_name);
+						$("#user-info-popup .user-info-popup-id").html(json[0].id);
+						$("#user-info-popup .user-info-popup-body li").attr("idx", json[0].idx);
+						$("#user-info-popup").css({
+							display:"block",
+							top:o.top+33,
+							left:o.left-237
+						});
+					}
 				}
 			});
+		}
+		function initUserInfoPopdown(idx_user)
+		{
+			$("#user-info-popup").css({
+				display:"none",
+				top:"0px",
+				left:"0px"
+			});
+		}
+		function removeFromGroup(idx_user)
+		{
+			if( confirm("Are you sure?") )
+			{
+				$.ajax({
+					url: '/page/delete_user',
+					type: 'POST',
+					data: {idx_user:idx_user},
+					dataType: 'json',
+					success: function(json) {
+						if( json.result == "successful" )
+						{
+							$("#meeting-list .member-list li[idx="+idx_user+"]").remove();
+						}
+						initUserInfoPopdown(idx_user);
+					}
+				});
+			}
 		}
 	</script>
 <!-- /Javascript -->

@@ -68,11 +68,13 @@ exports.meeting_evaluation = function(req, res){
 };
 
 exports.post_meeting_appraisal = function(req, res){
+
+	var result;
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
 	var params = { 
-		satisfaction:req.body.satisfaction,	 
+		satisfaction:req.body.satisfaction,
 		ft_appraisal:req.body.ft_appraisal,
 		mvp:req.body.mvp
 	};
@@ -88,6 +90,8 @@ exports.post_meeting_appraisal = function(req, res){
 };
 
 exports.post_meeting_evaluation = function(req, res) {
+
+	var result;
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
@@ -109,7 +113,8 @@ exports.post_meeting_evaluation = function(req, res) {
 };
 
 exports.post_meeting_close = function(req, res){
-	
+
+	var result;
 	/** session start **
 	if( !req.session.email || typeof req.session.email === "undefined" )
 	{

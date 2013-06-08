@@ -469,6 +469,14 @@
 		var _runTime = <%=t%>;
 		var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
 		setInterval("showRunTime()", 1000);
+		$(function(){
+			$(".process-unit").hover(function(){
+				
+				$(this).addClass("processing");
+			}, function(){
+				$(this).removeClass("processing");
+			})
+		});
 	</script>
 <!-- /Javascript -->
 

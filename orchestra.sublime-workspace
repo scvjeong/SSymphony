@@ -4,8 +4,40 @@
 		"selected_items":
 		[
 			[
+				"stroke",
+				"strokeStyle"
+			],
+			[
+				"_canva",
+				"_canvas_context"
+			],
+			[
+				"_cav",
+				"_canvas_context"
+			],
+			[
+				"off",
+				"offsetY"
+			],
+			[
+				"_font",
+				"_font_size"
+			],
+			[
+				"linewid",
+				"linewidth_preview"
+			],
+			[
+				"_can",
+				"_canvas"
+			],
+			[
 				"_line",
 				"_line_color"
+			],
+			[
+				"rect",
+				"rect_data"
 			],
 			[
 				"offs",
@@ -22,18 +54,6 @@
 			[
 				"_canvas",
 				"_canvas_context"
-			],
-			[
-				"_canva",
-				"_canvas_context"
-			],
-			[
-				"_can",
-				"_canvas_context"
-			],
-			[
-				"off",
-				"offsetY"
 			],
 			[
 				"_draw",
@@ -63,11 +83,43 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "views/meeting.ejs",
+			"settings":
+			{
+				"buffer_size": 23040,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "public/javascripts/meeting.js",
+			"settings":
+			{
+				"buffer_size": 46911,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "public/stylesheets/theme.css",
+			"settings":
+			{
+				"buffer_size": 14665,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "server.js",
+			"settings":
+			{
+				"buffer_size": 21811,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 47.0,
+		"height": 27.0,
 		"selected_items":
 		[
 			[
@@ -96,14 +148,15 @@
 	},
 	"file_history":
 	[
+		"/Users/stargt/workspace/SSymphony/public/stylesheets/theme.css",
+		"/Users/stargt/workspace/SSymphony/public/stylesheets/orchestra.css",
+		"/Users/stargt/workspace/SSymphony/public/stylesheets/list.css",
+		"/Users/stargt/workspace/SSymphony/app.js",
+		"/Users/stargt/workspace/SSymphony/routes/meeting.js",
 		"/Users/stargt/workspace/SSymphony/public/javascripts/config.js",
 		"/Users/stargt/workspace/SSymphony/public/javascripts/meeting.js",
 		"/Users/stargt/workspace/SSymphony/views/meeting.ejs",
-		"/Users/stargt/workspace/SSymphony/app.js",
-		"/Users/stargt/workspace/SSymphony/public/stylesheets/orchestra.css",
-		"/Users/stargt/workspace/SSymphony/public/stylesheets/theme.css",
 		"/Users/stargt/workspace/SSymphony/public/stylesheets/tools/list.css",
-		"/Users/stargt/workspace/SSymphony/routes/meeting.js",
 		"/Users/stargt/workspace/SSymphony/routes/meeting_list.js",
 		"/Users/stargt/workspace/SSymphony/sql/meeting.js",
 		"/Users/stargt/workspace/SSymphony/views/group_select.ejs",
@@ -137,6 +190,27 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"</li>",
+			"\">",
+			"div",
+			"changeC",
+			"fillc",
+			"notice-bar",
+			"cv_wh",
+			"whiteboard",
+			"redraw",
+			"_canvas",
+			"refresh",
+			"resize",
+			"drawtext",
+			"drawArrive",
+			"openSocke",
+			"dataArrive",
+			"dataArrived",
+			"opensocket",
+			"{\n",
+			"set_option",
+			"drawArrivedP",
 			"HEAD",
 			">>",
 			"HEAD",
@@ -163,11 +237,14 @@
 			"util"
 		],
 		"highlight": true,
-		"in_selection": false,
+		"in_selection": true,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
 		[
+			"</span></li>",
+			"\"><span>",
+			"li",
 			"changeLineColor"
 		],
 		"reverse": false,
@@ -179,8 +256,133 @@
 	"groups":
 	[
 		{
+			"selected": 3,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "views/meeting.ejs",
+					"settings":
+					{
+						"buffer_size": 23040,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17336,
+								17336
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"origin_encoding": "UTF-8",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 5396.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "public/javascripts/meeting.js",
+					"settings":
+					{
+						"buffer_size": 46911,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								33280,
+								33280
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"origin_encoding": "UTF-8",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "public/stylesheets/theme.css",
+					"settings":
+					{
+						"buffer_size": 14665,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1706,
+								1706
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"origin_encoding": "UTF-8",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/CSS/CSS.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1126.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "server.js",
+					"settings":
+					{
+						"buffer_size": 21811,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								511,
+								511
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"origin_encoding": "UTF-8",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],

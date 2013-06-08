@@ -1120,8 +1120,32 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
-function makeCanvasImg(tool_name)
+function makeCanvasImg(params)
 {
+	var tool_name = params['tool_name'];
+	var tool_idx = params['tool_idx'];
+	
+	var send_params = [];
+
+	// set_meeting_save_options
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_tool']
+// params['idx_process']
+// params['tool_num']
+// params['image_value']
+
+	switch ( tool_name ) {
+		case 'list' : send_params['idx_tool'] = 1; break;
+		case 'postit' : send_params['idx_tool'] = 2; break;
+		case 'mindmap' : send_params['idx_tool'] = 3; break;
+		case 'vote' : send_params['idx_tool'] = 4; break;
+		case 'matrix' : send_params['idx_tool'] = 5; break;	
+	}
+	send_params['idx_process'] = '0';
+	send_params['tool_num'] = tool_idx;
+	
+
 	html2canvas( [ document.getElementById(tool_name) ], {
           onrendered: function(canvas) {
 			//$('.container').prepend(canvas);
@@ -1129,19 +1153,34 @@ function makeCanvasImg(tool_name)
 			//$('canvas:first').attr('id', 'myCanvas');
 			//var can =document.getElementById("myCanvas");
 			
-			var oCanvas = canvas.toDataURL();
-
-			console.log(oCanvas);
-			var image = new Image();
-			image.src = oCanvas;
-
+			var canvas_image = canvas.toDataURL();
+		
+			console.log(canvas_image);
+			
+			send_params['image_value'] = canvas_image;
+			
+			//var image = new Image();
+			//image.src = canvas_image;
 			//var ctx = can.getContext("2d");
 			//ctx.drawImage(image,10,10,250,200);
+			console.log("Params: "+params);
 
+			$.ajax( {
+				type: 'POST',
+				asyn: true,
+				url: '/page/save_tools_image',
+				data: send_params,
+				dataType: 'json',
+				success: function(json_data) {
+
+
+				}
+			});
+
+			
 		  }
 	});
 	
-
 }
 
 function setupWordChart()

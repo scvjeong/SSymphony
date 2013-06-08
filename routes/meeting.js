@@ -309,3 +309,31 @@ exports.ft_help = function(req, res){
 	result = { title:"ft_help" };
 	res.render('ft_help', {result:result} );
 }
+
+
+exports.meeting_save_tools_image = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	
+	console.log("Params: "+params);
+
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_tool:req.param("idx_tool"),
+		idx_process:req.param("idx_process"),
+		tool_num:req.param("tool_num"),
+		image_value:req.param("image_value")
+	};		
+
+	dao_m.dao_set_meeting_save_tools_image(evt, mysql_conn, params);
+
+	evt.on('set_meeting_tools_image', function(err, sql){
+		if(err) throw err;
+	});
+};

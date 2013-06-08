@@ -176,6 +176,8 @@ exports.dao_set_meeting_close = function(evt, mysql_conn, params){
 // params['tool_num']
 // params['image_value']
 exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
+	console.log("[image_value] -> "+params['image_value']);
+	
 	var sql = "INSERT INTO `tools_image` SET ";
 	sql += "`idx_meeting` = '"+params['idx_meeting']+"', ";
 	sql += "`idx_group` = '"+params['idx_group']+"', ";

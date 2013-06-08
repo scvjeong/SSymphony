@@ -1141,10 +1141,13 @@ function makeCanvasImg(params)
 		case 'mindmap' : send_params['idx_tool'] = 3; break;
 		case 'vote' : send_params['idx_tool'] = 4; break;
 		case 'matrix' : send_params['idx_tool'] = 5; break;	
+		default break;
 	}
-	send_params['idx_process'] = '0';
+	send_params['idx_process'] = '1';
 	send_params['tool_num'] = tool_idx;
 	
+	console.log("[idx_tool] -> "+ send_params['idx_tool']);
+
 	var tmp_make = tool_name+tool_idx;
 
 	html2canvas( [ document.getElementById(tmp_make) ], {

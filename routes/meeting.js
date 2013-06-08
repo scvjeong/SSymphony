@@ -335,5 +335,8 @@ exports.meeting_save_tools_image = function(req, res){
 
 	evt.on('set_meeting_tools_image', function(err, sql){
 		if(err) throw err;
+
+		var result = { result:"successful", msg:"successful"  };
+		res.send(result);
 	});
 };

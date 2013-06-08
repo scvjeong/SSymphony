@@ -328,8 +328,6 @@ exports.meeting_save_tools_image = function(req, res){
 		tool_num:req.param("tool_num"),
 		image_value:req.param("image_value")
 	};	
-		
-	console.log("Params: "+params);
 
 	dao_m.dao_set_meeting_save_tools_image(evt, mysql_conn, params);
 

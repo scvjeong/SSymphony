@@ -1123,32 +1123,22 @@ function hideEvaluateWindow()
 function makeCanvasImg(params)
 {
 	var tool_name = params['tool_name'];
-	var tool_idx = params['tool_idx'];
 	
-	var send_params = [];
-	
-	// set_meeting_save_options
-// params['idx_meeting']
-// params['idx_group']
-// params['idx_tool']
-// params['idx_process']
-// params['tool_num']
-// params['image_value']
+	var idx_tool = params['tool_idx'];
+	var idx_process = 1;
+	var tool_num = -1;
+	var image_value = 0;
 
 	switch ( tool_name ) {
-		case 'list' : send_params['idx_tool'] = 1; break;
-		case 'postit' : send_params['idx_tool'] = 2; break;
-		case 'mindmap' : send_params['idx_tool'] = 3; break;
-		case 'vote' : send_params['idx_tool'] = 4; break;
-		case 'matrix' : send_params['idx_tool'] = 5; break;	
-		default : send_params['idx_tool'] = -1; break;
+		case 'list' : tool_num = 1; break;
+		case 'postit' : tool_num = 2; break;
+		case 'mindmap' : tool_num = 3; break;
+		case 'vote' : tool_num = 4; break;
+		case 'matrix' : tool_num = 5; break;	
+		default : tool_num = -1; break;
 	}
-	send_params['idx_process'] = '1';
-	send_params['tool_num'] = tool_idx;
-	
-	console.log("[idx_tool] -> "+ send_params['idx_tool']);
 
-	var tmp_make = tool_name+tool_idx;
+	var tmp_make = tool_name+idx_tool;
 
 	html2canvas( [ document.getElementById(tmp_make) ], {
           onrendered: function(canvas) {
@@ -1157,22 +1147,24 @@ function makeCanvasImg(params)
 			//$('canvas:first').attr('id', 'myCanvas');
 			//var can =document.getElementById("myCanvas");
 			
-			var canvas_image = canvas.toDataURL();
-		
-			console.log(canvas_image);
-			
-			send_params['image_value'] = canvas_image;
+			var canvas_image = canvas.toDataURL();		
+			image_value = canvas_image;
 			
 			//var image = new Image();
 			//image.src = canvas_image;
 			//var ctx = can.getContext("2d");
 			//ctx.drawImage(image,10,10,250,200);
-			console.log("Image: "+send_params['image_value']);
 
+			var send_params = {
+				idx_tool: idx_tool,
+				idx_process: idx_process,
+				tool_num: tool_num,
+				image_value: image_value
+			};	
+			
 			$.ajax( {
-				type: 'POST',
-				asyn: true,
 				url: '/page/save_tools_image',
+				type: 'POST',		
 				data: send_params,
 				dataType: 'json',
 				success: function(json_data) {

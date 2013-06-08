@@ -167,3 +167,27 @@ exports.dao_set_meeting_close = function(evt, mysql_conn, params){
 
 	return sql;
 }
+
+// set_meeting_save_options
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_tool']
+// params['idx_process']
+// params['tool_num']
+// params['image_value']
+exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
+
+	var sql = "INSERT INTO `tools_image` SET ";
+	sql += "`idx_meeting` = '"+params['idx_meeting']+"', ";
+	sql += "`idx_group` = '"+params['idx_group']+"', ";
+	sql += "`idx_tool` = '"+params['idx_tool']+"', ";
+	sql += "`idx_process` = '"+params['idx_process']+"', ";
+	sql += "`tool_num` = '"+params['tool_num']+"', ";
+	sql += "`image_value` = '"+params['image_value']+"' ";
+	
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_meeting_tools_image', err, rows);
+	});
+
+	return sql;
+}

@@ -371,7 +371,7 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
 		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(5*parseInt(indentStatus)))+'%' });
+		tmpInput.css({ "width": (80-(5*parseInt(indentStatus)))+'%' });
 		tmpToolSelect.find('.input_add').attr('class', 'input_task');
 	}
 	else 
@@ -381,7 +381,7 @@ function mindmap_set_indent(indentStatus) {
 		var tmpBulletLeft = tmpBullet.css('margin-left');
 		var tmpWidth = tmpInput.width();
 		tmpBullet.css({"margin-left": parseInt(0) + (7*parseInt(indentStatus)) });
-		tmpInput.css({ "width": (85-(5*parseInt(indentStatus)))+'%' });
+		tmpInput.css({ "width": (80-(5*parseInt(indentStatus)))+'%' });
 		tmpInput.trigger('focus');
 	}
 }

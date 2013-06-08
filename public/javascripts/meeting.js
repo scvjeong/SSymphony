@@ -1120,30 +1120,62 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
-function makeCanvasImg(tool_name)
+function makeCanvasImg(params)
 {
-	html2canvas( [ document.getElementById(tool_name) ], {
+	var tool_name = params['tool_name'];
+	
+	var idx_tool = params['tool_idx'];
+	var idx_process = 1;
+	var tool_num = -1;
+	var image_value = 0;
+
+	switch ( tool_name ) {
+		case 'list' : tool_num = 1; break;
+		case 'postit' : tool_num = 2; break;
+		case 'mindmap' : tool_num = 3; break;
+		case 'vote' : tool_num = 4; break;
+		case 'matrix' : tool_num = 5; break;	
+		default : tool_num = -1; break;
+	}
+
+	var tmp_make = tool_name+idx_tool;
+
+	html2canvas( [ document.getElementById(tmp_make) ], {
           onrendered: function(canvas) {
 			//$('.container').prepend(canvas);
 
 			//$('canvas:first').attr('id', 'myCanvas');
 			//var can =document.getElementById("myCanvas");
 			
-			var oCanvas = canvas.toDataURL();
-
-			console.log(oCanvas);
-			var image = new Image();
-			image.src = oCanvas;
+			var canvas_image = canvas.toDataURL();		
+			image_value = canvas_image;
 			
-			console.log(oCanvas);
-
+			//var image = new Image();
+			//image.src = canvas_image;
 			//var ctx = can.getContext("2d");
 			//ctx.drawImage(image,10,10,250,200);
 
+			var send_params = {
+				idx_tool: idx_tool,
+				idx_process: idx_process,
+				tool_num: tool_num,
+				image_value: image_value
+			};	
+			
+			$.ajax( {
+				url: '/page/save_tools_image',
+				type: 'POST',		
+				data: send_params,
+				dataType: 'json',
+				success: function(json_data) {
+					console.log("Success");
+				}
+			});
+
+			
 		  }
 	});
 	
-
 }
 
 function setupWordChart()

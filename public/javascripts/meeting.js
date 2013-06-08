@@ -1126,7 +1126,7 @@ function makeCanvasImg(params)
 	var tool_idx = params['tool_idx'];
 	
 	var send_params = [];
-
+	
 	// set_meeting_save_options
 // params['idx_meeting']
 // params['idx_group']
@@ -1145,8 +1145,9 @@ function makeCanvasImg(params)
 	send_params['idx_process'] = '0';
 	send_params['tool_num'] = tool_idx;
 	
+	var tmp_make = tool_name+tool_idx;
 
-	html2canvas( [ document.getElementById(tool_name) ], {
+	html2canvas( [ document.getElementById(tmp_make) ], {
           onrendered: function(canvas) {
 			//$('.container').prepend(canvas);
 

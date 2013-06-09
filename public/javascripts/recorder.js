@@ -68,8 +68,8 @@
       currCallback(blob);
     }
 
-    //source.connect(this.node);
-    //this.node.connect(this.context.destination);    //this should not be necessary
+    source.connect(this.node);
+    this.node.connect(this.context.destination);    //this should not be necessary
   };
 
   Recorder.forceDownload = function(blob, filename){

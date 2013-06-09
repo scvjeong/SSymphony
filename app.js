@@ -70,7 +70,6 @@ app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step); // �
 app.get('/page/ft_help', meeting.ft_help); // 퍼실리테이션 도움말
 app.get('/page/minutes', meeting.minutes); // 회의록 페이지
 
-
 /* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
@@ -86,6 +85,8 @@ app.post('/page/add_user', meeting_list.post_set_add_user);
 app.post('/page/user_info', meeting_list.post_user_info);
 app.post('/page/delete_user', meeting_list.post_set_delete_user);
 app.post('/page/save_tools_image', meeting.meeting_save_tools_image);
+app.post('/page/get_tools_image', meeting.result_get_tools_image);
+
 
 /* 도구 관련 */
 app.get('/tool/list/:group_id/:tool_index', tools.list);

@@ -34,6 +34,27 @@ $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
 
+	
+	// 오디오 관련 초기화
+	
+	 try {
+      // webkit shim
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+      window.URL = window.URL || window.webkitURL;
+      
+      audio_context = new AudioContext;
+      console.log('Audio context set up.');
+      console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+    } catch (e) {
+      alert('No web audio support in this browser!');
+    }
+
+    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+      console.log('No live audio input: ' + e);
+    });
+
+
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
 
 	// 소켓 열기
@@ -1112,7 +1133,6 @@ function hideMeetingResultWindow()
 	bootbox_select.modal('hide');
 }
 
-
 function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');
@@ -1120,7 +1140,7 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
-function makeCanvasImg(params)
+function makeCanvasImage(params)
 {
 	var tool_name = params['tool_name'];
 	
@@ -1171,88 +1191,34 @@ function makeCanvasImg(params)
 					console.log("Success");
 				}
 			});
-
-			
 		  }
-	});
+	});	
+}
+
+function getToolsImage(params)
+{
+	var idx_process = params['idx_process'];
 	
+	var send_params = {
+		idx_process: idx_process
+	};	
+					
+	$.ajax({
+		url: '/page/get_tools_image',
+		type: 'POST',		
+		data: send_params,
+		dataType: 'json',
+		success: function(json_data) {
+			console.log("Success");
+			console.log("json length: "+json_data.length);
+			var i=0;
+			for ( i=0; i<json_data.length; i++)
+			{
+				console.log("[json_data] -> "+json_data[i].image_value);
+			}		
+		}
+	});
 }
-
-function setupWordChart()
-{
-	var d1 = [[20,20,10], [40,50,20], [70,10,5], [80,80,7]];
-	var d2 = [[60,25,15], [70,40,6], [30,80,4]];
-	var d3 = [[30,25,15], [24,40,6], [30,43,4]];
-	var d4 = [[20,23,10], [43,24,20], [23,65,5], [60,80,4]];
-	var options = { 
-		series:{bubbles:{active:true,show:true,linewidth:2},editMode:'xy'},
-		grid:{hoverable:true,clickable:true,editable:true }
-	};
-	$.plot( $("#placeholder") , [d1,d2,d3,d4], options );
-}
-
-function setupUserListChart()
-{
-	if ($(".bar-chart").length) {
-		var data1 = [];
-		for (var i = 0; i <= 4; i += 1)
-			data1.push([i, parseInt(Math.random() * 100)]);
-
-		var data2 = [];
-		for (var i = 0; i <= 4; i += 1)
-			data2.push([i, parseInt(Math.random() * 100)]);
-
-		var data3 = [];
-		for (var i = 0; i <= 4; i += 1)
-			data3.push([i, parseInt(Math.random() * 100)]);
-
-		var ds = new Array();
-
-		ds.push({
-			data : data1,
-			bars : {
-				show : true,
-				barWidth : 0.2,
-				order : 1,
-			}
-		});
-		ds.push({
-			data : data2,
-			bars : {
-				show : true,
-				barWidth : 0.2,
-				order : 2
-			}
-		});
-		ds.push({
-			data : data3,
-			bars : {
-				show : true,
-				barWidth : 0.2,
-				order : 3
-			}
-		});
-		//Display graph
-		$.plot($(".bar-chart"), ds, {
-			colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
-			grid : {
-				show : true,
-				hoverable : true,
-				clickable : true,
-				tickColor : $chrt_border_color,
-				borderWidth : 0,
-				borderColor : $chrt_border_color,
-			},
-			legend : true,
-			tooltip : true,
-			tooltipOpts : {
-				content : "<b>%x</b> = <span>%y</span>",
-				defaultTheme : false
-			}
-		});
-	}
-}
-
 
 var _drawing_tool = "pen";
 var _fill_color = "#000000";
@@ -1776,3 +1742,66 @@ function noticeBarMoving()
 		noticeBarMoving();
 	});
 }
+
+
+/*
+오디오 녹음 부분
+
+*/
+var audio_context;
+var recorder;
+
+
+  function startUserMedia(stream) {
+	
+    var input = audio_context.createMediaStreamSource(stream);
+    console.log('Media stream created.');
+    
+    input.connect(audio_context.destination);
+    console.log('Input connected to audio context destination.');
+    
+    recorder = new Recorder(input);
+    console.log('Recorder initialised.');
+  }
+
+  function startRecording() {
+	recorder.clear();
+    recorder && recorder.record();
+    $('.record-btn').css("display", "none");
+	$('.stop-btn').css("display", "block");
+    console.log('Recording...');
+  }
+
+  function stopRecording() {
+    recorder && recorder.stop();
+    $('.record-btn').css("display", "block");
+	$('.stop-btn').css("display", "none");
+    console.log('Stopped recording.');
+    
+    // create WAV download link using audio data blob
+    createDownloadLink();
+    
+    recorder.clear();
+  }
+
+  function createDownloadLink() {
+    recorder && recorder.exportWAV(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var li = document.createElement('li');
+      var au = document.createElement('audio');
+      var hf = document.createElement('a');
+      
+      au.controls = true;
+      au.src = url;
+      hf.href = url;
+      hf.download = new Date().toISOString() + '.wav';
+      hf.innerHTML = hf.download;
+      li.appendChild(au);
+      li.appendChild(hf);
+      
+		$('.facilitator-box .rightpanel-content-box').append(li);
+    });
+  }
+
+  
+	

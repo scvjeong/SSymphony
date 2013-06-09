@@ -313,7 +313,7 @@ exports.meeting_save = function(req, res){
 exports.ft_help = function(req, res){
 	result = { title:"ft_help" };
 	res.render('ft_help', {result:result} );
-}
+};
 
 
 exports.meeting_save_tools_image = function(req, res){
@@ -343,3 +343,30 @@ exports.meeting_save_tools_image = function(req, res){
 		res.send(result);
 	});
 };
+
+exports.result_get_tools_image = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_process:req.param("idx_process")
+	};	
+
+	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, params);
+
+	evt.on('get_meeting_tools_image', function(err, rows){
+		if(err) throw err;
+		//console.log("[rows]->"+rows[0].image_value);
+		res.send(rows);
+	});
+};
+
+
+

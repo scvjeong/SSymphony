@@ -1765,6 +1765,7 @@ var recorder;
   }
 
   function startRecording() {
+	recorder.clear();
     recorder && recorder.record();
     $('.record-btn').css("display", "none");
 	$('.stop-btn').css("display", "block");

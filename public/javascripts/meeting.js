@@ -1112,7 +1112,6 @@ function hideMeetingResultWindow()
 	bootbox_select.modal('hide');
 }
 
-
 function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');
@@ -1120,7 +1119,7 @@ function hideEvaluateWindow()
 	showMeetingResultWindow();
 }
 
-function makeCanvasImg(params)
+function makeCanvasImage(params)
 {
 	var tool_name = params['tool_name'];
 	
@@ -1171,88 +1170,34 @@ function makeCanvasImg(params)
 					console.log("Success");
 				}
 			});
-
-			
 		  }
-	});
+	});	
+}
+
+function getToolsImage(params)
+{
+	var idx_process = params['idx_process'];
 	
+	var send_params = {
+		idx_process: idx_process
+	};	
+					
+	$.ajax({
+		url: '/page/get_tools_image',
+		type: 'POST',		
+		data: send_params,
+		dataType: 'json',
+		success: function(json_data) {
+			console.log("Success");
+			console.log("json length: "+json_data.length);
+			var i=0;
+			for ( i=0; i<json_data.length; i++)
+			{
+				console.log("[json_data] -> "+json_data[i].image_value);
+			}		
+		}
+	});
 }
-
-function setupWordChart()
-{
-	var d1 = [[20,20,10], [40,50,20], [70,10,5], [80,80,7]];
-	var d2 = [[60,25,15], [70,40,6], [30,80,4]];
-	var d3 = [[30,25,15], [24,40,6], [30,43,4]];
-	var d4 = [[20,23,10], [43,24,20], [23,65,5], [60,80,4]];
-	var options = { 
-		series:{bubbles:{active:true,show:true,linewidth:2},editMode:'xy'},
-		grid:{hoverable:true,clickable:true,editable:true }
-	};
-	$.plot( $("#placeholder") , [d1,d2,d3,d4], options );
-}
-
-function setupUserListChart()
-{
-	if ($(".bar-chart").length) {
-		var data1 = [];
-		for (var i = 0; i <= 4; i += 1)
-			data1.push([i, parseInt(Math.random() * 100)]);
-
-		var data2 = [];
-		for (var i = 0; i <= 4; i += 1)
-			data2.push([i, parseInt(Math.random() * 100)]);
-
-		var data3 = [];
-		for (var i = 0; i <= 4; i += 1)
-			data3.push([i, parseInt(Math.random() * 100)]);
-
-		var ds = new Array();
-
-		ds.push({
-			data : data1,
-			bars : {
-				show : true,
-				barWidth : 0.2,
-				order : 1,
-			}
-		});
-		ds.push({
-			data : data2,
-			bars : {
-				show : true,
-				barWidth : 0.2,
-				order : 2
-			}
-		});
-		ds.push({
-			data : data3,
-			bars : {
-				show : true,
-				barWidth : 0.2,
-				order : 3
-			}
-		});
-		//Display graph
-		$.plot($(".bar-chart"), ds, {
-			colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],
-			grid : {
-				show : true,
-				hoverable : true,
-				clickable : true,
-				tickColor : $chrt_border_color,
-				borderWidth : 0,
-				borderColor : $chrt_border_color,
-			},
-			legend : true,
-			tooltip : true,
-			tooltipOpts : {
-				content : "<b>%x</b> = <span>%y</span>",
-				defaultTheme : false
-			}
-		});
-	}
-}
-
 
 var _drawing_tool = "pen";
 var _fill_color = "#000000";

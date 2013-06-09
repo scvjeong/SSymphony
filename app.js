@@ -84,6 +84,8 @@ app.post('/page/add_user', meeting_list.post_set_add_user);
 app.post('/page/user_info', meeting_list.post_user_info);
 app.post('/page/delete_user', meeting_list.post_set_delete_user);
 app.post('/page/save_tools_image', meeting.meeting_save_tools_image);
+app.post('/page/get_tools_image', meeting.result_get_tools_image);
+
 
 /* 도구 관련 */
 app.get('/tool/list/:group_id/:tool_index', tools.list);

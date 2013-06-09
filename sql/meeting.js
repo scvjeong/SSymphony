@@ -191,3 +191,30 @@ exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
 
 	return sql;
 }
+
+// set_meeting_save_options
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_process']
+exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
+	
+	
+	params['idx_meeting']=83;
+	params['idx_group']=0;
+	params['idx_process']=1;
+
+	var sql = "SELECT `idx_tool`, ";
+	sql += "`tool_num`, ";
+	sql += "`image_value` ";
+	sql += "FROM `tools_image` ";
+	sql += "WHERE `idx_meeting` = '"+params['idx_meeting']+"' ";
+	sql += "AND `idx_group` = '"+params['idx_group']+"' ";
+	sql += "AND `idx_process` = '"+params['idx_process']+"' ";
+	sql += "ORDER BY `tool_num` ASC";
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('get_meeting_tools_image', err, rows);
+	});
+
+	return sql;
+}

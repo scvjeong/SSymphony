@@ -1748,20 +1748,27 @@ function noticeBarMoving()
 오디오 녹음 부분
 
 */
-var audio_context;
-var recorder;
-
+var audio_context = null;
+var recorder = null;
+var input_point = null;
 
   function startUserMedia(stream) {
 	
-    var input = audio_context.createMediaStreamSource(stream);
+	input_point = audio_context.createGainNode();
+		
+	var input = audio_context.createMediaStreamSource(stream);
     console.log('Media stream created.');
+   
+	input.connect(input_point);
     
-    input.connect(audio_context.destination);
-    console.log('Input connected to audio context destination.');
-    
-    recorder = new Recorder(input);
+    recorder = new Recorder(input_point);
     console.log('Recorder initialised.');
+
+	zeroGain = audio_context.createGainNode();
+    zeroGain.gain.value = 0.0;
+    input_point.connect( zeroGain );
+    zeroGain.connect( audio_context.destination );
+
   }
 
   function startRecording() {

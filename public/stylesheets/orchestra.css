@@ -1559,6 +1559,25 @@ h6 small {
 	width:200px;
 	text-align:right;
 }
+.title-bar .record-btn{
+	font-family:"Fjalla One";
+	float:right;
+	padding-right:20px;
+	width:60px;
+	text-align:right;
+	cursor:pointer;
+}
+
+.title-bar .stop-btn{
+	font-family:"Fjalla One";
+	float:right;
+	padding-right:20px;
+	width:60px;
+	text-align:right;
+	cursor:pointer;
+}
+
+
 .title-bar .result-btn{
 	font-family:"Fjalla One";
 	float:right;
@@ -1567,6 +1586,7 @@ h6 small {
 	text-align:right;
 	cursor:pointer;
 }
+
 .white-board{
 	float:left;
 	width:75%;

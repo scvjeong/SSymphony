@@ -19,15 +19,17 @@
 <!--============================= Page Body =================================-->
 
 <div id="topbar">
-	<div id="logo">orchestra</div>
-	<span id="group-title"><%= result.group_info[0].name %></span>
-	<div id="top-menu">
-		<ul>
-			<li>NOTICE</li>
-			<li><a href="/page/group_select">GROUP</a></li>
-			<li>MY ACCOUNT</li>
-			<li>LOG OUT</li>
-		</ul>
+	<div class="topbar-container">
+		<div id="logo">orchestra</div>
+		<span id="group-title"><%= result.group_info[0].name %></span>
+		<div id="top-menu">
+			<ul>
+				<li>NOTICE</li>
+				<li><a href="/page/group_select">GROUP</a></li>
+				<li>MY ACCOUNT</li>
+				<li>LOG OUT</li>
+			</ul>
+		</div>
 	</div>
 </div>
 <div class="container">
@@ -52,7 +54,7 @@
 	</div>
     <div id="meeting-calendar">
     </div>
-	<div id="meeting-list">
+	<div id="meeting-list" class="fancy-scrollbar">
 		<ul class="member-list">
 		<% 
 			for(var i=0; i<result.group_info.length; i++) {

@@ -1797,7 +1797,8 @@ var recorder;
       hf.innerHTML = hf.download;
       li.appendChild(au);
       li.appendChild(hf);
-      recordingslist.appendChild(li);
+      
+		$('.facilitator-box .rightpanel-content-box').append(li);
     });
   }
 

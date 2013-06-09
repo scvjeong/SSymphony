@@ -8,11 +8,29 @@ var express = require('express')
   , quick_meeting = require('./routes/quick_meeting')
   , tools = require('./routes/tools')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , expressValidator = require('express-validator');
 
 var app = express();
 
 var _upload_dir = 'tmp';
+
+var validator_option = {
+	errorFormatter: function(param, msg, value) {
+		var namespace = param.split('.')
+		, root    = namespace.shift()
+		, formParam = root;
+
+		while(namespace.length) {
+			formParam += '[' + namespace.shift() + ']';
+		}
+		return {
+			param : formParam,
+			msg   : msg,
+			value : value
+		};
+	}
+}
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
@@ -25,6 +43,7 @@ app.configure(function(){
 	app.use(express.cookieParser('keyboard cat'));
 	app.use(express.session());
 	app.use(app.router);
+	app.use(expressValidator(validator_option));
 	app.use(require('stylus').middleware(__dirname + '/public'));
 	app.use(express.static(path.join(__dirname, 'public')));
 	app.use('/' + _upload_dir, express.static(path.join(__dirname, _upload_dir)));	// 업로드 디렉토리 static 등재

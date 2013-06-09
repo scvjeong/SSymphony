@@ -5,19 +5,6 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 var Validator = require('validator').Validator;
 
-// validator
-var v = new Validator();
-v.error = function(target) {
-	var msg = "";
-	switch(target)
-	{
-		case "sign_up_email":
-			msg = "Please enter a valid email";
-			break;
-	}
-	result = { result:"failed", msg:msg, target:target };
-}
-
 function register_session(req, idx_user, id, first_name, last_name)
 {
 	req.session.idx_user = idx_user;
@@ -68,27 +55,48 @@ exports.sign_up = function(req, res){
 	var sign_up_password = req.body.sign_up_password;
 	var sign_up_re_password = req.body.sign_up_re_password;
 	
-	v.check(sign_up_email, "sign_up_email").isEmail();
-
-	if( first_name.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"first_name" };
-	else if( last_name.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"last_name" };	
-	else if( sign_up_email.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"sign_up_email" };
-	else if( sign_up_password.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"sign_up_password" };
-	else if( sign_up_password !== sign_up_re_password )
-		result = { result:"failed", msg:"These passwords don't match. Try again?", target:"sign_up_re_password" };
-
-	if( result.result !== "failed" )
-	{
-		// params['id']
-		var params = { id:sign_up_email }
-		dao_m.dao_check_email(evt, mysql_conn, params);
+	/*
+	// validator
+	var v = new Validator();
+	var result;
+	v.error = function(target, evt) {
+		var msg = "";
+		console.log(evt);
+		switch(target)
+		{
+			case "sign_up_email":
+				msg = "Please enter a valid email";
+				break;
+		}
+		result = { result:"failed", msg:msg, target:target };
 	}
-	else
-		res.send(result);
+	*/
+
+	console.log( req );
+	//req.checkBody("sign_up_email", "Please enter a valid email").isEmail();
+
+	evt.on('sign_up_email', function(err, result){
+
+		if( first_name.length < 1 )
+			result = { result:"failed", msg:"You can't leave this empty.", target:"first_name" };
+		else if( last_name.length < 1 )
+			result = { result:"failed", msg:"You can't leave this empty.", target:"last_name" };	
+		else if( sign_up_email.length < 1 )
+			result = { result:"failed", msg:"You can't leave this empty.", target:"sign_up_email" };
+		else if( sign_up_password.length < 1 )
+			result = { result:"failed", msg:"You can't leave this empty.", target:"sign_up_password" };
+		else if( sign_up_password !== sign_up_re_password )
+			result = { result:"failed", msg:"These passwords don't match. Try again?", target:"sign_up_re_password" };
+
+		if( result.result !== "failed" )
+		{
+			// params['id']
+			var params = { id:sign_up_email }
+			dao_m.dao_check_email(evt, mysql_conn, params);
+		}
+		else
+			res.send(result);
+	});
 
 	evt.on('check_email', function(err, rows){
 		if( rows[0].cnt === 0 )

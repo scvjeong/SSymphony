@@ -49,14 +49,11 @@ $(document).ready(function() {
     } catch (e) {
       alert('No web audio support in this browser!');
     }
-    /*
+
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
       console.log('No live audio input: ' + e);
     });
-	*/
-	navigator.getUserMedia({audio: false}, startUserMedia, function(e) {
-      console.log('No live audio input: ' + e);
-    });
+
 
 	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
 

@@ -26,8 +26,10 @@ var validator_option = {
 		}
 		return {
 			param : formParam,
+			target : formParam,
 			msg   : msg,
-			value : value
+			value : value,
+			result : "failed"
 		};
 	}
 }
@@ -39,11 +41,11 @@ app.configure(function(){
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
+	app.use(expressValidator(validator_option));
 	app.use(express.methodOverride());
 	app.use(express.cookieParser('keyboard cat'));
 	app.use(express.session());
 	app.use(app.router);
-	app.use(expressValidator(validator_option));
 	app.use(require('stylus').middleware(__dirname + '/public'));
 	app.use(express.static(path.join(__dirname, 'public')));
 	app.use('/' + _upload_dir, express.static(path.join(__dirname, _upload_dir)));	// 업로드 디렉토리 static 등재

@@ -507,6 +507,11 @@ function initRightpanel()
 	});
 }
 
+// 오른쪽 패널 보이거나 숨기기
+function toggleRightpanel()
+{
+	$("#rightpanel").slideToggle();
+}
 
 /* 동적으로 파일 추가 */
 function includeFileDynamically(list) {

@@ -34,10 +34,8 @@ $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
 
-<<<<<<< HEAD
 	initRightpanel();
-=======
-	
+
 	// 오디오 관련 초기화
 	
 	 try {
@@ -56,10 +54,6 @@ $(document).ready(function() {
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
       console.log('No live audio input: ' + e);
     });
-
-
-	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
->>>>>>> scvjeong
 
 	// 소켓 열기
 	openSocket();

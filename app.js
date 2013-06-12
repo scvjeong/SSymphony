@@ -69,6 +69,7 @@ app.get('/page/setting_agenda', meeting_planning.setting_agenda); // 회의 기�
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step); // 회의 상세 기획
 app.get('/page/ft_help', meeting.ft_help); // 퍼실리테이션 도움말
 app.get('/page/minutes', meeting.minutes); // 회의록 페이지
+app.get('/page/need_help', meeting.need_help);
 
 /* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);

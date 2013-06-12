@@ -1136,8 +1136,12 @@ function hideMeetingResultWindow()
 function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');
-	bootbox_select.modal('hide');
-	showMeetingResultWindow();
+	bootbox_select.modal('hide');	
+}
+
+function evaluate_complete()
+{
+	 $('#evaluate_form').submit();
 }
 
 function makeCanvasImage(params)

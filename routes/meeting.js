@@ -315,6 +315,10 @@ exports.ft_help = function(req, res){
 	res.render('ft_help', {result:result} );
 };
 
+exports.need_help = function(req, res){
+	result = { title:"need_help" };
+	res.render('need_help', {result:result} );
+};
 
 exports.meeting_save_tools_image = function(req, res){
 	/** session start **/

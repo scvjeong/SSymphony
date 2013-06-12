@@ -1,10 +1,10 @@
 	<div class="meeting_evaluate_box">
 		<div class="container">
-			<form action="/page/meeting_appraisal" method="post">
+			<form id="evaluate_form" action="/page/meeting_appraisal" method="post">
 
 			<div id="evaluate_title_box">
 				<div class="evaluate_icon">
-					<input type="submit" value="평가 완료">
+					
 					<img class="evaluate_icon_button" src="/images/meeting_result/exit.png" onClick="hideEvaluateWindow()"/>
 				</div>
 			</div>
@@ -16,14 +16,14 @@
 					<div class="evaluate_subject">
 						We Love Chicky, Enjoy Your Day
 					</div>
-					<div class="result_time">
+					<div class="eval_result_time">
 						<img class="result_contents_button" src="/images/meeting_result/clock.png" />
 						<div id="eval_result_time_use">02:31:00</div>
 						<div id="eval_result_time_set">/ 2:00:00</div>	
 						<div id="eval_result_time_clock">(9:00 am - 11:31 am)</div>	
 					</div>
 					
-					<img class="result_contents_button" src="/images/meeting_result/badge.png" />
+					<img class="eval_result_contents_button" src="/images/meeting_result/badge.png" />
 					<div class="input_evaluate_meeting_box">
 						<div class="input_evaluate_title">
 							<div class="input_evaluate_subject">Meeting</div>
@@ -133,9 +133,13 @@
 								<div class="member_grade">Perfect</div>
 							</div>
 						</div>
-					</div>
-
+					</div>					
 				</div>
+			</div>
+
+			<div id="evaluate_footer_box">
+				<div class="prev_btn" onClick="hideEvaluateWindow()">Prev</div>
+				<div class="next_btn" onClick="evaluate_complete()">Next</div>
 			</div>
 
 			</form>

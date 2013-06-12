@@ -68,11 +68,13 @@ exports.meeting_evaluation = function(req, res){
 };
 
 exports.post_meeting_appraisal = function(req, res){
+
+	var result;
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
 	var params = { 
-		satisfaction:req.body.satisfaction,	 
+		satisfaction:req.body.satisfaction,
 		ft_appraisal:req.body.ft_appraisal,
 		mvp:req.body.mvp
 	};
@@ -88,6 +90,8 @@ exports.post_meeting_appraisal = function(req, res){
 };
 
 exports.post_meeting_evaluation = function(req, res) {
+
+	var result;
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
@@ -109,7 +113,8 @@ exports.post_meeting_evaluation = function(req, res) {
 };
 
 exports.post_meeting_close = function(req, res){
-	
+
+	var result;
 	/** session start **
 	if( !req.session.email || typeof req.session.email === "undefined" )
 	{
@@ -308,4 +313,60 @@ exports.meeting_save = function(req, res){
 exports.ft_help = function(req, res){
 	result = { title:"ft_help" };
 	res.render('ft_help', {result:result} );
-}
+};
+
+
+exports.meeting_save_tools_image = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_tool:req.param("idx_tool"),
+		idx_process:req.param("idx_process"),
+		tool_num:req.param("tool_num"),
+		image_value:req.param("image_value")
+	};	
+
+	dao_m.dao_set_meeting_save_tools_image(evt, mysql_conn, params);
+
+	evt.on('set_meeting_tools_image', function(err, sql){
+		if(err) throw err;
+
+		var result = { result:"successful", msg:"successful"  };
+		res.send(result);
+	});
+};
+
+exports.result_get_tools_image = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_process:req.param("idx_process")
+	};	
+
+	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, params);
+
+	evt.on('get_meeting_tools_image', function(err, rows){
+		if(err) throw err;
+		//console.log("[rows]->"+rows[0].image_value);
+		res.send(rows);
+	});
+};
+
+
+

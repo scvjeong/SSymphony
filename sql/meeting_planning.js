@@ -1,5 +1,11 @@
 exports.dao_set_meeting_planning = function(evt, mysql_conn, params){
-	var sql = "INSERT INTO `meeting_planning` SET `idx_owner` = '1', `idx_owner_type` = 'user', `subject` = '"+params['meeting_subject']+"', `goal` = '"+params['meeting_goal']+"', `date` = '"+params['date']+"', `start_time` = '"+params['meeting_start_time']+"', `end_time` = '"+params['meeting_end_time']+"', `reg_time` = now()";
+	var sql = "INSERT INTO `meeting_planning` SET `idx_owner` = '1', `idx_owner_type` = 'user', `subject` = '"+params['meeting_subject']+"', ";
+	sql += "`goal` = '"+params['meeting_goal']+"', ";
+	sql += "`date` = '"+params['date']+"', ";
+	sql += "`start_time` = '"+params['meeting_start_time']+"', ";
+	sql += "`end_time` = '"+params['meeting_end_time']+"', ";
+	sql += "`reg_time` = now(), ";
+	sql += "`status` = 'progress' ";
 	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
 		evt.emit('query_unit_1', err, rows);
 	});

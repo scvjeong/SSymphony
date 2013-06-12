@@ -160,7 +160,14 @@
 		<div class="title-bar">
 			<div class="subject">Weekly Discussion</div>
 			<span class="sub-subject">Service Design Meeting</span>
+<<<<<<< HEAD
 			<div class="result-btn" id="result-btn"><button type="button" class="btn btn-primary">회의종료</div></div>
+=======
+			<div class="result-btn" id="result-btn">회의종료</div>
+			<div class="record-btn" id="record-btn" onclick="startRecording();">Record</div>
+			<div class="stop-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
+			
+>>>>>>> scvjeong
 			<div class="time">00:00:00 / <%=limit_time%></div>
 		</div>
 		<div id="white-board" class="white-board">
@@ -494,6 +501,8 @@
 
   <!-- html2canvas Plugin -->
   <script src="/javascripts/html2canvas.js"></script>
+  
+  <script src="/javascripts/recorder.js"></script>
 
 <script src="/javascripts/libs/jquery.pageslide/jquery.pageslide.min.js"></script>
 
@@ -523,6 +532,14 @@
 		var _runTime = <%=t%>;
 		var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
 		setInterval("showRunTime()", 1000);
+		$(function(){
+			$(".process-unit").hover(function(){
+				
+				$(this).addClass("processing");
+			}, function(){
+				$(this).removeClass("processing");
+			})
+		});
 	</script>
 <!-- /Javascript -->
 

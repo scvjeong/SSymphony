@@ -5,19 +5,6 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 var Validator = require('validator').Validator;
 
-// validator
-var v = new Validator();
-v.error = function(target) {
-	var msg = "";
-	switch(target)
-	{
-		case "sign_up_email":
-			msg = "Please enter a valid email";
-			break;
-	}
-	result = { result:"failed", msg:msg, target:target };
-}
-
 function register_session(req, idx_user, id, first_name, last_name)
 {
 	req.session.idx_user = idx_user;
@@ -67,28 +54,25 @@ exports.sign_up = function(req, res){
 	var sign_up_email = req.body.sign_up_email;
 	var sign_up_password = req.body.sign_up_password;
 	var sign_up_re_password = req.body.sign_up_re_password;
-	
-	v.check(sign_up_email, "sign_up_email").isEmail();
 
-	if( first_name.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"first_name" };
-	else if( last_name.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"last_name" };	
-	else if( sign_up_email.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"sign_up_email" };
-	else if( sign_up_password.length < 1 )
-		result = { result:"failed", msg:"You can't leave this empty.", target:"sign_up_password" };
-	else if( sign_up_password !== sign_up_re_password )
-		result = { result:"failed", msg:"These passwords don't match. Try again?", target:"sign_up_re_password" };
-
-	if( result.result !== "failed" )
+	req.checkBody("first_name", "You can't leave this empty.").notEmpty();
+	req.checkBody("last_name", "You can't leave this empty.").notEmpty();
+	req.checkBody("sign_up_email", "You can't leave this empty.").notEmpty();
+	req.checkBody("sign_up_email", "Please enter a valid email").isEmail();
+	req.checkBody("sign_up_password", "You can't leave this empty.").notEmpty();
+	req.checkBody("sign_up_re_password", "These passwords don't match. Try again?").equals(sign_up_password);
+	var errors = req.validationErrors();
+	if( errors !== null )
+	{
+		result = errors[0];
+		res.send(result);
+	}
+	else
 	{
 		// params['id']
 		var params = { id:sign_up_email }
 		dao_m.dao_check_email(evt, mysql_conn, params);
 	}
-	else
-		res.send(result);
 
 	evt.on('check_email', function(err, rows){
 		if( rows[0].cnt === 0 )
@@ -124,14 +108,15 @@ exports.check_email = function(req, res){
 	var evt = new EventEmitter();
 	var dao_m = require('../sql/main');
 	var result = {};
-	var email = req.body.email;
+	var sign_up_email = req.body.sign_up_email;
 
-	v.check(email).isEmail();
-
-	if( result.result !== "failed" )
+	req.checkBody("sign_up_email", "You can't leave this empty.").notEmpty();
+	req.checkBody("sign_up_email", "Please enter a valid email").isEmail();
+	var errors = req.validationErrors();
+	if( errors === null )
 	{
 		// params['id']
-		var params = { id:email }
+		var params = { id:sign_up_email }
 		dao_m.dao_check_email(evt, mysql_conn, params);
 		evt.on('check_email', function(err, rows){
 			if( rows[0].cnt === 0 )
@@ -142,5 +127,8 @@ exports.check_email = function(req, res){
 		});
 	}
 	else
+	{
+		result = errors[0];
 		res.send(result);
+	}
 }

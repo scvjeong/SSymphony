@@ -8,11 +8,31 @@ var express = require('express')
   , quick_meeting = require('./routes/quick_meeting')
   , tools = require('./routes/tools')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , expressValidator = require('express-validator');
 
 var app = express();
 
 var _upload_dir = 'tmp';
+
+var validator_option = {
+	errorFormatter: function(param, msg, value) {
+		var namespace = param.split('.')
+		, root    = namespace.shift()
+		, formParam = root;
+
+		while(namespace.length) {
+			formParam += '[' + namespace.shift() + ']';
+		}
+		return {
+			param : formParam,
+			target : formParam,
+			msg   : msg,
+			value : value,
+			result : "failed"
+		};
+	}
+}
 
 app.configure(function(){
 	app.set('port', process.env.PORT || 3000);
@@ -21,6 +41,7 @@ app.configure(function(){
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
+	app.use(expressValidator(validator_option));
 	app.use(express.methodOverride());
 	app.use(express.cookieParser('keyboard cat'));
 	app.use(express.session());
@@ -49,7 +70,6 @@ app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step); // �
 app.get('/page/ft_help', meeting.ft_help); // 퍼실리테이션 도움말
 app.get('/page/minutes', meeting.minutes); // 회의록 페이지
 
-
 /* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
@@ -61,7 +81,12 @@ app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 app.post('/page/meeting_evaluation', meeting.post_meeting_evaluation);
 app.post('/page/meeting_close', meeting.post_meeting_close);
 app.post('/page/search_user', meeting_list.post_search_user);
-app.post('/page/add_user', meeting_list.post_add_user);
+app.post('/page/add_user', meeting_list.post_set_add_user);
+app.post('/page/user_info', meeting_list.post_user_info);
+app.post('/page/delete_user', meeting_list.post_set_delete_user);
+app.post('/page/save_tools_image', meeting.meeting_save_tools_image);
+app.post('/page/get_tools_image', meeting.result_get_tools_image);
+
 
 /* 도구 관련 */
 app.get('/tool/list/:group_id/:tool_index', tools.list);

@@ -1559,6 +1559,25 @@ h6 small {
 	width:200px;
 	text-align:right;
 }
+.title-bar .record-btn{
+	font-family:"Fjalla One";
+	float:right;
+	padding-right:20px;
+	width:60px;
+	text-align:right;
+	cursor:pointer;
+}
+
+.title-bar .stop-btn{
+	font-family:"Fjalla One";
+	float:right;
+	padding-right:20px;
+	width:60px;
+	text-align:right;
+	cursor:pointer;
+}
+
+
 .title-bar .result-btn{
 	font-family:"Fjalla One";
 	float:right;
@@ -1567,6 +1586,7 @@ h6 small {
 	text-align:right;
 	cursor:pointer;
 }
+
 .white-board{
 	float:left;
 	width:75%;
@@ -1619,6 +1639,9 @@ h6 small {
 	background-repeat: repeat-x;
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
 	overflow-y:scroll;
+}
+.rightpanel-content-box .process-unit{
+	cursor:pointer;
 }
 .rightpanel-content-box .processing{
 	color:#2674a1;
@@ -1697,10 +1720,13 @@ h6 small {
 #member-info{
 	float:left;
 	width:280px;
+	height:510px;
 	margin:65px 0px 10px 0px;
-	padding:30px;
+	padding:30px 30px 0 30px;
 	color:#999999;
 	background-color:#FFFFFF;
+	overflow-x:hidden;
+	overflow-y:scroll;
 }
 #member-info .profile-pic{
 	width:125px;
@@ -1798,13 +1824,11 @@ h6 small {
 	padding:15px 10px;
 	margin-bottom:5px;
 	height:100px;
+	line-height:27px;
 	color:#FFFFFF;
 	cursor:pointer;
 }
 #menu #start-btn{
-<<<<<<< HEAD
-	background-color:#336699;
-=======
 	position:relative;
 	top:0px;
 	left:0px;
@@ -1822,7 +1846,6 @@ h6 small {
 }
 #menu #start-btn div.tool{
 	padding:0px 10px;
->>>>>>> scvjeong
 }
 #menu #meeting-list-btn{
 	background-color:#6699cc;
@@ -1834,6 +1857,9 @@ h6 small {
 	color:#336699 !important;
 	background-color:#cccccc;
 }
+#topbar .topbar-container{
+	width:1280px;
+}
 #topbar #top-menu{
 	float:right;
 	margin-top:24px;
@@ -1844,14 +1870,14 @@ h6 small {
 #topbar #top-menu a:hover {text-decoration: none; color: #FFFFFF;}
 #topbar #top-menu ul{
 	list-style:none;
-	margin:0px 300px 0px 0px;
+	margin:0px;
 	padding:0px;
 }
 #topbar #top-menu li{
 	float:left;
 	font-family:"Fjalla One";
 	font-size:19px;
-	margin-right:30px;
+	margin:0px 10px 0px 20px;
 	cursor:pointer;
 }
 #topbar #group-title{
@@ -1871,17 +1897,41 @@ h6 small {
 #meeting-list{
 	float:left;
 	width:280px;
+	height:510px;
 	margin:65px 0px 10px 0px;
-	padding:30px;
+	padding:30px 30px 0 30px;
 	color:#666666;
 	background-color:#FFFFFF;
 	font-family:"Istok Web";
+	overflow-x:hidden;
+	overflow-y:scroll;
+}
+#meeting-list .member-list{
+	float:left;
+	width:100%;
+	margin-bottom:10px;
+}
+#meeting-list .member-list li{
+	float:left;
+	width:30px;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	font-weight:bold;
+	color: #444;
+	background-color:#ccc;
+	border: 1px solid #B9B9B9;
+	overflow: hidden;
+	cursor: pointer;
+	margin: 0 2px 2px 0;
+	border-radius:3px;
 }
 #meeting-list .meeting-list-btn-wrap{
+	width:100%;
 	margin-bottom:10px;
 }
 #meeting-list .add-member-btn{
-	width:278px;
+
 	background-color:#FFFFFF;
 	border:1px solid #999999;
 	background:#ffffff;
@@ -1899,7 +1949,8 @@ h6 small {
 	display:block;
 	height:18px;
 	margin-top:6px;
-	max-width:250px;
+	max-width:275px;
+	width:275px;
 	overflow:hidden;
 	white-space:nowrap;
 	padding:6px;
@@ -1919,13 +1970,18 @@ h6 small {
 #meeting-list .add-member-btn:active {text-decoration: none; color: #666666;}
 
 #meeting-list ul{
+	float:left;
 	list-style:none;
 	margin:0px;
 	padding:0px;
 }
 #meeting-list .meeting-node{
+	float:left;
 	cursor:pointer;
 	margin-bottom:15px;
+}
+#meeting-list .meeting-node ul{
+	width:232px;
 }
 #meeting-list .color-bar{
 	float:left;
@@ -2221,10 +2277,23 @@ h6 small {
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	line-height:20px;
+	height:20px;
+	overflow:hidden;
+	word-wrap:break-word;
+	width: 90%;                   /* IE6 needs any width */
+	-o-text-overflow: ellipsis;    /* Opera under 10.7 */
+	text-overflow:ellipsis;    /* IE, Safari */
+	display:block;
+	text-decoration:none;
+	white-space:nowrap
 }
 #light-popup .light-popup-body .contents ul li:hover{
 	color:#FFFFFF;
 	background-color:#2887bd;
+}
+#light-popup .light-popup-body .contents ul li div{
+	width:1000px;
 }
 #light-popup .light-popup-body .light-popup-submit{
 	margin:20px 0px 0px 80px;
@@ -2233,5 +2302,89 @@ h6 small {
 	background: linear-gradient(to bottom, #24A828 0%, #1B7E1E 100%) repeat scroll 0 0 transparent;
     color: #FFFFFF;
 }
-
 /*** light-popup ***/
+
+
+/*** user-info-popup ***/
+#user-info-popup{
+	font-family: "Roboto";
+	position:absolute;
+	top:0px;
+	left:0px;
+	box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+	background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #B9B9B9;
+    border-radius: 3px 3px 3px 3px;
+	overflow-x: hidden;
+    overflow-y: auto;
+	width:268px;
+	z-index: 20;
+	display:none;
+}
+#user-info-popup .user-info-popup-close-btn{
+	padding: 8px 12px 4px 0px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+#user-info-popup .user-info-popup-header .icon-close:before{
+	content:"X";
+}
+.user-info-popup-close-btn:link {text-decoration: none; color: #939393;}
+.user-info-popup-close-btn:visited {text-decoration: none; color: #939393;}
+.user-info-popup-close-btn:active {text-decoration: none; color: #939393;}
+.user-info-popup-close-btn:hover {text-decoration: none; color: #111111;}
+
+#user-info-popup .user-info-popup-header{
+    padding: 8px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#user-info-popup .user-info-popup-img{
+	float:left;
+	width:50px;
+	height:50px;
+	line-height:50px;
+	text-align:center;
+	font-weight:bold;
+	color: #444;
+	background-color:#ccc;
+	border: 1px solid #B9B9B9;
+	overflow: hidden;
+	cursor: pointer;
+	margin: 0 7px 0 0;
+	border-radius:3px;
+}
+#user-info-popup .user-info-popup-name{
+	display:block;
+	font-weight: bold;
+	line-height: 21px;
+}
+#user-info-popup .user-info-popup-id{
+	display:block;
+	font-size:13px;
+    line-height: 16px;
+	color: #939393;
+}
+#user-info-popup .user-info-popup-edit{
+	display:none;
+	font-size:13px;
+    line-height: 16px;
+	color: #939393;
+}
+
+#user-info-popup .user-info-popup-body ul{
+	list-style:none;
+	margin:0px 0px 5px 0px;
+}
+#user-info-popup .user-info-popup-body li{
+	line-height:27px;
+	padding:0px 8px;
+	cursor:pointer;
+}
+#user-info-popup .user-info-popup-body li:hover{
+	color:#FFFFFF;
+	background-color:#2887bd;
+}
+/*** user-info-popup ***/

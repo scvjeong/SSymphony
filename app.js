@@ -56,6 +56,9 @@ app.configure('development', function(){
 });
 
 app.get('/', main.main);
+app.get('/auth/facebook', main.facebook); // 페이스북 가입
+app.get('/auth/facebook/callback', main.facebook_callback); // 페이스북 가입
+app.get('/facebook/channel', main.channel); // 페이스북 가입
 app.get('/page/group_select', group_select.group_select); // 회의 선택 페이지
 app.get('/page/meeting_list', meeting_list.meeting_list); // 회의 선택 페이지
 app.get('/page/meeting', meeting.main); // 회의 진행 페이지
@@ -85,8 +88,6 @@ app.post('/page/add_user', meeting_list.post_set_add_user);
 app.post('/page/user_info', meeting_list.post_user_info);
 app.post('/page/delete_user', meeting_list.post_set_delete_user);
 app.post('/page/save_tools_image', meeting.meeting_save_tools_image);
-app.post('/page/get_tools_image', meeting.result_get_tools_image);
-
 
 /* 도구 관련 */
 app.get('/tool/list/:group_id/:tool_index', tools.list);

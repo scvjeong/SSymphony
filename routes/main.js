@@ -54,14 +54,25 @@ exports.sign_up = function(req, res){
 	var sign_up_email = req.body.sign_up_email;
 	var sign_up_password = req.body.sign_up_password;
 	var sign_up_re_password = req.body.sign_up_re_password;
+	var referer = req.headers.referer;
+	var referer_facebook = (referer === "http://orchestra.com:3000/auth/facebook" || referer === "http://orchestra.im/auth/facebook" || referer === "http://lyd.orchestra.im:3000/auth/facebook");
+	var type;
 
 	req.checkBody("first_name", "You can't leave this empty.").notEmpty();
 	req.checkBody("last_name", "You can't leave this empty.").notEmpty();
 	req.checkBody("sign_up_email", "You can't leave this empty.").notEmpty();
 	req.checkBody("sign_up_email", "Please enter a valid email").isEmail();
-	req.checkBody("sign_up_password", "You can't leave this empty.").notEmpty();
-	req.checkBody("sign_up_re_password", "These passwords don't match. Try again?").equals(sign_up_password);
+	if( referer_facebook )
+		type = "facebook";
+	else
+	{
+		type = "origin";
+		req.checkBody("sign_up_password", "You can't leave this empty.").notEmpty();
+		req.checkBody("sign_up_re_password", "These passwords don't match. Try again?").equals(sign_up_password);
+	}
+
 	var errors = req.validationErrors();
+
 	if( errors !== null )
 	{
 		result = errors[0];
@@ -70,7 +81,10 @@ exports.sign_up = function(req, res){
 	else
 	{
 		// params['id']
-		var params = { id:sign_up_email }
+		var params = { 
+			id:sign_up_email,
+			type:type
+		}
 		dao_m.dao_check_email(evt, mysql_conn, params);
 	}
 
@@ -85,7 +99,8 @@ exports.sign_up = function(req, res){
 					id:sign_up_email,
 					pw:sign_up_password,
 					first_name:first_name,
-					last_name:last_name
+					last_name:last_name,
+					type:"origin"
 				};
 			dao_m.dao_sign_up(evt, mysql_conn, params);
 		}
@@ -132,3 +147,51 @@ exports.check_email = function(req, res){
 		res.send(result);
 	}
 }
+
+exports.channel = function(req, res){
+	res.render('channel', {} );
+};
+exports.facebook = function(req, res){
+	res.render('facebook', {} );
+};
+exports.facebook_callback = function(req, res){
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/main');
+	var result = {};
+	var code = req.param("code");
+	res.redirect("/auth/facebook");
+	//console.log(code);
+	/*
+	var signed_request = req.param("signed_request").toString().split(".");
+	var sig, result, email, name, first_name, last_name;
+	for(var i=0;i<signed_request.length;i++)
+	{
+		sig = new Buffer(signed_request[i], 'base64').toString('ascii');
+		if( sig.substring(0,1) === "{" )
+		{
+			result = JSON.parse(sig);
+			email = result.registration.email;
+			name = result.registration.name.toString().split(" ");
+			if( name[0] ) first_name = name[0]; else first_name = "";
+			if( name[1] ) last_name = name[1]; else last_name = "";
+			// params['id']
+			// params['pw']
+			// params['first_name']
+			// params['last_name']
+			var params = {
+					id:email,
+					pw:"o!r@c)h(e*s&t^r%a$",
+					first_name:first_name,
+					last_name:last_name,
+					type:"facebook"
+				};
+			dao_m.dao_sign_up(evt, mysql_conn, params);
+		}
+	}
+	evt.on('sign_up', function(err, rows){
+		var idx_user = rows.insertId;
+		register_session(req, idx_user, email, first_name, last_name);
+		res.redirect("/page/group_select");
+	});
+	*/
+};

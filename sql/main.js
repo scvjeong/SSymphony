@@ -43,7 +43,8 @@ exports.dao_sign_up = function(evt, mysql_conn, params){
 	sql += "SET `id` = '"+params['id']+"', ";
 	sql += "`pw` = md5('"+params['pw']+"'), ";
 	sql += "`first_name` = '"+params['first_name']+"', ";
-	sql += "`last_name` = '"+params['last_name']+"' ";
+	sql += "`last_name` = '"+params['last_name']+"', ";
+	sql += "`type` = '"+params['type']+"' ";
 
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('sign_up', err, rows);

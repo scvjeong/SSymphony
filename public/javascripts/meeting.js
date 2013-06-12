@@ -34,7 +34,7 @@ $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
 
-	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
+	initRightpanel();
 
 	// 소켓 열기
 	openSocket();
@@ -468,24 +468,24 @@ function addLinkList(title, link)
 		link_list.append(newlink);
 }
 
-// 오른쪽 메뉴 전환
-function setRightpanel(panel)
+// 오른쪽 패널 초기화
+function initRightpanel()
 {
-	$("#rightpanel #tabbar li").css("background-color", "");
-	$("#rightpanel #tabbar #" + panel).css("background-color", "#111111");
+	$("#rightpanel div #panel_process_title").click(function() {
+		$("#rightpanel div #panel_process_container").slideToggle();
+	});
 
-	switch (panel)
-	{
-	case "participants":
-		break;
-	case "tools":
-		break;
-	case "info":
-		break;
-	}
+	$("#rightpanel div #panel_addtool_title").click(function() {
+		$("#rightpanel div #panel_addtool_container").slideToggle();
+	});
 
-	$("#rightpanel #panelcontents div").hide();
-	$("#rightpanel #panelcontents #" + panel).show();
+	$("#rightpanel div #panel_member_title").click(function() {
+		$("#rightpanel div #panel_member_container").slideToggle();
+	});
+
+	$("#rightpanel div #panel_facilitator_title").click(function() {
+		$("#rightpanel div #panel_facilitator_container").slideToggle();
+	});
 }
 
 

@@ -160,7 +160,7 @@
 		<div class="title-bar">
 			<div class="subject">Weekly Discussion</div>
 			<span class="sub-subject">Service Design Meeting</span>
-			<div class="result-btn" id="result-btn">회의종료</div>
+			<div class="result-btn" id="result-btn"><button type="button" class="btn btn-primary">회의종료</div></div>
 			<div class="time">00:00:00 / <%=limit_time%></div>
 		</div>
 		<div id="white-board" class="white-board">
@@ -374,26 +374,71 @@
 		</div>
 		<div id="rightpanel" class="rightpanel">
 			<div class="process-box">
-				<div class="rightpanel-title-bar">Process</div>
-				<div class="rightpanel-content-box fancy-scrollbar">
+				<div class="rightpanel-title-bar" id="panel_process_title">Process</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_process_container">
 					<ul id="process_list" style="margin: 0;">
 						<li class="process-unit processing">
 							<span>Ice Breaking</span>
-							<div style="height:2px; background-color:#dddddd;"></div>
-							<div></div>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:70%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
 						</li>
-						<li class="process-unit"><span>Weekly Review</span></li>	
-						<li class="process-unit"><span>Clarify Agenda</span></li>
-						<li class="process-unit"><span>Discussion</span></li>
-						<li class="process-unit"><span>Burning Issue</span></li>
-						<li class="process-unit"><span>Review</span></li>
-						<li class="process-unit"><span>Closing Round</span></li>
+						<li class="process-unit">
+							<span>Weekly Review</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Clarify Agenda</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Discussion</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Burning Issue</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Review</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Closing Round</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
 					</ul>
 				</div>
 			</div>
 			<div class="tool-box">
-				<div class="rightpanel-title-bar">Add Tool</div>
-				<div class="rightpanel-content-box fancy-scrollbar">
+				<div class="rightpanel-title-bar" id="panel_addtool_title">Add Tool</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_addtool_container">
 					<div class="member-unit" onclick="getToolSource('list', initList, true);">list</div>
 					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap, true);">mindmap</div>
 					<div class="member-unit" onclick="getToolSource('postit', initPostit, true);">postit</div>
@@ -402,8 +447,8 @@
 				</div>
 			</div>
 			<div class="member-box">
-				<div class="rightpanel-title-bar">Memeber 4/6</div>
-				<div class="rightpanel-content-box fancy-scrollbar">
+				<div class="rightpanel-title-bar" id="panel_member_title">Memeber 4/6</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_member_container">
 					<div class="member-unit client-1">■ Jonghyuk Lim</div>
 					<div class="member-unit client-2">■ Julian De Maestri</div>
 					<div class="member-unit client-3">■ scvjeong</div>
@@ -413,8 +458,8 @@
 				</div>
 			</div>
 			<div class="facilitator-box">
-				<div class="rightpanel-title-bar">Facilitator</div>
-				<div class="rightpanel-content-box fancy-scrollbar">
+				<div class="rightpanel-title-bar" id="panel_facilitator_title">Facilitator</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_facilitator_container">
 				</div>
 			</div>
 		</div>		

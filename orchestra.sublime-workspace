@@ -87,15 +87,7 @@
 			"file": "views/meeting.ejs",
 			"settings":
 			{
-				"buffer_size": 23040,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "public/javascripts/meeting.js",
-			"settings":
-			{
-				"buffer_size": 46911,
+				"buffer_size": 25211,
 				"line_ending": "Windows"
 			}
 		},
@@ -103,7 +95,15 @@
 			"file": "public/stylesheets/theme.css",
 			"settings":
 			{
-				"buffer_size": 14665,
+				"buffer_size": 15289,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "public/javascripts/meeting.js",
+			"settings":
+			{
+				"buffer_size": 47040,
 				"line_ending": "Windows"
 			}
 		},
@@ -112,6 +112,14 @@
 			"settings":
 			{
 				"buffer_size": 21811,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "public/javascripts/tools/postit.js",
+			"settings":
+			{
+				"buffer_size": 10882,
 				"line_ending": "Windows"
 			}
 		}
@@ -190,6 +198,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"rightpanel",
+			"process-unit",
 			"</li>",
 			"\">",
 			"div",
@@ -237,7 +247,7 @@
 			"util"
 		],
 		"highlight": true,
-		"in_selection": true,
+		"in_selection": false,
 		"preserve_case": false,
 		"regex": false,
 		"replace_history":
@@ -256,7 +266,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -264,15 +274,15 @@
 					"file": "views/meeting.ejs",
 					"settings":
 					{
-						"buffer_size": 23040,
+						"buffer_size": 25211,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								17336,
-								17336
+								7401,
+								7401
 							]
 						],
 						"settings":
@@ -285,56 +295,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 5396.0,
+						"translation.y": 2156.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "public/javascripts/meeting.js",
-					"settings":
-					{
-						"buffer_size": 46911,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								33280,
-								33280
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"origin_encoding": "UTF-8",
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
 					"file": "public/stylesheets/theme.css",
 					"settings":
 					{
-						"buffer_size": 14665,
+						"buffer_size": 15289,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1706,
-								1706
+								1702,
+								1702
 							]
 						],
 						"settings":
@@ -347,7 +326,38 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1126.0,
+						"translation.y": 1355.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "public/javascripts/meeting.js",
+					"settings":
+					{
+						"buffer_size": 47040,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12535,
+								12535
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"origin_encoding": "UTF-8",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 6917.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -378,6 +388,37 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "public/javascripts/tools/postit.js",
+					"settings":
+					{
+						"buffer_size": 10882,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7348,
+								7348
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"origin_encoding": "UTF-8",
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 1.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},

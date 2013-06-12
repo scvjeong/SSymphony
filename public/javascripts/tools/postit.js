@@ -207,6 +207,7 @@ function postit_render_children(valId, groupId, valData) {
 		  // ----------------------------------------------------------------------
 
 		$containers.on("ss-event-dropped", function(e, selected) {
+			console.log("CALL $containers.on:ss-event-dropped");
 			//드롭 이벤트에 따라 위치 변경 클라이언트에 전달 - changeDepth 이용해서 구현
 			var $selected = $(selected)
 			var $selectedGroup = $selected.parent().parent();
@@ -234,6 +235,7 @@ function postit_render_children(valId, groupId, valData) {
 		});
 
 		$containers.on("ss-event-dragged", function(e, selected) {
+			console.log("CALL $containers.on:ss-event-dragged");
 			var $selected = $(selected);
 			var $selectedGroup = $selected.parent().parent();
 			preSelectGroup = $selectedGroup.attr('groupid');

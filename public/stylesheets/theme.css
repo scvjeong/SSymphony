@@ -99,13 +99,37 @@ iframe {
 	background-color: #61b0e9;
 	z-index: 5000;
 }
+#rightpanel div .rightpanel-title-bar {
+	cursor: pointer;
+}
+#rightpanel div .rightpanel-title-bar:hover {
+	background-color: rgb(95, 156, 218);
+}
 #rightpanel #process_list {
 	list-style: none;
 }
 #rightpanel #process_list .process-unit {
-	height: 25px;
-	line-height: 25px;
+	/*height: 25px;
+	line-height: 25px;*/
 	margin-bottom: 10px;
+	cursor: pointer;
+}
+#rightpanel #process_list .process-unit .progress-bar { 
+	height: 2px;
+	background-color: #dddddd;
+}
+#rightpanel #process_list .process-unit .progress-bar-fill { 
+ height: 2px;
+ background-color: #336699;
+}
+#rightpanel #process_list .process-unit .time_container {
+	font-size: 8pt;
+}
+#rightpanel #process_list .process-unit .time_container .lead_time {
+	float: left;
+}
+#rightpanel #process_list .process-unit .time_container .limit_time {
+	float: right;
 }
 #rightpanel > ul {
 	list-style: none;

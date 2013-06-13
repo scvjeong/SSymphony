@@ -82,32 +82,76 @@
 						-->
 						<div class="agenda_box">
 							<div class="agenda_title_box">
-								<div class="agenda_subject">Opening</div>
-								<div class="agenda_goal">Ice Breaking, 회의 주제 및 목표 전달, Ground Rule 작성</div>
+								<div class="agenda_subject" onClick="clickAgendaTitle(0)">Opening</div>
+								<div class="agenda_goal">Ice Breaking, 회의 주제 및 목표 전달, Ground Rule 작성</div>			
+							</div>
+							<div class="agenda_result" id="result0" style="display:none;">
+								
+
 							</div>
 						</div>
 						<div class="agenda_box">
 							<div class="agenda_title_box">
-								<div class="agenda_subject">문제 정의</div>
-								<div class="agenda_goal">문제 정의</div>
+								<div class="agenda_subject" onClick="clickAgendaTitle(1)">문제 정의</div>
+								<div class="agenda_goal">문제 정의</div>			
+							</div>
+							<div class="agenda_result" id="result1" style="display:none;">
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">Postit</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">Mindmap</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">Vote</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">List</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">Matrix</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
 							</div>
 						</div>
 						<div class="agenda_box">
 							<div class="agenda_title_box">
-								<div class="agenda_subject">문제 분석</div>
+								<div class="agenda_subject" onClick="clickAgendaTitle(2)">문제 분석</div>
 								<div class="agenda_goal">문제의 원인 분석</div>
 							</div>
-						</div>
-						<div class="agenda_box">
-							<div class="agenda_title_box">
-								<div class="agenda_subject">아이디어 도출</div>
-								<div class="agenda_goal">문제 해결을 위하 아이디어 도출</div>
+							<div class="agenda_result" id="result2" style="display:none;">
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">Postit</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
 							</div>
 						</div>
 						<div class="agenda_box">
 							<div class="agenda_title_box">
-								<div class="agenda_subject">솔루션 도출</div>
-								<div class="agenda_goal">아이디어 활용하여 솔루션 도출</div>
+								<div class="agenda_subject" onClick="clickAgendaTitle(3)">아이디어 도출</div>
+								<div class="agenda_goal">문제 해결을 위한 아이디어 도출</div>			
+							</div>
+							<div class="agenda_result" id="result3" style="display:none;">
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">Postit</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
+							</div>
+						</div>
+						<div class="agenda_box">
+							<div class="agenda_title_box">
+								<div class="agenda_subject" onClick="clickAgendaTitle(4)">솔루션 도출</div>
+								<div class="agenda_goal">아이디어 활용하여 솔루션 도출</div>				
+							</div>
+							<div class="agenda_result" id="result4" style="display:none;">
+								<div class="agenda_result_box"> 
+									<div class="agenda_result_title">Postit</div>
+									<canvas class="agenda_result_canvas"></canvas>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -161,7 +161,12 @@ function showMeetingResultWindow()
 
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
-	
+			
+			//도구 결과 이미지 불러오는 부분
+			var params = [];
+			params['idx_process'] = 0;
+			getToolsImage(params);
+
 		},
 		error: function(err) {
 			console.log(err);
@@ -170,10 +175,98 @@ function showMeetingResultWindow()
 	});		
 }
 
+function clickAgendaTitle(num)
+{
+	console.log(num);
+	var tmp_result_num = "result"+num;
+	var tmp_selector = $('#'+tmp_result_num);
+	var tmp_display = tmp_selector.css("display");
+	if ( tmp_display == "block" )
+	{
+		tmp_selector.css("display", "none");
+	}
+	else if ( tmp_display == "none" )
+	{
+		tmp_selector.css("display", "block");
+	
+	}
+	//console.log( $('#'+tmp_result_num).attr('id') );
+}
+
+
 function getToolsResult()
 {
 	
 }
+
+
+function getToolsImage(params)
+{
+	var idx_process = params['idx_process'];
+	
+	var send_params = {
+		idx_process: idx_process
+	};	
+					
+	$.ajax({
+		url: '/page/get_tools_image',
+		type: 'POST',		
+		data: send_params,
+		dataType: 'json',
+		success: function(json_data) {
+			console.log("Success");
+			console.log("json length: "+json_data.length);
+			var i=0;
+			for ( i=0; i<json_data.length; i++)
+			{
+				//console.log("[json_data] -> "+json_data[i].image_value);
+				drawToolsImage(idx_process, json_data[i].idx_tool, json_data[i].tool_num, json_data[i].image_value);
+			}		
+		}
+	});
+}
+
+function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
+{
+	console.log("idx_tool->"+idx_tool);
+	console.log("tool_num->"+tool_num);
+	console.log("image_value->"+image_value);
+
+	var tool_name = "";
+
+	switch ( tool_num ) {
+		case 1 : tool_name = "List"; break;
+		case 2 : tool_name = "Postit"; break;
+		case 3 : tool_name = "Mindmap"; break;
+		case 4 : tool_name = "Vote"; break;
+		case 5 : tool_name = "Matrix"; break;	
+		default : tool_name = ""; break;
+	}
+	
+
+	//console.log("tool_name->"+tool_name);
+
+	var tmp_canvas = tool_name+idx_tool;
+	
+	var result_tag = "<div class='agenda_result_box'>";
+	result_tag += "<div class='agenda_result_title'>"+tool_name+"</div>";
+	result_tag += "<canvas class='agenda_result_canvas' id="+tmp_canvas+"></canvas>";
+	result_tag += "</div>";
+
+	var tmp_result_selector = $('.agenda_result:eq('+idx_process+')');
+	tmp_result_selector.append(result_tag);
+	
+	var image = new Image();
+	image.src = image_value;
+	
+	var canvas_selector =document.getElementById(tmp_canvas);
+	//console.log(canvas_selector);
+	var ctx = canvas_selector.getContext("2d");
+	ctx.drawImage(image,0,0, image.width, image.height,0,0,250,150);
+
+}
+
+
 
 
 function setupWordChart()

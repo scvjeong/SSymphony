@@ -601,7 +601,7 @@ ul.users-online li a strong {
 	padding-left: 12px;
 }
 
-#agenda_title_box {
+#agenda_title_box {	
 	width: 994px;
 	height: 40px;
 	background-color: #9cf;
@@ -613,10 +613,13 @@ ul.users-online li a strong {
 }
 
 .agenda_box {
+	position: relative;
 	margin-bottom: 10px;
 }
 
 .agenda_title_box {
+	position: relative;
+	cursor: pointer;
 	width: 994px;
 	height: 40px;
 	background-color: #9cf;
@@ -643,6 +646,43 @@ ul.users-online li a strong {
 	color: #fff;
 	line-height: 40px;
 }
+
+.agenda_result {	
+	width: 1006px;
+	height: 200px;
+}
+
+.agenda_result_box {
+	float:left;
+	width: 200px;
+	height: 200px;
+}
+
+.agenda_result_title {
+	width: 180px;
+	height: 40px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
+	text-align: center;
+	line-height: 40px;
+	font-family: "Fjalla One";
+	font-size: 21px;
+	color: #666;
+	-webkit-border-radius: 12px 0 0/40px 0 0;
+	-moz-border-radius: 12px 0 0/40px 0 0;
+	border-radius: 12px 0 0/40px 0 0;
+	background-color: #e3f0fd;
+}
+
+.agenda_result_canvas {
+	width: 190px;
+	height: 150px;
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
 /* /회의 결과 부트박스 */
 
 

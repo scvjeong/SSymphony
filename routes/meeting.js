@@ -372,5 +372,3 @@ exports.result_get_tools_image = function(req, res){
 	});
 };
 
-
-

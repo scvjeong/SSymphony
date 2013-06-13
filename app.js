@@ -103,7 +103,9 @@ app.post('/lib/upload', function(req, res) {
  	
   	var fs = require('fs');
  	var util = require('util');
- 
+	
+	console.log(req.files.uploadFile);
+
     var serverPath = '/' + _upload_dir + '/' + req.files.uploadFile.name;	
  	var targetPath = path.join(__dirname, serverPath);
 
@@ -117,6 +119,32 @@ app.post('/lib/upload', function(req, res) {
             filetype: req.files.uploadFile.type
 		});
 	});
+});
+
+app.post('/lib/blob_upload', function(req, res) {
+	console.log(req);
+	//console.log(JSON.stringify(req.files)); 
+	//console.log('serverPath : ' + targetPath);
+	/*	
+  	var fs = require('fs');
+ 	var util = require('util');
+	
+	console.log(req.files.uploadFile);
+
+    var serverPath = '/' + _upload_dir + '/' + req.files.uploadFile.name;	
+ 	var targetPath = path.join(__dirname, serverPath);
+
+	var is = fs.createReadStream(req.files.uploadFile.path);
+	var os = fs.createWriteStream(targetPath);
+	
+	util.pump(is, os, function() {
+	    fs.unlinkSync(req.files.uploadFile.path);
+	    res.send({
+            filename: req.files.uploadFile.name,
+            filetype: req.files.uploadFile.type
+		});
+	});
+	*/
 });
 
 http.createServer(app).listen(app.get('port'), function(){

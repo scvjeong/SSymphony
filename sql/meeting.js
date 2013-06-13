@@ -199,9 +199,9 @@ exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
 exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
 	
 	
-	params['idx_meeting']=83;
+	params['idx_meeting']=14;
 	params['idx_group']=0;
-	params['idx_process']=1;
+	params['idx_process']=0;
 
 	var sql = "SELECT `idx_tool`, ";
 	sql += "`tool_num`, ";

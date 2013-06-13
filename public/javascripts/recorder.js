@@ -11,7 +11,7 @@
     worker.postMessage({
       command: 'init',
       config: {
-        sampleRate: this.context.sampleRate
+		sampleRate: this.context.sampleRate
       }
     });
     var recording = false,
@@ -74,7 +74,7 @@
 
   Recorder.forceDownload = function(blob, filename){
     var url = (window.URL || window.webkitURL).createObjectURL(blob);
-    var link = window.document.createElement('a');
+	var link = window.document.createElement('a');
     link.href = url;
     link.download = filename || 'output.wav';
     var click = document.createEvent("Event");

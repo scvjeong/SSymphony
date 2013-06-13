@@ -58,6 +58,7 @@ app.configure('development', function(){
 app.get('/', main.main);
 app.get('/auth/facebook', main.facebook); // 페이스북 가입
 app.get('/auth/facebook/callback', main.facebook_callback); // 페이스북 가입
+app.get('/auth/facebook/callback/login', main.facebook_callback_login); // 페이스북 로그인
 app.get('/facebook/channel', main.channel); // 페이스북 가입
 app.get('/page/group_select', group_select.group_select); // 회의 선택 페이지
 app.get('/page/meeting_list', meeting_list.meeting_list); // 회의 선택 페이지

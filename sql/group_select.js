@@ -90,7 +90,7 @@ exports.dao_group_info = function(evt, mysql_conn, params){
 	sql += "ON `D`.`idx_user` = `E`.`idx` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
 	sql += "GROUP BY `C`.`idx` ";
-	sql += "ORDER BY `C`.`idx` DESC";
+	sql += "ORDER BY `C`.`idx` ASC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('group_info', err, rows);
 	});

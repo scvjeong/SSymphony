@@ -4,6 +4,7 @@ var util = require('../lib/util');
 var check = require('validator').check,
     sanitize = require('validator').sanitize;
 var Validator = require('validator').Validator;
+var crypto = require('crypto');
 
 function register_session(req, idx_user, id, first_name, last_name)
 {
@@ -26,18 +27,40 @@ exports.main = function(req, res){
 exports.login = function(req, res){
 	var evt = new EventEmitter();
 	var dao_m = require('../sql/main');
+	var referer = req.headers.referer;
+	var referer_facebook = (referer === "http://orchestra.com:3000/auth/facebook?type=login" || referer === "http://orchestra.im/auth/facebook?type=login" || referer === "http://lyd.orchestra.im:3000/auth/facebook?type=login");
+	var id = req.param("email");
+	var pass = req.param("pass");
+	var fb_key = req.param("fb_key");
 	// params['id']
 	// params['pw']
-	var params = { id:req.body.email, pw:req.body.pass }
+	var params = { 
+		id:id, 
+		pw:pass 
+	}
 
 	dao_m.dao_login(evt, mysql_conn, params);
 	evt.on('login', function(err, rows){
 		if(err) throw err;
 		if( rows.length < 1 )
-		{
 			res.redirect("/?status=failed");
+		else if( referer_facebook && req.session.fb_key === fb_key )
+		{
+			register_session(req, rows[0].idx, rows[0].id, rows[0].first_name, rows[0].last_name);
+			res.redirect("/page/group_select");
 		}
-		else
+		else if( rows[0].type === "facebook" )
+		{
+			crypto.randomBytes(48, function(ex, buf) {
+				var token = buf.toString('hex');
+				req.session.fb_key = token;
+				req.session.fb_id = id;
+				res.redirect("/auth/facebook?type=login");
+			});			
+		}
+		else if( rows[0].pw !== rows[0].input_pw )
+			res.redirect("/?status=failed");
+		else if( rows[0].pw === rows[0].input_pw )
 		{
 			register_session(req, rows[0].idx, rows[0].id, rows[0].first_name, rows[0].last_name);
 			res.redirect("/page/group_select");
@@ -72,7 +95,6 @@ exports.sign_up = function(req, res){
 	}
 
 	var errors = req.validationErrors();
-
 	if( errors !== null )
 	{
 		result = errors[0];
@@ -81,10 +103,7 @@ exports.sign_up = function(req, res){
 	else
 	{
 		// params['id']
-		var params = { 
-			id:sign_up_email,
-			type:type
-		}
+		var params = { 	id:sign_up_email }
 		dao_m.dao_check_email(evt, mysql_conn, params);
 	}
 
@@ -100,7 +119,7 @@ exports.sign_up = function(req, res){
 					pw:sign_up_password,
 					first_name:first_name,
 					last_name:last_name,
-					type:"origin"
+					type:type
 				};
 			dao_m.dao_sign_up(evt, mysql_conn, params);
 		}
@@ -152,7 +171,12 @@ exports.channel = function(req, res){
 	res.render('channel', {} );
 };
 exports.facebook = function(req, res){
-	res.render('facebook', {} );
+	var type = req.param("type");
+	var result = {
+		type:type,
+		fb_key:req.session.fb_key
+	}
+	res.render('facebook', {result:result} );
 };
 exports.facebook_callback = function(req, res){
 	var evt = new EventEmitter();
@@ -194,4 +218,11 @@ exports.facebook_callback = function(req, res){
 		res.redirect("/page/group_select");
 	});
 	*/
+};
+exports.facebook_callback_login = function(req, res){
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/main');
+	var result = {};
+	var code = req.param("code");
+	res.redirect("/auth/facebook?type=login");
 };

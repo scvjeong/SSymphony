@@ -14,6 +14,8 @@
 <script>if ($ === undefined) $ = jQuery</script>
 <!-- /jQuery -->
 <script>
+	var action = "<%=result.type%>";
+	var url;
 	window.fbAsyncInit = function() {
 		// init the FB JS SDK
 		FB.init({
@@ -22,36 +24,55 @@
 		status     : true,                                 // Check Facebook Login status
 		xfbml      : true                                  // Look for social plugins on the page
 	});
+
+	if( action === "login" )
+	{
+		url = "https://www.facebook.com/login.php?skip_api_login=1&api_key=538364069532216&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Foauth%3Fresponse_type%3Dcode%26client_id%3D538364069532216%26redirect_uri%3Dhttp%3A%2F%2Forchestra.com%3A3000%2Fauth%2Ffacebook%2Fcallback%2Flogin%26scope%3Demail%2Cuser_birthday";
+	}
+	else
+	{
+		url = "https://www.facebook.com/login.php?skip_api_login=1&api_key=538364069532216&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Foauth%3Fresponse_type%3Dcode%26client_id%3D538364069532216%26redirect_uri%3Dhttp%3A%2F%2Forchestra.com%3A3000%2Fauth%2Ffacebook%2Fcallback%26scope%3Demail%2Cuser_birthday";
+	}
+
 	
 	FB.getLoginStatus(function(response) {
 		if(response.status === 'connected') {
 			FB.api('/me', function(response) {
-				console.log(response);
-				var data = {
-					first_name:response.first_name,
-					last_name:response.last_name,
-					sign_up_email:response.email
-				};
-				$.ajax({
-					url: '/page/sign_up',
-					type: 'POST',
-					data: data,
-					dataType: 'json',
-					success: function(json) {
-						if( json.result == "failed" )
-						{
-							alert(json.msg);
-							location.href="/";
+
+				if( action === "login" )
+				{
+					var data = { id:response.email, type:"facebook" };
+					$("form[name=login-form] input[name=email]").val(response.email);
+					$("form[name=login-form]").submit();
+				}
+				else
+				{
+					var data = {
+						first_name:response.first_name,
+						last_name:response.last_name,
+						sign_up_email:response.email
+					};
+					$.ajax({
+						url: '/page/sign_up',
+						type: 'POST',
+						data: data,
+						dataType: 'json',
+						success: function(json) {
+							if( json.result == "failed" )
+							{
+								alert(json.msg);
+								location.href="/";
+							}
+							else if( json.result == "successful" )
+								location.href="/page/group_select";
 						}
-						else if( json.result == "successful" )
-							location.href="/page/group_select";
-					}
-				});
+					});
+				}
 			});
 		} else if (response.status === 'not_authorized') {
-			location.href="https://www.facebook.com/login.php?skip_api_login=1&api_key=538364069532216&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Foauth%3Fresponse_type%3Dcode%26client_id%3D538364069532216%26redirect_uri%3Dhttp%3A%2F%2Forchestra.com%3A3000%2Fauth%2Ffacebook%2Fcallback%26scope%3Demail%2Cuser_birthday";
+			location.href = url;
 		} else {
-			location.href="https://www.facebook.com/login.php?skip_api_login=1&api_key=538364069532216&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Foauth%3Fresponse_type%3Dcode%26client_id%3D538364069532216%26redirect_uri%3Dhttp%3A%2F%2Forchestra.com%3A3000%2Fauth%2Ffacebook%2Fcallback%26scope%3Demail%2Cuser_birthday";
+			location.href = url;
 		}
 	});
 	
@@ -75,7 +96,10 @@
 			console.log('Good to see you, ' + response.name + '.');
 		});
 	}
-
 </script>
+<form name="login-form" method="post" action="/page/login">
+	<input type="hidden" name="email" value="">
+	<input type="hidden" name="fb_key" value="<%=result.fb_key%>">
+</form>
 </body>
 </html>

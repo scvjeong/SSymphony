@@ -1650,6 +1650,14 @@ h6 small {
 	float:left;
 	width:50%;
 }
+.rightpanel-tool-box{
+	padding:0px;
+	height:50px;
+	background-color: #FFFFFF;
+}
+.rightpanel-tool-box div{
+	float:left;
+}
 .client-1{
 	color:#3366CC;
 }

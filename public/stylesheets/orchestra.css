@@ -1609,13 +1609,14 @@ h6 small {
 	top:52px;
 	right:0px;
 	float:right;
-	width:25%;
-  
-  z-index: 1030;
-  border-left: 1px solid #dddddd;
-
-  -webkit-box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
-  box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+	width:285px;  
+	z-index: 1030;
+	border-left: 1px solid #dddddd;
+	-webkit-box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+	box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+}
+.rightpanel .etc-box{
+	background-color:#5c85ad;
 }
 .rightpanel-title-bar{
 	font-family:"Fjalla One";
@@ -1629,7 +1630,6 @@ h6 small {
 	line-height:25px;
 	color:#999999;
 	padding:10px 5px 5px 20px;
-	height:100px;
 	background-color: #FFFFFF;
 	background-image: -moz-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
 	background-image: -webkit-gradient(linear, 0 0, 0 10%, from(#d7d7d7), to(#FFFFFF));
@@ -1639,6 +1639,15 @@ h6 small {
 	background-repeat: repeat-x;
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
 	overflow-y:scroll;
+}
+.rightpanel-content-box.process-box{
+	max-height:150px;
+}
+.rightpanel-content-box.member-box{
+	max-height:100px;
+}
+.rightpanel-content-box.facilitator-box{
+	max-height:50px;
 }
 .rightpanel-content-box .process-unit{
 	cursor:pointer;
@@ -1652,11 +1661,12 @@ h6 small {
 }
 .rightpanel-tool-box{
 	padding:0px;
-	height:50px;
-	background-color: #FFFFFF;
+	height:58px;
+	overflow:hidden;
 }
 .rightpanel-tool-box div{
 	float:left;
+	cursor:pointer;
 }
 .client-1{
 	color:#3366CC;
@@ -1894,6 +1904,14 @@ h6 small {
 	font-size:23px;
 	margin-top:19px;
 }
+
+#meeting-list-page{
+	display:none;
+}
+#group-info-page{
+	display:block;
+}
+
 #meeting-calendar{
 	float:left;
 	width:750px;
@@ -1914,69 +1932,6 @@ h6 small {
 	overflow-x:hidden;
 	overflow-y:scroll;
 }
-#meeting-list .member-list{
-	float:left;
-	width:100%;
-	margin-bottom:10px;
-}
-#meeting-list .member-list li{
-	float:left;
-	width:30px;
-	height:30px;
-	line-height:30px;
-	text-align:center;
-	font-weight:bold;
-	color: #444;
-	background-color:#ccc;
-	border: 1px solid #B9B9B9;
-	overflow: hidden;
-	cursor: pointer;
-	margin: 0 2px 2px 0;
-	border-radius:3px;
-}
-#meeting-list .meeting-list-btn-wrap{
-	width:100%;
-	margin-bottom:10px;
-}
-#meeting-list .add-member-btn{
-
-	background-color:#FFFFFF;
-	border:1px solid #999999;
-	background:#ffffff;
-	background:-webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);
-	background:linear-gradient(to bottom, #ffffff 0%, #f3f3f3 100%);
-	border-radius:3px;
-	-webkit-touch-callout:none;
-	-webkit-user-select:none;
-	-khtml-user-select:none;
-	-moz-user-select:none;
-	-ms-user-select:none;
-	user-select:none;border:1px solid #cecece;
-	border-bottom-color:#a0a0a0;
-	cursor:pointer;
-	display:block;
-	height:18px;
-	margin-top:6px;
-	max-width:275px;
-	width:275px;
-	overflow:hidden;
-	white-space:nowrap;
-	padding:6px;
-	position:relative;
-	text-decoration:none;
-	text-overflow:ellipsis;
-}
-#meeting-list .add-member-btn:hover{
-	background:#2887bd;
-	background:-webkit-linear-gradient(top, #2887bd 0%, #336699 100%);
-	background:linear-gradient(to bottom, #2887bd 0%, #336699 100%);
-	border-color:#2478a8;
-	color:#fff !important;
-}
-#meeting-list .add-member-btn:link {text-decoration: none; color: #666666;}
-#meeting-list .add-member-btn:visited {text-decoration: none; color: #666666;}
-#meeting-list .add-member-btn:active {text-decoration: none; color: #666666;}
-
 #meeting-list ul{
 	float:left;
 	list-style:none;
@@ -2015,6 +1970,109 @@ h6 small {
 	font-size:14px;
 }
 /*** meeting_list ***/
+
+/*** group-info ***/
+#group-info{
+	float: left;
+	width: 750px;
+	min-height:526px;
+	max-height:526px;
+	margin: 65px 30px 10px 25px;
+	padding: 10px;
+	background-color: #FFFFFF;
+}
+#group-info-chart{
+	width:400px;
+	height:200px;
+}
+#group-info-member{
+	float:left;
+	width:280px;
+	height:510px;
+	margin:65px 0px 10px 0px;
+	padding:30px 30px 0 30px;
+	color:#666666;
+	background-color:#FFFFFF;
+	font-family:"Istok Web";
+	overflow-x:hidden;
+	overflow-y:scroll;
+}
+#group-info-member .member-list{
+	float:left;
+	list-style:none;
+	width:100%;
+	margin:10px 0px 0px 0px;
+	padding:0px;
+}
+#group-info-member .member-list li{
+	float:left;
+	width:271px;
+	height:30px;
+	line-height:36px;
+	margin:3px 0;
+	cursor: pointer;
+}
+#group-info-member .member-list li div.picture{
+	float:left;
+	width:30px;
+	height:30px;
+	overflow: hidden;
+	font-weight:bold;
+	color: #444;
+	background-color:#ccc;
+	border: 1px solid #B9B9B9;
+	border-radius:3px;
+}
+#group-info-member .member-list li div.name{
+	float:left;
+	width:221px;
+	height:30px;
+	padding:0px 5px;
+    white-space: nowrap;
+	-o-text-overflow: ellipsis;    /* Opera under 10.7 */
+	text-overflow:ellipsis;    /* IE, Safari */
+	word-wrap:break-word;
+	overflow: hidden;
+}
+#group-info-member .group-info-btn-wrap{
+	width:100%;
+	margin-bottom:10px;
+}
+#group-info-member .add-member-btn{
+	background-color:#FFFFFF;
+	border:1px solid #999999;
+	background:#ffffff;
+	background:-webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);
+	background:linear-gradient(to bottom, #ffffff 0%, #f3f3f3 100%);
+	border-radius:3px;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;border:1px solid #cecece;
+	border-bottom-color:#a0a0a0;
+	cursor:pointer;
+	display:block;
+	height:18px;
+	width:90%;
+	overflow:hidden;
+	padding:6px 5%;
+	position:relative;
+	text-decoration:none;
+	text-overflow:ellipsis;
+}
+#group-info-member .add-member-btn:hover{
+	background:#2887bd;
+	background:-webkit-linear-gradient(top, #2887bd 0%, #336699 100%);
+	background:linear-gradient(to bottom, #2887bd 0%, #336699 100%);
+	border-color:#2478a8;
+	color:#fff !important;
+}
+#group-info-member .add-member-btn:link {text-decoration: none; color: #666666;}
+#group-info-member .add-member-btn:visited {text-decoration: none; color: #666666;}
+#group-info-member .add-member-btn:active {text-decoration: none; color: #666666;}
+/*** group-info ***/
 
 .color-1{
 	color:#339933;

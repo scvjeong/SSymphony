@@ -171,6 +171,9 @@ $(document).ready(function() {
 
 	// notice bar
 	noticeBarMoving();
+
+	// init rightpanel
+	initRightpanel();
 	
 	// 회의 종료 버튼
 	$("#result-btn").click(function(){
@@ -1724,6 +1727,11 @@ function noticeBarMoving()
 	});
 }
 
+function initRightpanel()
+{
+	var h = $(window).height();
+	$("#rightpanel .etc-box").height(h)
+}
 
 /*
 오디오 녹음 부분

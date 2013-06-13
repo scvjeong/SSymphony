@@ -510,7 +510,21 @@ function initRightpanel()
 // 오른쪽 패널 보이거나 숨기기
 function toggleRightpanel()
 {
-	$("#rightpanel").slideToggle();
+	//$("#rightpanel").slideToggle();
+	var right = $("#rightpanel").css("right");
+
+	if (right != "-300px")
+	{
+		$("#rightpanel").animate({
+			right: -300
+		}, 500);
+	}
+	else
+	{
+		$("#rightpanel").animate({
+			right: 0
+		}, 500);
+	}
 }
 
 /* 동적으로 파일 추가 */
@@ -1226,7 +1240,7 @@ var _pen_data = {points:[], line_width:1, line_color:"#000000"};
 var _drawtextbox = $('#drawtext_container #inputbox');
 
 _canvas.mousedown(function(e) {
-	console.log("mousedown");
+	//console.log("mousedown");
 	_is_mousedown = true;
 
 	_now_position.x = e.offsetX;
@@ -1272,7 +1286,7 @@ _canvas.mousedown(function(e) {
 	}
 });
 _canvas.mousemove(function(e) {
-	console.log("mousemove");
+	//console.log("mousemove");
 
 	if (_is_mousedown == true)
 	{
@@ -1293,7 +1307,7 @@ _canvas.mousemove(function(e) {
 	}
 });
 _canvas.mouseup(function(e) {
-	console.log("mouseup");
+	//console.log("mouseup");
 	_is_mousedown = false;
 
 	switch(_drawing_tool)
@@ -1774,7 +1788,7 @@ function noticeBarMoving()
 	if( ($notice_bar_li+1) === _notice_bar_idx )
 	{
 		$notice_bar.css({ top:"0px" });
-		console.log($notice_bar.css('top'));
+		//console.log($notice_bar.css('top'));
 		_notice_bar_idx = 1;
 	}
 	var top_px = _notice_bar_idx*20;

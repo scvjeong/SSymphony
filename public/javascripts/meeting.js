@@ -518,11 +518,17 @@ function toggleRightpanel()
 		$("#rightpanel").animate({
 			right: -300
 		}, 500);
+		$("#btn_rightpanel_toggle").animate({
+			right: 0
+		}, 500);
 	}
 	else
 	{
 		$("#rightpanel").animate({
 			right: 0
+		}, 500);
+		$("#btn_rightpanel_toggle").animate({
+			right: 300
 		}, 500);
 	}
 }

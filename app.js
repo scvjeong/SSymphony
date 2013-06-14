@@ -94,6 +94,9 @@ app.post('/page/save_tools_image', meeting.meeting_save_tools_image);
 app.post('/page/get_tools_image', meeting.result_get_tools_image);
 app.post('/page/search_meeting_planning', meeting_planning.post_search_meeting_planning);
 
+/* 메일 인증 */
+app.get('/auth/:code', main.mail_auth);
+
 /* 도구 관련 */
 app.get('/tool/list/:group_id/:tool_index', tools.list);
 app.get('/tool/postit/:group_id/:tool_index', tools.postit);

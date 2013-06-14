@@ -36,14 +36,21 @@ exports.main = function(req, res){
 	res.render('main', {} );
 };
 
-function sendMail(email)
+exports.mail_auth = function(req, res){
+	var code = req.params.code;
+	console.log(code);
+
+	res.send("asdf");
+};
+
+function sendMail(email, code)
 {
 	var smtpTransport = nodemailer.createTransport("Sendmail");
 	var mailOptions = {
 		from: "Orchestra ✔ <SignUp@orchestra.im>", // sender address
 		to: email, // list of receivers
 		subject: "Hello ✔", // Subject line
-		text: "Hello world ✔", // plaintext body
+		text: "Hello world " + code, // plaintext body
 		html: "<b>Hello world ✔</b>" // html body
 	}
 	smtpTransport.sendMail(mailOptions, function(error, response){
@@ -93,7 +100,7 @@ exports.login = function(req, res){
 				req.session.fb_key = token;
 				req.session.fb_id = id;
 				res.redirect("/auth/facebook?type=login");
-			});			
+			});
 		}
 		else if( rows[0].pw !== rows[0].input_pw )
 			res.redirect("/?status=failed");
@@ -116,7 +123,7 @@ exports.sign_up = function(req, res){
 	var sign_up_re_password = req.body.sign_up_re_password;
 	var referer = req.headers.referer;
 	var referer_facebook = (referer === "http://orchestra.com:3000/auth/facebook" || referer === "http://orchestra.im/auth/facebook" || referer === "http://lyd.orchestra.im:3000/auth/facebook");
-	var type;
+	var type, code;
 
 	req.checkBody("first_name", "You can't leave this empty.").notEmpty();
 	req.checkBody("last_name", "You can't leave this empty.").notEmpty();
@@ -147,18 +154,22 @@ exports.sign_up = function(req, res){
 	evt.on('check_email', function(err, rows){
 		if( rows[0].cnt === 0 )
 		{
-			// params['id']
-			// params['pw']
-			// params['first_name']
-			// params['last_name']
-			var params = {
-					id:sign_up_email,
-					pw:sign_up_password,
-					first_name:first_name,
-					last_name:last_name,
-					type:type
+			crypto.randomBytes(48, function(ex, buf) {
+				code = buf.toString('hex');
+				// params['id']
+				// params['pw']
+				// params['first_name']
+				// params['last_name']
+				var params = {
+						id:sign_up_email,
+						pw:sign_up_password,
+						first_name:first_name,
+						last_name:last_name,
+						type:type,
+						code:code
 				};
-			dao_m.dao_sign_up(evt, mysql_conn, params);
+				dao_m.dao_sign_up(evt, mysql_conn, params);
+			});
 		}
 		else
 		{
@@ -170,6 +181,7 @@ exports.sign_up = function(req, res){
 	evt.on('sign_up', function(err, rows){
 		var idx_user = rows.insertId;
 		register_session(req, idx_user, sign_up_email, first_name, last_name);
+		sendMail(sign_up_email, code);
 		result = { result:"successful", msg:"successful" };
 		res.send(result);
 	});

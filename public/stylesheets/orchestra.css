@@ -1929,6 +1929,10 @@ h6 small {
 	display:none;
 }
 
+#need-help-page{
+	display:none;
+}
+
 #meeting-calendar{
 	float:left;
 	width:750px;
@@ -2194,6 +2198,76 @@ h6 small {
 .back-color-9{
 	background-color:#ff9900 !important;
 }
+
+/*** need-help ***/
+
+#need-help {
+	float: left;
+	width: 700px;
+	min-height:501px;
+	max-height:501px;
+	margin: 65px 30px 10px 25px;
+	padding: 35px;
+	color:#333333;
+	background-color: #FFFFFF;
+}
+
+.keyboard {
+
+			height: 380px;
+		}
+
+.help_title {
+			font-family: "Fjalla One";
+			font-size: 22px;
+			color: #369;
+			margin-bottom: 10px;
+		}
+
+.help_contents {
+	font-family: "Istok Web";
+	font-size: 18px;
+	color: #333;
+}
+
+.member_contents {
+	font-family: "Istok Web";
+	font-size: 18px;
+	color: #333;
+}
+
+.ft_help {
+	margin-top: 30px;
+}
+
+.left_page {
+			width: 340px;
+			margin: 1px;
+			float: left;
+		}
+
+.right_page {
+	width: 340px;
+	margin: 1px;
+	float: right;
+}
+
+.member_left_page {
+			width: 320px;
+			height: 300px;
+			margin: 1px;
+			float: left;
+		}
+
+		.member_right_page {
+			width: 370px;
+			height: 300px;
+			margin: 1px;
+			float: left;
+		}
+
+/***  ***/
+
 
 /*** modal ***/
 .fade {

@@ -10,6 +10,7 @@ exports.dao_login = function(evt, mysql_conn, params){
 	sql += "`A`.`last_name`, ";
 	sql += "`A`.`position`, ";
 	sql += "`A`.`type`, ";
+	sql += "`A`.`status`, ";
 	sql += "md5('"+params['pw']+"') AS `input_pw` ";
 	sql += "FROM `user` AS `A` ";
 	sql += "WHERE `A`.`id` = '"+params['id']+"' ";

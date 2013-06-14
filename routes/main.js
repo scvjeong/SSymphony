@@ -5,6 +5,7 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 var Validator = require('validator').Validator;
 var crypto = require('crypto');
+var nodemailer = require("nodemailer");
 
 function register_session(req, idx_user, id, first_name, last_name)
 {
@@ -35,6 +36,25 @@ exports.main = function(req, res){
 	res.render('main', {} );
 };
 
+function sendMail(email)
+{
+	var smtpTransport = nodemailer.createTransport("Sendmail");
+	var mailOptions = {
+		from: "Orchestra ✔ <SignUp@orchestra.im>", // sender address
+		to: email, // list of receivers
+		subject: "Hello ✔", // Subject line
+		text: "Hello world ✔", // plaintext body
+		html: "<b>Hello world ✔</b>" // html body
+	}
+	smtpTransport.sendMail(mailOptions, function(error, response){
+		if(error){
+			console.log(error);
+		}else{
+			console.log("Message sent: " + response.message);
+		}
+	});
+}
+
 exports.login = function(req, res){
 	var evt = new EventEmitter();
 	var dao_m = require('../sql/main');
@@ -50,11 +70,17 @@ exports.login = function(req, res){
 		pw:pass 
 	}
 
+
 	dao_m.dao_login(evt, mysql_conn, params);
 	evt.on('login', function(err, rows){
 		if(err) throw err;
 		if( rows.length < 1 )
 			res.redirect("/?status=failed");
+		else if( rows[0].status === "N" )
+		{
+			sendMail(rows[0].id);
+			res.redirect("/?status=auth");
+		}
 		else if( referer_facebook && req.session.fb_key === fb_key )
 		{
 			register_session(req, rows[0].idx, rows[0].id, rows[0].first_name, rows[0].last_name);

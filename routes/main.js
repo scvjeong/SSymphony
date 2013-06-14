@@ -50,7 +50,7 @@ function sendMail(email, code)
 		from: "Orchestra ✔ <SignUp@orchestra.im>", // sender address
 		to: email, // list of receivers
 		subject: "Hello ✔", // Subject line
-		html: "<a href='http://orchestra.im/"+code+"'>Click here</a>" // html body
+		html: "<a href='http://orchestra.im/auth/"+code+"'>Click here</a>" // html body
 	}
 	smtpTransport.sendMail(mailOptions, function(error, response){
 		if(error){

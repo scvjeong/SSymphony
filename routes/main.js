@@ -197,7 +197,7 @@ exports.sign_up = function(req, res){
 
 	evt.on('sign_up', function(err, rows){
 		var idx_user = rows.insertId;
-		register_session(req, idx_user, sign_up_email, first_name, last_name);
+		//register_session(req, idx_user, sign_up_email, first_name, last_name);
 		sendMail(sign_up_email, code);
 		result = { result:"successful", msg:"successful" };
 		res.send(result);

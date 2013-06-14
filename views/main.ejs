@@ -378,7 +378,7 @@
 					$("form[name=sign-up-form] input[name="+json.target+"]").focus();
 				}
 				else if( json.result == "successful" )
-					location.href="/page/group_select";
+					location.href="/?status=auth";
 			}
 		};
 		$('form[name=sign-up-form]').ajaxSubmit(Options);

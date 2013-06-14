@@ -21,17 +21,19 @@
     <div id="group-calendar">
     </div>
 	<div id="member-info" class="fancy-scrollbar">
-		<div class="profile-pic"></div>
-		<%if(result.user_info.length > 0) {%>
-		<div class="id"><%= result.user_info[0].first_name %> <%= result.user_info[0].last_name %></div>
+		<div class="my-profile">
+			<div class="profile-pic"></div>
+			<%if(result.user_info.length > 0) {%>
+			<div class="name"><%= result.user_info[0].first_name %> <%= result.user_info[0].last_name %></div>
+		</div>
 		<%}%>
-		<div class="info-menu">
+		<!--div class="info-menu">
 			<ul>
 				<li><a href="#">Profile</a></li>
 				<li><a href="#">My Account</a></li>
 				<li><a href="#">Notice</a></li>
 			</ul>
-		</div>
+		</div-->
 		<div class="group-list-box">
 			<ul>
 				<li><span class="my-groups">My Groups</span> <a href="javascript:newGroupPopup();" class="new-group">New Group...</a></li>

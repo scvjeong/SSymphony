@@ -1746,15 +1746,24 @@ h6 small {
 	overflow-x:hidden;
 	overflow-y:scroll;
 }
-#member-info .profile-pic{
+#member-info .my-profile{
+	float:left;
+	width:100%;
+	padding:0px 0px 20px 0px;
+}
+#member-info .my-profile .profile-pic{
+	float:left;
 	width:125px;
 	height:125px;
 	background-color:#cccccc;
 }
-#member-info .id{
+#member-info .my-profile .name{
+	float:left;
 	font-family:"Roboto";
 	font-size:20px;
-	margin-top:10px;
+	width:136px;
+	margin:5px;
+	word-wrap:break-word;
 }
 #member-info .info-menu{
 	font-family:"Roboto";
@@ -1768,6 +1777,7 @@ h6 small {
 	margin:3px 0px;
 }
 #member-info ul{
+	clear:both;
 	list-style:none;
 	margin:0px;
 	padding:0px;
@@ -1906,10 +1916,10 @@ h6 small {
 }
 
 #meeting-list-page{
-	display:none;
+
 }
 #group-info-page{
-	display:block;
+	display:none;
 }
 
 #meeting-calendar{
@@ -1972,18 +1982,25 @@ h6 small {
 /*** meeting_list ***/
 
 /*** group-info ***/
+#group-info-page .sub-title{
+	font-family:"Fjalla One";
+	font-size:20px;
+	color:#336699;
+}
 #group-info{
 	float: left;
-	width: 750px;
-	min-height:526px;
-	max-height:526px;
+	width: 700px;
+	min-height:501px;
+	max-height:501px;
 	margin: 65px 30px 10px 25px;
-	padding: 10px;
+	padding: 35px;
+	color:#333333;
 	background-color: #FFFFFF;
 }
 #group-info-chart{
-	width:400px;
+	width:700px;
 	height:200px;
+	margin:20px 0px 30px 0px;
 }
 #group-info-member{
 	float:left;

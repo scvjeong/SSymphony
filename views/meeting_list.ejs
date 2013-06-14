@@ -93,7 +93,9 @@
 	</div>
 	<div id="group-info-page" class="page">
 		<div id="group-info">
+			<div class="sub-title">The number of meeting</div>
 			<div id="group-info-chart" class="group-info-chart"></div>
+			<div class="sub-title">Group Info</div>
 		</div>
 		<div id="group-info-member" class="fancy-scrollbar">
 			<div class="meeting-list-btn-wrap">
@@ -167,6 +169,16 @@
 	<script src="/javascripts/bootstrap.wizard.min.js"></script>
 	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
 	<script src="/javascripts/bootstrap.datepicker.min.js"></script>
+	<!-- Flot Plotting -->
+	<script src="/javascripts/libs/flot/excanvas.min.js"></script>
+	<script src="/javascripts/libs/flot/jquery.flot.js"></script>
+	<!-- REQUIRED: Flot Chart Engine -->
+	<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>			
+	<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>		
+	<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
+	<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>	
+	<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>	
+	<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
 	<script src="/javascripts/select2.js"></script>
 	<script src="/javascripts/jquery.uniform.js"></script>
 	<script src="/javascripts/jquery.form.js"></script>
@@ -206,16 +218,10 @@
 		function initChart()
 		{
 			if ($("#group-info-chart").length) {
-				console.log("ASDF");
-				var pageviews = [[1, 75], [3, 87], [4, 93], [5, 127], [6, 116]];
-				var visitors = [[1, 65], [3, 50], [4, 73], [5, 100], [6, 95]];
-
-				var plot = $.plot($("#group-chart"), [{
+				var pageviews = [[1, 5], [3, 7], [4, 13], [10, 15], [14, 1], [20, 10], [25, 10], [30, 16]];
+				var plot = $.plot($("#group-info-chart"), [{
 					data : pageviews,
-					label : "Your pageviews"
-				}, {
-					data : visitors,
-					label : "Site visitors"
+					label : "The number of meeting "
 				}], {
 					series : {
 						lines : {
@@ -239,9 +245,9 @@
 						mode : "time",
 						tickLength : 10
 					},
-
 					yaxes : [{
-						min : 20,
+						max : 20,
+						min : 0,
 						tickLength : 5
 					}],
 					grid : {
@@ -253,17 +259,17 @@
 					},
 					tooltip : true,
 					tooltipOpts : {
-						content : "%s for <b>%x:00 hrs</b> was %y",
+						content : "%s for <b>%x</b> day was <b>%y</b>",
 						dateFormat : "%y-%0m-%0d",
 						defaultTheme : false
 					},
 					colors : [$chrt_main, $chrt_second],
 					xaxis : {
-						ticks : 15,
-						tickDecimals : 2
+						ticks : 31,
+						tickDecimals : 0
 					},
 					yaxis : {
-						ticks : 5,
+						ticks : 10,
 						tickDecimals : 0
 					},
 					legend: {
@@ -271,6 +277,7 @@
 						margin: [-5, -17]
 					}
 				});
+				
 			}
 		}
 		function showMeetingList()

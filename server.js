@@ -25,7 +25,7 @@ function server(io)
 				};
 				eval("_meeting_contents_for_each_group." + group_id + " = temp_group;");
 				console.log("CREATE GROUP:" + group_id);
-				console.log(eval("_meeting_contents_for_each_group." + group_id);
+				console.log(eval("_meeting_contents_for_each_group." + group_id));
 			}
 
 			console.log("Join "+tmpGroup);

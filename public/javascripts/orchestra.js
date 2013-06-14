@@ -193,13 +193,6 @@ function clickAgendaTitle(num)
 	//console.log( $('#'+tmp_result_num).attr('id') );
 }
 
-
-function getToolsResult()
-{
-	
-}
-
-
 function getToolsImage(params)
 {
 	var idx_process = params['idx_process'];
@@ -266,6 +259,12 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 
 }
 
+
+function hideMeetingResultWindow()
+{
+	var bootbox_select = $('.meeting_result_bootbox');
+	bootbox_select.modal('hide');
+}
 
 
 

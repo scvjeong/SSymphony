@@ -2,8 +2,8 @@ var _voteid = "";
 var _votelistnum = 0;
 
 var _tmpLastId = 101;
-var _tmpGroup = 0;
-var _clientId = 0;
+var _group_id = 0;
+var _client_id = 0;
 
 /* 서버로부터 받는 변수들 */
 var _question_title = "";
@@ -20,17 +20,17 @@ function initVote(group, tool)
 	tool = "vote" + tool;
 	group = "group" + group;
 	_voteid = tool;
-	_tmpGroup = group;
+	_group_id = group;
 	
-	_socket_vote.emit('join_room', {group: _tmpGroup});						// 그룹에 join
-	_socket_vote.emit('set_vote_data', {group: _tmpGroup, tool: tool});		// 서버에 초기 데이터 요청
-	_socket_vote.emit('set_client', {group: _tmpGroup, user: 'user1'});
-	_socket_vote.emit('set_tree_option_data', {group:_tmpGroup, tool: tool, option: 'is_multi_vote'});
+	_socket_vote.emit('join_room', {group: _group_id});						// 그룹에 join
+	_socket_vote.emit('set_vote_data', {group: _group_id, tool: tool});		// 서버에 초기 데이터 요청
+	//_socket_vote.emit('set_client', {group: _group_id, user: 'user1'});
+	_socket_vote.emit('set_tree_option_data', {group:_group_id, tool: tool, option: 'is_multi_vote'});
 	
 	
 	// 투표 시작 버튼 작동
 	$('.btn_votestart').click(function() {
-		_socket_vote.emit('set_last_id', { group: _tmpGroup, tool: tool});	
+		_socket_vote.emit('set_last_id', { group: _group_id, tool: tool});	
 	});
 	
 	$('#btn_votefinish').click(function() {
@@ -102,7 +102,7 @@ function startVote()
 {
 	_is_multi_vote = $('#chk_multi_vote').is(":checked");
 	//alert(_is_multi_vote);
-	_socket_vote.emit('set_option_data', {group:_tmpGroup, tool: _voteid,
+	_socket_vote.emit('set_option_data', {group:_group_id, tool: _voteid,
 													id: 0, option: 'is_multi_vote', val: _is_multi_vote});
 
 	var listcount = $('.voteReadyList input').length; //[1].value == ""
@@ -125,7 +125,7 @@ function startVote()
 			
 			_votelist.push(newitem);
 			console.log(i+1);
-			_socket_vote.emit('set_insert_vote_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: i+1, index: 1, val: this_title, client: _clientId } );
+			_socket_vote.emit('set_insert_vote_data', { group: _group_id, tool: _voteid, id: _tmpLastId, parent: i+1, index: 1, val: this_title, client: _client_id } );
 		}
 	}
 	
@@ -135,9 +135,11 @@ function startVote()
 
 function addSocketListenerForVote()
 {
+	/*
 	_socket_vote.on('get_client', function (data) {
-		_clientId = data.client;
+		_client_id = data.client;
 	});
+*/
 
 	////  투표 데이터 불러오는 함수  ////
 	_socket_vote.on('get_vote_data', function (data) { 
@@ -182,7 +184,7 @@ function addSocketListenerForVote()
 		_tmpLastId = data.last;
 		$('.question_title').attr('id', _tmpLastId);
 		var title_val = $('.question_title').val();
-		_socket_vote.emit('set_insert_vote_data', { group: _tmpGroup, tool: _voteid, id: _tmpLastId, parent: '0', index: '0', val: title_val, client: _clientId} );
+		_socket_vote.emit('set_insert_vote_data', { group: _group_id, tool: _voteid, id: _tmpLastId, parent: '0', index: '0', val: title_val, client: _client_id} );
 		startVote();
 	});
 	
@@ -258,7 +260,7 @@ function sendVoteDataToServer()
 	
 	console.log("multi: "+_is_multi_vote);
 	console.log("lastId: "+_tmpLastId);
-	_socket_vote.emit('set_voting_data', {group: _tmpGroup, tool: _voteid,
+	_socket_vote.emit('set_voting_data', {group: _group_id, tool: _voteid,
 													id: _tmpLastId, val: str_result, option: _is_multi_vote, user: 'user1'});
 }
 

@@ -27,6 +27,9 @@ function server(io)
 				console.log("CREATE GROUP:" + group_id);
 				console.log(eval("_meeting_contents_for_each_group." + group_id));
 			}
+			console.log("<_meeting_contents_for_each_group>");
+			console.log(_meeting_contents_for_each_group);
+			console.log("</_meeting_contents_for_each_group>");
 
 			console.log("Join "+tmpGroup);
 		});

@@ -17,6 +17,7 @@ function server(io)
 			socket.join(tmpGroup);
 
 			// join하려는 그룹이 _meeting_contents_for_each_group에 없으면 새 그룹 생성하기
+			console.log("[!] _meeting_contents_for_each_group.hasOwnProperty(group_id) : " + _meeting_contents_for_each_group.hasOwnProperty(group_id));
 			if (_meeting_contents_for_each_group.hasOwnProperty(group_id))
 			{
 				var temp_group = {
@@ -24,7 +25,7 @@ function server(io)
 					tools_for_each_process: []
 				};
 				eval("_meeting_contents_for_each_group." + group_id + " = temp_group;");
-				console.log("CREATE GROUP:" + group_id);
+				console.log("[!] CREATE GROUP:" + group_id);
 				console.log(eval("_meeting_contents_for_each_group." + group_id));
 			}
 			console.log("<_meeting_contents_for_each_group>");

@@ -22,6 +22,7 @@ function server(io)
 			console.log("Call: set_client");
 			var tmpGroup = data.group;
 			var tmpUser = data.user;
+			//var idx_meeting = data.idx_meeting;	// 수면 아래로 집어 넣은 소스
 			
 			var userInfo = tmpGroup+":user";
 			var userNum = -1;

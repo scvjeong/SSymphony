@@ -199,11 +199,11 @@ function openSocket()
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
 	
-	_socket_common.emit('join_room', {group:_group_id});
 
+	/* 서버 리스너 등록 */
 	_socket_common.on('get_client', function (data) {
 		_client_id = data.client;
-		//console.log("client: "+data.client);
+		console.log("get_client:" + data.client);
 	});
 
 	_socket_common.on('get_option_data', function(data) {
@@ -244,6 +244,12 @@ function openSocket()
 			drawArrived(data.tool, data.val);
 		}
 	});
+	/* /서버 리스너 등록 */
+
+	/* 서버 초기 이벤트 전송 */
+	_socket_common.emit('join_room', {group:_group_id});
+	_socket_common.emit('set_client', {group: _group_id, user: _user});
+	/* /서버 초기 이벤트 전송 */
 }
 
 

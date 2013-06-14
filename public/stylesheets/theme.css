@@ -116,6 +116,34 @@ iframe {
 #rightpanel div .rightpanel-title-bar:hover {
 	background-color: rgb(95, 156, 218);
 }
+#rightpanel .process-box .rightpanel-content-box #process_list .process-unit .tool_list_container .tool_list {
+	list-style: none;
+	margin: 0;
+}
+#rightpanel .process-box .rightpanel-content-box #process_list .process-unit .tool_list_container .tool_list li {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+#rightpanel .process-box .rightpanel-content-box #process_list .process-unit .tool_list_container .tool_list .item_list {
+	background-image: url("../images/icons/icon_list.png");
+}
+#rightpanel .process-box .rightpanel-content-box #process_list .process-unit .tool_list_container .tool_list .item_matrix {
+	background-image: url("../images/icons/icon_matrix.png");
+}
+#rightpanel .process-box .rightpanel-content-box #process_list .process-unit .tool_list_container .tool_list .item_mindmap {
+	background-image: url("../images/icons/icon_mindmap.png");
+}
+#rightpanel .process-box .rightpanel-content-box #process_list .process-unit .tool_list_container .tool_list .item_postit {
+	background-image: url("../images/icons/icon_postit.png");
+}
+#rightpanel .process-box .rightpanel-content-box #process_list .process-unit .tool_list_container .tool_list .item_vote {
+	background-image: url("../images/icons/icon_vote.png");
+}
 #rightpanel #process_list {
 	list-style: none;
 }

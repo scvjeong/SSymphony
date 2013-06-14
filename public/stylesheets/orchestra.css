@@ -2196,6 +2196,18 @@ h6 small {
 }
 
 /*** modal ***/
+.fade {
+  opacity: 0;
+  -webkit-transition: opacity 0.15s linear;
+     -moz-transition: opacity 0.15s linear;
+       -o-transition: opacity 0.15s linear;
+          transition: opacity 0.15s linear;
+}
+
+.fade.in {
+  opacity: 1;
+}
+
 .modal-backdrop {
 	position: fixed;
 	top: 0;
@@ -2221,8 +2233,8 @@ h6 small {
 	top: 10%;
 	left: 50%;
 	z-index: 10050;
-	width: 950px;
-	margin-left: -475px;
+	width: 970px;
+	margin-left: -485px;
 	background-color: #ffffff;
 	border: 1px solid #999;
 	border: 1px solid rgba(0, 0, 0, 0.3);

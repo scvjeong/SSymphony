@@ -1917,7 +1917,7 @@ h6 small {
 }
 
 #meeting-list-page{
-
+	display:block;
 }
 #group-info-page{
 	display:none;
@@ -1985,8 +1985,9 @@ h6 small {
 /*** group-info ***/
 #group-info-page .sub-title{
 	font-family:"Fjalla One";
-	font-size:20px;
+	font-size:22px;
 	color:#336699;
+	margin-bottom:10px;
 }
 #group-info{
 	float: left;
@@ -1998,6 +1999,38 @@ h6 small {
 	color:#333333;
 	background-color: #FFFFFF;
 }
+#group-info ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#group-info li{
+	float:left;
+	width:100%;
+	line-height:20px;
+	padding:3px 0px;
+}
+#group-info li .list-title{
+	font-weight:bold;
+
+}
+#group-info li div{
+	float:left;
+	width:50%;
+}
+#group-info li.top-3{
+	width:50%;
+	margin-top:10px;
+}
+#group-info li.top-3 div.list-title{
+	width:100%;
+	margin-bottom:10px;
+}
+#group-info li.top-3 div.list-contents{
+	width:90%;
+	padding:0px 2%;
+}
+
 #group-info-chart{
 	width:700px;
 	height:200px;
@@ -2025,10 +2058,17 @@ h6 small {
 #group-info-member .member-list li{
 	float:left;
 	width:271px;
-	height:30px;
+	height:32px;
 	line-height:36px;
 	margin:3px 0;
 	cursor: pointer;
+}
+#group-info-member .member-list li div.name:hover{
+	background:#2887bd;
+	background:-webkit-linear-gradient(top, #2887bd 0%, #336699 100%);
+	background:linear-gradient(to bottom, #2887bd 0%, #336699 100%);
+	border-color:#2478a8;
+	color:#fff !important;	
 }
 #group-info-member .member-list li div.picture{
 	float:left;
@@ -2043,14 +2083,16 @@ h6 small {
 }
 #group-info-member .member-list li div.name{
 	float:left;
-	width:221px;
-	height:30px;
-	padding:0px 5px;
+	width:220px;
+	height:32px;
+	padding:0px 0px 0px 5px;
+	margin:0px 1px;
     white-space: nowrap;
 	-o-text-overflow: ellipsis;    /* Opera under 10.7 */
 	text-overflow:ellipsis;    /* IE, Safari */
 	word-wrap:break-word;
 	overflow: hidden;
+	border-radius:3px;
 }
 #group-info-member .group-info-btn-wrap{
 	width:100%;

@@ -13,6 +13,17 @@ function register_session(req, idx_user, id, first_name, last_name)
 	req.session.nickname = first_name + " " + last_name;
 }
 
+exports.jeong = function(req, res){
+	var agent = req.headers['user-agent'];
+	if( agent.toString().indexOf("MSIE") > 0 )
+	{
+		res.render('no_explorer', {} );
+		return;
+	}
+	
+	res.render('jeong', {} );
+};
+
 exports.main = function(req, res){
 	var agent = req.headers['user-agent'];
 	if( agent.toString().indexOf("MSIE") > 0 )

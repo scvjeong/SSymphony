@@ -55,6 +55,7 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+app.get('/jeong', main.jeong);
 app.get('/', main.main);
 app.get('/auth/facebook', main.facebook); // 페이스북 가입
 app.get('/auth/facebook/callback', main.facebook_callback); // 페이스북 가입

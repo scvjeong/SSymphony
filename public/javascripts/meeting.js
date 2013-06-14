@@ -1138,12 +1138,6 @@ function showEvaluateMeetingWindow()
 
 }
 
-function hideMeetingResultWindow()
-{
-	var bootbox_select = $('.meeting_result_bootbox');
-	bootbox_select.modal('hide');
-}
-
 function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');

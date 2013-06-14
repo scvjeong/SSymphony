@@ -37,10 +37,28 @@ exports.main = function(req, res){
 };
 
 exports.mail_auth = function(req, res){
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/main');
 	var code = req.params.code;
-	console.log(code);
+	var params = { code:code };
 
-	res.send("asdf");
+	dao_m.dao_check_code(evt, mysql_conn, params);
+	evt.on('check_code', function(err, rows){
+		if( rows[0] )
+		{
+			params.id = rows[0].id;
+			params.idx = rows[0].idx;
+			params.first_name = rows[0].first_name;
+			params.last_name = rows[0].last_name;
+			dao_m.dao_mail_auth(evt, mysql_conn, params);		
+		}
+		else
+			res.redirect("/");
+	});
+	evt.on('mail_auth', function(err,rows){
+		register_session(req, params.idx, params.id, params.first_name, params.last_name);
+		res.redirect("/page/group_select");
+	});
 };
 
 function sendMail(email, code)

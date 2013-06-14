@@ -34,7 +34,8 @@ $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
 
-	
+	initRightpanel();
+
 	// 오디오 관련 초기화
 	
 	 try {
@@ -53,9 +54,6 @@ $(document).ready(function() {
     navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
       console.log('No live audio input: ' + e);
     });
-
-
-	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
 
 	// 소켓 열기
 	openSocket();
@@ -77,25 +75,10 @@ $(document).ready(function() {
 	switchDrawingTool('pen');
 	$("[data-toggle='tooltip']").tooltip();
 
-	changeFillColor('#000000');
+	changeFillColor('#ffffff');
 	changeLineColor('#000000');
 	//$("#colorPicker").jqxColorPicker({ color: "ffaabb", colorMode: 'hue', width: 220, height: 200, theme: null });
-
 	$("#white-board #btn_drawtool_pen").tooltip('show');
-	//$('#white-board #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
-	$('#white-board #btn_drawtool_pen').click(function() {
-		_drawtool = 'pen';
-	});
-	$('#white-board #btn_drawtool_rect').click(function() {
-		_drawtool = 'rect';
-	});
-	$('#white-board #btn_drawtool_ellipse').click(function() {
-		_drawtool = 'ellipse';
-	});
-
-	$('#white-board #btn_text_add').click(function() {
-		_drawtool = 'text';
-	});
 
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
@@ -507,26 +490,51 @@ function addLinkList(title, link)
 		link_list.append(newlink);
 }
 
-// 오른쪽 메뉴 전환
-function setRightpanel(panel)
+// 오른쪽 패널 초기화
+function initRightpanel()
 {
-	$("#rightpanel #tabbar li").css("background-color", "");
-	$("#rightpanel #tabbar #" + panel).css("background-color", "#111111");
+	$("#rightpanel div #panel_process_title").click(function() {
+		$("#rightpanel div #panel_process_container").slideToggle();
+	});
 
-	switch (panel)
-	{
-	case "participants":
-		break;
-	case "tools":
-		break;
-	case "info":
-		break;
-	}
+	$("#rightpanel div #panel_addtool_title").click(function() {
+		$("#rightpanel div #panel_addtool_container").slideToggle();
+	});
 
-	$("#rightpanel #panelcontents div").hide();
-	$("#rightpanel #panelcontents #" + panel).show();
+	$("#rightpanel div #panel_member_title").click(function() {
+		$("#rightpanel div #panel_member_container").slideToggle();
+	});
+
+	$("#rightpanel div #panel_facilitator_title").click(function() {
+		$("#rightpanel div #panel_facilitator_container").slideToggle();
+	});
 }
 
+// 오른쪽 패널 보이거나 숨기기
+function toggleRightpanel()
+{
+	//$("#rightpanel").slideToggle();
+	var right = $("#rightpanel").css("right");
+
+	if (right != "-300px")
+	{
+		$("#rightpanel").animate({
+			right: -300
+		}, 500);
+		$("#btn_rightpanel_toggle").animate({
+			right: 0
+		}, 500);
+	}
+	else
+	{
+		$("#rightpanel").animate({
+			right: 0
+		}, 500);
+		$("#btn_rightpanel_toggle").animate({
+			right: 300
+		}, 500);
+	}
+}
 
 /* 동적으로 파일 추가 */
 function includeFileDynamically(list) {
@@ -1212,6 +1220,7 @@ var _font_size = 10;
 var _canvas = $('#cv_whiteboard');
 var _canvas_context = document.getElementById('cv_whiteboard').getContext('2d');
 var _is_mousedown = false;
+//var _is_text_typing = false;
 
 var _now_position = {x:0, y:0};
 var _pre_position = {x:0, y:0};
@@ -1233,6 +1242,10 @@ _canvas.mousedown(function(e) {
 		_canvas_context.beginPath();
 		_canvas_context.moveTo(_now_position.x, _now_position.y);
 		_pen_data.points.push({x: _now_position.x, y: _now_position.y});
+		break;
+	case "line":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
 		break;
 	case "rect":
 		_pre_position.x = e.offsetX;
@@ -1301,6 +1314,36 @@ _canvas.mouseup(function(e) {
 				val:_pen_data
 			});
 		_pen_data.points = [];	// 다음 사용을 위해 펜 데이터 초기화
+		break;
+	case "line":
+		var line_data = {};
+
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(_pre_position.x, _pre_position.y);
+		_canvas_context.lineTo(_now_position.x, _now_position.y);
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+
+		// 동기화 데이터 전송
+		line_data.x1 = _pre_position.x;
+		line_data.y1 = _pre_position.y;
+		line_data.x2 = _now_position.x;
+		line_data.y2 = _now_position.y;
+		line_data.line_color = _line_color;
+		line_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'line',
+				id:"0",
+				val:line_data
+			});
 		break;
 	case "rect":
 		var rect_data = {};
@@ -1404,6 +1447,15 @@ function drawArrived(tool, val)
 			_canvas_context.stroke();
 		}
 		break;
+	case "line":
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(val.x1, val.y1);
+		_canvas_context.lineTo(val.x2, val.y2);
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		console.log("line draw");
+		break;
 	case "rect":
 		_canvas_context.beginPath();
 		_canvas_context.rect(val.x, val.y, val.width, val.height);
@@ -1422,8 +1474,6 @@ function drawArrived(tool, val)
 		_canvas_context.lineWidth = val.line_width;
 		_canvas_context.stroke();
 		break;
-	case "text":
-		break;
 	}
 }
 
@@ -1433,6 +1483,11 @@ function changeLineColor(color)
 {
 	_line_color = color;
 	$('#linecolor_preview').css('background-color', color);
+
+	if (color == 'rgba(0,0,0,0)')
+		$('#linecolor_preview').css('background-image', 'url("../images/whiteboard/pattern_transparent.png")');
+	else
+		$('#linecolor_preview').css('background-image', '');
 }
 
 // 선 두께 변경
@@ -1448,6 +1503,11 @@ function changeFillColor(color)
 {
 	_fill_color = color;
 	$('#fillcolor_preview').css('background-color', color);
+
+	if (color == 'rgba(0,0,0,0)')
+		$('#fillcolor_preview').css('background-image', 'url("../images/whiteboard/pattern_transparent.png")');
+	else
+		$('#fillcolor_preview').css('background-image', '');
 }
 
 // 글꼴 변경
@@ -1470,6 +1530,7 @@ function switchDrawingTool(tool)
 	_drawing_tool = tool;
 
 	$('#white-board .navbar .nav #btn_drawtool_pen').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_line').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_rect').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_ellipse').removeClass('active');
 	$('#white-board .navbar .nav #btn_drawtool_text').removeClass('active');
@@ -1717,7 +1778,7 @@ function noticeBarMoving()
 	if( ($notice_bar_li+1) === _notice_bar_idx )
 	{
 		$notice_bar.css({ top:"0px" });
-		console.log($notice_bar.css('top'));
+		//console.log($notice_bar.css('top'));
 		_notice_bar_idx = 1;
 	}
 	var top_px = _notice_bar_idx*20;

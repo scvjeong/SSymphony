@@ -67,7 +67,8 @@ iframe {
 
 .white-board #cv_whiteboard {
 	cursor: crosshair;
-	border: 1px solid #ababab;
+	margin-top: 45px;
+	border: none;
 }
 
 .notice-bar{
@@ -77,7 +78,8 @@ iframe {
 	width:100%;*/
 	height:20px;
 	line-height:20px;
-	background-color: #FFFFFF;
+	margin: 12px 0 12px 0;
+	/*background-color: #FFFFFF;*/
 	overflow:hidden;
 }
 .notice-bar ul{
@@ -87,25 +89,58 @@ iframe {
 }
 /* /화이트보드 */
 
-
-/* 콘텐트 관리 상자 */
-.white-board #content_manage_box {
+#btn_rightpanel_toggle {
+	position: fixed;
+	top: 50%;
+	right: 300px;
+	width: 20px;
+	height: 60px;
+	margin-top: -30px;
+	background-color: red;
+	cursor: pointer;
 }
-
-.white-board #content_manage_box #content {
-	overflow: hidden;
-}
-/* 콘텐트 관리 상자 
 
 #rightpanel {
 	position: fixed;
-	top: 30px;
+	top: 52px;
 	right: 0;
 	border-left: 2px solid #ababab;
 	height: 100%;
 	width: 300px;
 	background-color: #61b0e9;
 	z-index: 5000;
+}
+#rightpanel div .rightpanel-title-bar {
+	cursor: pointer;
+}
+#rightpanel div .rightpanel-title-bar:hover {
+	background-color: rgb(95, 156, 218);
+}
+#rightpanel #process_list {
+	list-style: none;
+}
+#rightpanel #process_list .process-unit {
+	/*height: 25px;
+	line-height: 25px;*/
+	margin-bottom: 10px;
+	cursor: pointer;
+}
+#rightpanel #process_list .process-unit .progress-bar { 
+	height: 2px;
+	background-color: #dddddd;
+}
+#rightpanel #process_list .process-unit .progress-bar-fill { 
+ height: 2px;
+ background-color: #336699;
+}
+#rightpanel #process_list .process-unit .time_container {
+	font-size: 8pt;
+}
+#rightpanel #process_list .process-unit .time_container .lead_time {
+	float: left;
+}
+#rightpanel #process_list .process-unit .time_container .limit_time {
+	float: right;
 }
 #rightpanel > ul {
 	list-style: none;

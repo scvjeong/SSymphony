@@ -163,7 +163,6 @@
 			<div class="result-btn" id="result-btn">회의종료</div>
 			<div class="record-btn" id="record-btn" onclick="startRecording();">Record</div>
 			<div class="stop-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
-			
 			<div class="time">00:00:00 / <%=limit_time%></div>
 		</div>
 		<div id="white-board" class="white-board">
@@ -176,6 +175,7 @@
 						<li class="divider-vertical"></li>
 
 						<li id="btn_drawtool_pen" class="active"><a onclick="switchDrawingTool('pen')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Pen"><img src="/images/whiteboard/btn_drawtool_pen.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_line"><a onclick="switchDrawingTool('line')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Line"><img src="/images/whiteboard/btn_drawtool_line.png" width="24" height="24" /></a></li>
 						<li id="btn_drawtool_rect"><a onclick="switchDrawingTool('rect')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Rectangle"><img src="/images/whiteboard/btn_drawtool_rect.png" width="24" height="24" /></i></a></li>
 						<li id="btn_drawtool_ellipse"><a onclick="switchDrawingTool('ellipse')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Ellipse"><img src="/images/whiteboard/btn_drawtool_ellipse.png" width="24" height="24" /></a></li>
 						<li id="btn_drawtool_text"><a onclick="switchDrawingTool('text')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Text"><img src="/images/whiteboard/btn_drawtool_text.png" width="24" height="24" /></a></li>
@@ -188,6 +188,7 @@
 						    <b class="caret"></b>
 						    </a>
 						    <ul class="dropdown-menu">
+						    	<li onclick="changeFillColor('rgba(0,0,0,0)')" style="background-image: url('../images/whiteboard/pattern_transparent.png')"><a style="height:20px"></a></li>
 						    	<li onclick="changeFillColor('#000000')" style="background-color: #000000"><a style="height:20px"></a></li>
 								<li onclick="changeFillColor('#ff0000')" style="background-color: #ff0000"><a style="height:20px"></a></li>
 								<li onclick="changeFillColor('#0000ff')" style="background-color: #0000ff"><a style="height:20px"></a></li>
@@ -205,6 +206,7 @@
 						    <b class="caret"></b>
 						    </a>
 						    <ul class="dropdown-menu">
+						    	<li onclick="changeLineColor('rgba(0,0,0,0)')" style="background-image: url('../images/whiteboard/pattern_transparent.png')"><a style="height:20px"></a></li>
 						    	<li onclick="changeLineColor('#000000')" style="background-color: #000000"><a style="height:20px"></a></li>
 								<li onclick="changeLineColor('#ff0000')" style="background-color: #ff0000"><a style="height:20px"></a></li>
 								<li onclick="changeLineColor('#0000ff')" style="background-color: #0000ff"><a style="height:20px"></a></li>
@@ -294,6 +296,25 @@
 					</span>
 				</div>
 				<div class="content"><div>
+					<div>
+						<input type="text" id="txt_linktitle" placeholder="링크 제목" />
+						<input type="text" id="txt_linkurl" placeholder="링크 주소" />
+						<input type="button" value="등록" id="btn_addlink" />
+						<ul id="link_list">
+						</ul>
+					</div>
+					<div>
+						<form id="uploadForm"
+							  enctype="multipart/form-data"
+							  action="/lib/upload"
+							  method="post">
+						  <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
+						  <input type="button" id="btn_uploadFile" value="업로드" />
+						</form>
+						<ul id="file_list">
+						</ul>
+					</div>
+					
 					<div id="section_links">
 						<div class="section_title">
 							<span class="title_text">Links</span>
@@ -342,26 +363,7 @@
 						</div>
 						<ul class="list"></ul>
 					</div>
-					</div>
-					<div>
-						<input type="text" id="txt_linktitle" placeholder="링크 제목" />
-						<input type="text" id="txt_linkurl" placeholder="링크 주소" />
-						<input type="button" value="등록" id="btn_addlink" />
-						<ul id="link_list">
-						</ul>
-					</div>
-					<div>
-						<form id="uploadForm"
-							  enctype="multipart/form-data"
-							  action="/lib/upload"
-							  method="post">
-						  <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
-						  <input type="button" id="btn_uploadFile" value="업로드" />
-						</form>
-						<ul id="file_list">
-						</ul>
-					</div>
-				</div>
+				</div></div>
 			</div>
 			
 			<canvas id="cv_whiteboard">
@@ -372,32 +374,84 @@
 				<textarea id="inputbox" placeholder="Type here..."></textarea>
 			</div>
 		</div>
+		<div id="btn_rightpanel_toggle" onclick="toggleRightpanel()"></div>
 		<div id="rightpanel" class="rightpanel">
 			<div class="process-box">
-				<div class="rightpanel-title-bar">Process</div>
-				<div class="rightpanel-content-box fancy-scrollbar process-box">
-					<div class="process-unit processing">Ice Breaking</div>
-					<div class="process-unit">Weekly Review</div>
-					<div class="process-unit">Clarify Agenda</div>
-					<div class="process-unit">Discussion</div>
-					<div class="process-unit">Burning Issue</div>
-					<div class="process-unit">Review</div>
-					<div class="process-unit">Closing Round</div>
+				<div class="rightpanel-title-bar" id="panel_process_title">Process</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_process_container">
+					<ul id="process_list" style="margin: 0;">
+						<li class="process-unit processing">
+							<span>Ice Breaking</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:70%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Weekly Review</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Clarify Agenda</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Discussion</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Burning Issue</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Review</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Closing Round</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+					</ul>
 				</div>
 			</div>
 			<div class="tool-box">
-				<div class="rightpanel-title-bar">Tool</div>
-				<div class="rightpanel-tool-box fancy-scrollbar">
-					<div class="member-unit" onclick="getToolSource('list', initList, true);"><img src="/images/list_icon.png" alt="list_icon"></div>
-					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap, true);"><img src="/images/mindmap_icon.png" alt="mindmap_icon"></div>
-					<div class="member-unit" onclick="getToolSource('postit', initPostit, true);"><img src="/images/whiteboard_icon.png" alt="list_icon"></div>
-					<div class="member-unit" onclick="getToolSource('matrix', initMatrix, true);"><img src="/images/matrix_icon.png" alt="list_icon"></div>
-					<div class="member-unit" onclick="getToolSource('vote', initVote, true);"><img src="/images/vote_icon.png" alt="list_icon"></div>
+				<div class="rightpanel-title-bar" id="panel_addtool_title">Add Tool</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_addtool_container">
+					<div class="member-unit" onclick="getToolSource('list', initList, true);">list</div>
+					<div class="member-unit" onclick="getToolSource('mindmap', initMindmap, true);">mindmap</div>
+					<div class="member-unit" onclick="getToolSource('postit', initPostit, true);">postit</div>
+					<div class="member-unit" onclick="getToolSource('matrix', initMatrix, true);">matrix</div>
+					<div class="member-unit" onclick="getToolSource('vote', initVote, true);">vote</div>
 				</div>
 			</div>
 			<div class="member-box">
-				<div class="rightpanel-title-bar">Memeber 4/6</div>
-				<div class="rightpanel-content-box fancy-scrollbar member-box">
+				<div class="rightpanel-title-bar" id="panel_member_title">Memeber 4/6</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_member_container">
 					<div class="member-unit client-1">■ Jonghyuk Lim</div>
 					<div class="member-unit client-2">■ Julian De Maestri</div>
 					<div class="member-unit client-3">■ scvjeong</div>
@@ -407,8 +461,8 @@
 				</div>
 			</div>
 			<div class="facilitator-box">
-				<div class="rightpanel-title-bar">Facilitator</div>
-				<div class="rightpanel-content-box fancy-scrollbar facilitator-box">
+				<div class="rightpanel-title-bar" id="panel_facilitator_title">Facilitator</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_facilitator_container"
 				</div>
 
 				<form id="record_form"

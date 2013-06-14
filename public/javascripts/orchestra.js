@@ -262,7 +262,7 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 	var canvas_selector =document.getElementById(tmp_canvas);
 	//console.log(canvas_selector);
 	var ctx = canvas_selector.getContext("2d");
-	ctx.drawImage(image,0,0, image.width, image.height,0,0,250,150);
+	ctx.drawImage(image,0,0, image.width, image.height,0,0,300,150);
 
 }
 

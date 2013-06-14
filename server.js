@@ -15,6 +15,9 @@ function server(io)
 			var tmpGroup = data.group;
 			socket.join(tmpGroup);
 			console.log("Join "+tmpGroup);
+
+			////  클라이언트로 도구 목록 전달  ////
+			socket.emit('get_tools', { idArray: _idArray });
 		});
 
 		////  유저 정보 리스트에 저장하여 관리하는 함수  ////
@@ -22,6 +25,7 @@ function server(io)
 			console.log("Call: set_client");
 			var tmpGroup = data.group;
 			var tmpUser = data.user;
+			//var idx_meeting = data.idx_meeting;	// 수면 아래로 집어 넣은 소스
 			
 			var userInfo = tmpGroup+":user";
 			var userNum = -1;

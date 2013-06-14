@@ -64,11 +64,15 @@ exports.mail_auth = function(req, res){
 function sendMail(email, code)
 {
 	var smtpTransport = nodemailer.createTransport("Sendmail");
+	var html = "Hello!<p>";
+	html += "Welcome to Orchestra<p>";
+	html += "To complete your registration, click or copy the link below:<p>";
+	html += "Click here : <a href='http://orchestra.im/auth/"+code+"'>http://orchestra.im/auth/"+code+"</a>";
 	var mailOptions = {
 		from: "Orchestra ✔ <SignUp@orchestra.im>", // sender address
 		to: email, // list of receivers
-		subject: "Hello ✔", // Subject line
-		html: "<a href='http://orchestra.im/auth/"+code+"'>Click here</a>" // html body
+		subject: "Please confirm your new Orchestra account ✔", // Subject line
+		html: html // html body
 	}
 	smtpTransport.sendMail(mailOptions, function(error, response){
 		if(error){

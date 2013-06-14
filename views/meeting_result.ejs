@@ -71,90 +71,43 @@
 						<div id="placeholder" style="width:600px;height:300px;display:none;"></div>
 						<!--<div id="" class=" input_chart" style="display:none;"></div> -->
 					</div>
-					<div class="agenda">
-						<!--
+					<div class="agenda">					
+		
 						<% for(var i=0; i<result.meeting_result.length; i++) { %>
-							<div><%=result.meeting_result[i].agenda_subject%></div>
-							<div><%=result.meeting_result[i].agenda_goal%></div>
-							<div><%=result.meeting_result[i].agenda_start_time%> ~ <%=result.meeting_result[i].agenda_end_time%></div>
-							<div><%=result.meeting_result[i].user_list%></div>
-						<% } %>
-						-->
-						<div class="agenda_box">
-							<div class="agenda_title_box">
-								<div class="agenda_subject" onClick="clickAgendaTitle(0)">Opening</div>
-								<div class="agenda_goal">Ice Breaking, 회의 주제 및 목표 전달, Ground Rule 작성</div>			
-							</div>
-							<div class="agenda_result" id="result0" style="display:none;">
+									
+							<div class="agenda_box">
+								<div class="agenda_title_box">
+									<div class="agenda_subject" onClick="clickAgendaTitle(<%=i%>)"><%=result.meeting_result[i].agenda_subject%></div>
+									<div class="agenda_goal"><%=result.meeting_result[i].agenda_goal%></div>	
+								</div>
 								
-
-							</div>
-						</div>
-						<div class="agenda_box">
-							<div class="agenda_title_box">
-								<div class="agenda_subject" onClick="clickAgendaTitle(1)">문제 정의</div>
-								<div class="agenda_goal">문제 정의</div>			
-							</div>
-							<div class="agenda_result" id="result1" style="display:none;">
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">Postit</div>
-									<canvas class="agenda_result_canvas"></canvas>
+								<div class="agenda_result" id="result<%=i%>" style="display:none;">
+									<% for (var j=0; j<result.meeting_tools_image.length; j++) { %>
+									
+										<%
+										var tool_name = "";
+										switch ( result.meeting_tools_image[j].tool_num ) {
+											case 1 : tool_name = "List"; break;
+											case 2 : tool_name = "Postit"; break;
+											case 3 : tool_name = "Mindmap"; break;
+											case 4 : tool_name = "Vote"; break;
+											case 5 : tool_name = "Matrix"; break;	
+											default : tool_name = ""; break;
+										}
+										var tmp_canvas = tool_name+result.meeting_tools_image[j].idx_tool;
+										%>
+									<div class="agenda_result_box">	
+										<div class="agenda_result_title"><%=tool_name%></div>
+										
+										<canvas class='agenda_result_canvas' id="<%=tmp_canvas%>" image_val="<%=result.meeting_tools_image[j].image_value%>"></canvas>
+									</div>
+									<%}%>
 								</div>
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">Mindmap</div>
-									<canvas class="agenda_result_canvas"></canvas>
-								</div>
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">Vote</div>
-									<canvas class="agenda_result_canvas"></canvas>
-								</div>
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">List</div>
-									<canvas class="agenda_result_canvas"></canvas>
-								</div>
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">Matrix</div>
-									<canvas class="agenda_result_canvas"></canvas>
-								</div>
-							</div>
-						</div>
-						<div class="agenda_box">
-							<div class="agenda_title_box">
-								<div class="agenda_subject" onClick="clickAgendaTitle(2)">문제 분석</div>
-								<div class="agenda_goal">문제의 원인 분석</div>
-							</div>
-							<div class="agenda_result" id="result2" style="display:none;">
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">Postit</div>
-									<canvas class="agenda_result_canvas"></canvas>
-								</div>
-							</div>
-						</div>
-						<div class="agenda_box">
-							<div class="agenda_title_box">
-								<div class="agenda_subject" onClick="clickAgendaTitle(3)">아이디어 도출</div>
-								<div class="agenda_goal">문제 해결을 위한 아이디어 도출</div>			
-							</div>
-							<div class="agenda_result" id="result3" style="display:none;">
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">Postit</div>
-									<canvas class="agenda_result_canvas"></canvas>
-								</div>
-							</div>
-						</div>
-						<div class="agenda_box">
-							<div class="agenda_title_box">
-								<div class="agenda_subject" onClick="clickAgendaTitle(4)">솔루션 도출</div>
-								<div class="agenda_goal">아이디어 활용하여 솔루션 도출</div>				
-							</div>
-							<div class="agenda_result" id="result4" style="display:none;">
-								<div class="agenda_result_box"> 
-									<div class="agenda_result_title">Postit</div>
-									<canvas class="agenda_result_canvas"></canvas>
-								</div>
-							</div>
-						</div>
+							</div>						
+						<% } %>		
 					</div>
+
+					
 				</div>
 			</div>
 		</div>

@@ -5,7 +5,7 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 
 var _APPRAISAL_COMPLETE_FLAG_CNT = 1;
-var _RESULT_COMPLETE_FLAG_CNT = 2;
+var _RESULT_COMPLETE_FLAG_CNT = 3;
 var _MEETING_FLAG_CNT = 1;
 
 exports.main = function(req, res){
@@ -161,7 +161,7 @@ exports.meeting_result = function(req, res){
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
 	var params = {};
-	var result = { meeting_result:{}, meeting_result_appraisal:{} };
+	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };
 	var complete_flag = 0;
 
 	dao_m.dao_get_meeting_result(evt, mysql_conn, params);
@@ -181,6 +181,21 @@ exports.meeting_result = function(req, res){
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
+
+	var idx_params = {
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group
+	};
+
+	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, idx_params);
+	evt.on('get_meeting_tools_image', function(err, rows){
+		if(err) throw err;
+		result.meeting_tools_image = rows;
+		complete_flag++;
+		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
+			res.render('meeting_result', {result:result} );
+	});
+
 };
 
 exports.minutes = function(req, res){

@@ -8,7 +8,7 @@ var _common_window_top = 50;
 var _common_window_left = 20;
 var _new_z_index = 0;
 //var _drawtool = 'pen';
-var _group_id = 1;
+//var _group_id = 1;
 var _is_rightpanel_open = true;
 var _window_width = 0;
 var _window_height = 0;
@@ -201,12 +201,24 @@ function openSocket()
 	
 
 	/* 서버 리스너 등록 */
+	_socket_common.on('get_tools', function (data) {
+		console.log("<get_tools>");
+		console.log(data);
+		console.log("</get_tools>");
+	});
+
 	_socket_common.on('get_client', function (data) {
 		_client_id = data.client;
 		console.log("get_client:" + data.client);
 	});
 
-	_socket_common.on('get_option_data', function(data) {
+	_socket_common.on('get_last_id', function (data) {
+		console.log("<get_last_id>");
+		console.log(data);
+		console.log("</get_last_id>");
+	});
+
+	_socket_common.on('get_option_data', function (data) {
 		// data.tool/id/option/val
 		console.log('GET get_option_data');
 		if (data.option === 'new_tool')
@@ -248,7 +260,7 @@ function openSocket()
 
 	/* 서버 초기 이벤트 전송 */
 	_socket_common.emit('join_room', {group:_group_id});
-	_socket_common.emit('set_client', {group: _group_id, user: _user});
+	_socket_common.emit('set_client', {group:_group_id, user: _idx_user});
 	/* /서버 초기 이벤트 전송 */
 }
 

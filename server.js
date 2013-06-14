@@ -15,6 +15,9 @@ function server(io)
 			var tmpGroup = data.group;
 			socket.join(tmpGroup);
 			console.log("Join "+tmpGroup);
+
+			////  클라이언트로 도구 목록 전달  ////
+			socket.emit('get_tools', { idArray: _idArray });
 		});
 
 		////  유저 정보 리스트에 저장하여 관리하는 함수  ////

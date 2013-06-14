@@ -1,6 +1,9 @@
 <%
 	/* 시간 설정 */
 	var t = 0;
+	var idx_user = result.idx_user;
+	var idx_group = result.idx_group;
+	var idx_meeting = result.idx_meeting;
 	var limit_time = "00:00:00";
 	if( result.meeting.length > 0 )
 	{
@@ -367,7 +370,7 @@
 			</div>
 			
 			<canvas id="cv_whiteboard">
-				<p>브라우저에서 캔버스 지원이 안 됩니다.</p>
+				<p>No canvas is supported on this browser.</p>
 			</canvas>
 			
 			<div id="drawtext_container">
@@ -387,6 +390,17 @@
 							</div>
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+									<a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="List1"><li class="item_list" id="btn_list1"></li></a>
+									<li class="item_list" id="btn_list1"></li>
+									<li class="item_list" id="btn_list1"></li>
+									<li class="item_matrix" id="btn_matrix1"></li>
+									<li class="item_mindmap" id="btn_mindmap1"></li>
+									<li class="item_postit" id="btn_postit1"></li>
+									<li class="item_vote" id="btn_vote1"></li>
+								</ul>
+							</div>
 						</li>
 						<li class="process-unit">
 							<span>Weekly Review</span>
@@ -536,7 +550,11 @@
 	<script src="/javascripts/meeting.js"></script>	
 	<script>
 		var _runTime = <%=t%>;
+		var _idx_user = "<%=idx_user%>";
 		var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
+		var _group_id = "<%=idx_group%>";
+		var _idx_meeting = "<%=idx_meeting%>";
+		console.log("in meeting.ejs {_idx_user:" + _idx_user + ", _group_id:" + _group_id + "}");
 		setInterval("showRunTime()", 1000);
 		$(function(){
 			$(".process-unit").hover(function(){

@@ -13,7 +13,21 @@ function server(io)
 		socket.on('join_room', function(data) {
 			console.log("Call: join_room");
 			var tmpGroup = data.group;
+			var group_id = "group" + data.group;
 			socket.join(tmpGroup);
+
+			// join하려는 그룹이 _meeting_contents_for_each_group에 없으면 새 그룹 생성하기
+			if (_meeting_contents_for_each_group.hasOwnProperty(group_id))
+			{
+				var temp_group = {
+					whiteboard: {},
+					tools_for_each_process: []
+				};
+				eval("_meeting_contents_for_each_group." + group_id + " = temp_group;");
+				console.log("CREATE GROUP:" + group_id);
+				console.log(eval("_meeting_contents_for_each_group." + group_id);
+			}
+
 			console.log("Join "+tmpGroup);
 		});
 
@@ -22,6 +36,7 @@ function server(io)
 			console.log("Call: set_client");
 			var tmpGroup = data.group;
 			var tmpUser = data.user;
+			//var idx_meeting = data.idx_meeting;	// 수면 아래로 집어 넣은 소스
 			
 			var userInfo = tmpGroup+":user";
 			var userNum = -1;
@@ -68,6 +83,25 @@ function server(io)
 			////  클라이언트로 lastId 전달  ////
 			socket.emit('get_last_id', { tool: tmpTool, last: tmpLastId });
 		});
+
+
+
+		////  클라이언트로 도구 목록 전달  ////
+		socket.on('set_list_of_tools', function(data) {
+			console.log("Call: set_list_of_tools");
+			var group = data.group;
+			var idx_meeting = data.idx_meeting;
+
+			socket.emit('get_list_of_tools', { idArray: _idArray });
+		});
+
+
+		////  도구 추가  ////
+		socket.on('create_tool', function(data) {
+
+
+		});
+
 		
 		////  클라이언트 해당 tool의 데이터 요청 처리하는 함수  ////
 		socket.on('set_data', function(data) {
@@ -255,7 +289,7 @@ function server(io)
 		});
 
 
-		////  클라이언트 해당 tool에 추가된 값을 DB에 저장_tree  ////
+			////  클라이언트 해당 tool에 추가된 값을 DB에 저장_tree  ////
 		socket.on('set_insert_tree_data', function(data) {
 			console.log("Call: insert_tree_data");
 			var tmpGroup = data.group;
@@ -646,6 +680,105 @@ function server(io)
 var redis = require('redis'), 
 	client = redis.createClient(6379, '61.43.139.70'), multi;
 
+var _meeting_contents_for_each_group = {};	// 회의 진행 중 데이터 보관
+/*
+	_meeting_contents = {
+		group + '그룹 식별 번호': {
+			whiteboard: {
+
+			},
+			tools_for_each_process: [
+				{
+					type: 'list',
+					name: 'list' + _tool_list_count,
+					title: '리스트 ' + _tool_list_count,
+					variables: {
+						tmpIndent: 0,	// 현재 들여쓰기 상태
+						tmpLastId: 0,	// 마지막 ID 관리
+						tmpClient: 0,	//현재 클라이언트 번호
+						tmpGroup: 0,	//현재 그룹
+						tmpTool: 0,  //현재 도구
+						tmpToolSelect: 0,
+						clientColor: new Array( "none", "#99FF99", "#CCCC99",
+												"#0099FF", "#CCFFCC", "#FFFF66",
+												"#FF9999", "#669999", "#9999FF",
+												"#00CCCC", "#CC9900"),
+						inputFlag: 0
+					}
+				},
+				{
+					type: 'postit',
+					name: 'postit' + _tool_postit_count,
+					title: '포스트잇 ' + _tool_postit_count,
+					variables: {
+						tmpLastId: 100,
+						tmpGroup: 0,
+						tmpTool: 0,
+						tmpItemGroup: 0,
+						tmpClient: 0,
+						tmpToolSelect: 0,
+						preSelectGroup: 0
+					}
+				},
+				{
+					type: 'mindmap',
+					name: 'mindmap' + _tool_mindmap_count,
+					title: '마인드맵 ' + _tool_mindmap_count,
+					variables: {
+						moveFlag: 0,
+						preX: 0,
+						preY: 0,
+						dataLinks: [],
+						dataNodes: [],
+						tmpIndent: 0,	// 현재 들여쓰기 상태 
+						tmpLastId: 100,	// 마지막 ID 관리
+						tmpClient: 0,	//현재 클라이언트 번호
+						tmpGroup: 0,	//현재 그룹
+						tmpTool: 0,
+						inputFlag: 0	//키입력 감지하기 위한 변수	
+					}
+				},
+				{
+					type: 'vote',
+					name: vote' + _tool_vote_count,
+					title: '투표 ' + _tool_vote_count,
+					variables: {
+						
+					}
+				},
+				{
+					type: 'matrix',
+					name: 'matrix' + _tool_matrix_count,
+					title: 'matrix ' + _tool_matrix_count,
+					variables: {
+						tmpClient: 0,	//현재 클라이언트 번호
+						tmpGroup: 0,	//현재 그룹
+						setupData: {
+									row: 0,
+									col: 0
+									}, // matrix 행, 열
+						setupFlag: {
+									data_init: true,
+									row: false,
+									col: false
+									},
+						optionId: {
+									set: 999999,
+									row: 999998,
+									col: 999997
+									},
+						_key_code: null, // 키 입력 값 저장
+						_box_count: 0,
+						inputFlag: 0	//키입력 감지하기 위한 변수
+					}
+				}
+				.
+				.
+				.
+			]
+		}
+	}
+*/
 var _idArray = new Array();	//lastId 배열
 var _lastClient = 1;	//_lastClient 변수
 var _vote_flag = false;

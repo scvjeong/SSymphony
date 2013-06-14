@@ -85,7 +85,7 @@ exports.login = function(req, res){
 			res.redirect("/?status=failed");
 		else if( rows[0].status === "N" )
 		{
-			sendMail(rows[0].id);
+			sendMail(rows[0].id, rows[0].code);
 			res.redirect("/?status=auth");
 		}
 		else if( referer_facebook && req.session.fb_key === fb_key )

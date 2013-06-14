@@ -151,6 +151,9 @@
 						}
 					}]);
 					$(".modal-body", dialog).css("max-height", window_height*0.7);
+					$("#start-btn").animate({
+						width: '90'
+					}, 640);
 				},"html");
 			});
 		}// end if

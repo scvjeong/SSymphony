@@ -4,6 +4,9 @@
 /* }=== COLOR - AZURE === */
 /* === MADMIN MENU ==={ */
 /* general setup & list styles reset */
+.hide{
+	display:none;
+}
 .left{
 	float:left;
 }
@@ -828,7 +831,7 @@ button,
 select,
 textarea,
 .navbar-search .search-query {
-  font-family: 'Segoe UI', Optima, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Malgun Gothic', 'Segoe UI', Optima, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .sidebar-menu a:hover {
   text-decoration: none;
@@ -860,6 +863,7 @@ h6 small {
 /* === FORMS ==={ */
 /* }=== FORMS === */
 /* === BUTTONS ==={ */
+/*
 .btn {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -965,6 +969,7 @@ h6 small {
   background: transparent;
   border: 0;
 }
+*/
 /* Bootstrap-style buttons if you don't like the MADMIN ones */
 .btn.btn-info-bs {
   color: #ffffff;
@@ -1473,19 +1478,6 @@ h6 small {
 		margin: 5% !important;
 	}
 
-	.meeting-template {
-		text-align:center;
-	}
-	.meeting-template div{
-		margin:5px 0;
-	}
-	.meeting-template .btn{
-		width:96%;
-		padding:2% !important;
-		border:0 none !important;
-		border-radius:8px;
-	}
-
 	#agenda_step label{
 		margin:0 10px 5px 0;
 		line-height:30px;
@@ -1714,6 +1706,20 @@ h6 small {
 }
 .fancy-scrollbar::-webkit-scrollbar-thumb:hover {
 	background: rgba(0, 0, 0, .55);
+}
+
+#meeting-template ul.fancy-scrollbar::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0) !important;
+}
+#meeting-template ul.fancy-scrollbar::-webkit-scrollbar-thumb {
+	background: rgba(201, 227, 254, 1) !important;
+	border: 1px inset rgba(0, 0, 0, .15) !important;
+}
+#meeting-template ul.fancy-scrollbar:hover::-webkit-scrollbar-thumb {
+	background: rgba(150, 203, 255, 1) !important;
+}
+#meeting-template ul.fancy-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: rgba(150, 203, 255, 1) !important;
 }
 
 /*** group_select ***/
@@ -2215,8 +2221,8 @@ h6 small {
 	top: 10%;
 	left: 50%;
 	z-index: 10050;
-	width: 70%;
-	margin-left: -35%;
+	width: 950px;
+	margin-left: -475px;
 	background-color: #ffffff;
 	border: 1px solid #999;
 	border: 1px solid rgba(0, 0, 0, 0.3);
@@ -2514,3 +2520,86 @@ h6 small {
 	background-color:#2887bd;
 }
 /*** user-info-popup ***/
+
+/*** meeting-template ***/
+#meeting-template ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#meeting-template .meeting-template-body .left-body {
+	float:left;
+	text-align:center;
+}
+#meeting-template .meeting-template-body .left-body .custom{
+	font-family: "Fjalla One"; 
+	font-size: 28px;
+	color:#FFFFFF;
+	width: 351px;
+	height: 47px;
+	line-height: 47px;
+	background-color: #96cbff;
+	-webkit-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	-moz-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	margin:10px;
+}
+#meeting-template .meeting-template-body .left-body ul{
+	width:341px;
+	height:300px;
+	margin:10px;
+	padding:0px 10px 0px 0px;
+	overflow-y:scroll;
+}
+#meeting-template .meeting-template-body .left-body li{
+	font-size: 20px; 
+	color: #57acff;
+	width:100%;
+	height: 41px; 
+	line-height: 35px; 
+	background-color: #eaf5ff; 
+	-webkit-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11); 
+	-moz-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11); 
+	box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	margin:10px 0px;
+	cursor:pointer;
+}
+#meeting-template .meeting-template-body .right-body{
+	float:left;
+	padding:20px;
+}
+#meeting-template .meeting-template-body .right-body .subject{
+	font-size: 28px; 
+	color: #666;
+	margin-bottom:7px;
+}
+#meeting-template .meeting-template-body .right-body .goal{
+	font-size: 19px;
+	color: #666;
+	margin-bottom:15px;
+}
+#meeting-template .meeting-template-body .right-body .process-subject{
+	position:relative;
+	left:0px;
+	top:0px;
+	text-align:center;
+	font-size: 19px; 
+	color: #333;
+	width: 526px; 
+	height: 41px; 
+	line-height: 41px; 
+	-webkit-border-radius: 0 526px/0 1px; 
+	-moz-border-radius: 0 526px/0 1px; 
+	border-radius: 0 526px/0 1px; 
+	background-color: #ffc; 
+	-webkit-box-shadow: 0 3px 5px rgba(0,0,0,.17); 
+	-moz-box-shadow: 0 3px 5px rgba(0,0,0,.17); 
+	box-shadow: 0 3px 5px rgba(0,0,0,.17);
+	z-index:1;
+}
+#meeting-template .meeting-template-body .right-body .process-arrow{
+	width:526px;
+	height:13px;
+	background: url(/images/arrow-bottom.png) no-repeat 250px 0  rgba(0, 0, 0, 0);
+}
+/*** meeting-template ***/

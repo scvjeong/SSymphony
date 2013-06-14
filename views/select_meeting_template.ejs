@@ -1,26 +1,35 @@
-<div class="row-fluid">
-	<div class="span12">
-		<div class="inner-spacer meeting-template"> 
-		<!-- content goes here -->
-			<a class="btn btn-success btn-large custom" title="" href="javascript:show_setting_agenda();">Custom</a>
+<link rel="stylesheet" href="/stylesheets/orchestra.css" />
+<div id="meeting-template">
+	<div class="meeting-template-header"></div>
+	<div class="meeting-template-body">
+		<div class="left-body">
+			<div class="custom">Custom</div>
+			<ul class="fancy-scrollbar">
+				<% for(var i=0; i<result.length; i++) {%>
+					<li title="<%= result[i].subject %>" onclick="javascript:show_setting_agenda('<%= result[i].idx %>');"><%= result[i].subject %></li>
+				<% } %>
+			</ul>
 		</div>
-	</div>
-</div>
-<div class="row-fluid">
-	<div class="span6">
-		<div class="inner-spacer meeting-template"> 
-		<!-- content goes here -->
-			<% for(var i=0; i<(result.length/2); i++) {%>
-				<div><a class="btn btn-primary btn-large" title="<%= result[i].subject %>" href="javascript:show_setting_agenda('<%= result[i].idx %>');"><%= result[i].subject %></a></div>
-			<% } %>
-		</div>
-	</div>
-	<div class="span6">
-		<div class="inner-spacer meeting-template"> 
-		<!-- content goes here -->
-			<% for(var i=Math.ceil(result.length/2); i<result.length; i++) {%>
-				<div><a class="btn btn-primary btn-large" title="<%= result[i].subject %>" href="javascript:show_setting_agenda('<%= result[i].idx %>');"><%= result[i].subject %></a></div>
-			<% } %>
+		<div class="right-body">
+			<ul>
+				<li>
+				<div class="subject">Decision Making</div>
+				<div class="goal">This is Photoshop's version of Lorem lpsum.</div>
+				<ul>
+					<li>
+						<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+						<div class="process-arrow"></div>
+					</li>
+					<li>
+						<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+						<div class="process-arrow"></div>
+					</li>
+					<li>
+						<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+					</li>
+				</ul>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>

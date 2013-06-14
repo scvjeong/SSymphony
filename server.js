@@ -15,9 +15,6 @@ function server(io)
 			var tmpGroup = data.group;
 			socket.join(tmpGroup);
 			console.log("Join "+tmpGroup);
-
-			////  클라이언트로 도구 목록 전달  ////
-			socket.emit('get_tools', { idArray: _idArray });
 		});
 
 		////  유저 정보 리스트에 저장하여 관리하는 함수  ////
@@ -71,6 +68,17 @@ function server(io)
 
 			////  클라이언트로 lastId 전달  ////
 			socket.emit('get_last_id', { tool: tmpTool, last: tmpLastId });
+		});
+
+
+
+		////  클라이언트로 도구 목록 전달  ////
+		socket.on('set_list_of_tools', function(data) {
+			console.log("Call: set_list_of_tools");
+			var group = data.group;
+			var idx_meeting = data.idx_meeting;
+
+			socket.emit('get_list_of_tools', { idArray: _idArray });
 		});
 		
 		////  클라이언트 해당 tool의 데이터 요청 처리하는 함수  ////

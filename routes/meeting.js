@@ -42,6 +42,7 @@ exports.main = function(req, res){
 		result.meeting = rows;
 		result.idx_user = req.session.idx_user;	// idx_user
 		result.idx_group = req.session.idx_group;	// idx_group
+		result.idx_meeting = req.param("idx_meeting");	// idx_meeting
 		console.log(result);
 		if( complete_flag === _MEETING_FLAG_CNT )
 			res.render('meeting', { result:result });

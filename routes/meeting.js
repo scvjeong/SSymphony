@@ -160,7 +160,13 @@ exports.meeting_result = function(req, res){
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
-	var params = {};
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group
+	};	
+
+	console.log("[LOG]"+params['idx_meeting']);
+
 	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };
 	var complete_flag = 0;
 
@@ -182,12 +188,7 @@ exports.meeting_result = function(req, res){
 			res.render('meeting_result', {result:result} );
 	});
 
-	var idx_params = {
-		idx_meeting:req.session.idx_meeting,	 
-		idx_group:req.session.idx_group
-	};
-
-	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, idx_params);
+	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, params);
 	evt.on('get_meeting_tools_image', function(err, rows){
 		if(err) throw err;
 		result.meeting_tools_image = rows;

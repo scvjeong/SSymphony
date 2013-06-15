@@ -41,8 +41,8 @@ exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
 // params['idx_meeting']
 // params['idx_group']
 exports.dao_get_meeting_result = function(evt, mysql_conn, params){
-	params['idx_meeting'] = 19;
-	params['idx_group'] = 1;
+//	params['idx_meeting'] = 19;
+//	params['idx_group'] = 1;
 	
 	var sql = "SELECT ";
 	sql += "`A`.`idx`, ";
@@ -75,12 +75,14 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 //console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('get_meeting_result', err, rows);
+
+		//console.log(rows);
 	});
 	return sql;
 }
 
 exports.dao_get_meeting_result_appraisal = function(evt, mysql_conn, params){
-	params['idx_meeting'] = 60;
+	//params['idx_meeting'] = 60;
 	
 	var sql = "SELECT ";
 	sql += "`A`.`satisfaction`, ";
@@ -199,8 +201,9 @@ exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
 exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
 	
 	
-	params['idx_meeting']=1;
-	params['idx_group']=0;
+//	params['idx_meeting']=1;
+//params['idx_group']=0;
+//	console.log(params['idx_group']);
 
 	var sql = "SELECT `A`.`idx_tool`, ";
 	sql += "`A`.`tool_num`, ";
@@ -210,7 +213,7 @@ exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
 //	sql += "INNER JOIN `agenda` AS `B` ";
 //	sql += "ON `A`.`idx_meeting` = `B`.`idx_meeting_planning` ";
 	sql += "WHERE `A`.`idx_meeting` = '"+params['idx_meeting']+"' ";
-	sql += "AND `A`.`idx_group` = '"+params['idx_group']+"' ";
+//	sql += "AND `A`.`idx_group` = '"+params['idx_group']+"' ";
 	sql += "ORDER BY `A`.`idx_process` ASC";
 
 

@@ -163,28 +163,63 @@ function showMeetingResultWindow()
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
 			
+		
+			var image_array = new Array();		
+			var image_value_array = new Array();
 			
+			var num = 0;
+
 			var result_selector = $(".agenda_result_box:first");
+
 			while ( result_selector.length > 0 )
 			{	
+							
 				var tmp_canvas = result_selector.children('canvas').attr('id');
-				var canvas_selector =document.getElementById(tmp_canvas);
+				var canvas_num = "canvas"+num;
+				result_selector.children('canvas').attr('id', canvas_num);
+
+				console.log(tmp_canvas);
 				var image_value = result_selector.children('canvas').attr('image_val');
-				var image = new Image();
-				image.src = image_value;
-
-				var ctx = canvas_selector.getContext("2d");
-				ctx.drawImage(image,0,0, image.width, image.height,0,0,300,150);						
-
+				image_value_array.push(image_value);
+			
 				result_selector = result_selector.next('.agenda_result_box');
-			}		
+				num++;
+			}
+
+			var tmp_select_box = $(".agenda_result_box:first");
+
+			for (var k=0; k<image_value_array.length; k++)
+			{
+				image_array[k] = new Image();
+				
+				var cnt_num = 0;
+				image_array[k].onload = function() {
+			
+					var find_canvas = "canvas"+cnt_num;
+					var tmp_selector = $('#'+find_canvas);
+					console.log(find_canvas);
+					
+					var canvas_selector =document.getElementById(find_canvas);
+					var ctx = canvas_selector.getContext("2d");
+					
+					console.log();
+					ctx.drawImage(image_array[cnt_num],0,0, image_array[cnt_num].width, image_array[cnt_num].height,0,0,300,150);	
+
+					cnt_num++;
+				}
+				
+				image_array[k].src = image_value_array[k];
+				tmp_select_box = tmp_select_box.next('.agenda_result_box');
+				
+			}
 
 		},
 		error: function(err) {
 			console.log(err);
 			return false;
 		}
-	});		
+	});	
+	
 }
 
 function clickAgendaTitle(num)

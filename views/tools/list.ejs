@@ -1,29 +1,20 @@
 <div class="list_tool" id="list<%= tool_index %>">
-
-	<header id="main_header">
-		<h1>List Tool</h1>
-	</header>
-	<div id="container">
-    <section id="main_section">
-		<article>
-			<header>
-				<div class="home_line">
-					<div class="home_box">
-						<div id="homeButton" onClick="list_change_data()"><h2>Change</h2></div>
-						<div id="initButton" onClick="list_init_data()"><h2>Clear</h2></div>
-					</div>
-					<div class="init_box">
-						<div id="addButton" onClick="list_add_new_input()">+</div>
-					</div>
+    <div class="main_section">
+		<div class="header">
+			<div class="home_line">
+				<div class="home_box">
+					<span id="homeButton" onClick="list_change_data()">Change</span>
+					<span id="initButton" onClick="list_init_data()">Clear</span>
 				</div>
-			</header>
-			<div class="list_space">
-				<div class="children">
-				
+				<div class="init_box">
+					<span id="addButton" onClick="list_add_new_input()">+</span>
 				</div>
 			</div>
-		</article>
-    </section>
-	</div>
-
+		</div class="header">
+		<div class="list_space">
+			<div class="children">
+			</div>
+		</div>
+		&nbsp;
+    </div>
 </div>

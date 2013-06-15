@@ -5,13 +5,15 @@ var _tool_mindmap_count = 0;
 var _tool_vote_count = 0;
 var _tool_matrix_count = 0;
 var _common_window_top = 50;
-var _common_windot_left = 20;
+var _common_window_left = 20;
 var _new_z_index = 0;
-var _drawtool = 'pen';
-var _group_id = 1;
+//var _drawtool = 'pen';
+//var _group_id = 1;
 var _is_rightpanel_open = true;
 var _window_width = 0;
 var _window_height = 0;
+
+var _client_id;	// 클라이언트 아이디
 
 var _socket_common;
 var _socket_list;
@@ -21,20 +23,48 @@ var _socket_vote;
 var _socket_matrix;
 
 var _is_added_socket_listener_for_list = false;
+var _is_added_socket_listener_for_postit = false;
+var _is_added_socket_listener_for_mindmap = false;
+var _is_added_socket_listener_for_vote = false;
+var _is_added_socket_listener_for_matrix = false;
+
+var _notice_bar_idx = 1;
 
 $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
 
-	setRightpanel("participants");	// 최초에는 오른쪽 패널에 참가자 탭을 보여줌
+	initRightpanel();
+
+	// 오디오 관련 초기화
+	
+	 try {
+      // webkit shim
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+      window.URL = window.URL || window.webkitURL;
+      
+      audio_context = new AudioContext;
+      console.log('Audio context set up.');
+      console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+    } catch (e) {
+      alert('No web audio support in this browser!');
+    }
+
+    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+      console.log('No live audio input: ' + e);
+    });
 
 	// 소켓 열기
 	openSocket();
 
 	// 콘텐트 관리 상자 초기화
 	share_box.init();
+	/*
 	addLinkList("네이버", "http://naver.com");
 	addLinkList("다음", "http://daum.net");
+	addLinkList("인트라넷 소마", "http://intranet.swmaestro.kr");
+	*/
 	$('#btn_addlink').click(function() {
 		var linktitle = $('#txt_linktitle').val();
 		var linkurl = $('#txt_linkurl').val();
@@ -42,20 +72,13 @@ $(document).ready(function() {
 	});
 
 	// 화이트보드 초기화
-	//$('#meetingboard #whiteboard_control_box').draggable();	// 화이트보드 도구 상자 움직이기 가능
-	$('#meetingboard #btn_drawtool_pen').click(function() {
-		_drawtool = 'pen';
-	});
-	$('#meetingboard #btn_drawtool_rect').click(function() {
-		_drawtool = 'rect';
-	});
-	$('#meetingboard #btn_drawtool_ellipse').click(function() {
-		_drawtool = 'ellipse';
-	});
+	switchDrawingTool('pen');
+	$("[data-toggle='tooltip']").tooltip();
 
-	$('#meetingboard #btn_text_add').click(function() {
-		_drawtool = 'text';
-	});
+	changeFillColor('#ffffff');
+	changeLineColor('#000000');
+	//$("#colorPicker").jqxColorPicker({ color: "ffaabb", colorMode: 'hue', width: 220, height: 200, theme: null });
+	$("#white-board #btn_drawtool_pen").tooltip('show');
 
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
@@ -63,7 +86,7 @@ $(document).ready(function() {
 	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
 	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
 	setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
-	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
+	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 6000);
 	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
 
 	// 파일 업로드 초기화
@@ -73,40 +96,99 @@ $(document).ready(function() {
             
 	$('#uploadForm').submit(function() { 
         $(this).ajaxSubmit({                                                                                                                 
- 
+
             error: function(xhr) {
 				status('Error: ' + xhr.status);
             },
- 
+
             success: function(response) {
             	console.log(response);
             	
+            	var fileObject = JSON.stringify(response);
+            	console.log("fileObject : " + fileObject);
+            	_socket_common.emit('set_option_data', {group:_group_id, option:'new_share_box_item', tool:"0", id:"0", val:fileObject});
+            	
             	var newfileitem = "";
             	var filetypeinfo = getFileTypeInfo(response.filetype);
+            	var target_list = "";
             	
-            	newfileitem += "<li>";
+            	/*
+				<li class="item">
+					<div class="icon"></div>
+					<div class="text">테스트</div>
+				</li>
+				*/
+				switch (filetypeinfo.category)
+            	{
+            	case "document":
+            		target_list = "section_documents";
+            		break;
+            	case "image":
+            		target_list = "section_photos";
+            		break;
+            	default:
+					target_list = "section_others";
+            	}
             	newfileitem += "<a href=\"";
             	newfileitem += "/tmp/";
             	newfileitem += response.filename;
-            	newfileitem += "\">";
-            	newfileitem += "<img src=\"";
-            	newfileitem += filetypeinfo.iconurl;
-            	newfileitem += "\" width=\"16\" height=\"16\" /> ";
-            	newfileitem += "[" + filetypeinfo.category + "]";
-            	newfileitem += response.filename;
+            	newfileitem += "\" target=\"_blank\">";
+	            	newfileitem += "<li class=\"item\">";
+		            	newfileitem += "<div class=\"icon\" style=\"background-image:url('";
+		            	newfileitem += filetypeinfo.iconurl;
+		            	newfileitem += "')\"></div>";
+		            	newfileitem += "<div class=\"text\">";
+			            	newfileitem += response.filename;
+		            	newfileitem += "</div>";
+	            	newfileitem += "</li>";
             	newfileitem += "</a>";
-            	newfileitem += "</li>";
-				$('#file_list').append(newfileitem);
+				//$('#file_list').append(newfileitem);
+				
+				$("#" + target_list + " .list").append(newfileitem);
+				console.log("Added : " + "#" + target_list + " .list");
             }
 		});
 
 		return false;
     });
+
+	// notice bar
+	noticeBarMoving();
+
+	// init rightpanel
+	initRightpanel();
+	
+	// 회의 종료 버튼
+	$("#result-btn").click(function(){
+		if( confirm("Are you sure?") )
+		{
+			$.ajax({
+				url: '/page/meeting_close',
+				type: 'POST',
+				dataType: 'json',
+				success: function(json) {
+					if( json.result == "failed" )
+					{
+						console.log(json.msg);
+					}
+					else if( json.result == "successful" )
+					{
+						showMeetingResultWindow();
+					}
+				},
+				error: function(err) {
+					console.log(err);
+					return false;
+				}
+			});			
+		}
+	});
 });
 
 $(window).resize(function() {
 	resetSizeInfo();
 	resizeWhiteBoardControlBox();
+	resizeWhiteBoardCanvas();
 });
 
 // 소켓 열기
@@ -119,6 +201,114 @@ function openSocket()
 	_socket_vote = io.connect('http://61.43.139.69:50004/group');
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
+	
+
+	/* 서버 리스너 등록 */
+	_socket_common.on('get_list_of_tools', function (data) {
+		console.log("<get_list_of_tools>");
+		console.log(data);
+		console.log("</get_list_of_tools>");
+	});
+
+	_socket_common.on('get_client', function (data) {
+		_client_id = data.client;
+		console.log("get_client:" + data.client);
+	});
+
+	_socket_common.on('get_last_id', function (data) {
+		console.log("<get_last_id>");
+		console.log(data);
+		console.log("</get_last_id>");
+	});
+
+	_socket_common.on('get_option_data', function (data) {
+		// data.tool/id/option/val
+		console.log('GET get_option_data');
+		if (data.option === 'new_tool')
+		{
+			console.log('새 도구 도착 : ' + data)
+			switch (data.tool)
+			{
+			case 'list':
+				getToolSource('list', initList);
+				break;
+			case 'mindmap':
+				getToolSource('mindmap', initMindmap);
+				break;
+			case 'postit':
+				getToolSource('postit', initPostit);
+				break;
+			case 'matrix':
+				getToolSource('matrix', initMatrix);
+				break;
+			case 'vote':
+				getToolSource('vote', initVote);
+				break;
+			}
+		}
+		else if (data.option === 'new_share_box_item')
+		{
+			console.log('새 쉐어박스 아이템 도착 : ');
+			console.log(data);
+			addShareItem(data.val);
+		}
+		else if (data.option === 'new_canvas_draw')
+		{
+			console.log("GET_OPTION_DATA new_canvas_draw");
+			console.log(data);
+			drawArrived(data.tool, data.val);
+		}
+	});
+	/* /서버 리스너 등록 */
+
+	/* 서버 초기 이벤트 전송 */
+	_socket_common.emit('join_room', {group:_group_id});
+	_socket_common.emit('set_client', {group:_group_id, user: _idx_user});
+	/* /서버 초기 이벤트 전송 */
+	_socket_common.emit('set_list_of_tools', {group:_group_id, idx_meeting:_idx_meeting});
+}
+
+
+// 쉐어박스 아이템 추가
+function addShareItem(response)
+{
+	console.log("CALL addShareItem [response:" + response + "]");
+	console.log("filename:" + response.filename);
+	response = JSON.parse(response);
+	//testtest = response;
+	var newfileitem = "";
+	var filetypeinfo = getFileTypeInfo(response.filetype);
+	var target_list = "";
+	
+	switch (filetypeinfo.category)
+	{
+	case "document":
+		target_list = "section_documents";
+		break;
+	case "image":
+		target_list = "section_photos";
+		break;
+	default:
+		target_list = "section_others";
+	}
+	newfileitem += "<a href=\"";
+	newfileitem += "/tmp/";
+	newfileitem += response.filename;
+	newfileitem += "\" target=\"_blank\">";
+    	newfileitem += "<li class=\"item\">";
+        	newfileitem += "<div class=\"icon\" style=\"background-image:url('";
+        	newfileitem += filetypeinfo.iconurl;
+        	newfileitem += "')\"></div>";
+        	newfileitem += "<div class=\"text\">";
+            	newfileitem += response.filename;
+        	newfileitem += "</div>";
+    	newfileitem += "</li>";
+	newfileitem += "</a>";
+	//$('#file_list').append(newfileitem);
+	
+	$("#" + target_list + " .list").append(newfileitem);
+	
+	showPopupWindow(response.filename + " is added on Share Box.");
 }
 
 function resetSizeInfo()
@@ -141,6 +331,17 @@ function resizeWhiteBoardControlBox()
 	{
 		whiteboard_control_box.width(_window_width);
 	}
+}
+
+function resizeWhiteBoardCanvas()
+{
+	var width = $(document).width();
+	var height = $(document).height() - 52;
+
+	$('#white-board').width(width);
+	$('#white-board').height(height);
+	$('#cv_whiteboard').attr('width', width);
+	$('#cv_whiteboard').attr('height', height);
 }
 
 function getFileTypeInfo(filetype)
@@ -170,13 +371,22 @@ function getFileTypeInfo(filetype)
 	return result;
 }
 
-
-
+var _is_share_box_open = false;
 var share_box = ( function() {
 		function _addEventListeners() {
-			$('#whiteboard_control_box #btn_show_share_box').click(function() {
-				$('#window_share_box').jqxWindow('open');
-				console.log("open share_box");
+			$('#btn_show_share_box').click(function() {
+				if (_is_share_box_open == false)
+				{
+					$('#window_share_box').jqxWindow('open');
+					$('#white-board .navbar .nav #btn_show_share_box').addClass('active');
+					_is_share_box_open = true;
+				}
+				else
+				{
+					$('#window_share_box').css('display', 'none');
+					$('#white-board .navbar .nav #btn_show_share_box').removeClass('active');
+					_is_share_box_open = false;
+				}
 			});
 		};
 		function _createElements() {
@@ -199,7 +409,14 @@ var share_box = ( function() {
 						width : '100%',
 						theme : share_box.config.theme
 					});
+
 					$('#window_share_box').jqxWindow('focus');
+
+					$('#window_share_box .jqx-window-close-button').click(function() {
+						_is_share_box_open = false;
+						$('#white-board .navbar .nav #btn_show_share_box').removeClass('active');
+						console.log("closed");
+					});
 				}
 			});
 		};
@@ -285,84 +502,57 @@ function addLinkList(title, link)
 		newlink += "</span> ";
 		newlink += "<span><a href=\"";
 		newlink += link;
-		newlink += "\">";
+		newlink += "\" target=\"_blank\">";
 		newlink += link;
 		newlink += "</a></span>";
 		newlink += "</li>";
 		link_list.append(newlink);
 }
 
-// 오른쪽 메뉴 전환
-function setRightpanel(panel)
+// 오른쪽 패널 초기화
+function initRightpanel()
 {
-	$("#rightpanel #tabbar li").css("background-color", "");
-	$("#rightpanel #tabbar #" + panel).css("background-color", "#111111");
+	$("#rightpanel div #panel_process_title").click(function() {
+		$("#rightpanel div #panel_process_container").slideToggle();
+	});
 
-	switch (panel)
-	{
-	case "participants":
-		break;
-	case "tools":
-		break;
-	case "info":
-		break;
-	}
+	$("#rightpanel div #panel_addtool_title").click(function() {
+		$("#rightpanel div #panel_addtool_container").slideToggle();
+	});
 
-	$("#rightpanel #panelcontents div").hide();
-	$("#rightpanel #panelcontents #" + panel).show();
+	$("#rightpanel div #panel_member_title").click(function() {
+		$("#rightpanel div #panel_member_container").slideToggle();
+	});
+
+	$("#rightpanel div #panel_facilitator_title").click(function() {
+		$("#rightpanel div #panel_facilitator_container").slideToggle();
+	});
 }
 
-
-var _tool_type = "";
-/* 도구별 소스를 동적으로 가져옴 */
-function getToolSource(tool_type, initFuncName)
+// 오른쪽 패널 보이거나 숨기기
+function toggleRightpanel()
 {
-	var source_url = "";
-	var tool_index = "";
-	_tool_type = tool_type;
-	
-	switch (tool_type)
+	//$("#rightpanel").slideToggle();
+	var right = $("#rightpanel").css("right");
+
+	if (right != "-300px")
 	{
-	case "list":
-		tool_index = _tool_list_count++;
-		break;
-	case "postit":
-		tool_index = _tool_postit_count++;
-		break;
-	case "mindmap":
-		tool_index = _tool_mindmap_count++;
-		break;
-	case "vote":
-		tool_index = _tool_vote_count++;
-		break;
-	case "matrix":
-		tool_index = _tool_matrix_count++;
-		break;
+		$("#rightpanel").animate({
+			right: -300
+		}, 500);
+		$("#btn_rightpanel_toggle").animate({
+			right: 0
+		}, 500);
 	}
-	
-	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_index;
-	console.log("부른 도구의 Source url :: " + source_url);
-	
-	$.ajax({
-		type: "GET",
-		url: source_url,
-//		data: {tool_index: tool_index, group_id: _group_id},
-		dataType: "html",
-		success: function(data) {
-			initFuncName(tool_index, _group_id);
-			if (_is_added_socket_listener_for_list == false)
-			{
-				addSocketListenerForList();
-				_is_added_socket_listener_for_list = true;
-			}
-//			includeFileDynamically(data.include_list);
-			addTool(_tool_type, data);
-		},
-		error: function(err) {
-			console.log(err);
-			return false;
-		}
-	});
+	else
+	{
+		$("#rightpanel").animate({
+			right: 0
+		}, 500);
+		$("#btn_rightpanel_toggle").animate({
+			right: 300
+		}, 500);
+	}
 }
 
 /* 동적으로 파일 추가 */
@@ -393,9 +583,87 @@ function includeFileDynamically(list) {
 }
 
 
+var _tool_type = "";
+/* 도구별 소스를 동적으로 가져옴 */
+function getToolSource(tool_type, initFuncName, is_broadcaster)
+{
+	if (is_broadcaster == true)
+		_socket_common.emit('set_option_data', {group:_group_id, option:'new_tool', tool:tool_type, id:"0", val:"0"});
+
+	var source_url = "";
+	var tool_index = "";
+	_tool_type = tool_type;
+	
+	switch (tool_type)
+	{
+	case "list":
+		tool_index = _tool_list_count;
+		if (_is_added_socket_listener_for_list == false)
+		{
+			addSocketListenerForList();
+			_is_added_socket_listener_for_list = true;
+		}
+		break;
+	case "postit":
+		tool_index = _tool_postit_count;
+		if (_is_added_socket_listener_for_postit == false)
+		{
+			addSocketListenerForPostit();
+			_is_added_socket_listener_for_postit = true;
+		}
+		break;
+	case "mindmap":
+		tool_index = _tool_mindmap_count;
+		if (_is_added_socket_listener_for_mindmap == false)
+		{
+			addSocketListenerForMindmap();
+			_is_added_socket_listener_for_mindmap = true;
+		}
+		break;
+	case "vote":
+		tool_index = _tool_vote_count;
+		if (_is_added_socket_listener_for_vote == false)
+		{
+			addSocketListenerForVote();
+			_is_added_socket_listener_for_vote = true;
+		}
+		break;
+	case "matrix":
+		tool_index = _tool_matrix_count;
+		if (_is_added_socket_listener_for_matrix == false)
+		{
+			addSocketListenerForMatrix();
+			_is_added_socket_listener_for_matrix = true;
+		}
+		break;
+	}
+	console.log("Now Creating " + tool_type + tool_index);
+	
+	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_index;
+	console.log("부른 도구의 Source url :: " + source_url);
+	
+	$.ajax({
+		type: "GET",
+		url: source_url,
+//		data: {tool_index: tool_index, group_id: _group_id},
+		dataType: "html",
+		success: function(data) {
+			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_index:" + tool_index + "]");
+//			includeFileDynamically(data.include_list);
+			addTool(_tool_type, data);
+			console.log("tool_index = " + tool_index);
+			initFuncName(_group_id, tool_index);
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+}
+
 function addTool(type, source)
 {
-	console.log("CALL addTool [type=" + type + ", source=" + source + "]");
+	console.log("CALL addTool [type=" + type + "]");
 
 	var tool = new Array();
 
@@ -407,6 +675,8 @@ function addTool(type, source)
 	var mindmap_window_height = 400;
 	var vote_window_width = 500;
 	var vote_window_height= 400;
+	var matrix_window_width = 500;
+	var matrix_window_height= 400;
 
 	console.log('addToolWindow 호출됨, type:' + type);
 	switch (type)
@@ -417,7 +687,7 @@ function addTool(type, source)
 		tool['title'] = '리스트 ' + _tool_list_count;
 		tool['width'] = list_window_width;
 		tool['height'] = list_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			tmpIndent: 0,	// 현재 들여쓰기 상태
@@ -439,10 +709,16 @@ function addTool(type, source)
 		tool['title'] = '포스트잇 ' + _tool_postit_count;
 		tool['width'] = postit_window_width;
 		tool['height'] = postit_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
-				
+			tmpLastId: 100,
+			tmpGroup: 0,
+			tmpTool: 0,
+			tmpItemGroup: 0,
+			tmpClient: 0,
+			tmpToolSelect: 0,
+			preSelectGroup: 0
 		};
 		break;
 	case "mindmap":
@@ -451,10 +727,20 @@ function addTool(type, source)
 		tool['title'] = '마인드맵 ' + _tool_mindmap_count;
 		tool['width'] = mindmap_window_width;
 		tool['height'] = mindmap_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
-			
+			moveFlag: 0,
+			preX: 0,
+			preY: 0,
+			dataLinks: [],
+			dataNodes: [],
+			tmpIndent: 0,	// 현재 들여쓰기 상태 
+			tmpLastId: 100,	// 마지막 ID 관리
+			tmpClient: 0,	//현재 클라이언트 번호
+			tmpGroup: 0,	//현재 그룹
+			tmpTool: 0,
+			inputFlag: 0	//키입력 감지하기 위한 변수	
 		};
 		break;
 	case "vote":
@@ -463,7 +749,7 @@ function addTool(type, source)
 		tool['title'] = '투표 ' + _tool_vote_count;
 		tool['width'] = vote_window_width;
 		tool['height'] = vote_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
 			
@@ -475,22 +761,40 @@ function addTool(type, source)
 		tool['title'] = 'matrix ' + _tool_matrix_count;
 		tool['width'] = matrix_window_width;
 		tool['height'] = matrix_window_height;
-		tool['left'] = _common_windot_left;
+		tool['left'] = _common_window_left;
 		tool['top'] = _common_window_top;
 		tool['variables'] = {
-			
+			tmpClient: 0,	//현재 클라이언트 번호
+			tmpGroup: 0,	//현재 그룹
+			setupData: {
+						row: 0,
+						col: 0
+						}, // matrix 행, 열
+			setupFlag: {
+						data_init: true,
+						row: false,
+						col: false
+						},
+			optionId: {
+						set: 999999,
+						row: 999998,
+						col: 999997
+						},
+			_key_code: null, // 키 입력 값 저장
+			_box_count: 0,
+			inputFlag: 0	//키입력 감지하기 위한 변수
 		};
 		break;
 	}
 	tool['source'] = source;
 	
-	_common_windot_left += 10;
-	_common_window_top += 10;
-
-		console.log('addTool source : ', tool['source']);
+	_common_window_left += 100;
+	_common_window_top += 100;
 
 	_toolWindowList.push(tool);
 	showToolWindow(_toolWindowList.length - 1);
+	
+	console.log('AFTER _socket_common.emit-set_option_data : ' + type);
 }
 
 // 도구창 보여주는 함수
@@ -502,7 +806,7 @@ function showToolWindow(idx)
 	var tooltitle = _toolWindowList[idx]['title'];
 	var tooltop = _toolWindowList[idx]['top'];
 	var toolleft = _toolWindowList[idx]['left'];
-	var toolsource = '<div class="toolwindow" onmousemove="switchToolVariables(\'' + toolname + '\')" id="' + toolname + '" onclick="upToFrontWindow(\'' + toolname + '\')">';
+	var toolsource = '<div class="toolwindow" id="' + toolname + '" onclick="upToFrontWindow(\'' + toolname + '\')">';
 		toolsource += '<div class="title">';
 			toolsource += '<div class="title_text">' + tooltitle + '</div>';
 			//toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
@@ -513,41 +817,41 @@ function showToolWindow(idx)
 		toolsource += '</div>';
 	var toolwidth = _toolWindowList[idx]['width'];
 	var toolheight = _toolWindowList[idx]['height'] + titlebarHeight + statusbarHeight;
-
-	$('#' + toolname).css('z-index', _new_z_index);
-	_new_z_index++;
-
+    
 	switch (_toolWindowList[idx]['type'])
 	{
+
 	case "list":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
+		_tool_list_count++;
 		break;
 	case "postit":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
+		_tool_postit_count++;
 		break;
 	case "mindmap":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
-		break;
-	case "matrix":
-		$('#meetingboard').append(toolsource);
-		$('#' + toolname).css('width', toolwidth);
-		$('#' + toolname).css('height', toolheight);
+		_tool_mindmap_count++;
 		break;
 	case "vote":
-		$('#meetingboard').append(toolsource);
+		$('#white-board').append(toolsource);
 		$('#' + toolname).css('width', toolwidth);
 		$('#' + toolname).css('height', toolheight);
+		_tool_vote_count++;
+		break;
+	case "matrix":
+		$('#white-board').append(toolsource);
+		$('#' + toolname).css('width', toolwidth);
+		$('#' + toolname).css('height', toolheight);
+		_tool_matrix_count++;
 		break;
 	}
-	toolsource += '<div class="statusbar">ㄹㄴㅁㅇㄹㅇㄴ</div></div></div>';
-
-	//$('#' + _toolWindowList[idx]['name']).draggable(); // Jquery-ui 기본 드래그 기능
 
 	$('#' + _toolWindowList[idx]['name']).jqxWindow({
 		showCollapseButton : true,
@@ -559,68 +863,29 @@ function showToolWindow(idx)
 		width : 500,
 		theme : share_box.config.theme,
         initContent: function () {
-        	console.log('INIT #' + _toolWindowList[idx]['name']);
-        	
-			switch (_toolWindowList[idx]['type'])
-			{
-				case "list":
-					break;
-				case "postit":
-					break;
-				case "mindmap":
-					break;
-				case "matrix":
-					_tmpGroup = "group1";	//현재 그룹
-					_toolName = _toolWindowList[idx]['name'];
-					resizeMatrix();
-					$(window).resize(function(){
-						resizeMatrix();
-					});
-					_socket_matrix.emit('join_room', { group: _tmpGroup });
-					////  서버에 초기 데이터 요청하는 함수  ////
-					_socket_matrix.emit('set_tree_data', { group: _tmpGroup, tool: _toolName });
-					_socket_matrix.emit('set_tree_option_data', { group: _tmpGroup, tool: _toolName });
-
-					/*
-					resizeMatrix();
-					$(window).resize(function(){
-						resizeMatrix();
-					});
-
-					socket.emit('join_room', { group: tmpGroup });
-					////  서버에 초기 데이터 요청하는 함수  ////
-					socket.emit('set_tree_data', { group: tmpGroup, tool: toolName });
-					socket.emit('set_tree_option_data', { group: tmpGroup, tool: toolName });
-
-					$(window).focus(function(){
-						$('.writing').focus();
-					});
-					$('.matrix').click(function(){
-						//console.log("focus");
-						//$('.writing').focus();
-					});
-					*/
-					break;
-			}
-			
 			$('#window_share_box').jqxWindow('focus');
 		}
     });
 
-                
 	$('#' + _toolWindowList[idx]['name']).css('left', toolleft + 'px');
 	$('#' + _toolWindowList[idx]['name']).css('top', tooltop + 'px');
-
-	console.log('toolsource : ' + toolsource);
+	
+	$('#' + toolname).on('mouseenter', function() {
+		switchToolVariables(toolname);
+	});
+	
+	switchToolVariables(toolname);
 }
 
 var _now_toolname = "";
 var _pre_toolname = "";
 function switchToolVariables(toolname)
 {
+	if (toolname == _now_toolname)
+		return;
+
 	_pre_toolname = _now_toolname;
 	_now_toolname = toolname;
-	//console.log("CALL switchToolInstance : " + _now_toolname);
 	
 	var pre_tool_idx = 0;
 	var now_tool_idx = 0;
@@ -637,9 +902,10 @@ function switchToolVariables(toolname)
 		}
 	}
 	
-	if (toolname.substr(0,4) == "list")
+	
+	// 기존 변수 저장하기 
+	if (_pre_toolname.substr(0,4) == "list")
 	{
-		// 기존 변수 저장하기 
 		_toolWindowList[pre_tool_idx]['variables'].tmpIndent = tmpIndent;
 		_toolWindowList[pre_tool_idx]['variables'].tmpLastId = tmpLastId; // 마지막 ID 관리
 		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;	//현재 클라이언트 번호
@@ -647,8 +913,51 @@ function switchToolVariables(toolname)
 		_toolWindowList[pre_tool_idx]['variables'].tmpTool = tmpTool;  //현재 도구
 		_toolWindowList[pre_tool_idx]['variables'].tmpToolSelect = tmpToolSelect;
 		_toolWindowList[pre_tool_idx]['variables'].inputFlag = inputFlag;	//키입력 감지하기 위한 변수
+	}
+	else if (_pre_toolname.substr(0,6) == "postit")
+	{ 
+		_toolWindowList[pre_tool_idx]['variables'].tmpLastId = tmpLastId;
+		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
+		_toolWindowList[pre_tool_idx]['variables'].tmpTool = tmpTool;
+		_toolWindowList[pre_tool_idx]['variables'].tmpItemGroup = tmpItemGroup;
+		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
+		_toolWindowList[pre_tool_idx]['variables'].tmpToolSelect = tmpToolSelect;
+		_toolWindowList[pre_tool_idx]['variables'].preSelectGroup = preSelectGroup;
+	}
+	else if (_pre_toolname.substr(0,7) == "mindmap")
+	{
+		_toolWindowList[pre_tool_idx]['variables'].moveFlag = moveFlag;
+		_toolWindowList[pre_tool_idx]['variables'].preX = preX;
+		_toolWindowList[pre_tool_idx]['variables'].preY = preY;
+		_toolWindowList[pre_tool_idx]['variables'].dataLinks = dataLinks;
+		_toolWindowList[pre_tool_idx]['variables'].dataNodes = dataNodes;
+		_toolWindowList[pre_tool_idx]['variables'].tmpIndent = tmpIndent;
+		_toolWindowList[pre_tool_idx]['variables'].tmpLastId = tmpLastId;
+		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
+		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
+		_toolWindowList[pre_tool_idx]['variables'].tmpTool = tmpTool;
+		_toolWindowList[pre_tool_idx]['variables'].inputFlag = inputFlag;
+	}
+	else if (_pre_toolname.substr(0,4) == "vote")
+	{
+		
+	}
+	else if (_pre_toolname.substr(0,6) == "matrix")
+	{
+		_toolWindowList[pre_tool_idx]['variables'].tmpClient = tmpClient;
+		_toolWindowList[pre_tool_idx]['variables'].tmpGroup = tmpGroup;
+
+		_toolWindowList[pre_tool_idx]['variables'].setupData = setupData;
+		_toolWindowList[pre_tool_idx]['variables'].setupFlag = setupFlag;
+		_toolWindowList[pre_tool_idx]['variables'].optionId = optionId;
+		_toolWindowList[pre_tool_idx]['variables']._key_code = _key_code;
+		_toolWindowList[pre_tool_idx]['variables']._box_count = _box_count;
+		_toolWindowList[pre_tool_idx]['variables'].inputFlag = inputFlag;
+	}
 	
-		// 사용할 변수 불러오기
+	// 사용할 변수 불러오기
+	if (_now_toolname.substr(0,4) == "list")
+	{
 		tmpIndent = _toolWindowList[now_tool_idx]['variables'].tmpIndent;
 		tmpLastId = _toolWindowList[now_tool_idx]['variables'].tmpLastId; // 마지막 ID 관리
 		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;	//현재 클라이언트 번호
@@ -657,22 +966,51 @@ function switchToolVariables(toolname)
 		tmpToolSelect = _toolWindowList[now_tool_idx]['variables'].tmpToolSelect;
 		inputFlag = _toolWindowList[now_tool_idx]['variables'].inputFlag;	//키입력 감지하기 위한 변수
 	}
-	else if (toolname.substr(0,6) == "postit")
+	else if (_now_toolname.substr(0,6) == "postit")
+	{
+		tmpLastId = _toolWindowList[now_tool_idx]['variables'].tmpLastId;
+		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
+		tmpTool = _toolWindowList[now_tool_idx]['variables'].tmpTool;
+		tmpItemGroup = _toolWindowList[now_tool_idx]['variables'].tmpItemGroup;
+		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
+		tmpToolSelect = _toolWindowList[now_tool_idx]['variables'].tmpToolSelect;
+		preSelectGroup = _toolWindowList[now_tool_idx]['variables'].preSelectGroup;
+	}
+	else if (_now_toolname.substr(0,7) == "mindmap")
+	{
+		moveFlag = _toolWindowList[now_tool_idx]['variables'].moveFlag;
+		preX = _toolWindowList[now_tool_idx]['variables'].preX;
+		preY = _toolWindowList[now_tool_idx]['variables'].preY;
+		dataLinks = _toolWindowList[now_tool_idx]['variables'].dataLinks;
+		dataNodes = _toolWindowList[now_tool_idx]['variables'].dataNodes;
+		tmpIndent = _toolWindowList[now_tool_idx]['variables'].tmpIndent;
+		tmpLastId = _toolWindowList[now_tool_idx]['variables'].tmpLastId;
+		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
+		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
+		tmpTool = _toolWindowList[now_tool_idx]['variables'].tmpTool;
+		inputFlag = _toolWindowList[now_tool_idx]['variables'].inputFlag;
+	}
+	else if (_now_toolname.substr(0,4) == "vote")
 	{
 		
 	}
-	else if (toolname.substr(0,7) == "mindmap")
+	else if (_now_toolname.substr(0,6) == "matrix")
 	{
-		
+		tmpClient = _toolWindowList[now_tool_idx]['variables'].tmpClient;
+		tmpGroup = _toolWindowList[now_tool_idx]['variables'].tmpGroup;
+
+		setupData = _toolWindowList[now_tool_idx]['variables'].setupData;
+		setupFlag = _toolWindowList[now_tool_idx]['variables'].setupFlag;
+		optionId = _toolWindowList[now_tool_idx]['variables'].optionId;
+		_key_code = _toolWindowList[now_tool_idx]['variables']._key_code;
+		_box_count = _toolWindowList[now_tool_idx]['variables']._box_count;
+		inputFlag = _toolWindowList[now_tool_idx]['variables'].inputFlag;	
 	}
-	else if (toolname.substr(0,4) == "vote")
-	{
-		
-	}
-	else if (toolname.substr(0,6) == "matrix")
-	{
-		
-	}
+	
+	console.log("CALL switchToolVariables [_pre_toolname : " + _pre_toolname 
+									+ " /  _now_toolname : " + _now_toolname
+									+ " / tmpToolSelect : ");
+									console.log(tmpToolSelect);
 }
 
 // 도구창 닫는 함수
@@ -708,19 +1046,20 @@ function closePopupWindow(idx)
 	$('#popup' + idx).fadeOut('slow');
 }
 
-setInterval("showRunTime()", 1000);
-var _runTime = 0;
-var _totalTime = "30:00:00";	// 회의 전체 시간
+<!--setInterval("showRunTime()", 1000);
+var _runTime = 1000;
+var _totalTime = "00:50:00";	// 회의 전체 시간-->
+
 var _alarmList = new Array();
 function showRunTime()
 {
 	var hour = parseInt(_runTime / 60 / 60);
-	var minute = parseInt(_runTime / 60);
+	var minute = parseInt((_runTime / 60) % 60);
 	var second = parseInt(_runTime % 60);
 	var tHour, tMinute, tSecond;
 
 	if (hour < 10)	tHour = "0" + hour;
-	else	tHour = tHour;
+	else	tHour = hour;
 
 	if (minute < 10)	tMinute = "0" + minute;
 	else	tMinute = minute;
@@ -730,7 +1069,7 @@ function showRunTime()
 
 	var nowRunTime = tHour + ":" + tMinute + ":" + tSecond;
 
-	$('#runTime').html(nowRunTime + " / " + _totalTime);
+	$('.meeting .time').html(nowRunTime + " / " + _totalTime);
 
 	catchAlarmTime();
 	
@@ -783,40 +1122,443 @@ function transWindow(name)
 
 function showEvaluateMeetingWindow()
 {
-	var html = "";
-		html += "<div>";
-			html += "<div >How was your meeting? Please evaluate your experience for the meeting.</div>";
-			html += "<div>How are you satisfied with the meeting?"
-				html += "<div id=\"meeting_rating\"></div>";
-			html += "</div>";
-			html += "<div>How are you satisfied with the facilitation?";
-				html += "<div id=\"fac_rating\"></div>";
-			html += "</div>";
-			html += "<div>How are you satisfied with yourself in the meeting?";
-				html += "<div id=\"self_rating\"></div>";
-			html += "</div>";
-		html += "</div>";
+	var source_url = "/page/meeting_evaluation";
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			dialog = bootbox.dialog(data);
+	
+			var bootbox_select = $('.bootbox');
+			bootbox_select.addClass("meeting_evaluate_bootbox");
+			
+			
+		//	var meeting_val = $("#meeting_val").text();
+		//	var ft_val = $("#proceeding_val").text();
 
-	console.log(html);
+			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
+			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
+	
+			$('#eval_input_meeting_rating_val').bind('change', function (event) { 
+				$('#meeting_val').val(event.value);
+				//console.log($('#meeting_val').val());
+			}); 
+			$('#eval_input_ft_rating_val').bind('change', function (event) { 
+				$('#ft_val').val(event.value);
+				//console.log($('#ft_val').val());
+			}); 	
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});	
 
-	dialog = bootbox.dialog(html, [{
-							"label" : "Finish",
-							"class" : "btn-success",
-							"callback": function() {
-								var meeting_satisfaction_point = $("#meeting_rating").jqxRating('getValue');
-								var fac_satisfaction_point = $("#fac_rating").jqxRating('getValue');
-								var self_satisfaction_point = $("#self_rating").jqxRating('getValue');
-								// 페이지 이동
-								return true;
-							}
-						}]);
+}
 
-	$("#meeting_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#fac_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
-	$("#self_rating").jqxRating({ width: 600, height: 60, theme: 'classic'});
+function hideEvaluateWindow()
+{
+	var bootbox_select = $('.meeting_evaluate_bootbox');
+	bootbox_select.modal('hide');	
+}
+
+function evaluate_complete()
+{
+	 $('#evaluate_form').submit();
+}
+
+function makeCanvasImage(params)
+{
+	var tool_name = params['tool_name'];
+	
+	var idx_tool = params['tool_idx'];
+	var idx_process = 0;
+	var tool_num = -1;
+	var image_value = 0;
+
+	switch ( tool_name ) {
+		case 'list' : tool_num = 1; break;
+		case 'postit' : tool_num = 2; break;
+		case 'mindmap' : tool_num = 3; break;
+		case 'vote' : tool_num = 4; break;
+		case 'matrix' : tool_num = 5; break;	
+		default : tool_num = -1; break;
+	}
+
+	var tmp_make = tool_name+idx_tool;
+
+	html2canvas( [ document.getElementById(tmp_make) ], {
+          onrendered: function(canvas) {
+			//$('.container').prepend(canvas);
+
+			//$('canvas:first').attr('id', 'myCanvas');
+			//var can =document.getElementById("myCanvas");
+			
+			var canvas_image = canvas.toDataURL();		
+			image_value = canvas_image;
+			
+			//var image = new Image();
+			//image.src = canvas_image;
+			//var ctx = can.getContext("2d");
+			//ctx.drawImage(image,10,10,250,200);
+
+			var send_params = {
+				idx_tool: idx_tool,
+				idx_process: idx_process,
+				tool_num: tool_num,
+				image_value: image_value
+			};	
+			
+			$.ajax( {
+				url: '/page/save_tools_image',
+				type: 'POST',		
+				data: send_params,
+				dataType: 'json',
+				success: function(json_data) {
+					console.log("Success");
+				}
+			});
+		  }
+	});	
 }
 
 
+var _drawing_tool = "pen";
+var _fill_color = "#000000";
+var _line_color = "#000000";
+var _line_width = "1";
+var _font_family = "serif";
+var _font_size = 10;
+var _canvas = $('#cv_whiteboard');
+var _canvas_context = document.getElementById('cv_whiteboard').getContext('2d');
+var _is_mousedown = false;
+//var _is_text_typing = false;
+
+var _now_position = {x:0, y:0};
+var _pre_position = {x:0, y:0};
+
+var _pen_data = {points:[], line_width:1, line_color:"#000000"};
+var _drawtextbox = $('#drawtext_container #inputbox');
+
+_canvas.mousedown(function(e) {
+	//console.log("mousedown");
+	_is_mousedown = true;
+
+	_now_position.x = e.offsetX;
+	_now_position.y = e.offsetY;
+
+	switch(_drawing_tool)
+	{
+	case "pen":
+		_pen_data.points = [];	// 펜 데이터 초기화
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(_now_position.x, _now_position.y);
+		_pen_data.points.push({x: _now_position.x, y: _now_position.y});
+		break;
+	case "line":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
+		break;
+	case "rect":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
+		break;
+	case "ellipse":
+		_pre_position.x = e.offsetX;
+		_pre_position.y = e.offsetY;
+		break;
+	case "text":
+		console.log(e);
+
+		$('#drawtext_container').css({
+			'display': 'block',
+			'left': e.clientX + 'px',
+			'top': (e.clientY - 15) + 'px'
+		});
+		_drawtextbox.css({
+			'color': _fill_color,
+			'font-family': _font_family,
+			'font-size': _font_size + 'pt'
+		});
+		_drawtextbox.val('');
+		_drawtextbox.focus();
+		
+		break;
+	}
+});
+_canvas.mousemove(function(e) {
+	//console.log("mousemove");
+
+	if (_is_mousedown == true)
+	{
+		switch (_drawing_tool)
+		{
+		case "pen":
+			//_pre_position = _now_position;
+			_now_position.x = e.offsetX;
+			_now_position.y = e.offsetY;
+
+			_canvas_context.lineTo(_now_position.x, _now_position.y);
+			_pen_data.points.push({x: _now_position.x, y: _now_position.y});
+			_canvas_context.strokeStyle = _line_color;
+			_canvas_context.lineWidth = _line_width;
+			_canvas_context.stroke();
+			break;
+		}
+	}
+});
+_canvas.mouseup(function(e) {
+	//console.log("mouseup");
+	_is_mousedown = false;
+
+	switch(_drawing_tool)
+	{
+	case "pen":
+		// 동기화 데이터 전송
+		_pen_data.line_width = _line_width;
+		_pen_data.line_color = _line_color;
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'pen',
+				id:"0",
+				val:_pen_data
+			});
+		_pen_data.points = [];	// 다음 사용을 위해 펜 데이터 초기화
+		break;
+	case "line":
+		var line_data = {};
+
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(_pre_position.x, _pre_position.y);
+		_canvas_context.lineTo(_now_position.x, _now_position.y);
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+
+		// 동기화 데이터 전송
+		line_data.x1 = _pre_position.x;
+		line_data.y1 = _pre_position.y;
+		line_data.x2 = _now_position.x;
+		line_data.y2 = _now_position.y;
+		line_data.line_color = _line_color;
+		line_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'line',
+				id:"0",
+				val:line_data
+			});
+		break;
+	case "rect":
+		var rect_data = {};
+
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		var width = _now_position.x - _pre_position.x;
+		var height = _now_position.y - _pre_position.y;
+
+		_canvas_context.beginPath();
+		_canvas_context.rect(_pre_position.x, _pre_position.y, width, height);
+		_canvas_context.fillStyle = _fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+
+
+		// 동기화 데이터 전송
+		rect_data.x = _pre_position.x;
+		rect_data.y = _pre_position.y;
+		rect_data.width = width;
+		rect_data.height = height;
+		rect_data.fill_color = _fill_color;
+		rect_data.line_color = _line_color;
+		rect_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'rect',
+				id:"0",
+				val:rect_data
+			});
+		break;
+	case "ellipse":
+		var ellipse_data = {};
+
+		_now_position.x = e.offsetX;
+		_now_position.y = e.offsetY;
+
+		var width = _now_position.x - _pre_position.x;
+		var height = _now_position.y - _pre_position.y;
+		var radius;
+
+		_canvas_context.beginPath();
+		if (width <= height)
+		{
+			radius = width / 2;
+			_canvas_context.arc(_pre_position.x + radius, _pre_position.y + radius, radius, 0, 2 * Math.PI);
+		}
+		else
+		{
+			radius = height / 2;
+			_canvas_context.arc(_pre_position.x + radius, _pre_position.y + radius, radius, 0, 2 * Math.PI);
+		}
+
+		_canvas_context.fillStyle = _fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = _line_color;
+		_canvas_context.lineWidth = _line_width;
+		_canvas_context.stroke();
+
+		// 동기화 데이터 전송
+		ellipse_data.x = _pre_position.x;
+		ellipse_data.y = _pre_position.y;
+		ellipse_data.radius = radius;
+		ellipse_data.fill_color = _fill_color;
+		ellipse_data.line_color = _line_color;
+		ellipse_data.line_width = _line_width;
+
+		_socket_common.emit('set_option_data',
+			{
+				group:_group_id,
+				option:'new_canvas_draw',
+				tool:'ellipse',
+				id:"0",
+				val:ellipse_data
+			});
+		break;
+	}
+});
+
+
+// 도착한 도구 그리기
+function drawArrived(tool, val)
+{
+	switch(tool)
+	{
+	case "pen":
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(val.points[0].x, val.points[0].y);
+
+		for (var i = 1; i < val.points.length; i++)
+		{
+			_canvas_context.lineTo(val.points[i].x, val.points[i].y);
+			_canvas_context.strokeStyle = val.line_color;
+			_canvas_context.lineWidth = val.line_width;
+			_canvas_context.stroke();
+		}
+		break;
+	case "line":
+		_canvas_context.beginPath();
+		_canvas_context.moveTo(val.x1, val.y1);
+		_canvas_context.lineTo(val.x2, val.y2);
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		console.log("line draw");
+		break;
+	case "rect":
+		_canvas_context.beginPath();
+		_canvas_context.rect(val.x, val.y, val.width, val.height);
+		_canvas_context.fillStyle = val.fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		break;
+	case "ellipse":
+		_canvas_context.beginPath();
+		_canvas_context.arc(val.x + val.radius, val.y + val.radius, val.radius, 0, 2 * Math.PI);
+		_canvas_context.fillStyle = val.fill_color;
+		_canvas_context.fill();
+		_canvas_context.strokeStyle = val.line_color;
+		_canvas_context.lineWidth = val.line_width;
+		_canvas_context.stroke();
+		break;
+	}
+}
+
+
+// 선 색상 변경
+function changeLineColor(color)
+{
+	_line_color = color;
+	$('#linecolor_preview').css('background-color', color);
+
+	if (color == 'rgba(0,0,0,0)')
+		$('#linecolor_preview').css('background-image', 'url("../images/whiteboard/pattern_transparent.png")');
+	else
+		$('#linecolor_preview').css('background-image', '');
+}
+
+// 선 두께 변경
+function changeLineWidth(width)
+{
+	_line_width = width;
+	$('#linewidth_preview').css('height', width + 'px');
+	$('#linewidth_text_preview').html(width + 'px');
+}
+
+// 채우기 색상 변경
+function changeFillColor(color)
+{
+	_fill_color = color;
+	$('#fillcolor_preview').css('background-color', color);
+
+	if (color == 'rgba(0,0,0,0)')
+		$('#fillcolor_preview').css('background-image', 'url("../images/whiteboard/pattern_transparent.png")');
+	else
+		$('#fillcolor_preview').css('background-image', '');
+}
+
+// 글꼴 변경
+function changeFontFamily(font)
+{
+	_font_family = font;
+	$('#fontfamily_preview').css('font-family', font);
+	$('#fontfamily_preview').html(font);
+}
+
+function changeFontSize(size)
+{
+	_font_size = size;
+	$('#fontsize_preview').html(size + 'pt');
+}
+
+// 도구 선택
+function switchDrawingTool(tool)
+{
+	_drawing_tool = tool;
+
+	$('#white-board .navbar .nav #btn_drawtool_pen').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_line').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_rect').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_ellipse').removeClass('active');
+	$('#white-board .navbar .nav #btn_drawtool_text').removeClass('active');
+
+	$('#white-board .navbar .nav #btn_drawtool_' + _drawing_tool).addClass('active');
+
+	if (tool == 'text')
+		$('#cv_whiteboard').css('cursor', 'text');
+	else
+		$('#cv_whiteboard').css('cursor', 'crosshair');
+}
+
+
+
+/*
 function changePenColor(color)
 {
 	_pen_color = color;
@@ -825,6 +1567,7 @@ function changePenColor(color)
 
 var _pen_color = "#000000";
 var _fill_color = "#000000";
+var sendingData = "";
 
 if(window.addEventListener) {
 	var dBoard;
@@ -835,12 +1578,12 @@ if(window.addEventListener) {
 
 		if(!canvas)
 		{
-			alert('캔버스 참조 실패');
+			alert('캔버스 이상함');
 			return;
 		}
 
 		if(!canvas.getContext){
-			alert("canvas.getContext를 사용할 수 없음");
+			alert("canvas.getContext 이상함");
 			return;
 		}
 
@@ -848,7 +1591,7 @@ if(window.addEventListener) {
 		dBoard.initBoard();
 	}
 
-	window.addEventListener( "load", init, false );
+	window.addEventListener("load", init, false );
 
 
 
@@ -882,6 +1625,15 @@ if(window.addEventListener) {
 				case 'pen':
 					var point = getMousePoint(event);
 					pen.moveTo( point );
+	
+					sendingData = {
+				         id: _client_id,
+				         action: 'pen',
+				         undo: false,
+				         lineWidth: 1,
+				         color: _pen_color,
+				         data: [{x: point.x, y: point.y}]
+				        };
 					break;
 				case 'rect':
 					prev_point = getMousePoint(event);
@@ -894,6 +1646,22 @@ if(window.addEventListener) {
 			}
 		}
 
+		// pen에 draw요청
+		function onMouseMove_Canvas( event ){
+			switch (_drawtool)
+			{
+				case 'pen':
+					var point = getMousePoint( event );
+					pen.draw(point);
+					
+					sendingData.data.push({x: point.x, y: point.y}); 
+					break;
+				case 'ellipse':
+
+					break;
+			}
+		}
+
 		// 마우스 업시 등록한 마우스 이벤트 해지 
 		function onMouseUp_Canvas( event ){
 			console.log("Call onMouseUp_Canvas");
@@ -902,6 +1670,8 @@ if(window.addEventListener) {
 			{
 				case 'pen':
 					console.log(now_point);
+					sendingData.data.push({x: now_point.x, y: now_point.y});
+					_socket_common.emit('set_option_data', {group:_group_id, option:'new_canvas_draw', tool:'pen', id:"0", val:sendingData});
 					break;
 				case 'rect':
 					var width = now_point.x - prev_point.x;
@@ -919,20 +1689,6 @@ if(window.addEventListener) {
 			}
 			window.removeEventListener("mouseup", onMouseUp_Canvas, false);
 			canvas.removeEventListener("mousemove", onMouseMove_Canvas, false);
-		}
-
-		// pen에 draw요청
-		function onMouseMove_Canvas( event ){
-			switch (_drawtool)
-			{
-				case 'pen':
-					var point = getMousePoint( event );
-					pen.draw( point );
-					break;
-				case 'ellipse':
-
-					break;
-			}
 		}
 
 		// 마우스 좌표를 브라우저에 따라 반환
@@ -953,8 +1709,8 @@ if(window.addEventListener) {
 function addTextToCanvas(x, y)
 {
 	console.log("call addTextToCanvas");
-	var drawtext_container = $('#meetingboard #drawtext_container');
-	var inputbox = $('#meetingboard #drawtext_container #inputbox');
+	var drawtext_container = $('#white-board #drawtext_container');
+	var inputbox = $('#white-board #drawtext_container #inputbox');
 	inputbox.val("");
 	inputbox.focus();
 	drawtext_container.css('display', 'block');
@@ -978,7 +1734,6 @@ function GraphicPen(objBoard)
 		this.pen.lineTo( point.x, point.y );
 		this.pen.stroke();
 	}
-
 }
 
 function GraphicRect(objBoard, left, top, width, height)
@@ -1018,3 +1773,127 @@ function GraphicText(objBoard, x, y, text)
 	var canvas_context = canvas.getContext("2d");
 	canvas.fillText(text, x, y);
 }
+
+
+function drawArrivedPen(data)
+{
+	var canvas = document.getElementById(objBoard);
+	var canvas_context = canvas.getContext("2d");
+	canvas.draw(data);
+}*/
+
+
+function noticeBarMoving()
+{
+	var $notice_bar = $(".notice-bar ul");
+	var $notice_bar_li = $("li.list", $notice_bar).length;
+
+	if( ($notice_bar_li+1) === _notice_bar_idx )
+	{
+		$notice_bar.css({ top:"0px" });
+		//console.log($notice_bar.css('top'));
+		_notice_bar_idx = 1;
+	}
+	var top_px = _notice_bar_idx*20;
+	_notice_bar_idx++;
+	$notice_bar.animate({ top:"-"+top_px+"px" }, 1500, function(){
+		noticeBarMoving();
+	});
+}
+
+function initRightpanel()
+{
+	var h = $(window).height();
+	$("#rightpanel .etc-box").height(h)
+}
+
+/*
+오디오 녹음 부분
+
+*/
+var audio_context = null;
+var recorder = null;
+var input_point = null;
+
+  function startUserMedia(stream) {
+	
+	input_point = audio_context.createGainNode();
+		
+	var input = audio_context.createMediaStreamSource(stream);
+    console.log('Media stream created.');
+   
+	input.connect(input_point);
+    
+    recorder = new Recorder(input_point);
+    console.log('Recorder initialised.');
+
+	zeroGain = audio_context.createGainNode();
+    zeroGain.gain.value = 0.0;
+    input_point.connect( zeroGain );
+    zeroGain.connect( audio_context.destination );
+
+  }
+
+  function startRecording() {
+	recorder.clear();
+    recorder && recorder.record();
+    $('.record-btn').css("display", "none");
+	$('.stop-btn').css("display", "block");
+    console.log('Recording...');
+  }
+
+  function stopRecording() {
+    recorder && recorder.stop();
+    $('.record-btn').css("display", "block");
+	$('.stop-btn').css("display", "none");
+    console.log('Stopped recording.');
+    
+    // create WAV download link using audio data blob
+    createDownloadLink();
+    
+    recorder.clear();
+  }
+
+  function createDownloadLink() {
+    recorder && recorder.exportWAV(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var li = document.createElement('li');
+      var au = document.createElement('audio');
+      var hf = document.createElement('a');
+      
+	console.log(blob);
+	//console.log("[url]: "+url);
+		//$('#upload_id').val(blob);
+		//console.log($('#upload_id').val());
+		
+	//form.append("blob",blob, filename);
+	$('#record_form').append("blob", blob, "test.wav");	
+	$('#record_form').submit();
+
+	
+	//var reader = new FileReader();
+	//console.log(url);
+	//reader.readAsDataURL(url);
+	//console.log(reader);
+	//console.log("////");
+
+	/*
+    var blob_url = webkitURL.createObjectURL(blob);
+	console.log(blob_url);
+	
+	console.log("DDD");
+*/
+      au.controls = true;
+      au.src = url;
+      hf.href = url;
+      hf.download = new Date().toISOString() + '.wav';
+      hf.innerHTML = hf.download;
+      li.appendChild(au);
+      li.appendChild(hf);
+      
+		$('.facilitator-box .rightpanel-content-box').append(li);
+    });
+  }
+
+  
+	

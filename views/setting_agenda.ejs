@@ -20,8 +20,8 @@
 						<div class="control-group">
 							<label class="control-label" for="input01">Meeting Date : </label>
 							<div class="controls">
-								<div class="input-append date" id="datepicker-js" data-date="" data-date-format="yyyy-mm-dd">
-									<input class="datepicker-input" name="date" size="16" type="text" value="" placeholder="Select a date" />
+								<div class="input-append date" id="datepicker-js" data-date-format="yyyy-mm-dd">
+									<input class="datepicker-input" name="date" size="16" type="text" value="2013-05-29" placeholder="Select a date" readonly="readonly"/>
 									<span class="add-on"><i class="cus-calendar-2"></i></span>
 								</div>
 							</div>
@@ -30,7 +30,7 @@
 							<label class="control-label" for="input01">Meeting Start Time : </label>
 							<div class="controls">
 								<div class="input-append bootstrap-timepicker-component">
-									<input name="meeting_start_time" type="text" class="timepicker-input" value="00:00" />
+									<input name="meeting_start_time" type="text" class="timepicker-input" value="00:00" readonly="readonly"/>
 									<span class="add-on"><i class="cus-clock"></i></span>
 								</div>
 							</div>
@@ -39,7 +39,7 @@
 							<label class="control-label" for="input01">Meeting End Time : </label>
 							<div class="controls">
 								<div class="input-append bootstrap-timepicker-component">
-									<input name="meeting_end_time" type="text" class="timepicker-input" value="00:00" />
+									<input name="meeting_end_time" type="text" class="timepicker-input" value="00:00" readonly="readonly"/>
 									<span class="add-on"><i class="cus-clock"></i></span>
 								</div>
 							</div>
@@ -49,7 +49,7 @@
 							<div class="controls">
 								<select multiple="multiple" name="users" class="span6 with-search">
 									<% for(var i=0; i<result.users.length; i++) {%>
-										<option value="<%= result.users[i].idx %>"><%= result.users[i].name %></option>
+										<option value="<%= result.users[i].idx %>"><%= result.users[i].first_name %></option>
 									<% } %>	
 								</select>
 							</div>

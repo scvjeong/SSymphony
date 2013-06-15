@@ -5,40 +5,79 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 
 var _APPRAISAL_COMPLETE_FLAG_CNT = 1;
-var _RESULT_COMPLETE_FLAG_CNT = 2;
+var _RESULT_COMPLETE_FLAG_CNT = 3;
+var _MEETING_FLAG_CNT = 1;
 
 exports.main = function(req, res){
-	/** session start **/
-	if( !req.session.email || !req.session.email.length )
+
+	var agent = req.headers['user-agent'];
+	if( agent.toString().indexOf("MSIE") > 0 )
+	{
+		res.render('no_explorer', {} );
+		return;
+	}
+
+	/** session start 
+	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
-	
-	console.log("CALL meeting.main");
-	console.log(req);
 
-	res.render('meeting', { title: 'Express' });
+	if( typeof req.param("idx_meeting") === "undefined" )
+		res.redirect("/");
+	else
+		req.session.idx_meeting = req.param("idx_meeting");
+
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	var complete_flag = 0;
+	var params = { 
+		idx_meeting:req.param("idx_meeting")
+	};
+	var result = { meeting:{} };
+
+	dao_m.dao_get_meeting(evt, mysql_conn, params);
+	evt.on('get_meeting', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		result.meeting = rows;
+		result.idx_user = req.session.idx_user;	// idx_user
+		result.idx_group = req.session.idx_group;	// idx_group
+		result.idx_meeting = req.param("idx_meeting");	// idx_meeting
+		console.log(result);
+		if( complete_flag === _MEETING_FLAG_CNT )
+			res.render('meeting', { result:result });
+	});
 };
 
 exports.meeting_public = function(req, res){
-	
 	res.render('meeting_public', { title: 'Express' });
 };
 
 exports.meeting_appraisal = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
-
 	res.render('meeting_appraisal', { title: 'Express' });
 };
 
+
+exports.meeting_evaluation = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+	res.render('meeting_evaluation', { title: 'Express' });
+};
+
 exports.post_meeting_appraisal = function(req, res){
+
+	var result;
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
 	var params = { 
-		satisfaction:req.body.satisfaction,	 
+		satisfaction:req.body.satisfaction,
 		ft_appraisal:req.body.ft_appraisal,
 		mvp:req.body.mvp
 	};
@@ -53,9 +92,68 @@ exports.post_meeting_appraisal = function(req, res){
 	});
 };
 
+exports.post_meeting_evaluation = function(req, res) {
+
+	var result;
+	var evt = new EventEmitter();
+	var dao_c = require('../sql/common');
+	var dao_m = require('../sql/meeting');
+	var params = { 
+		satisfaction:req.body.satisfaction,	 
+		ft_appraisal:req.body.ft_appraisal,
+		mvp:req.body.mvp
+	};
+	var complete_flag = 0;
+
+	dao_m.dao_set_meeting_appraisal(evt, mysql_conn, params);
+	evt.on('set_meeting_appraisal', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		if( complete_flag === _APPRAISAL_COMPLETE_FLAG_CNT ) {
+			res.redirect("/page/meeting_result");
+		}
+	});
+};
+
+exports.post_meeting_close = function(req, res){
+
+	var result;
+	/** session start **
+	if( !req.session.email || typeof req.session.email === "undefined" )
+	{
+		result = { result:"failed", msg:"You should be logged.", target:"" };
+		res.send(result);
+	}
+	/** session end **/
+
+	var evt = new EventEmitter();
+	var dao_c = require('../sql/common');
+	var dao_m = require('../sql/meeting');
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_user:req.session.idx_user
+	};
+	var complete_flag = 0;
+
+	if( params['idx_meeting'].length < 1 )
+	{
+		result = { result:"failed", msg:"You should select meeting", target:"" };
+		res.send(result);
+	}
+	else
+		dao_m.dao_set_meeting_close(evt, mysql_conn, params);
+
+	evt.on('set_meeting_close', function(err, rows){
+		if(err) throw err;
+		result = { result:"successful", msg:"successful"  };
+		res.send(result);
+	});
+};
+
 exports.meeting_result = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
 
@@ -63,7 +161,7 @@ exports.meeting_result = function(req, res){
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
 	var params = {};
-	var result = { meeting_result:{}, meeting_result_appraisal:{} };
+	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };
 	var complete_flag = 0;
 
 	dao_m.dao_get_meeting_result(evt, mysql_conn, params);
@@ -83,11 +181,35 @@ exports.meeting_result = function(req, res){
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
+
+	var idx_params = {
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group
+	};
+
+	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, idx_params);
+	evt.on('get_meeting_tools_image', function(err, rows){
+		if(err) throw err;
+		result.meeting_tools_image = rows;
+		complete_flag++;
+		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
+			res.render('meeting_result', {result:result} );
+	});
+
+};
+
+exports.minutes = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+
+	res.render('minutes', { title: '' });
 };
 
 exports.meeting_save = function(req, res){
 	/** session start **/
-	//if( !req.session.email || !req.session.email.length )
+	//if( !req.session.email || typeof req.session.email === "undefined" )
 	//	res.redirect("/");
 	/** session end **/
 	
@@ -209,4 +331,62 @@ exports.meeting_save = function(req, res){
 exports.ft_help = function(req, res){
 	result = { title:"ft_help" };
 	res.render('ft_help', {result:result} );
-}
+};
+
+exports.need_help = function(req, res){
+	result = { title:"need_help" };
+	res.render('need_help', {result:result} );
+};
+
+exports.meeting_save_tools_image = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_tool:req.param("idx_tool"),
+		idx_process:req.param("idx_process"),
+		tool_num:req.param("tool_num"),
+		image_value:req.param("image_value")
+	};	
+
+	dao_m.dao_set_meeting_save_tools_image(evt, mysql_conn, params);
+
+	evt.on('set_meeting_tools_image', function(err, sql){
+		if(err) throw err;
+
+		var result = { result:"successful", msg:"successful"  };
+		res.send(result);
+	});
+};
+
+exports.result_get_tools_image = function(req, res){
+	/** session start **/
+	//if( !req.session.email || typeof req.session.email === "undefined" )
+	//	res.redirect("/");
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_m = require('../sql/meeting');
+	
+	var params = { 
+		idx_meeting:req.session.idx_meeting,	 
+		idx_group:req.session.idx_group,
+		idx_process:req.param("idx_process")
+	};	
+
+	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, params);
+
+	evt.on('get_meeting_tools_image', function(err, rows){
+		if(err) throw err;
+		//console.log("[rows]->"+rows[0].image_value);
+		res.send(rows);
+	});
+};
+

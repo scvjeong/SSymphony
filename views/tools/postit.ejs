@@ -1,39 +1,11 @@
-<!DOCTYPE html>
-<html>
-  <head>
-	<meta charset="utf-8">
-    <title>Post-it</title>
-    <meta name="description" content="Post-it Tool" />
-
-    <!-- Required Libraries -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
-
-    <!-- Core Files -->
-    <script type="text/JavaScript" src="/javascripts/jquery.ui.touch-punch.min.js"></script>
-    <script type="text/JavaScript" src="/javascripts/jquery.shapeshift.js"></script>
-	
-	<!-- CSS Files -->
-    <link href="/stylesheets/tools/template.css" rel="stylesheet" type="text/css" />
-    <link href="/stylesheets/tools/postit.css" rel="stylesheet" type="text/css" />
-    
-	<script src="/javascripts/socket.io.js"></script>	
-	<script>
-		
-		
-
-
-	</script>
-
-  </head>
-
-<div class="toolwindow" id="postit1">
+<div class="toolwindow" id="postit<%= tool_index %>">
 
   <body>
     <header>
 		<div class="title_line">
-			<div id="title_text">Post-it Tool</div>
+			<div id="title_text">Post-it</div>
 			<div id="add_group" onClick="postit_add_group()">+</div>
+			<div id="title_right_text">Group</div>			
 		</div>
 	</header>
 	<article>
@@ -48,6 +20,3 @@
 	</article>
 
 </div>
-
-  </body>
-</html>

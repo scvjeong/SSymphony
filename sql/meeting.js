@@ -1,3 +1,17 @@
+// get_meeting
+// params['idx_meeting']
+exports.dao_get_meeting = function(evt, mysql_conn, params){
+	var sql = "SELECT `idx`, `reg_time`, ";
+	sql += "`start_time`, ";
+	sql += "`end_time` ";
+	sql += "FROM `meeting_planning` ";
+	sql += "WHERE `idx` = '"+params['idx_meeting']+"' ";
+	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
+		evt.emit('get_meeting', err, rows);
+	});
+	return sql;
+}
+
 // set_meeting_appraisal
 // params['idx_meeting']
 // params['idx_group']
@@ -27,7 +41,7 @@ exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
 // params['idx_meeting']
 // params['idx_group']
 exports.dao_get_meeting_result = function(evt, mysql_conn, params){
-	params['idx_meeting'] = 60;
+	params['idx_meeting'] = 19;
 	params['idx_group'] = 1;
 	
 	var sql = "SELECT ";
@@ -44,7 +58,7 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 //	sql += "`E`.`satisfaction`, ";
 //	sql += "`E`.`ft_appraisal`, ";
 //	sql += "`E`.`mvp`, ";
-	sql += "GROUP_CONCAT( DISTINCT `D`.`name` ORDER BY `D`.`name` ASC SEPARATOR ', ') AS `user_list` ";
+	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`first_name` ASC SEPARATOR ', ') AS `user_list` ";
 	sql += "FROM `meeting_planning` AS `A` ";
 	sql += "INNER JOIN `agenda` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
@@ -55,7 +69,7 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 //	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
 //	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
-	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
+//	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
 //console.log(sql);
@@ -137,3 +151,73 @@ exports.dao_set_meeting_save_options = function(evt, mysql_conn, params){
 
 	return sql;
 }
+
+// set_meeting_close
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_user']
+exports.dao_set_meeting_close = function(evt, mysql_conn, params){
+	var sql = "UPDATE `meeting_planning` SET ";
+	sql += "`status` = 'closed' ";
+	sql += "WHERE `idx` = '"+params['idx_meeting']+"' ";
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_meeting_close', err, rows);
+	});
+
+	return sql;
+}
+
+// set_meeting_save_options
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_tool']
+// params['idx_process']
+// params['tool_num']
+// params['image_value']
+exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
+
+	var sql = "INSERT INTO `tools_image` SET ";
+	sql += "`idx_meeting` = '"+params['idx_meeting']+"', ";
+	sql += "`idx_group` = '"+params['idx_group']+"', ";
+	sql += "`idx_tool` = '"+params['idx_tool']+"', ";
+	sql += "`idx_process` = '"+params['idx_process']+"', ";
+	sql += "`tool_num` = '"+params['tool_num']+"', ";
+	sql += "`image_value` = '"+params['image_value']+"' ";
+	
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_meeting_tools_image', err, rows);
+	});
+
+	return sql;
+}
+
+// set_meeting_save_options
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_process']
+exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
+	
+	
+	params['idx_meeting']=1;
+	params['idx_group']=0;
+
+	var sql = "SELECT `A`.`idx_tool`, ";
+	sql += "`A`.`tool_num`, ";
+	sql += "`A`.`image_value`, ";
+	sql += "`A`.`idx_process` ";
+	sql += "FROM `tools_image` AS `A` ";
+//	sql += "INNER JOIN `agenda` AS `B` ";
+//	sql += "ON `A`.`idx_meeting` = `B`.`idx_meeting_planning` ";
+	sql += "WHERE `A`.`idx_meeting` = '"+params['idx_meeting']+"' ";
+	sql += "AND `A`.`idx_group` = '"+params['idx_group']+"' ";
+	sql += "ORDER BY `A`.`idx_process` ASC";
+
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('get_meeting_tools_image', err, rows);
+	});
+
+	return sql;
+}
+

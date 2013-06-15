@@ -1,3 +1,30 @@
+<%
+	/* 시간 설정 */
+	var t = 0;
+	var idx_user = result.idx_user;
+	var idx_group = result.idx_group;
+	var idx_meeting = result.idx_meeting;
+	var limit_time = "00:00:00";
+	if( result.meeting.length > 0 )
+	{
+		var reg_time = result.meeting[0].reg_time;
+		var r_t = new Date(reg_time);
+		var c_t = new Date();
+		t = (c_t.getTime() - r_t.getTime()) / 1000;
+		var start_time = result.meeting[0].start_time;
+		var end_time = result.meeting[0].end_time;
+		var s_t = start_time.toString().split(":");
+		var e_t = end_time.toString().split(":");
+		var h = ((e_t[0]*1) - (s_t[0]*1));
+		if( h < 10 ) h = "0"+ h;
+		var m = ((e_t[1]*1) - (s_t[1]*1));
+		if( m < 10 ) m = "0"+ m;
+		var s = ((e_t[2]*1) - (s_t[2]*1));
+		if( s < 10 ) s = "0"+ s;
+		limit_time = h + ":" + m + ":" + s;
+	}
+	/* 시간 설정 */
+%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -9,7 +36,7 @@
 
   <!-- Bootstrap Styles -->
     <!-- Bootstrap 2.0.4 -->
-    <link rel="stylesheet" href="/stylesheets/bootstrap.css" />
+    <!--link rel="stylesheet" href="/stylesheets/bootstrap.css" /-->
     <!-- Font Awesome 2.0 -->
       <link rel="stylesheet" href="/stylesheets/font-awesome.css" />
       
@@ -34,6 +61,8 @@
 
     <!-- /Libs Styles -->
 
+	<link rel="stylesheet" type="text/css" href="/stylesheets/bootstrap.css">
+
     <!-- Core Theme Styles -->
     <!-- <link rel="stylesheet/less" href="media/styles/style.less" /> -->
     <link rel="stylesheet" href="/stylesheets/orchestra.css" />
@@ -44,6 +73,7 @@
 	<link rel="stylesheet" href="/stylesheets/jarvis-widgets.css?v=1">
 	<!-- theme css -->
 	<link rel="stylesheet" href="/stylesheets/theme.css?v=1">
+
 
   <!-- /Theme Styles -->
 
@@ -83,6 +113,7 @@
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 <script type="text/javascript" src="../javascripts/jquery.form.js"></script>
+<script type="text/javascript" src="../lib/JS3-0.3.2-min.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcore.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxwindow.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxbuttons.js"></script>
@@ -91,6 +122,8 @@
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxtabs.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxcheckbox.js"></script>
 <script type="text/javascript" src="../javascripts/jqwidgets/jqxexpander.js"></script>
+<script type="text/javascript" src="../javascripts/jqwidgets/jqxrating.js"></script>
+<!--<script type="text/javascript" src="../javascripts/jqwidgets/jqxcolorpicker.js"></script>-->
 <script src="../javascripts/socket.io.js"></script>
 <!-- /공통 스크립트 -->
   
@@ -106,344 +139,360 @@
 		<script type="text/JavaScript" src="../javascripts/jquery.ui.touch-punch.min.js"></script>
 		<script type="text/JavaScript" src="../javascripts/jquery.shapeshift.js"></script>	
 		<script src="../javascripts/tools/postit.js"></script>
-	<!-- 포스트잇 도구 -->
+	<!-- /포스트잇 도구 -->
 
 	<!-- 마인드맵 도구 -->
 		<link rel="stylesheet" href="../stylesheets/tools/mindmap.css">
 		<script src="../javascripts/d3.v3.js"></script>
+		<script src="../javascripts/tools/mindmap.js"></script>
 	<!-- /마인드맵 도구 -->
 
 	<!-- 매트릭스 도구 -->
 		<link href="../stylesheets/tools/matrix.css" rel="stylesheet" type="text/css" />
 		<script src="../javascripts/tools/matrix.js"></script>
-	<!-- 매트릭스 도구 -->
-
-</head>
-
-<body class="sidebar-max" oncontextmenu="return false" onselectstart="return false">
-
-<!--============================= Page Body =================================-->
-
-
-<!-- #topbar: Top Bar Menu -->
-<ul id="topbar" class="on-click">
-  <li class="pull-left">
-    <h1 id="topbar-title">
-      <i class="icon-cogs" id="btn_closeTopbar"></i>
-      <!--  onclick="$('#topbar').hide()" -->
-      <!--<i class="icon-icomoon-grid-view"></i>-->
-      <!--<span aria-hidden="true" class="icon-icomoon-grid-view"></span>-->
-    </h1>
-  </li>
-  <li>
-      <i class="icon-book"></i>
-      <!-- <i class="icon-icomoon-grid-view"></i> -->
-      <!-- <span aria-hidden="true" class="icon-icomoon-grid-view"></span> -->
-      <span style="line-height: 30px; font-size: 13px; font-weight: bold; vertical-align: middle">회사 부도 처리에 대한 회의</span>
-  </li>
-<!--  <li class="parent pull-right">
-    <a href="#" data-toggle="dropdown">
-      <i class="icon-user"></i>
-      <span>John Adminsky</span>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="#">Profile</a></li>
-      <li><a href="#">Finances</a></li>
-      <li class="divider"></li>
-      <li><a href="#">Logout</a></li>
-    </ul>
-  </li>
-  <li class="parent pull-right">
-    <a href="#" data-toggle="dropdown">
-      <i class="icon-cog"></i>
-      <span>Settings</span>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="#">Backend Settings</a></li>
-      <li><a href="#">Frontend Settings</a></li>
-    </ul>
-  </li>-->
-  <!--
-  <li class="pull-right">
-  	<a onclick="$('#topbar').hide()">
-		<span>____</span>
-  	</a>
-  </li>
-  -->
-  <li class="pull-right">
-    <a href="http://mma.go.kr/" target="_blank">
-      <i class="icon-sign-blank"></i>
-      <span id="runTime">00:00:00 / 03:00:00</span>
-    </a>
-  </li>
-</ul>
-<!-- /#topbar: Top Bar Menu -->
-
-<div id="rightpanel">
-<ul id="tabbar">
-	<li id="participants" onclick="setRightpanel('participants')">참가자</li>
-	<li id="tools" onclick="setRightpanel('tools')">회의 도구</li>
-	<li id="info" onclick="setRightpanel('info')">회의 정보</li>
-</ul>
-<div id="panelcontents">
-	<div id="participants">
-		<ul class="users-online">
-			<li class="first">
-				<a href="javascript:void(0);" title="">
-                    <img src="" alt="" style="background-color:#eeeeee;" />
-                    <span class="user-name">
-                        <strong>
-                        	Go Dong Hyun <span>(3)</span>
-                        </strong>
-                        <b>Murderer</b>
-                    </span>
-                    <i class="online"></i>
-                </a>
-			</li>
-			<li class="">
-				<a href="javascript:void(0);" title="">
-                    <img src="" alt="" style="background-color:#eeeeee;" />
-                    <span class="user-name">
-                        <strong>
-                        	SCV Jeong <span></span>
-                        </strong>
-                        <b>jeongjeong1</b>
-                    </span>
-                    <i class="online"></i>
-                </a>
-			</li>
-			<li class="">
-				<a href="javascript:void(0);" title="">
-                    <img src="" alt="" style="background-color:#eeeeee;" />
-                    <span class="user-name">
-                        <strong>
-                        	Angie Freemen <span></span>
-                        </strong>
-                        <b>CFO</b>
-                    </span>
-                    <i class="away"></i>
-                </a>
-			</li>
-			<li class="">
-				<a href="javascript:void(0);" title="">
-                    <img src="" alt="" style="background-color:#eeeeee;" />
-                    <span class="user-name">
-                        <strong>
-                        	Carol Lam <span></span>
-                        </strong>
-                        <b>Graphic Designer</b>
-                    </span>
-                    <i class="offline"></i>
-                </a>
-			</li>
-			<li class="">
-				<a href="javascript:void(0);" title="">
-                    <img src="" alt="" style="background-color:#eeeeee;" />
-                    <span class="user-name">
-                        <strong>
-                        	Julia Berry <span></span>
-                        </strong>
-                        <b>Human Resources</b>
-                    </span>
-                    <i class="online"></i>
-                </a>
-			</li>
-			<li class="">
-				<a href="javascript:void(0);" title="">
-                    <img src="" alt="" style="background-color:#eeeeee;" />
-                    <span class="user-name">
-                        <strong>
-                        	David Simpson <span>(2)</span>
-                        </strong>
-                        <b>CEO</b>
-                    </span>
-                    <i class="away"></i>
-                </a>
-			</li>
-			<li class="last">
-				<a href="javascript:void(0);" title="">
-                    <img src="" alt="" style="background-color:#eeeeee;" />
-                    <span class="user-name">
-                        <strong>
-                        	Brad Pitt <span></span>
-                        </strong>
-                        <b>Information Technology</b>
-                    </span>
-                    <i class="busy"></i>
-                </a>
-			</li>
-		</ul>
-	</div>
-	<div id="tools">
-		<ul>
-			<li onclick="getToolSource('list', initList)">
-				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>리스트</span>
-			</li>
-			<li onclick="getToolSource('postit', alert('test'))">
-				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>포스트잇</span>
-			</li>
-			<li onclick="getToolSource('mindmap', alert('test'))">
-				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>마인드맵</span>
-			</li>
-			<li onclick="getToolSource('vote', alert('test'))">
-				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>투표도구</span>
-			</li>
-			<li onclick="getToolSource('matrix', alert('test'))">
-				<img src="" alt="" style="background-color:#eeeeee;" />
-				<span>Matrix Tool</span>
-			</li>
-		</ul>
-		</ul>
-	</div>
-	<div id="info">
-		<ul id="meta">
-			<li>
-				<span class="type">목적</span>
-				<span class="text">정상적인 부도처리를 유도</span>
-			</li>
-			<li>
-				<span class="type">시간</span>
-				<span class="text">15:00 ~ 18:00</span>
-			</li>
-			<li>
-				<span class="type">장소</span>
-				<span class="text">3층 대회의실</span>
-			</li>
-			<li>
-				<div class="type_rules">규칙</div>
-				<ul>
-					<li>껌을 씹지 말 것</li>
-					<li>반말을 하지 말 것</li>
-				</ul>
-			</li>
-		</ul>
-		<div id="processtitle">진행 과정</div>
-		<ul id="process">
-			<li>Ice Breaking</li>
-			<div class="underarrow"></div>
-			<li id="isNow">아이디어 발상</li>
-			<div class="underarrow"></div>
-			<li>아이디어 수렴</li>
-			<div class="underarrow"></div>
-			<li>아이디어 정리</li>
-		</ul>
-	</div>
-</div>
-</div>
-
-<div id="meetingboard">
-	<div id="whiteboard_control_box">
-		<div id="titlebar"></div>
-		<div id="color_selector">
-			<ul id="color_list">
-				<li onclick="changePenColor('#000000')" style="background-color: #000000"></li>
-				<li onclick="changePenColor('#ff0000')" style="background-color: #ff0000"></li>
-				<li onclick="changePenColor('#0000ff')" style="background-color: #0000ff"></li>
-				<li onclick="changePenColor('#00ff00')" style="background-color: #00ff00"></li>
-				<li onclick="changePenColor('#f0f000')" style="background-color: #f0f000"></li>
-				<li onclick="changePenColor('#0f0f00')" style="background-color: #0f0f00"></li>
-				<li onclick="changePenColor('#00f0f0')" style="background-color: #00f0f0"></li>
-				<li onclick="changePenColor('#ffffff')" style="background-color: #ffffff"></li>
-			</ul>
-		</div>
-		
-		<input type="button" value="파일창 열기" id="btn_show_share_box" />
-		
-		<div>
-			<input type="button" value="펜" id="btn_drawtool_pen" />
-			<input type="button" value="사각형" id="btn_drawtool_rect" />
-			<input type="button" value="원" id="btn_drawtool_ellipse" />
-		</div>	
-	</div>
+	<!-- /매트릭스 도구 -->
 	
-	<div id="window_share_box">
-		<div id="titlebar">
-			<span>
-				<img src="" style="width:15px; height:15px; margin-right:15px" />Share Box
-			</span>
+	<!-- 투표 도구 -->
+		<link href="../stylesheets/tools/vote.css" rel="stylesheet" type="text/css" />
+		<script src="../javascripts/tools/vote.js"></script>
+	<!-- /투표 도구 -->
+	
+</head>
+<body class="meeting" ondragstart="return false" onselectstart="return false">
+	<div class="container">
+		<div class="title-bar">
+			<div class="subject">Weekly Discussion</div>
+			<span class="sub-subject">Service Design Meeting</span>
+			<div class="result-btn" id="result-btn">회의종료</div>
+			<div class="record-btn" id="record-btn" onclick="startRecording();">Record</div>
+			<div class="stop-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
+			<div class="time">00:00:00 / <%=limit_time%></div>
 		</div>
-		<div class="content"><div>
-			<div id="section_links">
-				<div class="section_title">
-					<span class="title_text">Links</span><span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+		<div id="white-board" class="white-board">
+			<!-- Whiteboard control box -->
+			<div class="navbar navbar-fixed-top" style="margin-top:52px">
+				<div class="navbar-inner">
+					<ul class="nav">
+						<li id="btn_show_share_box" style="margin-left: 10px"><a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Share Box"><img src="/images/whiteboard/btn_share_box.png" width="24" height="24" /></a></li>
+
+						<li class="divider-vertical"></li>
+
+						<li id="btn_drawtool_pen" class="active"><a onclick="switchDrawingTool('pen')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Pen"><img src="/images/whiteboard/btn_drawtool_pen.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_line"><a onclick="switchDrawingTool('line')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Line"><img src="/images/whiteboard/btn_drawtool_line.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_rect"><a onclick="switchDrawingTool('rect')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Rectangle"><img src="/images/whiteboard/btn_drawtool_rect.png" width="24" height="24" /></i></a></li>
+						<li id="btn_drawtool_ellipse"><a onclick="switchDrawingTool('ellipse')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Ellipse"><img src="/images/whiteboard/btn_drawtool_ellipse.png" width="24" height="24" /></a></li>
+						<li id="btn_drawtool_text"><a onclick="switchDrawingTool('text')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Text"><img src="/images/whiteboard/btn_drawtool_text.png" width="24" height="24" /></a></li>
+						
+						<li class="divider-vertical"></li>
+
+						<li class="dropdown">
+						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						    Fill Color <span id="fillcolor_preview" style=" display:inline-block; width:16px; height:16px; vertical-align:middle; border:1px solid #aaaaaa"></span>
+						    <b class="caret"></b>
+						    </a>
+						    <ul class="dropdown-menu">
+						    	<li onclick="changeFillColor('rgba(0,0,0,0)')" style="background-image: url('../images/whiteboard/pattern_transparent.png')"><a style="height:20px"></a></li>
+						    	<li onclick="changeFillColor('#000000')" style="background-color: #000000"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#ff0000')" style="background-color: #ff0000"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#0000ff')" style="background-color: #0000ff"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#00ff00')" style="background-color: #00ff00"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#f0f000')" style="background-color: #f0f000"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#0f0fa0')" style="background-color: #0f0fa0"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#00f0f0')" style="background-color: #00f0f0"><a style="height:20px"></a></li>
+								<li onclick="changeFillColor('#ffffff')" style="background-color: #ffffff"><a style="height:20px"></a></li>
+						    </ul>
+					  	</li>
+
+					  	<li class="dropdown">
+						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						    Line Color <span id="linecolor_preview" style=" display:inline-block; width:16px; height:16px; vertical-align:middle; border:1px solid #aaaaaa"></span>
+						    <b class="caret"></b>
+						    </a>
+						    <ul class="dropdown-menu">
+						    	<li onclick="changeLineColor('rgba(0,0,0,0)')" style="background-image: url('../images/whiteboard/pattern_transparent.png')"><a style="height:20px"></a></li>
+						    	<li onclick="changeLineColor('#000000')" style="background-color: #000000"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#ff0000')" style="background-color: #ff0000"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#0000ff')" style="background-color: #0000ff"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#00ff00')" style="background-color: #00ff00"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#f0f000')" style="background-color: #f0f000"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#0f0fa0')" style="background-color: #0f0fa0"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#00f0f0')" style="background-color: #00f0f0"><a style="height:20px"></a></li>
+								<li onclick="changeLineColor('#ffffff')" style="background-color: #ffffff"><a style="height:20px"></a></li>
+						    </ul>
+					  	</li>
+
+					  	<li class="dropdown">
+						    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						    <span id="linewidth_preview" style="display:inline-block; width:100px; height:1px; background-color:#000000; vertical-align:middle;"></span>&nbsp;<span id="linewidth_text_preview">1px</span>
+						    <b class="caret"></b>
+						    </a>
+						    <ul class="dropdown-menu">
+						    	<li onclick="changeLineWidth(1)"><a style="height:20px"><span style="display:inline-block; width:100px; height:1px; background-color:#000000; vertical-align:middle;"></span>&nbsp;1px</a></li>
+						    	<li onclick="changeLineWidth(2)"><a style="height:20px"><span style="display:inline-block; width:100px; height:2px; background-color:#000000; vertical-align:middle;"></span>&nbsp;2px</a></li>
+						    	<li onclick="changeLineWidth(3)"><a style="height:20px"><span style="display:inline-block; width:100px; height:3px; background-color:#000000; vertical-align:middle;"></span>&nbsp;3px</a></li>
+						    	<li onclick="changeLineWidth(5)"><a style="height:20px"><span style="display:inline-block; width:100px; height:5px; background-color:#000000; vertical-align:middle;"></span>&nbsp;5px</a></li>
+						    	<li onclick="changeLineWidth(8)"><a style="height:20px"><span style="display:inline-block; width:100px; height:8px; background-color:#000000; vertical-align:middle;"></span>&nbsp;8px</a></li>
+						    	<li onclick="changeLineWidth(10)"><a style="height:20px"><span style="display:inline-block; width:100px; height:10px; background-color:#000000; vertical-align:middle;"></span>&nbsp;10px</a></li>
+						    	<li onclick="changeLineWidth(15)"><a style="height:20px"><span style="display:inline-block; width:100px; height:15px; background-color:#000000; vertical-align:middle;"></span>&nbsp;15px</a></li>
+						    	<li onclick="changeLineWidth(20)"><a style="height:20px"><span style="display:inline-block; width:100px; height:20px; background-color:#000000; vertical-align:middle;"></span>&nbsp;20px</a></li>
+						    </ul>
+					  	</li>
+
+					  	<li class="divider-vertical"></li>
+
+					  	<li>
+					  		<!--<span style="display:inline-block; vertical-align:middle; padding-top:6px;">Font</span>-->
+						  	<div class="btn-group">
+								<button class="btn"><span id="fontfamily_preview" style="font-family:serif; line-height:15px;">Serif</span></button>
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+							    	<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+							    	<li><a onclick="changeFontFamily('serif')" style="font-family:serif;">serif</a></li>
+							    	<li><a onclick="changeFontFamily('sans-serif')" style="font-family:sans-serif;">sans-serif</a></li>
+							    	<li><a onclick="changeFontFamily('cursive')" style="font-family:cursive">cursive</a></li>
+							    	<li><a onclick="changeFontFamily('fantasy')" style="font-family:fantasy">fantasy</a></li>
+							    	<li><a onclick="changeFontFamily('monospace')" style="font-family:monospace">monospace</a></li>
+								</ul>
+							</div>
+					  	</li>
+
+					  	<li>
+					  		<!--<span style="display:inline-block; vertical-align:middle; padding-top:6px;">Font</span>-->
+						  	<div class="btn-group">
+								<button class="btn"><span id="fontsize_preview">10pt</span></button>
+								<button class="btn dropdown-toggle" data-toggle="dropdown">
+							    	<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+									<% for (var i = 6; i < 40; i+=2) { %>
+							    		<li><a onclick="changeFontSize(<%=i%>)" style="font-family:serif;"><%=i%>pt</a></li>
+							    	<% } %>
+								</ul>
+							</div>
+					  	</li>
+
+						<div class="notice-bar">
+							<ul>
+								<li class="list">오프닝</li>
+								<li class="list">의사결정</li>
+								<li class="list">갈등해결</li>
+								<li>오프닝</li>
+							</ul>
+						</div>
+					</ul>
 				</div>
 			</div>
-			<div id="section_documents">
-				<div class="section_title">Documents</div>
+			<div id="whiteboard_control_box">
+				<div id="color_selector">
+ 					<ul id="color_list" style="display:inline">
+						
+					</ul>
+				</div>
 			</div>
-			<div id="section_photos">
-				<div class="section_title">Photos</div>
+			
+			<!-- /Whiteboard control box -->
+			<div id="window_share_box">
+				<div id="titlebar">
+					<span>
+						<img src="" style="width:15px; height:15px; margin-right:15px" />Share Box
+					</span>
+				</div>
+				<div class="content"><div>
+					<div>
+						<input type="text" id="txt_linktitle" placeholder="링크 제목" />
+						<input type="text" id="txt_linkurl" placeholder="링크 주소" />
+						<input type="button" value="등록" id="btn_addlink" />
+						<ul id="link_list">
+						</ul>
+					</div>
+					<div>
+						<form id="uploadForm"
+							  enctype="multipart/form-data"
+							  action="/lib/upload"
+							  method="post">
+						  <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
+						  <input type="button" id="btn_uploadFile" value="업로드" />
+						</form>
+						<ul id="file_list">
+						</ul>
+					</div>
+					
+					<div id="section_links">
+						<div class="section_title">
+							<span class="title_text">Links</span>
+							<span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+							<div class="clearboth"></div>
+						</div>
+						<ul class="list"></ul>
+					</div>
+					<div id="section_documents">
+						<div class="section_title">
+							<span class="title_text">Documents</span>
+							<span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+							<div class="clearboth"></div>
+						</div>
+						<ul class="list"></ul>
+					</div>
+					<div id="section_photos">
+						<div class="section_title">
+							<span class="title_text">Photos</span>
+							<span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+							<div class="clearboth"></div>
+						</div>
+						<ul class="list"></ul>
+					</div>
+					<div id="section_movies">
+						<div class="section_title">
+							<span class="title_text">Movies</span>
+							<span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+							<div class="clearboth"></div>
+						</div>
+						<ul class="list"></ul>
+					</div>
+					<div id="section_sounds">
+						<div class="section_title">
+							<span class="title_text">Sounds</span>
+							<span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+							<div class="clearboth"></div>
+						</div>
+						<ul class="list"></ul>
+					</div>
+					<div id="section_others">
+						<div class="section_title">
+							<span class="title_text">Others</span>
+							<span class="btn_show_all">모두 보기</span><span class="btn_hide">덜 보기</span>
+							<div class="clearboth"></div>
+						</div>
+						<ul class="list"></ul>
+					</div>
+				</div></div>
 			</div>
-			<div id="section_movies">
-				<div class="section_title">Movies</div>
-			</div>
-			<div id="section_sounds">
-				<div class="section_title">Sounds</div>
-			</div>
-			<div id="section_others">
-				<div class="section_title">Others</div>
-			</div>
-			</div>
-			<div>
-				<input type="text" id="txt_linktitle" placeholder="링크 제목" />
-				<input type="text" id="txt_linkurl" placeholder="링크 주소" />
-				<input type="button" value="등록" id="btn_addlink" />
-				<ul id="link_list">
-				</ul>
-			</div>
-			<div>
-				<form id="uploadForm"
-			          enctype="multipart/form-data"
-			          action="/lib/upload"
-			          method="post">
-			      <input type="file" id="uploadFile" name="uploadFile" style="border:1px solid #ababab" />
-			      <input type="button" id="btn_uploadFile" value="업로드" />
-			    </form>
-				<ul id="file_list">
-				</ul>
+			
+			<canvas id="cv_whiteboard">
+				<p>No canvas is supported on this browser.</p>
+			</canvas>
+			
+			<div id="drawtext_container">
+				<textarea id="inputbox" placeholder="Type here..."></textarea>
 			</div>
 		</div>
+		<div id="btn_rightpanel_toggle" onclick="toggleRightpanel()"></div>
+		<div id="rightpanel" class="rightpanel">
+			<div class="process-box">
+				<div class="rightpanel-title-bar" id="panel_process_title">Process</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_process_container">
+					<ul id="process_list" style="margin: 0;">
+						<li class="process-unit processing">
+							<span>Ice Breaking</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:70%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+									<a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="List1"><li class="item_list" id="btn_list1"></li></a>
+									<li class="item_list" id="btn_list1"></li>
+									<li class="item_list" id="btn_list1"></li>
+									<li class="item_matrix" id="btn_matrix1"></li>
+									<li class="item_mindmap" id="btn_mindmap1"></li>
+									<li class="item_postit" id="btn_postit1"></li>
+									<li class="item_vote" id="btn_vote1"></li>
+								</ul>
+							</div>
+						</li>
+						<li class="process-unit">
+							<span>Weekly Review</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Clarify Agenda</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Discussion</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Burning Issue</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Review</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+						<li class="process-unit">
+							<span>Closing Round</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
+							<div class="clearboth"></div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="tool-box">
+				<div class="rightpanel-title-bar" id="panel_addtool_title">Add Tool</div>
+				<div class="rightpanel-tool-box fancy-scrollbar" id="panel_addtool_container">
+					<div class="tool-unit" onclick="getToolSource('list', initList, true);"><img src="/images/list_icon.png" alt="list"></div>
+					<div class="tool-unit" onclick="getToolSource('mindmap', initMindmap, true);"><img src="/images/mindmap_icon.png" alt="list"></div>
+					<div class="tool-unit" onclick="getToolSource('postit', initPostit, true);"><img src="/images/whiteboard_icon.png" alt="list"></div>
+					<div class="tool-unit" onclick="getToolSource('matrix', initMatrix, true);"><img src="/images/matrix_icon.png" alt="list"></div>
+					<div class="tool-unit" onclick="getToolSource('vote', initVote, true);"><img src="/images/vote_icon.png" alt="list"></div>
+				</div>
+			</div>
+			<div class="member-box">
+				<div class="rightpanel-title-bar" id="panel_member_title">Memeber 4/6</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_member_container">
+					<div class="member-unit client-1">■ Jonghyuk Lim</div>
+					<div class="member-unit client-2">■ Julian De Maestri</div>
+					<div class="member-unit client-3">■ scvjeong</div>
+					<div class="member-unit client-4">■ Donghyun Go</div>
+					<div class="member-unit">■ Irene White</div>
+					<div class="member-unit">■ Vincent Monaco</div>
+				</div>
+			</div>
+			<div class="facilitator-box">
+				<div class="rightpanel-title-bar" id="panel_facilitator_title">Facilitator</div>
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_facilitator_container"
+				</div>
+
+				<form id="record_form"
+							  enctype="multipart/form-data"
+							  action="/lib/blob_upload"
+							  method="post">
+					<input type="hidden" id="upload_id" name="uploadFile" />
+				
+				</form>
+			</div>
+			<div class="etc-box">
+			</div>
+		</div>		
 	</div>
-	
-	<canvas id="canvasView" width="1400" height="1000" >
-		<p>브라우저에서 캔버스 지원이 안 됩니다.<br/>
-		</p>
-	</canvas>
-</div>
-
-<div id="splashpopup_wrapper">
-</div>
-
-
-
+	<div id="splashpopup_wrapper"></div>
 <!--============================= /Page Body ================================-->
-
-<!-- Javascript: placed at the end of the document to speed up page loading
-     (generally gives more consistent behavior than 'defer') -->
-
-  <!-- Scripts will most likely break in IE6 and below, so why bother loading them? -->
-  <!--[if lte IE 6]><noscript><![endif]-->
-
-  <!-- CMS/Framework scripts -->
-    <!-- ADD HERE -->
-  <!-- /CMS/Framework scripts -->
-
-  <!-- jQuery -->
-<!--
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-    <script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
-    <!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
-            long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
-            to to "classic" jQuery behavior -->
-    <script>if ($ === undefined) $ = jQuery</script>
--->
-  <!-- /jQuery -->
 	
   <!-- Bootstrap Components -->
   <script src="/javascripts/bootstrap.min.js"></script>
@@ -470,8 +519,12 @@
   <!-- jQuery Table Sorter Plugin -->
   <script src="/javascripts/libs/jquery.tablesorter/jquery.tablesorter.min.js"></script>
 
-  <!-- jQuery Page Slide Plugin -->
-  <script src="/javascripts/libs/jquery.pageslide/jquery.pageslide.min.js"></script>
+  <!-- html2canvas Plugin -->
+  <script src="/javascripts/html2canvas.js"></script>
+  
+  <script src="/javascripts/recorder.js"></script>
+
+<script src="/javascripts/libs/jquery.pageslide/jquery.pageslide.min.js"></script>
 
   <!-- Demo Charts
   <script src="/javascripts/demo-area-chart.js"></script>
@@ -491,10 +544,27 @@
 	<script src="/javascripts/bootstrap.wizard.min.js"></script>
 	<!-- REQUIRED: Bootstrap Timepicker -->
 	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
-
+	
+	<script src="/javascripts/orchestra.js"></script>
 	<script src="/javascripts/config.js"></script>
 	<script src="/javascripts/meeting.js"></script>	
-
+	<script>
+		var _runTime = <%=t%>;
+		var _idx_user = "<%=idx_user%>";
+		var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
+		var _group_id = "<%=idx_group%>";
+		var _idx_meeting = "<%=idx_meeting%>";
+		console.log("in meeting.ejs {_idx_user:" + _idx_user + ", _group_id:" + _group_id + "}");
+		setInterval("showRunTime()", 1000);
+		$(function(){
+			$(".process-unit").hover(function(){
+				
+				$(this).addClass("processing");
+			}, function(){
+				$(this).removeClass("processing");
+			})
+		});
+	</script>
 <!-- /Javascript -->
 
 </body>

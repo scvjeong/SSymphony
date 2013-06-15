@@ -124,11 +124,12 @@ html .fc,
 
 .fc-widget-header,    /* <th>, usually */
 .fc-widget-content {  /* <td>, usually */
-	border: 1px solid #ccc;
+	border: 1px solid #dfdfdf;
 	}
 	
 .fc-state-highlight { /* <td> today cell */ /* TODO: add .fc-today to <th> */
-	background: #ffc;
+	/*background: #ffc;*/
+	background: #ebebeb;
 	}
 	
 .fc-cell-overlay { /* semi-transparent rectangle while dragging */
@@ -279,10 +280,12 @@ a.fc-event {
 	}
 	
 .fc-event-skin {
-	border-color: #36c;     /* default BORDER color */
+	width:5px;
+	/*
+	border-color: #36c;
 	border-color: #616161 #3F3F3F #363636;
-	border-color: #305F9C #305F9C #002A80; /* default BACKGROUND color */
-	color: #fff;            /* default TEXT color */
+	border-color: #305F9C #305F9C #002A80;
+	color: #fff;
 	
 	background: url(../img/csshack/blue-gradient.png) repeat-x #0A5DB8;
 	-webkit-background-size: 100% 100%;
@@ -297,15 +300,18 @@ a.fc-event {
 	background: url('/images/overlay-pattern.png'), linear-gradient(top, #65B2DD, #045AB2 50%, #004995 50%, #0A5DB8);
 	
 	cursor: move;
+	*/
 }
 	
 .fc-event-inner {
 	position: relative;
 	width: 100%;
 	height: 100%;
+	/*
 	border-style: solid;
 	border-width: 0;
 	overflow: hidden;
+	*/
 	}
 	
 .fc-event-time,
@@ -328,7 +334,7 @@ a.fc-event {
 ------------------------------------------------------------------------*/
 
 .fc-event-hori {
-	border-width: 1px 0;
+	/*border-width: 1px 0;*/
 	margin-bottom: 1px;
 	}
 	
@@ -397,7 +403,7 @@ a.fc-event {
 	
 /* Fake Rounded Corners SPECIFICALLY FOR EVENTS
 -----------------------------------------------------------------*/
-	
+	/*
 .fc-corner-left .fc-event-inner {
 	border-left-width: 1px;
 	}
@@ -413,13 +419,14 @@ a.fc-event {
 .fc-corner-bottom .fc-event-inner {
 	border-bottom-width: 1px;
 	}
-	
+	*/
 	
 	
 /* Reusable Separate-border Table
 ------------------------------------------------------------*/
 
 table.fc-border-separate {
+	border: 1px solid #dfdfdf;
 	border-collapse: separate;
 	}
 	
@@ -448,6 +455,10 @@ table.fc-border-separate {
 /* Month View, Basic Week View, Basic Day View
 ------------------------------------------------------------------------*/
 
+.fc-sun .fc-day-number{
+	color:#ff626e !important;
+}
+
 .fc-grid th {
 	text-align: center;
 	}
@@ -455,11 +466,13 @@ table.fc-border-separate {
 .fc-grid .fc-day-number {
 	float: right;
 	padding: 0 2px;
+	color:#6d6e71;
 	}
 	
 .fc-grid .fc-other-month .fc-day-number {
-	opacity: 0.3;
-	filter: alpha(opacity=30); /* for IE */
+	color:#6d6e71 !important;
+	opacity: 0.2;
+	filter: alpha(opacity=20); /* for IE */
 	/* opacity with small font can sometimes look too faded
 	   might want to set the 'color' property instead
 	   making day-numbers bold also fixes the problem */
@@ -468,6 +481,7 @@ table.fc-border-separate {
 .fc-grid .fc-day-content {
 	clear: both;
 	padding: 2px 2px 1px; /* distance between events and day edges */
+	height:70px;
 	}
 	
 /* event styles */

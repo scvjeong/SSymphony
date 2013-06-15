@@ -154,8 +154,8 @@ function showMeetingResultWindow()
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_result_bootbox");
 			
-			setupUserListChart();
-			setupWordChart();
+			//setupUserListChart();
+			//setupWordChart();
 			
 			var meeting_val = $("#meeting_val").text();
 			var ft_val = $("#proceeding_val").text();
@@ -163,33 +163,66 @@ function showMeetingResultWindow()
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
 			
+			var image_array = new Array();		
+			var image_value_array = new Array();
 			
-			var result_selector = $(".agenda_result_box:first");
-			while ( result_selector.length > 0 )
-			{	
-				var tmp_canvas = result_selector.children('canvas').attr('id');
-				var canvas_selector =document.getElementById(tmp_canvas);
-				var image_value = result_selector.children('canvas').attr('image_val');
-				var image = new Image();
-				image.src = image_value;
+			var num = 0;
+			var result_selector = $('.agenda_result_box');
 
-				var ctx = canvas_selector.getContext("2d");
-				ctx.drawImage(image,0,0, image.width, image.height,0,0,300,150);						
+			for (var i=0; i<result_selector.length; i++)
+			{
+				var tmp_selector = $('.agenda_result_box:eq('+i+')');
+				var tmp_canvas = tmp_selector.children('canvas').attr('id');
+				var canvas_num = "canvas"+num;
+				tmp_selector.children('canvas').attr('id', canvas_num);
 
-				result_selector = result_selector.next('.agenda_result_box');
-			}		
+				//console.log(tmp_selector);
+				var image_value = tmp_selector.children('canvas').attr('image_val');
+				image_value_array.push(image_value);
+			
+			//	result_selector = result_selector.next('.agenda_result_box');
+				num++;
+			}
+
+
+			var tmp_select_box = $(".agenda_result_box:first");
+
+			for (var k=0; k<image_value_array.length; k++)
+			{
+				image_array[k] = new Image();
+				
+				var cnt_num = 0;
+				image_array[k].onload = function() {
+			
+					var find_canvas = "canvas"+cnt_num;
+					var tmp_selector = $('#'+find_canvas);
+					//console.log(find_canvas);
+					
+					var canvas_selector =document.getElementById(find_canvas);
+					var ctx = canvas_selector.getContext("2d");
+					
+					ctx.drawImage(image_array[cnt_num],0,0, image_array[cnt_num].width, image_array[cnt_num].height,0,0,300,150);	
+
+					cnt_num++;
+				}
+				
+				image_array[k].src = image_value_array[k];
+				tmp_select_box = tmp_select_box.next('.agenda_result_box');
+				
+			}
 
 		},
 		error: function(err) {
 			console.log(err);
 			return false;
 		}
-	});		
+	});	
+	
 }
 
 function clickAgendaTitle(num)
 {
-	console.log(num);
+	//console.log(num);
 	var tmp_result_num = "result"+num;
 	var tmp_selector = $('#'+tmp_result_num);
 	var tmp_display = tmp_selector.css("display");
@@ -334,6 +367,7 @@ function setupUserListChart()
 				order : 3
 			}
 		});
+
 		//Display graph
 		$.plot($(".bar-chart"), ds, {
 			colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],

@@ -21,7 +21,33 @@
 						<div class="result_time">
 							<img class="result_contents_button" src="/images/meeting_result/clock.png" />
 							<div id="result_time_use">01:00:00</div>
-							<div id="result_time_set">/ 00:50:00</div>	
+							<%
+								var start_time = result.meeting_result[0].start_time;
+								var end_time = result.meeting_result[0].end_time;
+								var start_array = start_time.split(':');
+								var end_array = end_time.split(':');
+								
+								var t1 = end_array[0] - start_array[0]
+								var t2 = 0;
+								if ( end_array[1] >= start_array[1] ) {
+									t2 = end_array[1] - start_array[1];
+								}
+								else {
+									t2 = 60 - (start_array[1] - end_array[1]);
+									t1 = t1-1;
+								}
+
+								if (t1<10) {
+									t1 = "0"+t1;
+								}
+
+								if (t2<10) {
+									t2 = "0"+t2;
+								}
+								var set_time = t1+":"+t2+":"+"00";
+								
+							%>
+							<div id="result_time_set">/ <%=set_time %></div>	
 							<div id="result_time_clock">(<%= result.meeting_result[0].start_time %> - <%= result.meeting_result[0].end_time %>)</div>	
 						</div>
 						<div class="result_evaluate">
@@ -74,7 +100,7 @@
 					<div class="agenda">					
 		
 						<% for(var i=0; i<result.meeting_result.length; i++) { %>
-									
+							
 							<div class="agenda_box">
 								<div class="agenda_title_box">
 									<div class="agenda_subject" onClick="clickAgendaTitle(<%=i%>)"><%=result.meeting_result[i].agenda_subject%></div>
@@ -82,7 +108,12 @@
 								</div>
 								
 								<div class="agenda_result" id="result<%=i%>" style="display:none;">
-									<% for (var j=0; j<result.meeting_tools_image.length; j++) { %>
+									<% for (var j=0; j<result.meeting_tools_image.length; j++) {
+										var tmp_idx_process = result.meeting_tools_image[j].idx_process;	
+										if (tmp_idx_process != i){
+												continue;
+										}
+									 %>
 									
 										<%
 										var tool_name = "";

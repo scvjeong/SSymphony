@@ -48,7 +48,7 @@
 			</li>
 			<li id="meeting-list-btn" onclick="showMeetingList()">MEETING<br>LIST</li>
 			<li id="group-info-btn" onclick="showGroupInfo()">GROUP<br>INFO</li>
-			<li id="need-any-help-btn" onclick="javascript:alert('준비중')">NEED<br>ANY<br>HELP</li>
+			<li id="need-any-help-btn" onclick="showNeedHelp()">NEED<br>ANY<br>HELP</li>
 		</ul>
 	</div>
 	<div id="meeting-list-page" class="page">
@@ -140,14 +140,196 @@
 			</ul>
 		</div>
 	</div>
-</div>
-<div id="myModal" class="modal hide fade">
-	<!-- dialog contents -->
-	<div class="modal-body">Hello world!</div>
-	<!-- dialog buttons -->
-	<div class="modal-footer"><a href="#" class="btn primary">OK</a></div>
-</div>
 
+	
+	<div id="need-help-page" class="page">
+		<div id="need-help">
+			
+
+			<div class="help">
+			<div class="service_help">
+				<div class="service_intro">	
+					<div class="help_title">
+						Orchestra
+					</div>
+					<div class="help_contents">
+						Meeting master, Orchestra!
+					</div>
+				</div><br/>
+
+				<div class="use_help">
+					<div class="help_title">
+						How to use
+					</div>
+					<div class="help_contents">
+						<div class="quick_start">
+							Quick Start
+						</div>
+						<img src="/images/quick_start.jpg" width="680px" style="margin-bottom:30px;"></img>
+						<div class="meeting_planning">
+							Meeting Planning
+						</div>
+						<img src="/images/meeting_planning.jpg" width="680px" style="margin-bottom:30px;"></img>
+						<div class="meeting_proceeding">
+							Meeting Proceeding
+						</div>
+						<img src="/images/meeting_proceeding.jpg" width="680px" style="margin-bottom:30px;"></img>
+						<div class="meeting_result">
+							Meeting Result
+						</div>
+						<img src="/images/meeting_result.jpg" width="680px" style="margin-bottom:30px;"></img>
+					</div>
+				</div>
+			</div>
+		
+
+			<div class="ft_help">
+			
+				<div class="help_title">
+					What's the Facilitation?
+				</div>
+				<div class="help_contents">
+					<div>&nbsp
+						Facilitation is any activity that makes tasks for others easy, or tasks that are assisted.
+					</div><br/>
+				</div>
+	
+			</div>
+		</div>
+
+		<div class="keyboard">
+			<div class="help_title">
+				Keyboard Shotcuts
+			</div>
+			<div class="left_page">
+				<div class="help_contents">
+					<div class="keyboard_short">Member1
+						<input type="text" />
+					</div><br/>
+					<div class="keyboard_short">Member2
+						<input type="text" />
+					</div><br/>
+					<div class="keyboard_short">Member3
+						<input type="text" />
+					</div><br/>
+					<div class="keyboard_short">Member4
+						<input type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="right_page">
+				<div class="help_contents">
+					<div class="keyboard_short">List Tool 
+						<input type="text" />
+					</div><br/>
+					<div class="keyboard_short">Postit Tool
+						<input type="text" />
+					</div><br/>
+					<div class="keyboard_short">Mindmap Tool
+						<input type="text" />
+					</div><br/>
+					<div class="keyboard_short">Vote Tool
+						<input type="text" />
+					</div><br/>
+					<div class="keyboard_short">Matrix Tool
+						<input type="text" />
+					</div><br/>
+				</div><br/>
+			</div>
+		</div>
+
+		<div class="about">
+			<div class="help_title">Team Members</div>
+			<div class="member">
+				<div class="member_left_page">
+					<div class="member_contents">
+						<img src="/images/yonggi.jpg" width="300px"></img>
+					</div>
+				</div>
+				<div class="member_right_page">
+					<div class="member_contents">정용기
+					</div>
+				</div>
+			</div><br/>
+			<div class="member">
+				<div class="member_left_page">
+					<div class="member_contents">
+						<img src="/images/chicken.jpg" width="300px"></img>
+					</div>
+				</div>
+				<div class="member_right_page">
+					<div class="member_contents">임종혁
+					</div>
+				</div>
+			</div><br/>
+			<div class="member">
+				<div class="member_left_page">
+					<div class="member_contents">
+						<img src="/images/godong.jpg" width="300px"></img>
+					</div>
+				</div>
+				<div class="member_right_page">
+					<div class="member_contents">고동현
+					</div>
+				</div>
+			</div><br/>
+			<div class="member">
+				<div class="member_left_page">
+					<div class="member_contents">
+						<img src="/images/chaehyun.jpg" width="300px"></img>
+					</div>
+				</div>
+				<div class="member_right_page">
+					<div class="member_contents">백채현
+					</div>
+				</div>
+			</div><br/>
+		</div><br/><br/>
+
+
+
+
+
+		</div>
+		<div id="meeting-list" class="fancy-scrollbar">
+			<ul class="meeting-list-main">
+				<% 
+					for(var i=0; i<result.meeting_list.length; i++) {
+						var idx = result.meeting_list[i].idx_meeting;
+				%>
+						<li class="meeting-node" idx="<%= idx %>" status="<%=result.meeting_list[i].status%>">
+							<div class="color-bar back-color-<%=i+1%>"></div>
+							<ul>
+								<li class="subject"><%= result.meeting_list[i].subject %></li>
+								<li class="date color-<%=i+1%>"><%= result.meeting_list[i].date.toDateString() %> <%= result.meeting_list[i].start_time %></li>
+								<li class="time"><%= result.meeting_list[i].start_time %> ~ <%= result.meeting_list[i].end_time %></li>
+								<li><%=result.meeting_list[i].status%></li>
+								<li class="member">
+									<%
+										var len = result.meeting_user[idx].length;
+										for(var j=0; j<len; j++) {
+											var name = result.meeting_user[idx][j].first_name + result.meeting_user[idx][j].last_name;
+											if( len === (j+1) ) {
+											%>
+												<span><%= name.trim() %></span>
+											<%
+											} else {
+											%>
+												<span><%= name.trim() %>,</span>
+											<%	
+											}
+										}
+									%>
+								</li>
+							</ul>
+						</li>
+				<% } %>
+			</ul>		
+		</div>
+	</div>
+
+
+</div>
 <div id="light-popup">
 	<div class="light-popup-header">
 		<span class="light-popup-title">Members</span>
@@ -190,7 +372,7 @@
   <!-- /jQuery -->
 	<script src="/javascripts/jquery.fullcalendar.min.js"></script>	
 	<script src="/javascripts/bootstrap.min.js"></script>
-	<script src="/javascripts/bootbox.min.js"></script>
+	<script src="/javascripts/bootbox.js"></script>
 	<script src="/javascripts/bootstrap.wizard.min.js"></script>
 	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
 	<script src="/javascripts/bootstrap.datepicker.min.js"></script>
@@ -198,12 +380,7 @@
 	<script src="/javascripts/libs/flot/excanvas.min.js"></script>
 	<script src="/javascripts/libs/flot/jquery.flot.js"></script>
 	<!-- REQUIRED: Flot Chart Engine -->
-	<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>			
-	<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>		
 	<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
-	<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>	
-	<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>	
-	<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
 	<script src="/javascripts/select2.js"></script>
 	<script src="/javascripts/jquery.uniform.js"></script>
 	<script src="/javascripts/jquery.form.js"></script>
@@ -315,6 +492,12 @@
 		{
 			$(".page").hide();
 			$("#group-info-page").show();
+		}
+
+		function showNeedHelp()
+		{
+			$(".page").hide();
+			$("#need-help-page").show();
 		}
 
 		function initClickMeeting()

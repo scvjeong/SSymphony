@@ -136,19 +136,42 @@ exports.set_meeting_planning = function(req, res){
 
 exports.meeting_template = function(req, res){
 	/** session start **/
+	/*
 	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
+	*/
 	/** session end **/
 
 	var evt = new EventEmitter();
 	var dao_mp = require('../sql/meeting_planning');
+	var result = { agenda:[] };
+	var idx_group = req.session.idx_group;
+	var complete_flag = 0;
+	var total_complete_flag = 0;
 	// params['idx_owner']
 	// params['idx_owner_type']
-	var params = { idx_owner:null, idx_owner_type:null }
+	var params = { idx_owner:null, idx_owner_type:null, idx_group:idx_group }
 	dao_mp.dao_meeting_template(evt, mysql_conn, params);
 	evt.on('meeting_template', function(err, rows){
 		if(err) throw err;
-		res.render('select_meeting_template', {result:rows} );
+		result.meeting_planning = rows;
+		total_complete_flag = rows.length;
+		for(var i=0;i<rows.length;i++)
+		{
+			params.idx_meeting_planning = rows[i].idx;
+			dao_mp.dao_load_agenda(evt, mysql_conn, params);
+		}
+	});
+
+	evt.on('setting_agenda', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		if( rows.length > 0 )
+		{
+			result.agenda[rows[0].idx] = rows;
+			if( total_complete_flag === complete_flag )
+				res.render('select_meeting_template', {result:result} );		
+		}
 	});
 };
 
@@ -208,3 +231,46 @@ exports.setting_agenda_step = function(req, res){
 	res.render('setting_agenda_step');
 };
 
+exports.post_search_meeting_planning = function(req, res){
+	/** session start **/
+	/*
+	if( !req.session.email || typeof req.session.email === "undefined" )
+		res.redirect("/");
+	*/
+	/** session end **/
+
+	var evt = new EventEmitter();
+	var dao_mp = require('../sql/meeting_planning');
+	var result = { agenda:[] };
+	var idx_group = req.session.idx_group;
+	var value = req.param("val");
+	var complete_flag = 0;
+	var total_complete_flag = 0;
+	// params['idx_owner']
+	// params['idx_owner_type']
+	var params = { idx_owner:null, idx_owner_type:null, idx_group:idx_group, value:value }
+	dao_mp.dao_meeting_template(evt, mysql_conn, params);
+	evt.on('meeting_template', function(err, rows){
+		if(err) throw err;
+		if( rows.length < 1 )
+			res.send(result);
+		else 
+		{
+			result.meeting_planning = rows;
+			total_complete_flag = rows.length;
+			for(var i=0;i<rows.length;i++)
+			{
+				params.idx_meeting_planning = rows[i].idx;
+				dao_mp.dao_load_agenda(evt, mysql_conn, params);
+			}
+		}
+	});
+
+	evt.on('setting_agenda', function(err, rows){
+		if(err) throw err;
+		complete_flag++;
+		result.agenda[rows[0].idx] = rows;
+		if( total_complete_flag === complete_flag )
+			res.send(result);
+	});
+};

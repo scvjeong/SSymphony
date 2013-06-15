@@ -1,34 +1,63 @@
-<link rel="stylesheet" href="/stylesheets/orchestra.css" />
 <div id="meeting-template">
 	<div class="meeting-template-header"></div>
 	<div class="meeting-template-body">
 		<div class="left-body">
 			<div class="custom">Custom</div>
 			<ul class="fancy-scrollbar">
-				<% for(var i=0; i<result.length; i++) {%>
-					<li title="<%= result[i].subject %>" onclick="javascript:show_setting_agenda('<%= result[i].idx %>');"><%= result[i].subject %></li>
+				<% for(var i=0; i<result.meeting_planning.length; i++) {%>
+					<li title="<%= result.meeting_planning[i].subject %>" onclick="javascript:show_setting_agenda('<%= result.meeting_planning[i].idx %>');" idx="<%= result.meeting_planning[i].idx %>" class="meeting-planning-node"><%= result.meeting_planning[i].subject %></li>
 				<% } %>
 			</ul>
 		</div>
 		<div class="right-body">
-			<ul>
-				<li>
-				<div class="subject">Decision Making</div>
-				<div class="goal">This is Photoshop's version of Lorem lpsum.</div>
-				<ul>
-					<li>
-						<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
-						<div class="process-arrow"></div>
+			<ul class="agenda">
+				<% 
+					for(var i=0; i<result.meeting_planning.length; i++) {
+						var c;
+						if( i === 0 )
+							c = "show";
+						else
+							c = "hide";
+						var idx_meeting_planning = result.meeting_planning[i].idx;
+				%>
+					<li class="agenda-preview <%=c%>" idx="<%=idx_meeting_planning%>">
+						<div class="subject"><%= result.meeting_planning[i].subject %></div>
+						<div class="goal"><%= result.meeting_planning[i].goal %></div>
+						<ul>
+							<% 
+								for(var j=0; j<result.agenda[idx_meeting_planning].length; j++) {
+									if( result.agenda[idx_meeting_planning][j].subject && (j+1) === result.agenda[idx_meeting_planning].length ){
+							%>
+									<li>
+										<div class="process-subject"><%= result.agenda[idx_meeting_planning][j].subject %></div>
+									</li>
+								<% } else if ( result.agenda[idx_meeting_planning][j].subject ){ %>
+									<li>
+										<div class="process-subject"><%= result.agenda[idx_meeting_planning][j].subject %></div>
+										<div class="process-arrow"></div>
+									</li>
+								<% } %>
+							<% } %>
+						</ul>
 					</li>
-					<li>
-						<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
-						<div class="process-arrow"></div>
-					</li>
-					<li>
-						<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
-					</li>
-				</ul>
-				</li>
+				<% } %>
+				<!--li>
+					<div class="subject">Decision Making</div>
+					<div class="goal">This is Photoshop's version of Lorem lpsum.</div>
+					<ul>
+						<li>
+							<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+							<div class="process-arrow"></div>
+						</li>
+						<li>
+							<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+							<div class="process-arrow"></div>
+						</li>
+						<li>
+							<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+						</li>
+					</ul>
+				</li-->
 			</ul>
 		</div>
 	</div>

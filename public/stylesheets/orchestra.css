@@ -393,7 +393,7 @@ body.help-page {
 	height: 52px;
 	border: 0;
 	margin: 0;
-	z-index: 5000;
+	z-index: 999;
 	text-align:center;
 }
 #topbar > li {
@@ -1929,6 +1929,10 @@ h6 small {
 	display:none;
 }
 
+#need-help-page{
+	display:none;
+}
+
 #meeting-calendar{
 	float:left;
 	width:750px;
@@ -2195,6 +2199,76 @@ h6 small {
 	background-color:#ff9900 !important;
 }
 
+/*** need-help ***/
+
+#need-help {
+	float: left;
+	width: 700px;
+	min-height:501px;
+	max-height:501px;
+	margin: 65px 30px 10px 25px;
+	padding: 35px;
+	color:#333333;
+	background-color: #FFFFFF;
+}
+
+.keyboard {
+
+			height: 380px;
+		}
+
+.help_title {
+			font-family: "Fjalla One";
+			font-size: 22px;
+			color: #369;
+			margin-bottom: 10px;
+		}
+
+.help_contents {
+	font-family: "Istok Web";
+	font-size: 18px;
+	color: #333;
+}
+
+.member_contents {
+	font-family: "Istok Web";
+	font-size: 18px;
+	color: #333;
+}
+
+.ft_help {
+	margin-top: 30px;
+}
+
+.left_page {
+			width: 340px;
+			margin: 1px;
+			float: left;
+		}
+
+.right_page {
+	width: 340px;
+	margin: 1px;
+	float: right;
+}
+
+.member_left_page {
+			width: 320px;
+			height: 300px;
+			margin: 1px;
+			float: left;
+		}
+
+		.member_right_page {
+			width: 370px;
+			height: 300px;
+			margin: 1px;
+			float: left;
+		}
+
+/***  ***/
+
+
 /*** modal ***/
 .fade {
   opacity: 0;
@@ -2233,8 +2307,8 @@ h6 small {
 	top: 10%;
 	left: 50%;
 	z-index: 10050;
-	width: 970px;
-	margin-left: -485px;
+	width: 990px;
+	margin-left: -495px;
 	background-color: #ffffff;
 	border: 1px solid #999;
 	border: 1px solid rgba(0, 0, 0, 0.3);
@@ -2250,43 +2324,35 @@ h6 small {
 	-moz-background-clip: padding-box;
 	background-clip: padding-box;
 }
-
 .modal.fade {
 	-webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
 	-moz-transition: opacity 0.3s linear, top 0.3s ease-out;
 	-o-transition: opacity 0.3s linear, top 0.3s ease-out;
 	transition: opacity 0.3s linear, top 0.3s ease-out;
 }
-
 .modal.fade.in {
   top: 5%;
 }
-
 .modal-header {
   padding: 9px 15px;
   border-bottom: 1px solid #eee;
 }
-
 .modal-header .close {
   margin-top: 2px;
 }
-
 .modal-header h3 {
   margin: 0;
   line-height: 30px;
 }
-
 .modal-body {
   position: relative;
   max-height: 680px;
   padding: 5px;
   overflow-y: auto;
 }
-
 .modal-form {
   margin-bottom: 0;
 }
-
 .modal-footer {
   padding: 14px 15px 15px;
   margin-bottom: 0;
@@ -2301,29 +2367,40 @@ h6 small {
      -moz-box-shadow: inset 0 1px 0 #ffffff;
           box-shadow: inset 0 1px 0 #ffffff;
 }
-
 .modal-footer:before,
 .modal-footer:after {
   display: table;
   line-height: 0;
   content: "";
 }
-
 .modal-footer:after {
   clear: both;
 }
-
 .modal-footer .btn + .btn {
   margin-bottom: 0;
   margin-left: 5px;
 }
-
 .modal-footer .btn-group .btn + .btn {
   margin-left: -1px;
 }
-
 .modal-footer .btn-block + .btn-block {
   margin-left: 0;
+}
+.modal .close{
+	float:right;
+	margin:5px 10px 5px 0px;
+}
+.modal .search{
+	font-size:20px;
+	width: 335px; 
+	height: 37px; 
+	padding:0px 45px 0px 10px;
+	background-color: #fff; 
+	border:1px solid #fff;
+	-webkit-box-shadow: inset 0 5px 5px rgba(0,0,0,.11); 
+	-moz-box-shadow: inset 0 5px 5px rgba(0,0,0,.11); 
+	box-shadow: inset 0 5px 5px rgba(0,0,0,.11);
+	background:url("/images/input_search_icon.png") no-repeat 350px 8px;
 }
 /*** modal ***/
 
@@ -2554,31 +2631,31 @@ h6 small {
 	-webkit-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
 	-moz-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
 	box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
-	margin:10px;
+	margin:20px 10px 10px 20px;
 }
 #meeting-template .meeting-template-body .left-body ul{
 	width:341px;
 	height:300px;
-	margin:10px;
+	margin:10px 10px 20px 20px;
 	padding:0px 10px 0px 0px;
 	overflow-y:scroll;
 }
 #meeting-template .meeting-template-body .left-body li{
 	font-size: 20px; 
 	color: #57acff;
-	width:100%;
-	height: 41px; 
-	line-height: 35px; 
+	width:96%;
+	line-height: 34px; 
 	background-color: #eaf5ff; 
 	-webkit-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11); 
 	-moz-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11); 
 	box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
 	margin:10px 0px;
+	padding:0px 2% 7px 2%;
 	cursor:pointer;
 }
 #meeting-template .meeting-template-body .right-body{
 	float:left;
-	padding:20px;
+	padding:30px;
 }
 #meeting-template .meeting-template-body .right-body .subject{
 	font-size: 28px; 
@@ -2598,7 +2675,6 @@ h6 small {
 	font-size: 19px; 
 	color: #333;
 	width: 526px; 
-	height: 41px; 
 	line-height: 41px; 
 	-webkit-border-radius: 0 526px/0 1px; 
 	-moz-border-radius: 0 526px/0 1px; 
@@ -2612,6 +2688,6 @@ h6 small {
 #meeting-template .meeting-template-body .right-body .process-arrow{
 	width:526px;
 	height:13px;
-	background: url(/images/arrow-bottom.png) no-repeat 250px 0  rgba(0, 0, 0, 0);
+	background: url(/images/arrow-bottom.png) no-repeat 240px 0  rgba(0, 0, 0, 0);
 }
 /*** meeting-template ***/

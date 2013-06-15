@@ -40,7 +40,28 @@ exports.dao_set_meeting_planning_group = function(evt, mysql_conn, params){
 // params['idx_owner']
 // params['idx_owner_type']
 exports.dao_meeting_template = function(evt, mysql_conn, params){
-	var sql = "SELECT idx, subject FROM `meeting_planning` WHERE `idx_owner` = '1' AND `idx_owner_type` = 'admin'";
+	var sql_search = "";
+	if( params['value'] )
+		sql_search = "AND `A`.`subject` LIKE '%"+params['value']+"%' ";
+	var sql = "(SELECT `A`.`idx`, ";
+	sql += "`A`.`subject`, ";
+	sql += "`A`.`goal` ";
+	sql += "FROM `meeting_planning` AS `A` ";
+	sql += "WHERE `A`.`idx_owner_type` = 'admin' ";
+	sql += sql_search;
+	sql += ") ";
+	sql += "UNION ";
+	sql += "(SELECT `A`.`idx`, ";
+	sql += "`A`.`subject`, ";
+	sql += "`A`.`goal` ";
+	sql += "FROM `meeting_planning` AS `A` ";
+	sql += "INNER JOIN `relation_group_meeting` AS `B` ";
+	sql += "ON `A`.`idx` = `B`.`idx_meeting` ";
+	sql += "INNER JOIN `group` AS `C` ";
+	sql += "ON `C`.`idx` = `B`.`idx_group` ";
+	sql += "WHERE `C`.`idx` = '"+params['idx_group']+"' ";
+	sql += sql_search;
+	sql += ") ";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('meeting_template', err, rows);
 	});
@@ -55,9 +76,10 @@ exports.dao_meeting_template = function(evt, mysql_conn, params){
 exports.dao_load_agenda = function(evt, mysql_conn, params){
 	// agenda
 	var sql = "SELECT	`A`.`idx`, `A`.`subject`, `B`.`subject`, `B`.`goal`, `B`.`start_time`, `B`.`end_time`, `B`.`order` ";
-	sql += "FROM `meeting_planning` AS `A` INNER JOIN `agenda` AS `B` ";
+	sql += "FROM `meeting_planning` AS `A`  ";
+	sql += "LEFT OUTER JOIN `agenda` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
-	sql += "WHERE `A`.`idx_owner` = '1' AND `A`.`idx_owner_type` = 'admin' AND `A`.`idx` = '"+params['idx_meeting_planning']+"' ";
+	sql += "WHERE `A`.`idx` = '"+params['idx_meeting_planning']+"' ";
 	sql += "ORDER BY `B`.`order` ASC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('setting_agenda', err, rows);

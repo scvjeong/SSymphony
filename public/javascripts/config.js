@@ -119,6 +119,7 @@
 
 			$('#start-btn .make').click(function(e) {
 				e.preventDefault();
+				var search_input = '<input type="text" name="search" class="search">';
 				$.get("/page/meeting_template",null,function(html){
 					dialog = bootbox.dialog(html, [{
 						"label" : "Prev",
@@ -144,19 +145,103 @@
 							return true;
 						}
 					},{
-						"label" : "Cancel",
+						"label" : "<img src='/images/exit_icon.png'>",
 						"class" : "btn-primary medium",
 						"callback": function() {
 							return true;
 						}
-					}]);
+					}],{
+						"header":search_input
+					});
+					$(".meeting-planning-node").mouseover(function(){
+						var idx = $(this).attr("idx");
+						$("#meeting-template .agenda-preview").hide();
+						$("#meeting-template .agenda-preview[idx="+idx+"]").show();
+					});
+
 					$(".modal-body", dialog).css("max-height", window_height*0.7);
 					$("#start-btn").animate({
 						width: '90'
 					}, 640);
+
+					// search
+					initSearchMeetingPlanningBtn();
 				},"html");
 			});
 		}// end if
+	}
+	var _search_meeting_planing_flag = false;
+	function initSearchMeetingPlanningBtn()
+	{
+		var cb = function(t, val)
+		{
+			if( $(t).val() === val )
+			{
+				if( _search_meeting_planing_flag )
+				{
+					_search_meeting_planing_flag = false;
+					searchMeetingPlanning(val);
+				}
+			}
+		}
+
+		$(".modal input[name=search]").keyup(function(){
+			var val = $(this).val();
+			_search_meeting_planing_flag = true;
+			window.setTimeout(cb, 500, this, val)
+		});
+	}
+
+	function searchMeetingPlanning(val)
+	{
+		var html = "";
+		var params = {val:val};
+		$.ajax({
+			url: '/page/search_meeting_planning',
+			type: 'POST',
+			data: params,
+			dataType: 'json',
+			success: function(json) {
+				console.log(json);
+				var meeting_planning_html = "";
+				var agenda_html = "";
+				var c, agenda_len;
+				if( json.meeting_planning )
+				{
+					for(var i=0;i<json.meeting_planning.length;i++)
+					{
+						meeting_planning_html += '<li title="'+json.meeting_planning[i].subject+'" onclick="javascript:show_setting_agenda(\''+json.meeting_planning[i].idx+'\');" idx="'+json.meeting_planning[i].idx+'" class="meeting-planning-node">'+json.meeting_planning[i].subject+'</li>';
+
+						if( i === 0 )
+							c = "show";
+						else
+							c = "hide";
+						agenda_html += '<li class="agenda-preview '+c+'" idx="'+json.meeting_planning[i].idx+'">';
+						agenda_html += '<div class="subject">'+json.meeting_planning[i].subject+'</div>';
+						agenda_html += '<div class="goal">'+json.meeting_planning[i].goal+'</div><ul>';
+						agenda_len = json.agenda[json.meeting_planning[i].idx].length
+						for(var j=0;j<agenda_len;j++)
+						{
+							if( json.agenda[json.meeting_planning[i].idx][j].subject )
+							{
+								agenda_html += '<li><div class="process-subject">' + json.agenda[json.meeting_planning[i].idx][j].subject + '</div>';
+								if( agenda_len !== (j+1)  )
+									agenda_html += '<div class="process-arrow"></div>';
+								agenda_html += '</li>';
+							}
+						}
+						agenda_html += '</ul></li>';
+					}
+				}
+				$("#meeting-template .meeting-template-body .left-body ul").html(meeting_planning_html);
+				$("#meeting-template .meeting-template-body .right-body ul.agenda").html(agenda_html);
+				$(".meeting-planning-node").mouseover(function(){
+					var idx = $(this).attr("idx");
+					$("#meeting-template .agenda-preview").hide();
+					$("#meeting-template .agenda-preview[idx="+idx+"]").show();
+				});
+			}
+		});
 	}
 
 	// meeting planning page pointer
@@ -224,6 +309,12 @@
 			$(".modal-footer a.complete", dialog).hide();
 			$(".modal-footer a.next", dialog).hide();
 			$(".modal-footer a.prev", dialog).hide();
+			$(".meeting-planning-node").mouseover(function(){
+				var idx = $(this).attr("idx");
+				$("#meeting-template .agenda-preview").hide();
+				$("#meeting-template .agenda-preview[idx="+idx+"]").show();
+			});
+			$(".modal .search").focus();
 			//setup_meeting_wizard();
 		},"html");
 	}

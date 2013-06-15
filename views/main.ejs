@@ -266,11 +266,13 @@
 	<div class="container">
 		<div class="header">
 			<div class="context-box">
-				<div class="logo">orchestra</div>
+				<div class="logo">
+					<img src="/images/bi.png"/>
+				</div>
 				<div class="login-box">
 					<form name="login-form" method="post" action="/page/login">				
 						<div class="login-box-wrap">
-							<div class="login-box-body"><input type="text" name="email" value="orchestra"></div>
+							<div class="login-box-body"><input type="text" name="email" value="scvjeong@gmail.com"></div>
 							<div class="login-box-footer"><input type="checkbox" name="keep_login" checked="checked"> Keep me logged in</div>
 						</div>
 						<div class="login-box-wrap">
@@ -343,8 +345,16 @@
 		if( $(window).width() < 1280 )
 			$(".container").width("1280");
 		var status = $.getUrlVar('status');
-		if( status == "failed" )
+		if( status === "failed" )
+		{
+			location.herf = location.origin+"#";
 			alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+		}
+		else if( status === "auth" )
+		{
+			location.herf = location.origin+"#";
+			alert("이메일 인증을 하셔야 합니다.\n아이디로 메일 발송 해드렸습니다.");
+		}
 
 		checkEmail();
 	})
@@ -370,7 +380,7 @@
 					$("form[name=sign-up-form] input[name="+json.target+"]").focus();
 				}
 				else if( json.result == "successful" )
-					location.href="/page/group_select";
+					location.href="/?status=auth";
 			}
 		};
 		$('form[name=sign-up-form]').ajaxSubmit(Options);

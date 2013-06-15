@@ -143,6 +143,7 @@ Date.prototype.format = function (mask, utc) {
 function showMeetingResultWindow()
 {
 	var source_url = "/page/meeting_result";
+
 	$.ajax({
 		type: "GET",
 		url: source_url,
@@ -162,10 +163,21 @@ function showMeetingResultWindow()
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
 			
-			//도구 결과 이미지 불러오는 부분
-			var params = [];
-			params['idx_process'] = 0;
-			getToolsImage(params);
+			
+			var result_selector = $(".agenda_result_box:first");
+			while ( result_selector.length > 0 )
+			{	
+				var tmp_canvas = result_selector.children('canvas').attr('id');
+				var canvas_selector =document.getElementById(tmp_canvas);
+				var image_value = result_selector.children('canvas').attr('image_val');
+				var image = new Image();
+				image.src = image_value;
+
+				var ctx = canvas_selector.getContext("2d");
+				ctx.drawImage(image,0,0, image.width, image.height,0,0,300,150);						
+
+				result_selector = result_selector.next('.agenda_result_box');
+			}		
 
 		},
 		error: function(err) {
@@ -192,13 +204,6 @@ function clickAgendaTitle(num)
 	}
 	//console.log( $('#'+tmp_result_num).attr('id') );
 }
-
-
-function getToolsResult()
-{
-	
-}
-
 
 function getToolsImage(params)
 {
@@ -266,6 +271,12 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 
 }
 
+
+function hideMeetingResultWindow()
+{
+	var bootbox_select = $('.meeting_result_bootbox');
+	bootbox_select.modal('hide');
+}
 
 
 

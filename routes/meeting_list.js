@@ -7,7 +7,6 @@ var Validator = require('validator').Validator;
 
 var _GROUP_INFO_COMPLETE_FLAG_CNT = 1;
 var _MEETING_LIST_COMPLETE_FLAG_CNT = 1;
-var _MEETING_USER_COMPLETE_FLAG_CNT = 1;
 
 exports.meeting_list = function(req, res){
 	var agent = req.headers['user-agent'];
@@ -40,6 +39,7 @@ exports.meeting_list = function(req, res){
 		var meeting_list_complete_flag = 0;
 		var group_info_complete_flag = 0;
 		var meeting_user_complete_flag = 0;
+		var meeting_user_complete_flag_cnt;
 		var s_d = new Date();
 		var e_d = new Date();
 		e_d.setMonth(e_d.getMonth()+1);
@@ -63,7 +63,7 @@ exports.meeting_list = function(req, res){
 			result.meeting_list = rows;
 			if( meeting_list_complete_flag === _MEETING_LIST_COMPLETE_FLAG_CNT && rows.length > 0 )
 				{
-				_MEETING_USER_COMPLETE_FLAG_CNT = rows.length;
+				meeting_user_complete_flag_cnt = rows.length;
 				for(var i=0; i<rows.length; i++)
 				{
 					params['idx_meeting'] = rows[i].idx_meeting;
@@ -79,7 +79,7 @@ exports.meeting_list = function(req, res){
 			if(err) throw err;
 			meeting_user_complete_flag++;
 			result.meeting_user[rows[0].idx_meeting] = rows;
-			if( meeting_user_complete_flag === _MEETING_USER_COMPLETE_FLAG_CNT )
+			if( meeting_user_complete_flag === meeting_user_complete_flag_cnt )
 				res.render('meeting_list', {result:result} );
 		});
 	}
@@ -212,4 +212,115 @@ exports.post_set_delete_user = function (req, res){
 	}
 	else
 		res.send("");
+};
+
+exports.user_info = function(req, res){
+	var agent = req.headers['user-agent'];
+	if( agent.toString().indexOf("MSIE") > 0 )
+	{
+		res.render('no_explorer', {} );
+		return;
+	}
+
+	var evt = new EventEmitter();
+	var dao_ml = require('../sql/meeting_list');
+	var dao_gs = require('../sql/group_select');
+
+	var idx_user = req.param("idx");
+	//var idx_group = req.session.idx_group;
+	var idx_group = 1;
+	var result = { meeting_user:{} };
+	var complete_flag = 0;
+	var meeting_user_complete_flag_cnt;
+
+	var meeting_list_complete_flag = 0;
+	var group_info_complete_flag = 0;
+	var meeting_user_complete_flag = 0;
+		
+	// params['idx_user']
+	// params['idx_group']
+	var params = { idx_user:idx_user, idx_group:idx_group }
+	
+	dao_ml.dao_user_info(evt, mysql_conn, params);
+	evt.on('user_info', function(err, rows){
+		if(err) throw err;
+		result.user_info = rows;
+		complete_flag++;
+		if( complete_flag === 3 )
+		{
+			console.log(result);
+			if( result.user_info.length )
+				res.render('user_info', {result:result} );
+			else
+				res.send();
+		}
+	});
+
+	dao_gs.dao_group_info(evt, mysql_conn, params);
+	evt.on('group_info', function(err, rows){
+		if(err) throw err;
+		result.group_info = rows;
+		complete_flag++;
+		if( complete_flag === 3 )
+		{
+			console.log(result);
+			if( result.user_info.length )
+				res.render('user_info', {result:result} );
+			else
+				res.send();
+		}
+		/*
+		if( group_info_complete_flag === _GROUP_INFO_COMPLETE_FLAG_CNT && rows.length > 0 )
+			dao_ml.dao_meeting_list(evt, mysql_conn, params);
+		else if( rows.length < 1)
+			throw err;
+		*/
+	});
+	
+	dao_ml.dao_meeting_list(evt, mysql_conn, params);
+	evt.on('meeting_list', function(err, rows){
+		if(err) throw err;
+		result.meeting_list = rows;
+		if( rows.length > 0 )
+			{
+			meeting_user_complete_flag_cnt = rows.length;
+			for(var i=0; i<rows.length; i++)
+			{
+				params['idx_meeting'] = rows[i].idx_meeting;
+				result.meeting_user[rows[i].idx_meeting] = {};
+				dao_ml.dao_meeting_user(evt, mysql_conn, params);
+			}
+		}
+		else if( rows.length < 1)
+		{
+			complete_flag++;
+			if( complete_flag === 3 )
+			{
+				console.log(result);
+				if( result.user_info.length )
+					res.render('user_info', {result:result} );
+				else
+					res.send();
+			}
+		}
+	});
+
+	evt.on('meeting_user', function(err, rows){
+		if(err) throw err;
+		meeting_user_complete_flag++;
+		console.log(rows);
+		result.meeting_user[rows[0].idx_meeting] = rows;
+		if( meeting_user_complete_flag === meeting_user_complete_flag_cnt )
+		{
+			complete_flag++;
+			if( complete_flag === 3 )
+			{
+				console.log(result);
+				if( result.user_info.length )
+					res.render('user_info', {result:result} );
+				else
+					res.send();
+			}
+		}
+	});
 };

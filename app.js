@@ -75,6 +75,7 @@ app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step); // �
 app.get('/page/ft_help', meeting.ft_help); // 퍼실리테이션 도움말
 app.get('/page/minutes', meeting.minutes); // 회의록 페이지
 app.get('/page/need_help', meeting.need_help);
+app.get('/page/user_info', meeting_list.user_info); // 유저 정보
 
 /* post */
 app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);

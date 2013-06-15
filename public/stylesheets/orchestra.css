@@ -2722,3 +2722,121 @@ h6 small {
 	background: url(/images/arrow-bottom.png) no-repeat 240px 0  rgba(0, 0, 0, 0);
 }
 /*** meeting-template ***/
+
+/*** user-info ***/
+#user-info{
+	font-family: "Roboto";
+	padding:20px;
+	width:700px;
+	color:#333333;
+}
+#user-info ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#user-info .general{
+	float:left;
+	width:100%;
+	margin-bottom:20px;
+}
+#user-info .profile-pic{
+	float:left;
+	width:125px;
+	height:125px;
+	background-color:#cccccc;
+}
+#user-info .general .text{
+	float:left;
+	width:300px;
+	margin-left:10px;
+}
+#user-info .id{
+	width:100%;
+	font-size:20px;
+	margin:5px;
+	word-wrap:break-word;
+}
+#user-info .name{
+	width:100%;
+	font-size:18px;
+	margin:5px;
+	word-wrap:break-word;
+}
+#user-info .position{
+	width:100%;
+	font-size:18px;
+	margin:5px;
+	word-wrap:break-word;
+}
+#user-info .groups{
+	float:left;
+	width:100%;
+	margin-bottom:10px;
+}
+#user-info .title{
+	width:94%;
+	font-size:24px;
+	padding:5px 3%;
+	color:#ffffff;
+	background-color:#99ccff;
+	cursor:pointer;
+}
+#user-info .title:hover{
+	background-color:#6699cc;
+}
+#user-info .contents{
+	padding:10px;
+}
+#user-info .meetings{
+	float:left;
+	width:100%;
+	margin-bottom:10px;
+}
+#user-info .meetings .meetings-1, #user-info .meetings .meetings-2{
+	float:left;
+	width:50%;
+}
+#user-info .meetings .meeting-node{
+	float:left;
+	width:100%;
+	margin-bottom:10px;
+}
+#user-info .meetings .meeting-node .subject{
+	line-height: 25px;
+	font-size: 19px;
+}
+#user-info .meetings .meeting-node .date{
+	line-height: 24px;
+	font-size: 16px;
+}
+#user-info .meetings .meeting-node .time{
+	line-height: 20px;
+	font-size: 14px;
+}
+#user-info .meetings .meeting-node .member{
+	line-height: 20px;
+	font-size: 14px;
+}
+#user-info .chart-div{
+	float:left;
+	width:100%;
+	margin-bottom:10px;
+}
+#user-info .chart-div .contents{
+	padding:20px;
+	
+}
+#user-info #meeting-chart{
+	height:200px;
+}
+#user-info #attendance-rate-chart{
+	height:200px;
+}
+#user-info #participation-rate-chart{
+	height:200px;
+}
+#user-info #meeting-per-input-word-chart{
+	height:200px;
+}
+/*** user-info ***/

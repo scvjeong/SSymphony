@@ -23,7 +23,7 @@
 		<span id="group-title"><%= result.group_info[0].name %></span>
 		<div id="top-menu">
 			<ul>
-				<li>NOTICE</li>
+				<li><a href="#">Profile</a></li>
 				<li><a href="/page/group_select">GROUP</a></li>
 				<li>MY ACCOUNT</li>
 				<li>LOG OUT</li>
@@ -743,6 +743,19 @@
 		function initUserInfoPopup(obj)
 		{
 			var idx_user = obj.attr("idx");
+			$.get("/page/user_info?idx="+idx_user,null,function(html){
+				dialog = bootbox.dialog(html, [],{
+					"header":"Profile"
+				});
+				$("#user-info .title").click(function(){
+					$(this).next().slideToggle();
+				});
+				dialog.width(760);
+				dialog.css({"margin-left":"-380px"});
+				initUserInfoChart();
+			},"html");
+
+			/*
 			var o = obj.offset();
 			var w = $(window).width();
 			$.ajax({
@@ -765,6 +778,7 @@
 					}
 				}
 			});
+			*/
 		}
 		function initUserInfoPopdown(idx_user)
 		{
@@ -791,6 +805,258 @@
 						initUserInfoPopdown(idx_user);
 					}
 				});
+			}
+		}
+
+		function initUserInfoChart()
+		{
+			if ($("#user-info #meeting-chart").length) {
+				var pageviews = [[1, 5], [3, 7], [4, 13], [10, 15], [14, 1], [20, 10], [25, 10], [30, 16]];
+				var plot = $.plot($("#user-info #meeting-chart"), [{
+					data : pageviews,
+					label : "The number of meeting "
+				}], {
+					series : {
+						lines : {
+							show : true,
+							lineWidth : 1,
+							fill : true,
+							fillColor : {
+								colors : [{
+									opacity : 0.1
+								}, {
+									opacity : 0.15
+								}]
+							}
+						},
+						points : {
+							show : true
+						},
+						shadowSize : 0
+					},
+					xaxis : {
+						mode : "time",
+						tickLength : 10
+					},
+					yaxes : [{
+						max : 20,
+						min : 0,
+						tickLength : 5
+					}],
+					grid : {
+						hoverable : true,
+						clickable : true,
+						tickColor : $chrt_border_color,
+						borderWidth : 0,
+						borderColor : $chrt_border_color,
+					},
+					tooltip : true,
+					tooltipOpts : {
+						content : "%s for <b>%x</b> day was <b>%y</b>",
+						dateFormat : "%y-%0m-%0d",
+						defaultTheme : false
+					},
+					colors : [$chrt_main, $chrt_second],
+					xaxis : {
+						ticks : 31,
+						tickDecimals : 0
+					},
+					yaxis : {
+						ticks : 10,
+						tickDecimals : 0
+					},
+					legend: {
+						position: "ne", 
+						margin: [-5, -17]
+					}
+				});
+				
+			}
+			if ($("#user-info #attendance-rate-chart").length) {
+				var pageviews = [[1, 5], [3, 7], [4, 13], [10, 15], [14, 1], [20, 10], [25, 10], [30, 16]];
+				var plot = $.plot($("#user-info #attendance-rate-chart"), [{
+					data : pageviews,
+					label : "attendance-rate"
+				}], {
+					series : {
+						lines : {
+							show : true,
+							lineWidth : 1,
+							fill : true,
+							fillColor : {
+								colors : [{
+									opacity : 0.1
+								}, {
+									opacity : 0.15
+								}]
+							}
+						},
+						points : {
+							show : true
+						},
+						shadowSize : 0
+					},
+					xaxis : {
+						mode : "time",
+						tickLength : 10
+					},
+					yaxes : [{
+						max : 20,
+						min : 0,
+						tickLength : 5
+					}],
+					grid : {
+						hoverable : true,
+						clickable : true,
+						tickColor : $chrt_border_color,
+						borderWidth : 0,
+						borderColor : $chrt_border_color,
+					},
+					tooltip : true,
+					tooltipOpts : {
+						content : "%s for <b>%x</b> day was <b>%y</b>",
+						dateFormat : "%y-%0m-%0d",
+						defaultTheme : false
+					},
+					colors : [$chrt_main, $chrt_second],
+					xaxis : {
+						ticks : 31,
+						tickDecimals : 0
+					},
+					yaxis : {
+						ticks : 10,
+						tickDecimals : 0
+					},
+					legend: {
+						position: "ne", 
+						margin: [-5, -17]
+					}
+				});
+				
+			}
+			if ($("#user-info #participation-rate-chart").length) {
+				var pageviews = [[1, 5], [3, 7], [4, 13], [10, 15], [14, 1], [20, 10], [25, 10], [30, 16]];
+				var plot = $.plot($("#user-info #participation-rate-chart"), [{
+					data : pageviews,
+					label : "Participation Rate"
+				}], {
+					series : {
+						lines : {
+							show : true,
+							lineWidth : 1,
+							fill : true,
+							fillColor : {
+								colors : [{
+									opacity : 0.1
+								}, {
+									opacity : 0.15
+								}]
+							}
+						},
+						points : {
+							show : true
+						},
+						shadowSize : 0
+					},
+					xaxis : {
+						mode : "time",
+						tickLength : 10
+					},
+					yaxes : [{
+						max : 20,
+						min : 0,
+						tickLength : 5
+					}],
+					grid : {
+						hoverable : true,
+						clickable : true,
+						tickColor : $chrt_border_color,
+						borderWidth : 0,
+						borderColor : $chrt_border_color,
+					},
+					tooltip : true,
+					tooltipOpts : {
+						content : "%s for <b>%x</b> day was <b>%y</b>",
+						dateFormat : "%y-%0m-%0d",
+						defaultTheme : false
+					},
+					colors : [$chrt_main, $chrt_second],
+					xaxis : {
+						ticks : 31,
+						tickDecimals : 0
+					},
+					yaxis : {
+						ticks : 10,
+						tickDecimals : 0
+					},
+					legend: {
+						position: "ne", 
+						margin: [-5, -17]
+					}
+				});
+				
+			}
+			if ($("#user-info #meeting-per-input-word-chart").length) {
+				var pageviews = [[1, 5], [3, 7], [4, 13], [10, 15], [14, 1], [20, 10], [25, 10], [30, 16]];
+				var plot = $.plot($("#user-info #meeting-per-input-word-chart"), [{
+					data : pageviews,
+					label : "Meeting Per Input Word "
+				}], {
+					series : {
+						lines : {
+							show : true,
+							lineWidth : 1,
+							fill : true,
+							fillColor : {
+								colors : [{
+									opacity : 0.1
+								}, {
+									opacity : 0.15
+								}]
+							}
+						},
+						points : {
+							show : true
+						},
+						shadowSize : 0
+					},
+					xaxis : {
+						mode : "time",
+						tickLength : 10
+					},
+					yaxes : [{
+						max : 20,
+						min : 0,
+						tickLength : 5
+					}],
+					grid : {
+						hoverable : true,
+						clickable : true,
+						tickColor : $chrt_border_color,
+						borderWidth : 0,
+						borderColor : $chrt_border_color,
+					},
+					tooltip : true,
+					tooltipOpts : {
+						content : "%s for <b>%x</b> day was <b>%y</b>",
+						dateFormat : "%y-%0m-%0d",
+						defaultTheme : false
+					},
+					colors : [$chrt_main, $chrt_second],
+					xaxis : {
+						ticks : 31,
+						tickDecimals : 0
+					},
+					yaxis : {
+						ticks : 10,
+						tickDecimals : 0
+					},
+					legend: {
+						position: "ne", 
+						margin: [-5, -17]
+					}
+				});
+				
 			}
 		}
 	</script>

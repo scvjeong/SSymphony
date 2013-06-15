@@ -366,7 +366,7 @@ var bootbox = window.bootbox || (function(document, $) {
         }
 
         // push an empty body into which we'll inject the proper content later
-        parts.push("<div class='modal-body'></div>");
+        parts.push("<div class='modal-body fancy-scrollbar'></div>");
 		/*
         if (buttons) {
             parts.push("<div class='modal-footer'>"+buttons+"</div>");

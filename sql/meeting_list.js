@@ -28,7 +28,14 @@ exports.dao_group_info = function(evt, mysql_conn, params){
 // meeting_list
 // params['idx_user']
 // params['idx_group']
+// params['start_date']
+// params['end_date']
 exports.dao_meeting_list = function(evt, mysql_conn, params){
+	var sql_for_date;
+	if( params['start_date'] && params['end_date'] )
+		sql_for_date = "AND `C`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
+	else
+		sql_for_date = "";
 	var sql = "SELECT  ";
 	sql += "`C`.`idx` AS `idx_meeting`, ";
 	sql += "`C`.`subject`, ";
@@ -47,7 +54,7 @@ exports.dao_meeting_list = function(evt, mysql_conn, params){
 	sql += "ON `D`.`idx_user` = `E`.`idx` ";
 	sql += "WHERE `E`.`idx` = '"+params['idx_user']+"' ";
 	sql += "AND `A`.`idx` = '"+params['idx_group']+"' ";
-	sql += "AND `C`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
+	sql += sql_for_date;
 	sql += "GROUP BY `C`.`idx` ";
 	sql += "ORDER BY `C`.`date` ASC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
@@ -67,7 +74,7 @@ exports.dao_meeting_user = function(evt, mysql_conn, params){
 	sql += "INNER JOIN `meeting_planning` AS `C` ";
 	sql += "ON `B`.`idx_meeting` = `C`.`idx` ";
 	sql += "WHERE `C`.`idx` = '"+params['idx_meeting']+"' ";
-	sql += "AND `C`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
+	//sql += "AND `C`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
 	sql += "ORDER BY `A`.`first_name` DESC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('meeting_user', err, rows);
@@ -119,6 +126,7 @@ exports.dao_user_info = function(evt, mysql_conn, params){
 	var sql = "SELECT  ";
 	sql += "`A`.`idx`, ";
 	sql += "`A`.`id`, ";
+	sql += "`A`.`position`, ";
 	sql += "`A`.`first_name`, ";
 	sql += "`A`.`last_name` ";
 	sql += "FROM `user` AS `A` ";

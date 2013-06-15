@@ -154,8 +154,8 @@ function showMeetingResultWindow()
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_result_bootbox");
 			
-			setupUserListChart();
-			setupWordChart();
+			//setupUserListChart();
+			//setupWordChart();
 			
 			var meeting_val = $("#meeting_val").text();
 			var ft_val = $("#proceeding_val").text();
@@ -369,6 +369,7 @@ function setupUserListChart()
 				order : 3
 			}
 		});
+
 		//Display graph
 		$.plot($(".bar-chart"), ds, {
 			colors : [$chrt_second, $chrt_fourth, "#666", "#BBB"],

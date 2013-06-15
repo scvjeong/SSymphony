@@ -74,7 +74,7 @@
 					<div class="agenda">					
 		
 						<% for(var i=0; i<result.meeting_result.length; i++) { %>
-									
+							
 							<div class="agenda_box">
 								<div class="agenda_title_box">
 									<div class="agenda_subject" onClick="clickAgendaTitle(<%=i%>)"><%=result.meeting_result[i].agenda_subject%></div>
@@ -82,7 +82,12 @@
 								</div>
 								
 								<div class="agenda_result" id="result<%=i%>" style="display:none;">
-									<% for (var j=0; j<result.meeting_tools_image.length; j++) { %>
+									<% for (var j=0; j<result.meeting_tools_image.length; j++) {
+										var tmp_idx_process = result.meeting_tools_image[j].idx_process;	
+										if (tmp_idx_process != i){
+												break;
+										}
+									 %>
 									
 										<%
 										var tool_name = "";

@@ -356,14 +356,13 @@ var bootbox = window.bootbox || (function(document, $) {
         // for an explanation of tabIndex=-1
 
         var parts = ["<div class='bootbox modal' tabindex='-1' style='overflow:hidden;'>"];
-
         if (options['header']) {
             var closeButton = '';
             if (typeof options['headerCloseButton'] == 'undefined' || options['headerCloseButton']) {
                 closeButton = "<a href='"+_defaultHref+"' class='close'><img src='/images/exit_icon.png' alt='close'></a>";
             }
 
-            parts.push("<div class='modal-header'>"+closeButton+"<h3>"+options['header']+"</h3></div>");
+            parts.push("<div class='modal-header'><div class='contents'>"+closeButton+"<h3>"+options['header']+"</h3></div></div>");
         }
 
         // push an empty body into which we'll inject the proper content later

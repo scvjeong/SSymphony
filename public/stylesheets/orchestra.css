@@ -1596,17 +1596,6 @@ h6 small {
 	width:100%;
 	height:100%;
 }
-.rightpanel{
-	position:fixed;
-	top:52px;
-	right:0px;
-	float:right;
-	width:285px;  
-	z-index: 1030;
-	border-left: 1px solid #dddddd;
-	-webkit-box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
-	box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
-}
 .rightpanel .etc-box{
 	background-color:#5c85ad;
 }
@@ -1621,7 +1610,7 @@ h6 small {
 	font-family:"Roboto";
 	line-height:25px;
 	color:#999999;
-	padding:10px 5px 5px 20px;
+	padding:10px 5px 10px 10px;
 	background-color: #FFFFFF;
 	background-image: -moz-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
 	background-image: -webkit-gradient(linear, 0 0, 0 10%, from(#d7d7d7), to(#FFFFFF));
@@ -1632,14 +1621,30 @@ h6 small {
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
 	overflow-y:scroll;
 }
-.rightpanel-content-box.process-box{
-	max-height:150px;
+.rightpanel-content-box#panel_process_container{
+	max-height:300px;
 }
-.rightpanel-content-box.member-box{
+.rightpanel-content-box#panel_member_container{
 	max-height:100px;
 }
-.rightpanel-content-box.facilitator-box{
-	max-height:50px;
+.rightpanel-content-box#panel_facilitator_container{
+	max-height:100px;
+}
+.rightpanel-content-box .facilitator-btn{
+	float:left;
+	font-size:15px;
+	line-height:14px;
+	text-align:center;
+	padding:7px;
+	cursor:pointer;
+	border:1px solid #23466a;
+	border-radius:3px;
+	color:#FFFFFF;
+	background-color:#5c8ab8;
+	margin-left:5px;
+}
+.rightpanel-content-box .facilitator-btn:hover{
+	background-color: rgb(95, 156, 218);
 }
 .rightpanel-content-box .process-unit{
 	cursor:pointer;
@@ -2169,34 +2174,34 @@ h6 small {
 	background-color:#ff9900 !important;
 }
 .color-5{
-	color:#ff9900;
+	color:#a52a2a;
 }
 .back-color-5{
-	background-color:#ff9900 !important;
+	background-color:#a52a2a !important;
 }
 .color-6{
-	color:#ff9900;
+	color:#00008b;
 }
 .back-color-6{
-	background-color:#ff9900 !important;
+	background-color:#00008b !important;
 }
 .color-7{
-	color:#ff9900;
+	color:#8c38fe;
 }
 .back-color-7{
-	background-color:#ff9900 !important;
+	background-color:#8c38fe !important;
 }
 .color-8{
-	color:#ff9900;
+	color:#006400;
 }
 .back-color-8{
-	background-color:#ff9900 !important;
+	background-color:#006400 !important;
 }
 .color-9{
-	color:#ff9900;
+	color:#ee82ee;
 }
 .back-color-9{
-	background-color:#ff9900 !important;
+	background-color:#ee82ee !important;
 }
 
 /*** need-help ***/
@@ -2334,8 +2339,12 @@ h6 small {
   top: 5%;
 }
 .modal-header {
-  padding: 9px 15px;
-  border-bottom: 1px solid #eee;
+	padding: 0px 15px;
+}
+.modal-header .contents{
+	float:left;
+	width:100%;
+	margin:7px 0px;
 }
 .modal-header .close {
   margin-top: 2px;
@@ -2344,11 +2353,33 @@ h6 small {
   margin: 0;
   line-height: 30px;
 }
+.modal-header li{
+	float:left;
+	cursor:pointer;	
+	padding:0px 10px;
+	border-right: 2px solid #333333;
+}
+.modal-header li:hover{
+	color:#5c8ab8;
+}
+.modal-header li.end{
+	border:0px none;
+}
+.modal-header span.opening {
+	width:100px;
+}
+.modal-header span.decision-making {
+	width:200px;
+}
+.modal-header span.conflict-solving-method {
+	width:300px;
+}
 .modal-body {
-  position: relative;
-  max-height: 680px;
-  padding: 5px;
-  overflow-y: auto;
+	clear:both;
+	position: relative;
+	max-height: 680px;
+	padding: 5px;
+	overflow-y: auto;
 }
 .modal-form {
   margin-bottom: 0;

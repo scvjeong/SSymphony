@@ -34,9 +34,6 @@
   <meta name="description" content="" />
   <meta name="author" content="" />
 
-  <!-- Bootstrap Styles -->
-    <!-- Bootstrap 2.0.4 -->
-    <!--link rel="stylesheet" href="/stylesheets/bootstrap.css" /-->
     <!-- Font Awesome 2.0 -->
       <link rel="stylesheet" href="/stylesheets/font-awesome.css" />
       
@@ -69,8 +66,6 @@
 
 	<!-- full calander css -->
 	<link rel="stylesheet" href="/stylesheets/fullcalendar.css?v=1">
-	<!-- jarvis widget css -->
-	<link rel="stylesheet" href="/stylesheets/jarvis-widgets.css?v=1">
 	<!-- theme css -->
 	<link rel="stylesheet" href="/stylesheets/theme.css?v=1">
 
@@ -163,8 +158,6 @@
 		<div class="title-bar">
 			<div class="subject">Weekly Discussion</div>
 			<span class="sub-subject">Service Design Meeting</span>
-			<div class="result-btn" id="result-btn">회의종료</div>
-			<div class="record-btn" id="record-btn" onclick="startRecording();">Record</div>
 			<div class="stop-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
 			<div class="time">00:00:00 / <%=limit_time%></div>
 		</div>
@@ -476,9 +469,11 @@
 			</div>
 			<div class="facilitator-box">
 				<div class="rightpanel-title-bar" id="panel_facilitator_title">Facilitator</div>
-				<div class="rightpanel-content-box fancy-scrollbar" id="panel_facilitator_container"
+				<div class="rightpanel-content-box fancy-scrollbar" id="panel_facilitator_container">
+					<div class="facilitator-btn" id="facilitator-help">Help</div>
+					<div class="facilitator-btn" id="record-btn" onclick="startRecording();">Record</div>
+					<div class="facilitator-btn" id="result-btn">Exit</div>
 				</div>
-
 				<form id="record_form"
 							  enctype="multipart/form-data"
 							  action="/lib/blob_upload"
@@ -487,8 +482,6 @@
 				
 				</form>
 			</div>
-			<div class="etc-box">
-			</div>
 		</div>		
 	</div>
 	<div id="splashpopup_wrapper"></div>
@@ -496,22 +489,11 @@
 	
   <!-- Bootstrap Components -->
   <script src="/javascripts/bootstrap.min.js"></script>
-
+  <script src="/javascripts/bootbox.js"></script>
 
   <!-- Theme Scripts -->
   <script src="/javascripts/ohcastra.js"></script>
   <script src="/javascripts/application.js"></script>
-
-	<!-- Flot Plotting -->
-	<script src="/javascripts/libs/flot/excanvas.min.js"></script>
-	<script src="/javascripts/libs/flot/jquery.flot.js"></script>
-	<!-- REQUIRED: Flot Chart Engine -->
-	<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>			
-	<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>		
-	<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
-	<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>	
-	<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>	
-	<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
 
   <!-- Google Code Prettyfy - source-code highlighter -->
   <script src="/javascripts/libs/google-code-prettify/prettify.js"></script>
@@ -524,27 +506,8 @@
   
   <script src="/javascripts/recorder.js"></script>
 
-<script src="/javascripts/libs/jquery.pageslide/jquery.pageslide.min.js"></script>
+	<script src="/javascripts/libs/jquery.pageslide/jquery.pageslide.min.js"></script>
 
-  <!-- Demo Charts
-  <script src="/javascripts/demo-area-chart.js"></script>
-  <script src="/javascripts/demo-dynamic-chart.js"></script>
-  <script src="/javascripts/demo-pie-chart.js"></script>
-   -->
-
-	<!-- REQUIRED: Functional Widgets -->
-	<script src="/javascripts/jarvis.widget.min.js"></script>
-	<script src="/javascripts/mobiledevices.min.js"></script>
-	<!-- DISABLED (only needed for IE7 <script src="js/include/json2.js"></script> -->
-	<!-- REQUIRED: Full Calendar -->
-	<script src="/javascripts/jquery.fullcalendar.min.js"></script>	
-	<!-- REQUIRED: Bootstrap Prompt -->
-	<script src="/javascripts/bootbox.min.js"></script>
-	<!-- REQUIRED: Bootstrap Wizard -->
-	<script src="/javascripts/bootstrap.wizard.min.js"></script>
-	<!-- REQUIRED: Bootstrap Timepicker -->
-	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
-	
 	<script src="/javascripts/orchestra.js"></script>
 	<script src="/javascripts/config.js"></script>
 	<script src="/javascripts/meeting.js"></script>	

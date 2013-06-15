@@ -34,8 +34,6 @@ $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
 
-	initRightpanel();
-
 	// 오디오 관련 초기화
 	
 	 try {
@@ -157,6 +155,9 @@ $(document).ready(function() {
 
 	// init rightpanel
 	initRightpanel();
+
+	// init facilitator
+	initFacilitator();
 	
 	// 회의 종료 버튼
 	$("#result-btn").click(function(){
@@ -553,6 +554,42 @@ function toggleRightpanel()
 			right: 300
 		}, 500);
 	}
+}
+
+function initFacilitator()
+{
+	var header = "<ul>";
+	header += "<li class='opening'>Opening</li>";
+	header += "<li class='decision-making'>Decision making</li>";
+	header += "<li class='conflict-solving-method end'>Conflict solving method</li>";
+	header += "</ul>";
+	$("#facilitator-help").click(function(){
+		$.get("/page/ft_help",null,function(html){
+			dialog = bootbox.dialog(html, [],{
+				"header":header
+			});
+			$(".modal-body #ft-help .part", dialog).hide();
+			$(".modal-body #ft-help .part#opening", dialog).show();
+			$(".modal-header li", dialog).mouseover(function(){
+				var c = $(this).attr("class").trim();
+				switch(c)
+				{
+					case "opening":
+						$(".modal-body #ft-help .part", dialog).hide();
+						$(".modal-body #ft-help .part#opening", dialog).show();
+						break;
+					case "decision-making":
+						$(".modal-body #ft-help .part", dialog).hide();
+						$(".modal-body #ft-help .part#decision-making", dialog).show();
+						break;
+					case "conflict-solving-method end":
+						$(".modal-body #ft-help .part", dialog).hide();
+						$(".modal-body #ft-help .part#conflict-solving", dialog).show();
+						break;
+				}
+			});
+		},"html");
+	});
 }
 
 /* 동적으로 파일 추가 */
@@ -1799,12 +1836,6 @@ function noticeBarMoving()
 	$notice_bar.animate({ top:"-"+top_px+"px" }, 1500, function(){
 		noticeBarMoving();
 	});
-}
-
-function initRightpanel()
-{
-	var h = $(window).height();
-	$("#rightpanel .etc-box").height(h)
 }
 
 /*

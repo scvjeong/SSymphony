@@ -62,7 +62,7 @@ exports.dao_group_select = function(evt, mysql_conn, params){
 	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
 	sql += "AND `C`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
 	sql += "GROUP BY `C`.`idx` ";
-	sql += "ORDER BY `E`.`idx` DESC";
+	sql += "ORDER BY `A`.`idx` ASC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('group_select', err, rows);
 	});

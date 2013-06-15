@@ -397,15 +397,25 @@
 			var m_name = "";
 			for(var i=0; i<result.meeting_list.length; i++) {
 				var date = new Date(result.meeting_list[i].date);
-		%>
+				if( date != "Invalid Date" && result.meeting_list[i].start_time !=null && result.meeting_list[i].end_time !=null )
 				{
-					title: '<%=result.meeting_list[i].subject%>',
-					start: new Date(<%=date.getFullYear()%>, <%=date.getMonth()%>, <%=date.getDate()%>),
-					end: null,
-					editable: false,
-					skinClass: "back-color-<%=i+1%>"
-				},
-		<%}%>
+					var s_t = result.meeting_list[i].start_time.toString().split(":");
+					var e_t = result.meeting_list[i].end_time.toString().split(":");
+					var time = date.getTime();
+					var start_time = time + (s_t[0]*60*60 + s_t[1]*60 + s_t[2]*1)*1000 - (60*60*9*1000);
+					var end_time = time + (e_t[0]*60*60 + e_t[1]*60 + e_t[2]*1)*1000 - (60*60*9*1000);
+		%>
+					{
+						title: '<%=result.meeting_list[i].subject%>',
+						start: new Date(<%=start_time%>),
+						end: new Date(<%=end_time%>),
+						editable: false,
+						skinClass: "back-color-<%=i+1%>"
+					},
+		<%
+				}
+			}
+		%>
 		];
 
 		$(document).ready(function(){

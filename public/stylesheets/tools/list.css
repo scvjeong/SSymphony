@@ -12,6 +12,7 @@
 		border-radius:10px;
 		padding:20px;
 		box-shadow: 0px 0px 10px 5px #CCCCCC;
+		min-height:225px;
 	}
 	.list_tool .list_space{
 		float:left;
@@ -53,8 +54,7 @@
 		line-height:28px;
 		margin:0px;
 		margin-left: 10px;
-		padding:0px;
-		width:100%;
+		width:90%;
 	}
 
 	.list_tool .list_space input[type=checkbox]{

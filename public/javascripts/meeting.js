@@ -86,7 +86,7 @@ $(document).ready(function() {
 	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
 	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
 	setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
-	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 20000);
+	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 6000);
 	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
 
 	// 파일 업로드 초기화
@@ -154,6 +154,9 @@ $(document).ready(function() {
 
 	// notice bar
 	noticeBarMoving();
+
+	// init rightpanel
+	initRightpanel();
 	
 	// 회의 종료 버튼
 	$("#result-btn").click(function(){
@@ -1163,8 +1166,12 @@ function hideMeetingResultWindow()
 function hideEvaluateWindow()
 {
 	var bootbox_select = $('.meeting_evaluate_bootbox');
-	bootbox_select.modal('hide');
-	showMeetingResultWindow();
+	bootbox_select.modal('hide');	
+}
+
+function evaluate_complete()
+{
+	 $('#evaluate_form').submit();
 }
 
 function makeCanvasImage(params)
@@ -1172,7 +1179,7 @@ function makeCanvasImage(params)
 	var tool_name = params['tool_name'];
 	
 	var idx_tool = params['tool_idx'];
-	var idx_process = 1;
+	var idx_process = 0;
 	var tool_num = -1;
 	var image_value = 0;
 
@@ -1222,30 +1229,6 @@ function makeCanvasImage(params)
 	});	
 }
 
-function getToolsImage(params)
-{
-	var idx_process = params['idx_process'];
-	
-	var send_params = {
-		idx_process: idx_process
-	};	
-					
-	$.ajax({
-		url: '/page/get_tools_image',
-		type: 'POST',		
-		data: send_params,
-		dataType: 'json',
-		success: function(json_data) {
-			console.log("Success");
-			console.log("json length: "+json_data.length);
-			var i=0;
-			for ( i=0; i<json_data.length; i++)
-			{
-				console.log("[json_data] -> "+json_data[i].image_value);
-			}		
-		}
-	});
-}
 
 var _drawing_tool = "pen";
 var _fill_color = "#000000";
@@ -1580,6 +1563,7 @@ function switchDrawingTool(tool)
 }
 
 
+
 /*
 function changePenColor(color)
 {
@@ -1823,6 +1807,11 @@ function noticeBarMoving()
 	});
 }
 
+function initRightpanel()
+{
+	var h = $(window).height();
+	$("#rightpanel .etc-box").height(h)
+}
 
 /*
 오디오 녹음 부분
@@ -1878,6 +1867,28 @@ var input_point = null;
       var au = document.createElement('audio');
       var hf = document.createElement('a');
       
+	console.log(blob);
+	//console.log("[url]: "+url);
+		//$('#upload_id').val(blob);
+		//console.log($('#upload_id').val());
+		
+	//form.append("blob",blob, filename);
+	$('#record_form').append("blob", blob, "test.wav");	
+	$('#record_form').submit();
+
+	
+	//var reader = new FileReader();
+	//console.log(url);
+	//reader.readAsDataURL(url);
+	//console.log(reader);
+	//console.log("////");
+
+	/*
+    var blob_url = webkitURL.createObjectURL(blob);
+	console.log(blob_url);
+	
+	console.log("DDD");
+*/
       au.controls = true;
       au.src = url;
       hf.href = url;

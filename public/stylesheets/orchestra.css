@@ -4,6 +4,9 @@
 /* }=== COLOR - AZURE === */
 /* === MADMIN MENU ==={ */
 /* general setup & list styles reset */
+.hide{
+	display:none;
+}
 .left{
 	float:left;
 }
@@ -828,7 +831,7 @@ button,
 select,
 textarea,
 .navbar-search .search-query {
-  font-family: 'Segoe UI', Optima, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Malgun Gothic', 'Segoe UI', Optima, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 .sidebar-menu a:hover {
   text-decoration: none;
@@ -860,6 +863,7 @@ h6 small {
 /* === FORMS ==={ */
 /* }=== FORMS === */
 /* === BUTTONS ==={ */
+/*
 .btn {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -965,6 +969,7 @@ h6 small {
   background: transparent;
   border: 0;
 }
+*/
 /* Bootstrap-style buttons if you don't like the MADMIN ones */
 .btn.btn-info-bs {
   color: #ffffff;
@@ -1473,19 +1478,6 @@ h6 small {
 		margin: 5% !important;
 	}
 
-	.meeting-template {
-		text-align:center;
-	}
-	.meeting-template div{
-		margin:5px 0;
-	}
-	.meeting-template .btn{
-		width:96%;
-		padding:2% !important;
-		border:0 none !important;
-		border-radius:8px;
-	}
-
 	#agenda_step label{
 		margin:0 10px 5px 0;
 		line-height:30px;
@@ -1609,13 +1601,14 @@ h6 small {
 	top:52px;
 	right:0px;
 	float:right;
-	width:25%;
-  
-  z-index: 1030;
-  border-left: 1px solid #dddddd;
-
-  -webkit-box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
-  box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+	width:285px;  
+	z-index: 1030;
+	border-left: 1px solid #dddddd;
+	-webkit-box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+	box-shadow:  -3px 0px 3px 0px rgba(200, 200, 200, 0.3);
+}
+.rightpanel .etc-box{
+	background-color:#5c85ad;
 }
 .rightpanel-title-bar{
 	font-family:"Fjalla One";
@@ -1629,7 +1622,6 @@ h6 small {
 	line-height:25px;
 	color:#999999;
 	padding:10px 5px 5px 20px;
-	height:100px;
 	background-color: #FFFFFF;
 	background-image: -moz-linear-gradient(top, #d7d7d7 0.1%, #FFFFFF 10%);
 	background-image: -webkit-gradient(linear, 0 0, 0 10%, from(#d7d7d7), to(#FFFFFF));
@@ -1640,6 +1632,15 @@ h6 small {
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
 	overflow-y:scroll;
 }
+.rightpanel-content-box.process-box{
+	max-height:150px;
+}
+.rightpanel-content-box.member-box{
+	max-height:100px;
+}
+.rightpanel-content-box.facilitator-box{
+	max-height:50px;
+}
 .rightpanel-content-box .process-unit{
 	cursor:pointer;
 }
@@ -1649,6 +1650,16 @@ h6 small {
 .rightpanel-content-box .member-unit{
 	float:left;
 	width:50%;
+}
+.rightpanel-tool-box{
+	padding:0px;
+	height:58px;
+	overflow:hidden;
+	background-color:#FFFFFF;
+}
+.rightpanel-tool-box div{
+	float:left;
+	cursor:pointer;
 }
 .client-1{
 	color:#3366CC;
@@ -1697,6 +1708,20 @@ h6 small {
 	background: rgba(0, 0, 0, .55);
 }
 
+#meeting-template ul.fancy-scrollbar::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, 0) !important;
+}
+#meeting-template ul.fancy-scrollbar::-webkit-scrollbar-thumb {
+	background: rgba(201, 227, 254, 1) !important;
+	border: 1px inset rgba(0, 0, 0, .15) !important;
+}
+#meeting-template ul.fancy-scrollbar:hover::-webkit-scrollbar-thumb {
+	background: rgba(150, 203, 255, 1) !important;
+}
+#meeting-template ul.fancy-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: rgba(150, 203, 255, 1) !important;
+}
+
 /*** group_select ***/
 .container{
 	width:100%;
@@ -1728,15 +1753,24 @@ h6 small {
 	overflow-x:hidden;
 	overflow-y:scroll;
 }
-#member-info .profile-pic{
+#member-info .my-profile{
+	float:left;
+	width:100%;
+	padding:0px 0px 20px 0px;
+}
+#member-info .my-profile .profile-pic{
+	float:left;
 	width:125px;
 	height:125px;
 	background-color:#cccccc;
 }
-#member-info .id{
+#member-info .my-profile .name{
+	float:left;
 	font-family:"Roboto";
 	font-size:20px;
-	margin-top:10px;
+	width:136px;
+	margin:5px;
+	word-wrap:break-word;
 }
 #member-info .info-menu{
 	font-family:"Roboto";
@@ -1750,6 +1784,7 @@ h6 small {
 	margin:3px 0px;
 }
 #member-info ul{
+	clear:both;
 	list-style:none;
 	margin:0px;
 	padding:0px;
@@ -1886,6 +1921,14 @@ h6 small {
 	font-size:23px;
 	margin-top:19px;
 }
+
+#meeting-list-page{
+	display:block;
+}
+#group-info-page{
+	display:none;
+}
+
 #meeting-calendar{
 	float:left;
 	width:750px;
@@ -1906,69 +1949,6 @@ h6 small {
 	overflow-x:hidden;
 	overflow-y:scroll;
 }
-#meeting-list .member-list{
-	float:left;
-	width:100%;
-	margin-bottom:10px;
-}
-#meeting-list .member-list li{
-	float:left;
-	width:30px;
-	height:30px;
-	line-height:30px;
-	text-align:center;
-	font-weight:bold;
-	color: #444;
-	background-color:#ccc;
-	border: 1px solid #B9B9B9;
-	overflow: hidden;
-	cursor: pointer;
-	margin: 0 2px 2px 0;
-	border-radius:3px;
-}
-#meeting-list .meeting-list-btn-wrap{
-	width:100%;
-	margin-bottom:10px;
-}
-#meeting-list .add-member-btn{
-
-	background-color:#FFFFFF;
-	border:1px solid #999999;
-	background:#ffffff;
-	background:-webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);
-	background:linear-gradient(to bottom, #ffffff 0%, #f3f3f3 100%);
-	border-radius:3px;
-	-webkit-touch-callout:none;
-	-webkit-user-select:none;
-	-khtml-user-select:none;
-	-moz-user-select:none;
-	-ms-user-select:none;
-	user-select:none;border:1px solid #cecece;
-	border-bottom-color:#a0a0a0;
-	cursor:pointer;
-	display:block;
-	height:18px;
-	margin-top:6px;
-	max-width:275px;
-	width:275px;
-	overflow:hidden;
-	white-space:nowrap;
-	padding:6px;
-	position:relative;
-	text-decoration:none;
-	text-overflow:ellipsis;
-}
-#meeting-list .add-member-btn:hover{
-	background:#2887bd;
-	background:-webkit-linear-gradient(top, #2887bd 0%, #336699 100%);
-	background:linear-gradient(to bottom, #2887bd 0%, #336699 100%);
-	border-color:#2478a8;
-	color:#fff !important;
-}
-#meeting-list .add-member-btn:link {text-decoration: none; color: #666666;}
-#meeting-list .add-member-btn:visited {text-decoration: none; color: #666666;}
-#meeting-list .add-member-btn:active {text-decoration: none; color: #666666;}
-
 #meeting-list ul{
 	float:left;
 	list-style:none;
@@ -2007,6 +1987,158 @@ h6 small {
 	font-size:14px;
 }
 /*** meeting_list ***/
+
+/*** group-info ***/
+#group-info-page .sub-title{
+	font-family:"Fjalla One";
+	font-size:22px;
+	color:#336699;
+	margin-bottom:10px;
+}
+#group-info{
+	float: left;
+	width: 700px;
+	min-height:501px;
+	max-height:501px;
+	margin: 65px 30px 10px 25px;
+	padding: 35px;
+	color:#333333;
+	background-color: #FFFFFF;
+}
+#group-info ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#group-info li{
+	float:left;
+	width:100%;
+	line-height:20px;
+	padding:3px 0px;
+}
+#group-info li .list-title{
+	font-weight:bold;
+
+}
+#group-info li div{
+	float:left;
+	width:50%;
+}
+#group-info li.top-3{
+	width:50%;
+	margin-top:10px;
+}
+#group-info li.top-3 div.list-title{
+	width:100%;
+	margin-bottom:10px;
+}
+#group-info li.top-3 div.list-contents{
+	width:90%;
+	padding:0px 2%;
+}
+
+#group-info-chart{
+	width:700px;
+	height:200px;
+	margin:20px 0px 30px 0px;
+}
+#group-info-member{
+	float:left;
+	width:280px;
+	height:510px;
+	margin:65px 0px 10px 0px;
+	padding:30px 30px 0 30px;
+	color:#666666;
+	background-color:#FFFFFF;
+	font-family:"Istok Web";
+	overflow-x:hidden;
+	overflow-y:scroll;
+}
+#group-info-member .member-list{
+	float:left;
+	list-style:none;
+	width:100%;
+	margin:10px 0px 0px 0px;
+	padding:0px;
+}
+#group-info-member .member-list li{
+	float:left;
+	width:271px;
+	height:32px;
+	line-height:36px;
+	margin:3px 0;
+	cursor: pointer;
+}
+#group-info-member .member-list li div.name:hover{
+	background:#2887bd;
+	background:-webkit-linear-gradient(top, #2887bd 0%, #336699 100%);
+	background:linear-gradient(to bottom, #2887bd 0%, #336699 100%);
+	border-color:#2478a8;
+	color:#fff !important;	
+}
+#group-info-member .member-list li div.picture{
+	float:left;
+	width:30px;
+	height:30px;
+	overflow: hidden;
+	font-weight:bold;
+	color: #444;
+	background-color:#ccc;
+	border: 1px solid #B9B9B9;
+	border-radius:3px;
+}
+#group-info-member .member-list li div.name{
+	float:left;
+	width:220px;
+	height:32px;
+	padding:0px 0px 0px 5px;
+	margin:0px 1px;
+    white-space: nowrap;
+	-o-text-overflow: ellipsis;    /* Opera under 10.7 */
+	text-overflow:ellipsis;    /* IE, Safari */
+	word-wrap:break-word;
+	overflow: hidden;
+	border-radius:3px;
+}
+#group-info-member .group-info-btn-wrap{
+	width:100%;
+	margin-bottom:10px;
+}
+#group-info-member .add-member-btn{
+	background-color:#FFFFFF;
+	border:1px solid #999999;
+	background:#ffffff;
+	background:-webkit-linear-gradient(top, #ffffff 0%, #f3f3f3 100%);
+	background:linear-gradient(to bottom, #ffffff 0%, #f3f3f3 100%);
+	border-radius:3px;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;border:1px solid #cecece;
+	border-bottom-color:#a0a0a0;
+	cursor:pointer;
+	display:block;
+	height:18px;
+	width:90%;
+	overflow:hidden;
+	padding:6px 5%;
+	position:relative;
+	text-decoration:none;
+	text-overflow:ellipsis;
+}
+#group-info-member .add-member-btn:hover{
+	background:#2887bd;
+	background:-webkit-linear-gradient(top, #2887bd 0%, #336699 100%);
+	background:linear-gradient(to bottom, #2887bd 0%, #336699 100%);
+	border-color:#2478a8;
+	color:#fff !important;
+}
+#group-info-member .add-member-btn:link {text-decoration: none; color: #666666;}
+#group-info-member .add-member-btn:visited {text-decoration: none; color: #666666;}
+#group-info-member .add-member-btn:active {text-decoration: none; color: #666666;}
+/*** group-info ***/
 
 .color-1{
 	color:#339933;
@@ -2064,6 +2196,18 @@ h6 small {
 }
 
 /*** modal ***/
+.fade {
+  opacity: 0;
+  -webkit-transition: opacity 0.15s linear;
+     -moz-transition: opacity 0.15s linear;
+       -o-transition: opacity 0.15s linear;
+          transition: opacity 0.15s linear;
+}
+
+.fade.in {
+  opacity: 1;
+}
+
 .modal-backdrop {
 	position: fixed;
 	top: 0;
@@ -2089,8 +2233,8 @@ h6 small {
 	top: 10%;
 	left: 50%;
 	z-index: 10050;
-	width: 70%;
-	margin-left: -35%;
+	width: 970px;
+	margin-left: -485px;
 	background-color: #ffffff;
 	border: 1px solid #999;
 	border: 1px solid rgba(0, 0, 0, 0.3);
@@ -2115,7 +2259,7 @@ h6 small {
 }
 
 .modal.fade.in {
-  top: 10%;
+  top: 5%;
 }
 
 .modal-header {
@@ -2134,8 +2278,8 @@ h6 small {
 
 .modal-body {
   position: relative;
-  max-height: 400px;
-  padding: 15px;
+  max-height: 680px;
+  padding: 5px;
   overflow-y: auto;
 }
 
@@ -2388,3 +2532,86 @@ h6 small {
 	background-color:#2887bd;
 }
 /*** user-info-popup ***/
+
+/*** meeting-template ***/
+#meeting-template ul{
+	list-style:none;
+	margin:0px;
+	padding:0px;
+}
+#meeting-template .meeting-template-body .left-body {
+	float:left;
+	text-align:center;
+}
+#meeting-template .meeting-template-body .left-body .custom{
+	font-family: "Fjalla One"; 
+	font-size: 28px;
+	color:#FFFFFF;
+	width: 351px;
+	height: 47px;
+	line-height: 47px;
+	background-color: #96cbff;
+	-webkit-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	-moz-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	margin:10px;
+}
+#meeting-template .meeting-template-body .left-body ul{
+	width:341px;
+	height:300px;
+	margin:10px;
+	padding:0px 10px 0px 0px;
+	overflow-y:scroll;
+}
+#meeting-template .meeting-template-body .left-body li{
+	font-size: 20px; 
+	color: #57acff;
+	width:100%;
+	height: 41px; 
+	line-height: 35px; 
+	background-color: #eaf5ff; 
+	-webkit-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11); 
+	-moz-box-shadow: inset -3px -4px 5px rgba(0,0,0,.11); 
+	box-shadow: inset -3px -4px 5px rgba(0,0,0,.11);
+	margin:10px 0px;
+	cursor:pointer;
+}
+#meeting-template .meeting-template-body .right-body{
+	float:left;
+	padding:20px;
+}
+#meeting-template .meeting-template-body .right-body .subject{
+	font-size: 28px; 
+	color: #666;
+	margin-bottom:7px;
+}
+#meeting-template .meeting-template-body .right-body .goal{
+	font-size: 19px;
+	color: #666;
+	margin-bottom:15px;
+}
+#meeting-template .meeting-template-body .right-body .process-subject{
+	position:relative;
+	left:0px;
+	top:0px;
+	text-align:center;
+	font-size: 19px; 
+	color: #333;
+	width: 526px; 
+	height: 41px; 
+	line-height: 41px; 
+	-webkit-border-radius: 0 526px/0 1px; 
+	-moz-border-radius: 0 526px/0 1px; 
+	border-radius: 0 526px/0 1px; 
+	background-color: #ffc; 
+	-webkit-box-shadow: 0 3px 5px rgba(0,0,0,.17); 
+	-moz-box-shadow: 0 3px 5px rgba(0,0,0,.17); 
+	box-shadow: 0 3px 5px rgba(0,0,0,.17);
+	z-index:1;
+}
+#meeting-template .meeting-template-body .right-body .process-arrow{
+	width:526px;
+	height:13px;
+	background: url(/images/arrow-bottom.png) no-repeat 250px 0  rgba(0, 0, 0, 0);
+}
+/*** meeting-template ***/

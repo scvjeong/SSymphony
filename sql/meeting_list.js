@@ -5,6 +5,7 @@ exports.dao_group_info = function(evt, mysql_conn, params){
 	var sql = "SELECT  ";
 	sql += "`C`.`name`, ";
 	sql += "`E`.`idx` AS `idx_user`, ";
+	sql += "`E`.`id`, ";
 	sql += "CONCAT(`E`.`first_name`,  ' ',  `E`.`last_name`) AS `user_name` ";
 	sql += "FROM `user` AS `A` ";
 	sql += "INNER JOIN `relation_user_group` AS `B` ";

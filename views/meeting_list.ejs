@@ -8,10 +8,9 @@
 	<meta name="author" content="" />
 	<link rel="stylesheet" href="/stylesheets/font.css" />
 	<link rel="stylesheet" href="/stylesheets/orchestra.css" />
-	<link rel="stylesheet" href="/stylesheets/fullcalendar.css?v=1">
-	<link rel="stylesheet" href="/stylesheets/bootstrap_new.css" />
-	<link rel="stylesheet" href="/stylesheets/datepicker.css?v=1">
-	<link rel="stylesheet" href="/stylesheets/select2.css?v=1">
+	<link rel="stylesheet" href="/stylesheets/fullcalendar.css">
+	<link rel="stylesheet" href="/stylesheets/datepicker.css">
+	<link rel="stylesheet" href="/stylesheets/select2.css">
 	<link rel="stylesheet" href="/stylesheets/theme.css">
 </head>
 
@@ -47,59 +46,99 @@
 				<div class="tool matrix">Matrix</div>
 				<div class="tool vote">Vote</div>
 			</li>
-			<li id="meeting-list-btn">MEETING<br>LIST</li>
-			<li id="group-info-btn" onclick="javascript:alert('준비중')">GROUP<br>INFO</li>
+			<li id="meeting-list-btn" onclick="showMeetingList()">MEETING<br>LIST</li>
+			<li id="group-info-btn" onclick="showGroupInfo()">GROUP<br>INFO</li>
 			<li id="need-any-help-btn" onclick="javascript:alert('준비중')">NEED<br>ANY<br>HELP</li>
 		</ul>
 	</div>
-    <div id="meeting-calendar">
-    </div>
-	<div id="meeting-list" class="fancy-scrollbar">
-		<ul class="member-list">
-		<% 
-			for(var i=0; i<result.group_info.length; i++) {
-		%>
-			<li title="<%=result.group_info[i].user_name%>" idx="<%=result.group_info[i].idx_user%>"><%=result.group_info[i].user_name.toString().substring(0,1)%></li>
-		<%
-			}
-		%>
-		</ul>
-		<ul class="meeting-list-btn-wrap">
-			<li><a class="add-member-btn" href="javascript:initAddMemberPopup();">Add Memebers...</a>
-		</ul>
-		<ul class="meeting-list-main">
-			<% 
-				for(var i=0; i<result.meeting_list.length; i++) {
-					var idx = result.meeting_list[i].idx_meeting;
-			%>
-					<li class="meeting-node" idx="<%= idx %>" status="<%=result.meeting_list[i].status%>">
-						<div class="color-bar back-color-<%=i+1%>"></div>
-						<ul>
-							<li class="subject"><%= result.meeting_list[i].subject %></li>
-							<li class="date color-<%=i+1%>"><%= result.meeting_list[i].date.toDateString() %> <%= result.meeting_list[i].start_time %></li>
-							<li class="time"><%= result.meeting_list[i].start_time %> ~ <%= result.meeting_list[i].end_time %></li>
-							<li><%=result.meeting_list[i].status%></li>
-							<li class="member">
-								<%
-									var len = result.meeting_user[idx].length;
-									for(var j=0; j<len; j++) {
-										var name = result.meeting_user[idx][j].first_name + result.meeting_user[idx][j].last_name;
-										if( len === (j+1) ) {
-										%>
-											<span><%= name.trim() %></span>
-										<%
-										} else {
-										%>
-											<span><%= name.trim() %>,</span>
-										<%	
+	<div id="meeting-list-page" class="page">
+		<div id="meeting-calendar">
+		</div>
+		<div id="meeting-list" class="fancy-scrollbar">
+			<ul class="meeting-list-main">
+				<% 
+					for(var i=0; i<result.meeting_list.length; i++) {
+						var idx = result.meeting_list[i].idx_meeting;
+				%>
+						<li class="meeting-node" idx="<%= idx %>" status="<%=result.meeting_list[i].status%>">
+							<div class="color-bar back-color-<%=i+1%>"></div>
+							<ul>
+								<li class="subject"><%= result.meeting_list[i].subject %></li>
+								<li class="date color-<%=i+1%>"><%= result.meeting_list[i].date.toDateString() %> <%= result.meeting_list[i].start_time %></li>
+								<li class="time"><%= result.meeting_list[i].start_time %> ~ <%= result.meeting_list[i].end_time %></li>
+								<li><%=result.meeting_list[i].status%></li>
+								<li class="member">
+									<%
+										var len = result.meeting_user[idx].length;
+										for(var j=0; j<len; j++) {
+											var name = result.meeting_user[idx][j].first_name + result.meeting_user[idx][j].last_name;
+											if( len === (j+1) ) {
+											%>
+												<span><%= name.trim() %></span>
+											<%
+											} else {
+											%>
+												<span><%= name.trim() %>,</span>
+											<%	
+											}
 										}
-									}
-								%>
-							</li>
-						</ul>
-					</li>
-			<% } %>
-		</ul>		
+									%>
+								</li>
+							</ul>
+						</li>
+				<% } %>
+			</ul>		
+		</div>
+	</div>
+	<div id="group-info-page" class="page">
+		<div id="group-info">
+			<div class="sub-title">The number of meeting</div>
+			<div id="group-info-chart" class="group-info-chart"></div>
+			<div class="sub-title">Group Info</div>
+			<ul>
+				<li>
+					<div class="list-title">Total meeting count</div>
+					<div>1000 </div>
+				</li>
+				<li>
+					<div class="list-title">Total meeting time</div>
+					<div>1239234 hours</div>
+				</li>
+				<li>
+					<div class="list-title">Average meeting time</div>
+					<div>3.4 hours</div>
+				</li>
+				<li class="top-3">
+					<div class="list-title">Top 3 attendance rate</div>
+					<div class="list-contents">Micheal Jeong</div>
+					<div class="list-contents">Micheal Jeong</div>
+					<div class="list-contents">Micheal Jeong</div>
+				</li>
+				<li class="top-3">
+					<div class="list-title">Top 3 participation rate</div>
+					<div class="list-contents">Micheal Jeong</div>
+					<div class="list-contents">Micheal Jeong</div>
+					<div class="list-contents">Micheal Jeong</div>
+				</li>
+			</ul>
+		</div>
+		<div id="group-info-member" class="fancy-scrollbar">
+			<div class="meeting-list-btn-wrap">
+				<a class="add-member-btn" href="javascript:initAddMemberPopup();">Add Memebers...</a>
+			</div>
+			<ul class="member-list">
+			<% 
+				for(var i=0; i<result.group_info.length; i++) {
+			%>
+				<li title="<%=result.group_info[i].user_name%>" idx="<%=result.group_info[i].idx_user%>">
+					<div class="picture"></div>
+					<div class="name"><%=result.group_info[i].user_name%>(<%=result.group_info[i].id%>)</div>
+				</li>
+			<%
+				}
+			%>
+			</ul>
+		</div>
 	</div>
 </div>
 <div id="myModal" class="modal hide fade">
@@ -155,6 +194,16 @@
 	<script src="/javascripts/bootstrap.wizard.min.js"></script>
 	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
 	<script src="/javascripts/bootstrap.datepicker.min.js"></script>
+	<!-- Flot Plotting -->
+	<script src="/javascripts/libs/flot/excanvas.min.js"></script>
+	<script src="/javascripts/libs/flot/jquery.flot.js"></script>
+	<!-- REQUIRED: Flot Chart Engine -->
+	<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>			
+	<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>		
+	<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
+	<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>	
+	<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>	
+	<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
 	<script src="/javascripts/select2.js"></script>
 	<script src="/javascripts/jquery.uniform.js"></script>
 	<script src="/javascripts/jquery.form.js"></script>
@@ -187,7 +236,86 @@
 			initClickMeeting();
 			initColorBar();
 			initMeetingListBtn();
+			// group-info
+			initChart();
 		})
+		
+		function initChart()
+		{
+			if ($("#group-info-chart").length) {
+				var pageviews = [[1, 5], [3, 7], [4, 13], [10, 15], [14, 1], [20, 10], [25, 10], [30, 16]];
+				var plot = $.plot($("#group-info-chart"), [{
+					data : pageviews,
+					label : "The number of meeting "
+				}], {
+					series : {
+						lines : {
+							show : true,
+							lineWidth : 1,
+							fill : true,
+							fillColor : {
+								colors : [{
+									opacity : 0.1
+								}, {
+									opacity : 0.15
+								}]
+							}
+						},
+						points : {
+							show : true
+						},
+						shadowSize : 0
+					},
+					xaxis : {
+						mode : "time",
+						tickLength : 10
+					},
+					yaxes : [{
+						max : 20,
+						min : 0,
+						tickLength : 5
+					}],
+					grid : {
+						hoverable : true,
+						clickable : true,
+						tickColor : $chrt_border_color,
+						borderWidth : 0,
+						borderColor : $chrt_border_color,
+					},
+					tooltip : true,
+					tooltipOpts : {
+						content : "%s for <b>%x</b> day was <b>%y</b>",
+						dateFormat : "%y-%0m-%0d",
+						defaultTheme : false
+					},
+					colors : [$chrt_main, $chrt_second],
+					xaxis : {
+						ticks : 31,
+						tickDecimals : 0
+					},
+					yaxis : {
+						ticks : 10,
+						tickDecimals : 0
+					},
+					legend: {
+						position: "ne", 
+						margin: [-5, -17]
+					}
+				});
+				
+			}
+		}
+		function showMeetingList()
+		{
+			$(".page").hide();
+			$("#meeting-list-page").show();
+		}
+
+		function showGroupInfo()
+		{
+			$(".page").hide();
+			$("#group-info-page").show();
+		}
 
 		function initClickMeeting()
 		{
@@ -323,8 +451,9 @@
 						$("#light-popup .contents").html(html);
 						$("#light-popup .searched-user-node").on("click", function(){
 							var idx_user = $(this).attr("idx");
+							var user_id = $(".user_id", this).html();
 							var user_name = $(".user_name", this).html();
-							addMember(idx_user, user_name);
+							addMember(idx_user, user_id, user_name);
 						});
 					}
 				});
@@ -365,12 +494,14 @@
 			$("#light-popup #member").val("");
 			$("#light-popup .contents").html("Search for a person in Orchestra by email address, or enter an email address to invite someone new.");
 		}
-		function addMember(idx_user, user_name)
+		function addMember(idx_user, user_id, user_name)
 		{
+			user_name = user_name.replace("(","").replace(")","")
 			var params = { 
 				idx_user:idx_user, 
 				user_name:user_name 
 			};
+			var html;
 			$.ajax({
 				url: '/page/add_user',
 				type: 'POST',
@@ -379,8 +510,17 @@
 				success: function(json) {
 					if( json.result == "successful" )
 					{
-						var html = '<li title="'+json.user_name+'">'+json.user_name.toString().substring(1,2)+'</li>';
-						$("#meeting-list .member-list").append(html);
+						html = '<li title="'+user_name+'" idx="'+idx_user+'">';
+						html += '<div class="picture"></div>';
+						html += '<div class="name">'+user_name+' ('+user_id+')</div>';
+						html += '</li>';
+						$("#group-info-member .member-list").append(html);
+						$("#group-info-member .member-list li[idx="+idx_user+"]").toggle(
+						function(){
+							initUserInfoPopup($(this));
+						},function(){
+							initUserInfoPopdown($(this));
+						});
 					}
 					initAddMemberPopdown();
 				}
@@ -390,7 +530,7 @@
 		function initUserInfoBtn()
 		{
 			var idx_user;
-			$("#meeting-list .member-list li").toggle(
+			$("#group-info-member .member-list li").toggle(
 			function(){
 				initUserInfoPopup($(this));
 			},function(){
@@ -427,7 +567,7 @@
 						$("#user-info-popup").css({
 							display:"block",
 							top:o.top+33,
-							left:o.left-237
+							left:o.left
 						});
 					}
 				}
@@ -453,7 +593,7 @@
 					success: function(json) {
 						if( json.result == "successful" )
 						{
-							$("#meeting-list .member-list li[idx="+idx_user+"]").remove();
+							$("#group-info-member .member-list li[idx="+idx_user+"]").remove();
 						}
 						initUserInfoPopdown(idx_user);
 					}

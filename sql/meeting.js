@@ -199,18 +199,20 @@ exports.dao_set_meeting_save_tools_image = function(evt, mysql_conn, params){
 exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
 	
 	
-	params['idx_meeting']=100;
+	params['idx_meeting']=1;
 	params['idx_group']=0;
-	params['idx_process']=0;
 
-	var sql = "SELECT `idx_tool`, ";
-	sql += "`tool_num`, ";
-	sql += "`image_value` ";
-	sql += "FROM `tools_image` ";
-	sql += "WHERE `idx_meeting` = '"+params['idx_meeting']+"' ";
-	sql += "AND `idx_group` = '"+params['idx_group']+"' ";
-	sql += "AND `idx_process` = '"+params['idx_process']+"' ";
-	sql += "ORDER BY `tool_num` ASC";
+	var sql = "SELECT `A`.`idx_tool`, ";
+	sql += "`A`.`tool_num`, ";
+	sql += "`A`.`image_value`, ";
+	sql += "`A`.`idx_process` ";
+	sql += "FROM `tools_image` AS `A` ";
+//	sql += "INNER JOIN `agenda` AS `B` ";
+//	sql += "ON `A`.`idx_meeting` = `B`.`idx_meeting_planning` ";
+	sql += "WHERE `A`.`idx_meeting` = '"+params['idx_meeting']+"' ";
+	sql += "AND `A`.`idx_group` = '"+params['idx_group']+"' ";
+	sql += "ORDER BY `A`.`idx_process` ASC";
+
 
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('get_meeting_tools_image', err, rows);
@@ -218,3 +220,4 @@ exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
 
 	return sql;
 }
+

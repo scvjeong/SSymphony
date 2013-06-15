@@ -1,5 +1,5 @@
 /*
-	종혁이 파괴 방지 주석
+	영웅 종혁
 	13.05.27 02시 - 투표 진행 함수 구현
 */
 
@@ -17,7 +17,7 @@ function server(io)
 			socket.join(tmpGroup);
 
 			// join하려는 그룹이 _meeting_contents_for_each_group에 없으면 새 그룹 생성하기
-			if (_meeting_contents_for_each_group.hasOwnProperty(group_id))
+			if (!_meeting_contents_for_each_group.hasOwnProperty(group_id))
 			{
 				var temp_group = {
 					whiteboard: {},
@@ -94,8 +94,10 @@ function server(io)
 			console.log("Call: set_list_of_tools");
 			var group = data.group;
 			var idx_meeting = data.idx_meeting;
-
-			socket.emit('get_list_of_tools', { idArray: _idArray });
+			
+			var result = eval("_meeting_contents.group" + group + "[" + idx_meeting + "].tools_for_each_process;");
+			
+			socket.emit('get_list_of_tools', { list_of_tools: result });
 		});
 
 
@@ -686,98 +688,103 @@ var redis = require('redis'),
 var _meeting_contents_for_each_group = {};	// 회의 진행 중 데이터 보관
 /*
 	_meeting_contents = {
-		group + '그룹 식별 번호': {
-			whiteboard: {
-
-			},
-			tools_for_each_process: [
-				{
-					type: 'list',
-					name: 'list' + _tool_list_count,
-					title: '리스트 ' + _tool_list_count,
-					variables: {
-						tmpIndent: 0,	// 현재 들여쓰기 상태
-						tmpLastId: 0,	// 마지막 ID 관리
-						tmpClient: 0,	//현재 클라이언트 번호
-						tmpGroup: 0,	//현재 그룹
-						tmpTool: 0,  //현재 도구
-						tmpToolSelect: 0,
-						clientColor: new Array( "none", "#99FF99", "#CCCC99",
-												"#0099FF", "#CCFFCC", "#FFFF66",
-												"#FF9999", "#669999", "#9999FF",
-												"#00CCCC", "#CC9900"),
-						inputFlag: 0
+		group + '그룹 식별 번호': [
+			{
+				whiteboard: {
+	
+				},
+				tools_for_each_process: [
+					{
+						type: 'list',
+						name: 'list' + _tool_list_count,
+						title: '리스트 ' + _tool_list_count,
+						variables: {
+							tmpIndent: 0,	// 현재 들여쓰기 상태
+							tmpLastId: 0,	// 마지막 ID 관리
+							tmpClient: 0,	//현재 클라이언트 번호
+							tmpGroup: 0,	//현재 그룹
+							tmpTool: 0,  //현재 도구
+							tmpToolSelect: 0,
+							clientColor: new Array( "none", "#99FF99", "#CCCC99",
+													"#0099FF", "#CCFFCC", "#FFFF66",
+													"#FF9999", "#669999", "#9999FF",
+													"#00CCCC", "#CC9900"),
+							inputFlag: 0
+						}
+					},
+					{
+						type: 'postit',
+						name: 'postit' + _tool_postit_count,
+						title: '포스트잇 ' + _tool_postit_count,
+						variables: {
+							tmpLastId: 100,
+							tmpGroup: 0,
+							tmpTool: 0,
+							tmpItemGroup: 0,
+							tmpClient: 0,
+							tmpToolSelect: 0,
+							preSelectGroup: 0
+						}
+					},
+					{
+						type: 'mindmap',
+						name: 'mindmap' + _tool_mindmap_count,
+						title: '마인드맵 ' + _tool_mindmap_count,
+						variables: {
+							moveFlag: 0,
+							preX: 0,
+							preY: 0,
+							dataLinks: [],
+							dataNodes: [],
+							tmpIndent: 0,	// 현재 들여쓰기 상태 
+							tmpLastId: 100,	// 마지막 ID 관리
+							tmpClient: 0,	//현재 클라이언트 번호
+							tmpGroup: 0,	//현재 그룹
+							tmpTool: 0,
+							inputFlag: 0	//키입력 감지하기 위한 변수	
+						}
+					},
+					{
+						type: 'vote',
+						name: vote' + _tool_vote_count,
+						title: '투표 ' + _tool_vote_count,
+						variables: {
+							
+						}
+					},
+					{
+						type: 'matrix',
+						name: 'matrix' + _tool_matrix_count,
+						title: 'matrix ' + _tool_matrix_count,
+						variables: {
+							tmpClient: 0,	//현재 클라이언트 번호
+							tmpGroup: 0,	//현재 그룹
+							setupData: {
+										row: 0,
+										col: 0
+										}, // matrix 행, 열
+							setupFlag: {
+										data_init: true,
+										row: false,
+										col: false
+										},
+							optionId: {
+										set: 999999,
+										row: 999998,
+										col: 999997
+										},
+							_key_code: null, // 키 입력 값 저장
+							_box_count: 0,
+							inputFlag: 0	//키입력 감지하기 위한 변수
+						}
 					}
+					.
+					.
+					.
 				},
 				{
-					type: 'postit',
-					name: 'postit' + _tool_postit_count,
-					title: '포스트잇 ' + _tool_postit_count,
-					variables: {
-						tmpLastId: 100,
-						tmpGroup: 0,
-						tmpTool: 0,
-						tmpItemGroup: 0,
-						tmpClient: 0,
-						tmpToolSelect: 0,
-						preSelectGroup: 0
-					}
-				},
-				{
-					type: 'mindmap',
-					name: 'mindmap' + _tool_mindmap_count,
-					title: '마인드맵 ' + _tool_mindmap_count,
-					variables: {
-						moveFlag: 0,
-						preX: 0,
-						preY: 0,
-						dataLinks: [],
-						dataNodes: [],
-						tmpIndent: 0,	// 현재 들여쓰기 상태 
-						tmpLastId: 100,	// 마지막 ID 관리
-						tmpClient: 0,	//현재 클라이언트 번호
-						tmpGroup: 0,	//현재 그룹
-						tmpTool: 0,
-						inputFlag: 0	//키입력 감지하기 위한 변수	
-					}
-				},
-				{
-					type: 'vote',
-					name: vote' + _tool_vote_count,
-					title: '투표 ' + _tool_vote_count,
-					variables: {
-						
-					}
-				},
-				{
-					type: 'matrix',
-					name: 'matrix' + _tool_matrix_count,
-					title: 'matrix ' + _tool_matrix_count,
-					variables: {
-						tmpClient: 0,	//현재 클라이언트 번호
-						tmpGroup: 0,	//현재 그룹
-						setupData: {
-									row: 0,
-									col: 0
-									}, // matrix 행, 열
-						setupFlag: {
-									data_init: true,
-									row: false,
-									col: false
-									},
-						optionId: {
-									set: 999999,
-									row: 999998,
-									col: 999997
-									},
-						_key_code: null, // 키 입력 값 저장
-						_box_count: 0,
-						inputFlag: 0	//키입력 감지하기 위한 변수
-					}
+					...
 				}
-				.
-				.
-				.
 			]
 		}
 	}
@@ -807,4 +814,8 @@ server(io_mindmap);
 server(io_vote);
 server(io_matrix);
 server(io_board);
+<<<<<<< HEAD
 server(io_chatting);
+=======
+server(io_chatting);
+>>>>>>> a3b8774b1a0c8c2c7985a0dcc658694c56549c71

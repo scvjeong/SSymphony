@@ -17,7 +17,7 @@ function server(io)
 			socket.join(tmpGroup);
 
 			// join하려는 그룹이 _meeting_contents_for_each_group에 없으면 새 그룹 생성하기
-			if (_meeting_contents_for_each_group.hasOwnProperty(group_id))
+			if (!_meeting_contents_for_each_group.hasOwnProperty(group_id))
 			{
 				var temp_group = {
 					whiteboard: {},

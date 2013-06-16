@@ -1649,6 +1649,13 @@ h6 small {
 .rightpanel-content-box .process-unit{
 	cursor:pointer;
 }
+.rightpanel-content-box .process-unit:hover{
+	color:#2674a1;
+}
+.rightpanel-content-box .process-unit .use_time{
+	margin-left:5px;
+	font-size:8pt;
+}
 .rightpanel-content-box .processing{
 	color:#2674a1;
 }
@@ -1666,19 +1673,6 @@ h6 small {
 	float:left;
 	cursor:pointer;
 }
-.client-1{
-	color:#3366CC;
-}
-.client-2{
-	color:#009933;
-}
-.client-3{
-	color:#FF9900;
-}
-.client-4{
-	color:#E4007F;
-}
-
 .fancy-scrollbar::-webkit-scrollbar,
 .fancy-scrollbar::-webkit-scrollbar-button:start:increment,
 .fancy-scrollbar::-webkit-scrollbar-button:start:decrement,

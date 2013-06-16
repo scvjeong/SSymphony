@@ -1,29 +1,7 @@
 <%
-	/* 시간 설정 */
-	var t = 0;
 	var idx_user = result.idx_user;
 	var idx_group = result.idx_group;
 	var idx_meeting = result.idx_meeting;
-	var limit_time = "00:00:00";
-	if( result.meeting.length > 0 )
-	{
-		var reg_time = result.meeting[0].reg_time;
-		var r_t = new Date(reg_time);
-		var c_t = new Date();
-		t = (c_t.getTime() - r_t.getTime()) / 1000;
-		var start_time = result.meeting[0].start_time;
-		var end_time = result.meeting[0].end_time;
-		var s_t = start_time.toString().split(":");
-		var e_t = end_time.toString().split(":");
-		var h = ((e_t[0]*1) - (s_t[0]*1));
-		if( h < 10 ) h = "0"+ h;
-		var m = ((e_t[1]*1) - (s_t[1]*1));
-		if( m < 10 ) m = "0"+ m;
-		var s = ((e_t[2]*1) - (s_t[2]*1));
-		if( s < 10 ) s = "0"+ s;
-		limit_time = h + ":" + m + ":" + s;
-	}
-	/* 시간 설정 */
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -156,10 +134,10 @@
 <body class="meeting" ondragstart="return false" onselectstart="return false">
 	<div class="container">
 		<div class="title-bar">
-			<div class="subject">Weekly Discussion</div>
-			<span class="sub-subject">Service Design Meeting</span>
+			<div class="subject"><%=result.meeting[0].subject%></div>
+			<span class="sub-subject"><%=result.meeting[0].goal%></span>
 			<div class="stop-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
-			<div class="time">00:00:00 / 03:00:00</div>
+			<div class="time">00:00:00 / 00:00:00</div>
 		</div>
 		<div id="white-board" class="white-board">
 			<!-- Whiteboard control box -->
@@ -376,6 +354,24 @@
 				<div class="rightpanel-title-bar" id="panel_process_title">Process</div>
 				<div class="rightpanel-content-box fancy-scrollbar" id="panel_process_container">
 					<ul id="process_list" style="margin: 0;">
+					<%
+						for(var i=0;i<result.meeting.length;i++){
+							if(result.meeting[i].agenda_subject === null)
+								break;
+					%>
+						<li class="process-unit <%=result.meeting[i].class_name%>">
+							<span><%=result.meeting[i].agenda_subject%></span><span class="use_time">(<%=result.meeting[i].agenda_used_time%>)</span>
+							<div class="progress-bar">
+								<div class="progress-bar-fill" style="width:0%;"></div>
+							</div>
+							<div class="time_container"><span class="lead_time"><%=result.meeting[i].agenda_start_time%></span><span class="limit_time"><%=result.meeting[i].agenda_end_time%></span></div>
+							<div class="clearboth"></div>
+						</li>
+						
+					<%
+						}
+					%>
+						
 						<li class="process-unit processing">
 							<span>Ice Breaking</span>
 							<div class="progress-bar">
@@ -395,6 +391,7 @@
 								</ul>
 							</div>
 						</li>
+						<!--
 						<li class="process-unit">
 							<span>Weekly Review</span>
 							<div class="progress-bar">
@@ -443,6 +440,7 @@
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
 						</li>
+						-->
 					</ul>
 				</div>
 			</div>
@@ -457,14 +455,13 @@
 				</div>
 			</div>
 			<div class="member-box">
-				<div class="rightpanel-title-bar" id="panel_member_title">Memeber 4/6</div>
+				<div class="rightpanel-title-bar" id="panel_member_title">Memeber (<%=result.meeting_user.length%>)</div>
 				<div class="rightpanel-content-box fancy-scrollbar" id="panel_member_container">
-					<div class="member-unit client-1">■ Jonghyuk Lim</div>
-					<div class="member-unit client-2">■ Julian De Maestri</div>
-					<div class="member-unit client-3">■ scvjeong</div>
-					<div class="member-unit client-4">■ Donghyun Go</div>
-					<div class="member-unit">■ Irene White</div>
-					<div class="member-unit">■ Vincent Monaco</div>
+					<%
+						for(var i=0;i<result.meeting_user.length;i++){
+					%>
+						<div class="member-unit color-<%=i+1%>">■ <%=result.meeting_user[i].first_name%> <%=result.meeting_user[i].last_name%></div>
+					<%}%>
 				</div>
 			</div>
 			<div class="facilitator-box">
@@ -493,10 +490,6 @@
   <script src="/javascripts/bootstrap.min.js"></script>
   <script src="/javascripts/bootbox.js"></script>
 
-  <!-- Theme Scripts -->
-  <script src="/javascripts/ohcastra.js"></script>
-  <script src="/javascripts/application.js"></script>
-
   <!-- Google Code Prettyfy - source-code highlighter -->
   <script src="/javascripts/libs/google-code-prettify/prettify.js"></script>
 
@@ -514,22 +507,15 @@
 	<script src="/javascripts/config.js"></script>
 	<script src="/javascripts/meeting.js"></script>	
 	<script>
-		var _runTime = <%=t%>;
+		var _runTime = <%=result.meeting[0].run_time%>;
+		var _process_time = <%=result.process.time%>;
 		var _idx_user = "<%=idx_user%>";
-		//var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
-		var _totalTime = "03:00:00";	// 회의 전체 시간
+		var _totalTime = "<%=result.meeting[0].limit_time%>";	// 회의 전체 시간
 		var _group_id = "<%=idx_group%>";
 		var _idx_meeting = "<%=idx_meeting%>";
 		console.log("in meeting.ejs {_idx_user:" + _idx_user + ", _group_id:" + _group_id + "}");
 		setInterval("showRunTime()", 1000);
-		$(function(){
-			$(".process-unit").hover(function(){
-				
-				$(this).addClass("processing");
-			}, function(){
-				$(this).removeClass("processing");
-			})
-		});
+		setInterval("showTime()", 1000);
 	</script>
 <!-- /Javascript -->
 

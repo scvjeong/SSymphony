@@ -46,6 +46,7 @@ exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
 // params['ft_appraisal']
 // params['mvp']
 exports.dao_set_meeting_evaluation = function(evt, mysql_conn, params){
+	// 임시로 해놓은 변수들 //
 	params['idx_meeting'] = 19;
 	params['idx_group'] = 1;
 	params['idx_user'] = 1;

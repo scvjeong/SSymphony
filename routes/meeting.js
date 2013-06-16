@@ -5,7 +5,7 @@ var check = require('validator').check,
     sanitize = require('validator').sanitize;
 
 var _APPRAISAL_COMPLETE_FLAG_CNT = 1;
-var _EVALUATION_COMPLETE_FLAG_CNT = 4;
+var _EVALUATION_COMPLETE_FLAG_CNT = 1;
 var _RESULT_COMPLETE_FLAG_CNT = 3;
 var _MEETING_FLAG_CNT = 1;
 var _EVALUATION_INFO_FLAG_CNT = 1;
@@ -166,18 +166,16 @@ exports.post_meeting_evaluation = function(req, res) {
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
-	var params = { 
-		satisfaction:req.body.satisfaction,	 
-		ft_appraisal:req.body.ft_appraisal,
-		mvp:req.body.mvp
-	};
 
-	var result_params = { 
+	var params = { 
+		satisfaction:req.param("satisfaction"),
+		ft_appraisal:req.param("ft_appraisal"),
+		mvp:req.param("mvp"),
 		idx_meeting:req.session.idx_meeting,	 
 		idx_group:req.session.idx_group
 	};	
 	
-	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };
+	var result = {  };
 
 	var complete_flag = 0;
 	
@@ -188,44 +186,9 @@ exports.post_meeting_evaluation = function(req, res) {
 		complete_flag++;
 		if( complete_flag === _EVALUATION_COMPLETE_FLAG_CNT ) {
 			//showMeetingRe
+			res.send(result);
 		}
 	});
-	
-	//console.log("22222222");
-
-	dao_m.dao_get_meeting_result(evt, mysql_conn, result_params);
-	evt.on('get_meeting_result', function(err, rows){
-		console.log("get_meeting_tools_image");
-		if(err) throw err;
-		result.meeting_result = rows;
-		complete_flag++;
-		if( complete_flag === _EVALUATION_COMPLETE_FLAG_CNT ) {
-			res.render('meeting_result', {result:result} );
-		}
-	});
-
-	dao_m.dao_get_meeting_result_appraisal(evt, mysql_conn, result_params);
-	evt.on('get_meeting_result_appraisal', function(err, rows){
-		console.log("get_meeting_result_appraisal");
-		if(err) throw err;
-		result.meeting_result_appraisal = rows;
-		complete_flag++;
-		if( complete_flag === _EVALUATION_COMPLETE_FLAG_CNT) {
-			res.render('meeting_result', {result:result} );
-		}
-	});
-
-	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, result_params);
-	evt.on('get_meeting_tools_image', function(err, rows){
-		console.log("get_meeting_tools_image");
-		if(err) throw err;
-		result.meeting_tools_image = rows;
-		complete_flag++;
-		if( complete_flag === _EVALUATION_COMPLETE_FLAG_CNT ) {
-			res.render('meeting_result', {result:result} );
-		}
-	});
-
 };
 
 exports.post_meeting_close = function(req, res){

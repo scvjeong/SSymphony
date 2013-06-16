@@ -80,12 +80,11 @@ $(document).ready(function() {
 
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
-	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 300);
-	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
-	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
-	setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
-	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 6000);
-	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
+	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 500);
+	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 700);
+	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 700);
+	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 800);
+	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 5000);
 
 	// 파일 업로드 초기화
 	$('#btn_uploadFile').click(function() {
@@ -177,7 +176,8 @@ $(document).ready(function() {
 					}
 					else if( json.result == "successful" )
 					{
-						showMeetingResultWindow();
+						//showMeetingResultWindow();
+						showEvaluateMeetingWindow();
 					}
 				},
 				error: function(err) {
@@ -644,6 +644,21 @@ function includeFileDynamically(list) {
 	}
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+/*	새로운 심장	*/
+
+function createNewTool(tool_type)
+{
+	_socket_common.emit("create_tool",
+		{
+			group: _group_id,
+			idx_meeting: _idx_meeting,
+			type: tool_type
+		});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 
 
 var _tool_type = "";
@@ -1242,9 +1257,33 @@ function clickBestMember(sel)
 
 function evaluateComplete()
 {
-	 $('#evaluate_form').submit();
 	 hideEvaluateWindow();
-	//showMeetingResultWindow();
+	// $('#evaluate_form').submit();
+
+	var satisfaction_val = $('#meeting_val').val();
+	var appraisal_val = $('#ft_val').val();
+	var mvp_val = $('#mvp_val').val();
+	
+	//console.log(mvp_val);
+	
+	var send_params = {
+		satisfaction: satisfaction_val,
+		ft_appraisal: appraisal_val,
+		mvp: mvp_val
+	};	
+
+	$.ajax( {
+			url: '/page/meeting_evaluation',
+			type: 'POST',		
+			data: send_params,
+			dataType: 'json',
+			success: function(json_data) {
+				showMeetingResultWindow();
+			}
+		});
+
+	
+	// setTimeout("showMeetingResultWindow()", 5000); 
 }
 
 function makeCanvasImage(params)
@@ -1910,15 +1949,15 @@ var input_point = null;
   function startRecording() {
 	recorder.clear();
     recorder && recorder.record();
-    $('.record-btn').css("display", "none");
-	$('.stop-btn').css("display", "block");
+    $('#record-btn').css("display", "none");
+	$('#stop-btn').css("display", "block");
     console.log('Recording...');
   }
 
   function stopRecording() {
     recorder && recorder.stop();
-    $('.record-btn').css("display", "block");
-	$('.stop-btn').css("display", "none");
+    $('#record-btn').css("display", "block");
+	$('#stop-btn').css("display", "none");
     console.log('Stopped recording.');
     
     // create WAV download link using audio data blob
@@ -1940,8 +1979,8 @@ var input_point = null;
 		//console.log($('#upload_id').val());
 		
 	//form.append("blob",blob, filename);
-	$('#record_form').append("blob", blob, "test.wav");	
-	$('#record_form').submit();
+	//$('#record_form').append("blob", blob, "test.wav");	
+	//$('#record_form').submit();
 
 	
 	//var reader = new FileReader();

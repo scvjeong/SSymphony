@@ -19,7 +19,7 @@ exports.main = function(req, res){
 		return;
 	}
 
-	/** session start 
+	/** session start **/
 	if( !req.session.email || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
@@ -183,7 +183,7 @@ exports.post_meeting_evaluation = function(req, res) {
 	
 	dao_m.dao_set_meeting_evaluation(evt, mysql_conn, params);
 	evt.on('set_meeting_evaluation', function(err, rows){
-	
+		console.log("set_meeting_evaluation");
 		if(err) throw err;
 		complete_flag++;
 		if( complete_flag === _EVALUATION_COMPLETE_FLAG_CNT ) {
@@ -195,6 +195,7 @@ exports.post_meeting_evaluation = function(req, res) {
 
 	dao_m.dao_get_meeting_result(evt, mysql_conn, result_params);
 	evt.on('get_meeting_result', function(err, rows){
+		console.log("get_meeting_tools_image");
 		if(err) throw err;
 		result.meeting_result = rows;
 		complete_flag++;
@@ -205,6 +206,7 @@ exports.post_meeting_evaluation = function(req, res) {
 
 	dao_m.dao_get_meeting_result_appraisal(evt, mysql_conn, result_params);
 	evt.on('get_meeting_result_appraisal', function(err, rows){
+		console.log("get_meeting_result_appraisal");
 		if(err) throw err;
 		result.meeting_result_appraisal = rows;
 		complete_flag++;
@@ -215,6 +217,7 @@ exports.post_meeting_evaluation = function(req, res) {
 
 	dao_m.dao_get_meeting_tools_image(evt, mysql_conn, result_params);
 	evt.on('get_meeting_tools_image', function(err, rows){
+		console.log("get_meeting_tools_image");
 		if(err) throw err;
 		result.meeting_tools_image = rows;
 		complete_flag++;

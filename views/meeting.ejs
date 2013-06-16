@@ -159,7 +159,7 @@
 			<div class="subject">Weekly Discussion</div>
 			<span class="sub-subject">Service Design Meeting</span>
 			<div class="stop-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
-			<div class="time">00:00:00 / <%=limit_time%></div>
+			<div class="time">00:00:00 / 03:00:00</div>
 		</div>
 		<div id="white-board" class="white-board">
 			<!-- Whiteboard control box -->
@@ -515,7 +515,8 @@
 	<script>
 		var _runTime = <%=t%>;
 		var _idx_user = "<%=idx_user%>";
-		var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
+		//var _totalTime = "<%=limit_time%>";	// 회의 전체 시간
+		var _totalTime = "03:00:00";	// 회의 전체 시간
 		var _group_id = "<%=idx_group%>";
 		var _idx_meeting = "<%=idx_meeting%>";
 		console.log("in meeting.ejs {_idx_user:" + _idx_user + ", _group_id:" + _group_id + "}");

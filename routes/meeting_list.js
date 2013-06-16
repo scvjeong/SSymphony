@@ -79,6 +79,7 @@ exports.meeting_list = function(req, res){
 			if(err) throw err;
 			meeting_user_complete_flag++;
 			result.meeting_user[rows[0].idx_meeting] = rows;
+			console.log(result);
 			if( meeting_user_complete_flag === meeting_user_complete_flag_cnt )
 				res.render('meeting_list', {result:result} );
 		});

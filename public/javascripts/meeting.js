@@ -1216,9 +1216,33 @@ function clickBestMember(sel)
 
 function evaluateComplete()
 {
-	 $('#evaluate_form').submit();
 	 hideEvaluateWindow();
-	//showMeetingResultWindow();
+	// $('#evaluate_form').submit();
+
+	var satisfaction_val = $('#meeting_val').val();
+	var appraisal_val = $('#ft_val').val();
+	var mvp_val = $('#mvp_val').val();
+	
+	//console.log(mvp_val);
+	
+	var send_params = {
+		satisfaction: satisfaction_val,
+		ft_appraisal: appraisal_val,
+		mvp: mvp_val
+	};	
+
+	$.ajax( {
+			url: '/page/meeting_evaluation',
+			type: 'POST',		
+			data: send_params,
+			dataType: 'json',
+			success: function(json_data) {
+				showMeetingResultWindow();
+			}
+		});
+
+	
+	// setTimeout("showMeetingResultWindow()", 5000); 
 }
 
 function makeCanvasImage(params)
@@ -1914,8 +1938,8 @@ var input_point = null;
 		//console.log($('#upload_id').val());
 		
 	//form.append("blob",blob, filename);
-	$('#record_form').append("blob", blob, "test.wav");	
-	$('#record_form').submit();
+	//$('#record_form').append("blob", blob, "test.wav");	
+	//$('#record_form').submit();
 
 	
 	//var reader = new FileReader();

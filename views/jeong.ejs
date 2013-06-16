@@ -1,26 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title></title>
-
-
-<style type="text/css">
-
-input{
-	width: 311px; 
-	height: 20px; 
-	background-color: #fff;
-	border:1px solid #fff;
-	-webkit-box-shadow: inset 0 5px 5px rgba(0,0,0,.11); 
-	-moz-box-shadow: inset 0 5px 5px rgba(0,0,0,.11); 
-	box-shadow: inset 0 5px 5px rgba(0,0,0,.11); 
-}
-</style>
-
+<meta charset="utf-8" />
+<title>Orchestra</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<link rel="stylesheet" href="/stylesheets/jeong.css" />
+<link rel="stylesheet" href="/stylesheets/fullcalendar.css?v=1">
 </head>
 <body>
-<input type="text">
+<!--============================= Page Body =================================-->
+<div class="container">
+	<div id="meeting-list-page" class="page">
+		<div id="meeting-calendar">
+		</div>
+	</div>
+    <div id="group-calendar">
+    </div>
+</div>
+<!--============================= /Page Body ================================-->
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
+<!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+to to "classic" jQuery behavior -->
+<script>if ($ === undefined) $ = jQuery</script>
+<!-- /jQuery -->
+<script src="/javascripts/jquery.fullcalendar.min.js"></script>	
+<script src="/javascripts/config.js"></script>	
+<script type="text/javascript">
+var events = [];
+$(document).ready(function(){
+setup_calendar();
+})
+</script>
 </body>
 </html>

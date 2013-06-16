@@ -434,8 +434,8 @@
 					center: 'prev, next, today',
 					right: 'month, agendaWeek, agenDay' //month, agendaDay, 
 				},
-				selectable: true,
-				selectHelper: true,
+				selectable: false,
+				selectHelper: false,
 				select: function(start, end, allDay) {
 					var title = prompt('Event Title:');
 					if (title) {
@@ -446,12 +446,12 @@
 								end: end,
 								allDay: allDay
 							},
-							true // make the event "stick"
+							false // make the event "stick"
 						);
 					}
 					calendar.fullCalendar('unselect');
 				},
-				editable: true,
+				editable: false,
 				events: events
 			});
 		};
@@ -468,8 +468,8 @@
 					center: 'prev, next, today',
 					right: 'month, agendaWeek, agenDay' //month, agendaDay, 
 				},
-				selectable: true,
-				selectHelper: true,
+				selectable: false,
+				selectHelper: false,
 				select: function(start, end, allDay) {
 					var title = prompt('Event Title:');
 					if (title) {
@@ -480,13 +480,13 @@
 								end: end,
 								allDay: allDay
 							},
-							true // make the event "stick"
+							false // make the event "stick"
 						);
 					}
 					calendar.fullCalendar('unselect');
 				},
 				
-				editable: true,
+				editable: false,
 				events: events
 			});
 		};

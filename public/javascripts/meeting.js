@@ -80,12 +80,11 @@ $(document).ready(function() {
 
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
-	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 300);
-	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 4000);
-	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 5000);
-	setTimeout('showPopupWindow("김정호님이 입장하셨습니다.")', 5500);
-	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 6000);
-	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 22000);
+	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 500);
+	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 700);
+	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 700);
+	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 800);
+	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 5000);
 
 	// 파일 업로드 초기화
 	$('#btn_uploadFile').click(function() {
@@ -174,7 +173,8 @@ $(document).ready(function() {
 					}
 					else if( json.result == "successful" )
 					{
-						showMeetingResultWindow();
+						//showMeetingResultWindow();
+						showEvaluateMeetingWindow();
 					}
 				},
 				error: function(err) {
@@ -1923,15 +1923,15 @@ var input_point = null;
   function startRecording() {
 	recorder.clear();
     recorder && recorder.record();
-    $('.record-btn').css("display", "none");
-	$('.stop-btn').css("display", "block");
+    $('#record-btn').css("display", "none");
+	$('#stop-btn').css("display", "block");
     console.log('Recording...');
   }
 
   function stopRecording() {
     recorder && recorder.stop();
-    $('.record-btn').css("display", "block");
-	$('.stop-btn').css("display", "none");
+    $('#record-btn').css("display", "block");
+	$('#stop-btn').css("display", "none");
     console.log('Stopped recording.');
     
     // create WAV download link using audio data blob

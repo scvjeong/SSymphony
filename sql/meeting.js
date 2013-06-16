@@ -1,11 +1,21 @@
 // get_meeting
 // params['idx_meeting']
 exports.dao_get_meeting = function(evt, mysql_conn, params){
-	var sql = "SELECT `idx`, `reg_time`, ";
-	sql += "`start_time`, ";
-	sql += "`end_time` ";
-	sql += "FROM `meeting_planning` ";
-	sql += "WHERE `idx` = '"+params['idx_meeting']+"' ";
+	var sql = "SELECT `A`.`idx`, ";
+	sql += "`A`.`subject`, ";
+	sql += "`A`.`goal`, ";
+	sql += "`A`.`reg_time`, ";
+	sql += "`A`.`start_time`, ";
+	sql += "`A`.`end_time`, ";
+	sql += "`B`.`subject` AS `agenda_subject`, ";
+	sql += "`B`.`goal` AS `agenda_goal`, ";
+	sql += "`B`.`start_time` AS `agenda_start_time`, ";
+	sql += "`B`.`end_time` AS `agenda_end_time`, ";
+	sql += "`B`.`order` AS `agenda_order` ";
+	sql += "FROM `meeting_planning` AS `A` ";
+	sql += "LEFT OUTER JOIN `agenda` AS `B` ";
+	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
+	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
 	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
 		evt.emit('get_meeting', err, rows);
 	});

@@ -2152,58 +2152,53 @@ h6 small {
 .color-1{
 	color:#339933;
 }
-.back-color-1{
-	background-color:#339933 !important;
-}
-.color-2{
-	color:#cc0000;
-}
-.back-color-2{
-	background-color:#cc0000 !important;
-}
-.color-3{
-	color:#3366cc;
-}
-.back-color-3{
-	background-color:#3366cc !important;
-}
-.color-4{
-	color:#ff9900;
-}
-.back-color-4{
-	background-color:#ff9900 !important;
-}
-.color-5{
-	color:#a52a2a;
-}
-.back-color-5{
-	background-color:#a52a2a !important;
-}
-.color-6{
-	color:#00008b;
-}
-.back-color-6{
-	background-color:#00008b !important;
-}
-.color-7{
-	color:#8c38fe;
-}
-.back-color-7{
-	background-color:#8c38fe !important;
-}
-.color-8{
-	color:#006400;
-}
-.back-color-8{
-	background-color:#006400 !important;
-}
-.color-9{
-	color:#ee82ee;
-}
-.back-color-9{
-	background-color:#ee82ee !important;
-}
-
+.back-color-1{background-color:#339933 !important;}
+.color-2{color:#cc0000;}
+.back-color-2{background-color:#cc0000 !important;}
+.color-3{color:#3366cc;}
+.back-color-3{background-color:#3366cc !important;}
+.color-4{color:#ff9900;}
+.back-color-4{background-color:#ff9900 !important;}
+.color-5{color:#a52a2a;}
+.back-color-5{background-color:#a52a2a !important;}
+.color-6{color:#00008b;}
+.back-color-6{background-color:#00008b !important;}
+.color-7{color:#8c38fe;}
+.back-color-7{background-color:#8c38fe !important;}
+.color-8{color:#006400;}
+.back-color-8{background-color:#006400 !important;}
+.color-9{color:#ee82ee;}
+.back-color-9{background-color:#ee82ee !important;}
+.color-10{color:#990000;}
+.back-color-10{background-color:#990000 !important;}
+.color-11{color:#003300;}
+.back-color-11{background-color:#003300 !important;}
+.color-12{color:#6633CC;}
+.back-color-12{background-color:#6633CC !important;}
+.color-13{color:#336666;}
+.back-color-13{background-color:#336666 !important;}
+.color-14{color:#339966;}
+.back-color-14{background-color:#339966 !important;}
+.color-15{color:#FF9900;}
+.back-color-15{background-color:#FF9900 !important;}
+.color-16{color:#00CC00;}
+.back-color-16{background-color:#00CC00 !important;}
+.color-17{color:#FFCC00;}
+.back-color-17{background-color:#FFCC00 !important;}
+.color-18{color:#6600CC;}
+.back-color-18{background-color:#6600CC !important;}
+.color-19{color:#CC9900;}
+.back-color-19{background-color:#CC9900 !important;}
+.color-20{color:#333366;}
+.back-color-20{background-color:#333366 !important;}
+.color-21{color:#330099;}
+.back-color-21{background-color:#330099 !important;}
+.color-22{color:#66CC66;}
+.back-color-22{background-color:#66CC66 !important;}
+.color-23{color:#3300FF;}
+.back-color-23{background-color:#3300FF !important;}
+.color-24{color:#000033;}
+.back-color-24{background-color:#000033 !important;}
 /*** need-help ***/
 
 #need-help {

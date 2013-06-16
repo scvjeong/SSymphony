@@ -60,7 +60,7 @@
 						success: function(json) {
 							if( json.result == "failed" )
 								alert(json.msg);
-							location.href="/";
+							location.href="/?status=auth";
 						}
 					});
 				}

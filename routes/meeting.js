@@ -20,80 +20,90 @@ exports.main = function(req, res){
 	}
 
 	/** session start **/
-	if( !req.session.email || typeof req.session.email === "undefined" )
+	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
 		res.redirect("/");
 	/** session end **/
-
-	var evt = new EventEmitter();
-	var dao_c = require('../sql/common');
-	var dao_m = require('../sql/meeting');
-	var dao_mp = require('../sql/meeting_planning');
-	var select_tool = typeof req.param("tool") !== "undefined";
-	var incorrect = typeof req.param("idx_meeting") === "undefined";
-	var complete_flag = 0;
-	var params = { 
-		idx_user:req.session.idx_user
-	};
-	var result = {};
-
-	if( select_tool )
-		dao_c.dao_begin_work(evt, mysql_conn);
-	else if( incorrect )
-		res.redirect("/");
 	else
 	{
- 		params.idx_meeting = req.param("idx_meeting");
-		req.session.idx_meeting = req.param("idx_meeting");
-		dao_m.dao_get_meeting(evt, mysql_conn, params);
-	}
-	
-	// 트랜젝션 실행 후
-	evt.on('begin_work', function(err, rows){
-		if(err) throw err;
-		// unit 쿼리 실행 - Insert meeting_planning
-		dao_m.dao_set_quick_meeting(evt, mysql_conn, params);
-	});
-	
-	evt.on('set_quick_meeting', function(err, rows){
-		console.log("set_quick_meeting");
-		if(err) 
-			dao_c.dao_rollback(evt, mysql_conn);
+		var evt = new EventEmitter();
+		var dao_c = require('../sql/common');
+		var dao_m = require('../sql/meeting');
+		var dao_mp = require('../sql/meeting_planning');
+		var select_tool = typeof req.param("tool") !== "undefined";
+		var incorrect = typeof req.param("idx_meeting") === "undefined";
+		var complete_flag = 0;
+		var params = { 
+			idx_user:req.session.idx_user,
+			idx_group:req.session.idx_group
+		};
+		var result = {};
+
+		if( select_tool )
+			dao_c.dao_begin_work(evt, mysql_conn);
+		else if( incorrect )
+			res.redirect("/");
 		else
 		{
-			params.idx_meeting = rows.insertId;
-			dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, params);
+			params.idx_meeting = req.param("idx_meeting");
+			req.session.idx_meeting = req.param("idx_meeting");
+			dao_m.dao_get_meeting(evt, mysql_conn, params);
 		}
-	});
+		
+		// 트랜젝션 실행 후
+		evt.on('begin_work', function(err, rows){
+			if(err) throw err;
+			// unit 쿼리 실행 - Insert meeting_planning
+			dao_m.dao_set_quick_meeting(evt, mysql_conn, params);
+		});
+		
+		evt.on('set_quick_meeting', function(err, rows){
+			console.log("set_quick_meeting");
+			if(err) 
+				dao_c.dao_rollback(evt, mysql_conn);
+			else
+			{
+				params.idx_meeting = rows.insertId;
+				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, params);
+			}
+		});
+		evt.on('query_unit_3', function(err, rows){
+			console.log("query_unit_3");
+			if(err) 
+				dao_c.dao_rollback(evt, mysql_conn);
+			else
+				dao_mp.dao_set_meeting_planning_group(evt, mysql_conn, params);
+		});
+		evt.on('set_meeting_planning_group', function(err, rows){
+			console.log("set_meeting_planning_group");
+			if(err) 
+				dao_c.dao_rollback(evt, mysql_conn);
+			else
+				dao_c.dao_commit(evt, mysql_conn);
+		});
+		// 트랜젝션 커밋 실행 후
+		evt.on('commit', function(err, rows){
+			if(err) throw err;
+			dao_m.dao_get_meeting(evt, mysql_conn, params);
+		});
+		evt.on('rollback', function(err, rows){
+			if(err) throw err;
+			res.redirect("/");
+		});
 
-	evt.on('query_unit_3', function(err, rows){
-		console.log("query_unit_3");
-		if(err) 
-			dao_c.dao_rollback(evt, mysql_conn);
-		else
-			dao_c.dao_commit(evt, mysql_conn);
-	});
-
-	// 트랜젝션 커밋 실행 후
-	evt.on('commit', function(err, rows){
-		if(err) throw err;
-		dao_m.dao_get_meeting(evt, mysql_conn, params);
-	});
-	evt.on('rollback', function(err, rows){
-		if(err) throw err;
-		res.redirect("/");
-	});
-
-	evt.on('get_meeting', function(err, rows){
-		if(err) throw err;
-		complete_flag++;
-		result.meeting = rows;
-		result.idx_user = req.session.idx_user;	// idx_user
-		result.idx_group = req.session.idx_group;	// idx_group
-		result.idx_meeting = req.param("idx_meeting");	// idx_meeting
-		console.log(result);
-		if( complete_flag === _MEETING_FLAG_CNT )
-			res.render('meeting', { result:result });
-	});
+		evt.on('get_meeting', function(err, rows){
+			if(err) throw err;
+			complete_flag++;
+			result.meeting = rows;
+			result.idx_user = req.session.idx_user;	// idx_user
+			result.idx_group = req.session.idx_group;	// idx_group
+			result.idx_meeting = req.param("idx_meeting");	// idx_meeting
+			console.log(result);
+			if( complete_flag === _MEETING_FLAG_CNT && rows.length > 0 )
+				res.render('meeting', { result:result });
+			else
+				res.redirect("/");
+		});
+	}
 };
 
 exports.meeting_public = function(req, res){

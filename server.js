@@ -814,8 +814,4 @@ server(io_mindmap);
 server(io_vote);
 server(io_matrix);
 server(io_board);
-<<<<<<< HEAD
 server(io_chatting);
-=======
-server(io_chatting);
->>>>>>> a3b8774b1a0c8c2c7985a0dcc658694c56549c71

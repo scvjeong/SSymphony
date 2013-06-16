@@ -122,7 +122,7 @@ function server(io)
 			var group = data.group;
 			var idx_meeting = data.idx_meeting;
 			
-			xvar result = _meeting_contents[group][idx_meeting].tools;
+			var result = _meeting_contents[group][idx_meeting].tools;
 			
 			socket.emit('get_list_of_tools', { list_of_tools: result });
 		});

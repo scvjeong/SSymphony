@@ -13,6 +13,7 @@ function server(io)
 		socket.on('join_room', function(data) {
 			console.log("Call: join_room");
 			var group = data.group;
+			var idx_meeting = data.idx_meeting;
 			var group_id = "group" + data.group;
 			socket.join(group);
 

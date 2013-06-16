@@ -226,9 +226,12 @@ exports.user_info = function(req, res){
 	var dao_ml = require('../sql/meeting_list');
 	var dao_gs = require('../sql/group_select');
 
-	var idx_user = req.param("idx");
-	//var idx_group = req.session.idx_group;
-	var idx_group = 1;
+	var idx_user;
+	if( req.param("idx") )
+		idx_user = req.param("idx");
+	else
+		idx_user = req.session.idx_user;
+	var idx_group = req.session.idx_group;
 	var result = { meeting_user:{} };
 	var complete_flag = 0;
 	var meeting_user_complete_flag_cnt;
@@ -248,7 +251,6 @@ exports.user_info = function(req, res){
 		complete_flag++;
 		if( complete_flag === 3 )
 		{
-			console.log(result);
 			if( result.user_info.length )
 				res.render('user_info', {result:result} );
 			else
@@ -263,7 +265,6 @@ exports.user_info = function(req, res){
 		complete_flag++;
 		if( complete_flag === 3 )
 		{
-			console.log(result);
 			if( result.user_info.length )
 				res.render('user_info', {result:result} );
 			else
@@ -296,7 +297,6 @@ exports.user_info = function(req, res){
 			complete_flag++;
 			if( complete_flag === 3 )
 			{
-				console.log(result);
 				if( result.user_info.length )
 					res.render('user_info', {result:result} );
 				else
@@ -308,14 +308,12 @@ exports.user_info = function(req, res){
 	evt.on('meeting_user', function(err, rows){
 		if(err) throw err;
 		meeting_user_complete_flag++;
-		console.log(rows);
 		result.meeting_user[rows[0].idx_meeting] = rows;
 		if( meeting_user_complete_flag === meeting_user_complete_flag_cnt )
 		{
 			complete_flag++;
 			if( complete_flag === 3 )
 			{
-				console.log(result);
 				if( result.user_info.length )
 					res.render('user_info', {result:result} );
 				else

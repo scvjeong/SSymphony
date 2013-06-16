@@ -224,3 +224,20 @@ exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
 	return sql;
 }
 
+// set_quick_meeting
+// params['idx_user']
+exports.dao_set_quick_meeting = function(evt, mysql_conn, params){
+	var sql = "INSERT INTO `meeting_planning` SET ";
+	sql += "`idx_owner` = '"+params['idx_user']+"', ";
+	sql += "`idx_owner_type` = 'user', ";
+	sql += "`subject` = DATE_FORMAT(NOW(), '%Y%c%d%H%i%s'), ";
+	sql += "`date` = NOW(), ";
+	sql += "`start_time` = NOW(), ";
+	sql += "`end_time` =  NOW() + INTERVAL 1 HOUR, ";
+	sql += "`reg_time` = now(), ";
+	sql += "`status` = 'progress' ";
+	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
+		evt.emit('set_quick_meeting', err, rows);
+	});
+	return sql;
+}

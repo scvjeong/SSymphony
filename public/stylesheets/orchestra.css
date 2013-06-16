@@ -1641,7 +1641,7 @@ h6 small {
 	border-radius:3px;
 	color:#FFFFFF;
 	background-color:#5c8ab8;
-	margin-left:5px;
+	margin:0px 0px 5px 5px;
 }
 .rightpanel-content-box .facilitator-btn:hover{
 	background-color: rgb(95, 156, 218);

@@ -21,7 +21,9 @@ exports.dao_set_meeting_planning_agenda = function(evt, mysql_conn, params){
 }
 
 exports.dao_set_meeting_planning_users = function(evt, mysql_conn, params){
-	var sql = "INSERT INTO `relation_user_meeting` SET `idx_user` = '"+params['user']+"', `idx_meeting` = '"+params['idx_meeting']+"'";
+	var sql = "INSERT INTO `relation_user_meeting` SET ";
+	sql += "`idx_user` = '"+params['idx_user']+"', ";
+	sql += "`idx_meeting` = '"+params['idx_meeting']+"'";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('query_unit_3', err, rows);
 	});

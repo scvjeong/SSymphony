@@ -50,12 +50,12 @@ exports.set_meeting_planning = function(req, res){
 
 			// unit_3 쿼리 실행 - Insert relation_user_meeting
 			var users = new Array;
-			users[0] = { user:req.session.idx_user, idx_meeting:idx_meeting };
+			users[0] = { idx_user:req.session.idx_user, idx_meeting:idx_meeting };
 
 			if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "string" )
 			{
 				unit_3_total_cnt += 1;
-				users[1] = { user:post[0].users, idx_meeting:idx_meeting };
+				users[1] = { idx_user:post[0].users, idx_meeting:idx_meeting };
 				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users);
 			}
 			else if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "object" )
@@ -63,7 +63,7 @@ exports.set_meeting_planning = function(req, res){
 				unit_3_total_cnt += post[0].users.length;
 				for( var i=0; i<unit_3_total_cnt; i++ )
 				{
-					users[i+1] = { user:post[0].users[i], idx_meeting:idx_meeting };
+					users[i+1] = { idx_user:post[0].users[i], idx_meeting:idx_meeting };
 					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[i]);
 				}
 			}

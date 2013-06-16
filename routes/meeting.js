@@ -22,20 +22,65 @@ exports.main = function(req, res){
 		res.redirect("/");
 	/** session end **/
 
-	if( typeof req.param("idx_meeting") === "undefined" )
-		res.redirect("/");
-	else
-		req.session.idx_meeting = req.param("idx_meeting");
-
 	var evt = new EventEmitter();
+	var dao_c = require('../sql/common');
 	var dao_m = require('../sql/meeting');
+	var dao_mp = require('../sql/meeting_planning');
+	var select_tool = typeof req.param("tool") !== "undefined";
+	var incorrect = typeof req.param("idx_meeting") === "undefined";
 	var complete_flag = 0;
 	var params = { 
-		idx_meeting:req.param("idx_meeting")
+		idx_user:req.session.idx_user
 	};
-	var result = { meeting:{} };
+	var result = {};
 
-	dao_m.dao_get_meeting(evt, mysql_conn, params);
+	if( select_tool )
+		dao_c.dao_begin_work(evt, mysql_conn);
+	else if( incorrect )
+		res.redirect("/");
+	else
+	{
+ 		params.idx_meeting = req.param("idx_meeting");
+		req.session.idx_meeting = req.param("idx_meeting");
+		dao_m.dao_get_meeting(evt, mysql_conn, params);
+	}
+	
+	// 트랜젝션 실행 후
+	evt.on('begin_work', function(err, rows){
+		if(err) throw err;
+		// unit 쿼리 실행 - Insert meeting_planning
+		dao_m.dao_set_quick_meeting(evt, mysql_conn, params);
+	});
+	
+	evt.on('set_quick_meeting', function(err, rows){
+		console.log("set_quick_meeting");
+		if(err) 
+			dao_c.dao_rollback(evt, mysql_conn);
+		else
+		{
+			params.idx_meeting = rows.insertId;
+			dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, params);
+		}
+	});
+
+	evt.on('query_unit_3', function(err, rows){
+		console.log("query_unit_3");
+		if(err) 
+			dao_c.dao_rollback(evt, mysql_conn);
+		else
+			dao_c.dao_commit(evt, mysql_conn);
+	});
+
+	// 트랜젝션 커밋 실행 후
+	evt.on('commit', function(err, rows){
+		if(err) throw err;
+		dao_m.dao_get_meeting(evt, mysql_conn, params);
+	});
+	evt.on('rollback', function(err, rows){
+		if(err) throw err;
+		res.redirect("/");
+	});
+
 	evt.on('get_meeting', function(err, rows){
 		if(err) throw err;
 		complete_flag++;

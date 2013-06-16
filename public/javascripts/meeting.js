@@ -158,6 +158,9 @@ $(document).ready(function() {
 
 	// init facilitator
 	initFacilitator();
+
+	// init meeting planning
+	initMeetingPlanning();
 	
 	// 회의 종료 버튼
 	$("#result-btn").click(function(){
@@ -563,7 +566,8 @@ function initFacilitator()
 	header += "<li class='decision-making'>Decision making</li>";
 	header += "<li class='conflict-solving-method end'>Conflict solving method</li>";
 	header += "</ul>";
-	$("#facilitator-help").click(function(){
+	$("#facilitator-help").click(function(e){
+		e.preventDefault();
 		$.get("/page/ft_help",null,function(html){
 			dialog = bootbox.dialog(html, [],{
 				"header":header
@@ -588,6 +592,28 @@ function initFacilitator()
 						break;
 				}
 			});
+		},"html");
+	});
+}
+
+function initMeetingPlanning()
+{
+	$("#plan-for-meeting").click(function(e){
+		e.preventDefault();
+		var search_input = '<input type="text" name="search" class="search">';
+		$.get("/page/meeting_template",null,function(html){
+			dialog = bootbox.dialog(html, [],{
+				"header":search_input
+			});
+			$(".meeting-planning-node", dialog).mouseover(function(){
+				var idx = $(this).attr("idx");
+				$("#meeting-template .agenda-preview").hide();
+				$("#meeting-template .agenda-preview[idx="+idx+"]").show();
+			});
+
+			$(".modal-body", dialog).css("max-height", window_height*0.7);
+			// search
+			initSearchMeetingPlanningBtn();
 		},"html");
 	});
 }

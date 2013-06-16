@@ -23,9 +23,8 @@
 		<span id="group-title"><%= result.group_info[0].name %></span>
 		<div id="top-menu">
 			<ul>
-				<li><a href="#">Profile</a></li>
-				<li><a href="/page/group_select">GROUP</a></li>
-				<li>MY ACCOUNT</li>
+				<li><a href="/page/group_select">GROUP</li>
+				<li><a href="javascript:myAccount();">MY ACCOUNT</a></li>
 				<li>LOG OUT</li>
 			</ul>
 		</div>
@@ -739,6 +738,20 @@
 				var idx_user = $(this).attr("idx");
 				removeFromGroup(idx_user);
 			});
+		}
+		function myAccount()
+		{
+			$.get("/page/user_info",null,function(html){
+				dialog = bootbox.dialog(html, [],{
+					"header":"Profile"
+				});
+				$("#user-info .title").click(function(){
+					$(this).next().slideToggle();
+				});
+				dialog.width(760);
+				dialog.css({"margin-left":"-380px"});
+				initUserInfoChart();
+			},"html");
 		}
 		function initUserInfoPopup(obj)
 		{

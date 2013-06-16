@@ -582,6 +582,21 @@ function includeFileDynamically(list) {
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+/*	새로운 심장	*/
+
+function createNewTool(tool_type)
+{
+	_socket_common.emit("create_tool",
+		{
+			group: _group_id,
+			idx_meeting: _idx_meeting,
+			type: tool_type
+		});
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
 
 var _tool_type = "";
 /* 도구별 소스를 동적으로 가져옴 */

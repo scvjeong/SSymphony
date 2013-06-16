@@ -87,7 +87,7 @@ function server(io)
 			console.log("Call: set_last_id");
 			var tmpGroup = data.group;
 			var tmpTool = data.tool;
-			var tmpLastId:
+			var tmpLastId;
 			
 			tmpLastId = getLastId(tmpGroup, tmpTool);
 

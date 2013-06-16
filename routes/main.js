@@ -56,6 +56,7 @@ exports.mail_auth = function(req, res){
 			res.redirect("/");
 	});
 	evt.on('mail_auth', function(err,rows){
+		console.log("mail_auth");
 		register_session(req, params.idx, params.id, params.first_name, params.last_name);
 		res.redirect("/page/group_select");
 	});
@@ -200,6 +201,7 @@ exports.sign_up = function(req, res){
 	});
 
 	evt.on('sign_up', function(err, rows){
+		console.log("sign_up");
 		var idx_user = rows.insertId;
 		//register_session(req, idx_user, sign_up_email, first_name, last_name);
 		sendMail(sign_up_email, code);

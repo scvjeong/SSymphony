@@ -262,7 +262,7 @@ function openSocket()
 	/* /서버 리스너 등록 */
 
 	/* 서버 초기 이벤트 전송 */
-	_socket_common.emit('join_room', {group:_group_id});
+	_socket_common.emit('join_room', {group:_group_id, idx_meeting: _idx_meeting});
 	_socket_common.emit('set_client', {group:_group_id, user: _idx_user});
 	/* /서버 초기 이벤트 전송 */
 	_socket_common.emit('set_list_of_tools', {group:_group_id, idx_meeting:_idx_meeting});

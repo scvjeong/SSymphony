@@ -43,8 +43,8 @@ function server(io)
 			if (_meeting_contents[group][idx_meeting] == undefined)
 			{
 				_meeting_contents[group][idx_meeting] = {
-					whiteboard: {};
-					tools: [];
+					whiteboard: {},
+					tools: []
 				};
 			}			
 

@@ -120,6 +120,7 @@ function server(io)
 
 			console.log("group : " + group);
 			console.log("idx_meeting : " + idx_meeting);
+			console.log("_meeting_contents[group][idx_meeting] : " + _meeting_contents[group][idx_meeting]);
 			console.log("_meeting_contents[group][idx_meeting].tools : " + _meeting_contents[group][idx_meeting].tools);
 			
 			var result = _meeting_contents[group][idx_meeting].tools;

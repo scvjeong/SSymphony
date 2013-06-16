@@ -150,7 +150,6 @@ function showMeetingResultWindow()
 		dataType: "html",
 		success: function(data) {
 			dialog = bootbox.dialog(data);
-	
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_result_bootbox");
 			

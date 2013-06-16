@@ -1156,7 +1156,6 @@ function transWindow(name)
 	$('#' + name).addClass('toolwindow_trans');
 }
 
-
 function showEvaluateMeetingWindow()
 {
 	var source_url = "/page/meeting_evaluation";
@@ -1169,8 +1168,7 @@ function showEvaluateMeetingWindow()
 	
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_evaluate_bootbox");
-			
-			
+					
 		//	var meeting_val = $("#meeting_val").text();
 		//	var ft_val = $("#proceeding_val").text();
 
@@ -1200,9 +1198,27 @@ function hideEvaluateWindow()
 	bootbox_select.modal('hide');	
 }
 
-function evaluate_complete()
+
+function clickBestMember(sel)
+{
+	
+	var tmp_sel_id = sel.getAttribute('id');
+	
+	var pre_sel = $('.best_member_clicked');
+	pre_sel.removeClass('best_member_clicked');
+	var tmp_sel = $('#'+tmp_sel_id);
+	tmp_sel.addClass('best_member_clicked');
+	$('#eval_input_best_rating').text(tmp_sel.children('.member_name').text());
+	//console.log(tmp_sel.children('.member_name').text());
+	$('#mvp_val').val(tmp_sel.children('.member_name').text());
+}	
+
+
+function evaluateComplete()
 {
 	 $('#evaluate_form').submit();
+	 hideEvaluateWindow();
+	//showMeetingResultWindow();
 }
 
 function makeCanvasImage(params)

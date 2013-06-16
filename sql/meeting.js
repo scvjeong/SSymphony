@@ -20,7 +20,7 @@ exports.dao_get_meeting = function(evt, mysql_conn, params){
 // params['ft_appraisal']
 // params['mvp']
 exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
-	params['idx_meeting'] = 60;
+	params['idx_meeting'] = 19;
 	params['idx_group'] = 1;
 	params['idx_user'] = 1;
 
@@ -36,6 +36,33 @@ exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
 	});
 	return sql;
 }
+
+
+// set_meeting_evaluation
+// params['idx_meeting']
+// params['idx_group']
+// params['idx_user']
+// params['satisfaction']
+// params['ft_appraisal']
+// params['mvp']
+exports.dao_set_meeting_evaluation = function(evt, mysql_conn, params){
+	params['idx_meeting'] = 19;
+	params['idx_group'] = 1;
+	params['idx_user'] = 1;
+
+	var sql = "INSERT INTO `meeting_appraisal` ";
+	sql += "SET `idx_meeting` = '"+params['idx_meeting']+"', ";
+	sql += "`idx_group` = '"+params['idx_group']+"', ";
+	sql += "`idx_user` = '"+params['idx_user']+"', ";
+	sql += "`satisfaction` = '"+params['satisfaction']+"', ";
+	sql += "`ft_appraisal` = '"+params['ft_appraisal']+"', ";
+	sql += "`mvp` = '"+params['mvp']+"'";
+	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
+		evt.emit('set_meeting_evaluation', err, rows);
+	});
+	return sql;
+}
+
 
 // get_meeting_result
 // params['idx_meeting']
@@ -80,6 +107,46 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 	});
 	return sql;
 }
+
+exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
+	// 임시로 해놓은 회의 번호 //
+	params['idx_meeting'] = 19;
+//	params['idx_group'] = 1;
+	
+	var sql = "SELECT ";
+	sql += "`A`.`idx`, ";
+	sql += "`A`.`subject`, ";
+	sql += "`A`.`goal`, ";
+	sql += "`A`.`start_time`, ";
+	sql += "`A`.`end_time`, ";
+	sql += "`D`.`first_name`, ";
+	sql += "`D`.`last_name`, ";
+//	sql += "`E`.`satisfaction`, ";
+//	sql += "`E`.`ft_appraisal`, ";
+//	sql += "`E`.`mvp`, ";
+	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`first_name` ASC SEPARATOR ', ') AS `user_list` ";
+	sql += "FROM `meeting_planning` AS `A` ";
+	sql += "INNER JOIN `agenda` AS `B` ";
+	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
+	sql += "INNER JOIN `relation_user_meeting` AS `C` ";
+	sql += "ON `A`.`idx` = `C`.`idx_meeting` ";	
+	sql += "INNER JOIN `user` AS `D` ";
+	sql += "ON `C`.`idx_user` = `D`.`idx` ";
+//	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
+//	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
+	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
+//	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
+	sql += "GROUP BY `B`.`idx` ";
+	sql += "ORDER BY `B`.`order` ASC";
+//console.log(sql);
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('get_meeting_evaluation_info', err, rows);
+
+		console.log(rows);
+	});
+	return sql;
+}
+
 
 exports.dao_get_meeting_result_appraisal = function(evt, mysql_conn, params){
 	//params['idx_meeting'] = 60;

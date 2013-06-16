@@ -16,8 +16,8 @@
 					<%
 						if( result.meeting_result.length > 0 ) { 
 					%>
-						<div class="result_title">회의 주제 - <%= result.meeting_result[0].subject %></div>
-						<div class="result_subject">회의 목표 - <%= result.meeting_result[0].goal %></div>
+						<div class="result_title"><%= result.meeting_result[0].subject %></div>
+						<div class="result_subject"><%= result.meeting_result[0].goal %></div>
 						<div class="result_time">
 							<img class="result_contents_button" src="/images/meeting_result/clock.png" />
 							<div id="result_time_use">01:00:00</div>

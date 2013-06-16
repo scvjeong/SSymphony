@@ -59,12 +59,8 @@
 						dataType: 'json',
 						success: function(json) {
 							if( json.result == "failed" )
-							{
 								alert(json.msg);
-								location.href="/";
-							}
-							else if( json.result == "successful" )
-								location.href="/page/group_select";
+							location.href="/";
 						}
 					});
 				}

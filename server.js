@@ -34,6 +34,10 @@ function server(io)
 			console.log("</_meeting_contents>");
 			*/
 
+			console.log("group : " + group);
+			console.log("idx_meeting : " + idx_meeting);
+			console.log("_meeting_contents");
+
 			// 그룹이 등록되어 있지 않으면 새로 등록
 			if (_meeting_contents[group] == undefined)
 			{
@@ -118,7 +122,7 @@ function server(io)
 			var group = data.group;
 			var idx_meeting = data.idx_meeting;
 			
-			var result = _meeting_contents[group][idx_meeting].tools;
+			xvar result = _meeting_contents[group][idx_meeting].tools;
 			
 			socket.emit('get_list_of_tools', { list_of_tools: result });
 		});

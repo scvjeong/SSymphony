@@ -117,6 +117,10 @@ function server(io)
 			console.log("Call: set_list_of_tools");
 			var group = data.group;
 			var idx_meeting = data.idx_meeting;
+
+			console.log("group : " + group);
+			console.log("idx_meeting : " + idx_meeting);
+			console.log("_meeting_contents[group][idx_meeting].tools : " + _meeting_contents[group][idx_meeting].tools);
 			
 			var result = _meeting_contents[group][idx_meeting].tools;
 			

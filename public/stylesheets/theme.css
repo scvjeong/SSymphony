@@ -577,7 +577,7 @@ ul.users-online li a strong {
 
 #result_time_use {
 	margin-top: 1px;
-	margin-left: 10px;
+
 	margin-right: 5px;
 	float: left;
 	font-family: "Fjalla One";
@@ -604,7 +604,7 @@ ul.users-online li a strong {
 
 #result_eval_meeting {
 	float: left;
-	margin-left: 10px;
+
 	font-family: "Fjalla One";
 	font-size: 24px;
 	color: #69c;	
@@ -1009,8 +1009,30 @@ ul.users-online li a strong {
 	background-color: #d1d1d1;
 }
 
+.member_point_box {
+	height: 30px;
+
+}
+
+.member_grade_box {
+	height: 30px;
+}
+
+#member_point_icon {
+	float: left;
+	position: absolute;
+	margin-top: -8px;
+	margin-left: 5px;
+}
+
+#member_grade_icon {
+	float: left;
+	position: absolute;
+	margin-left: 12px;
+}
+
 .member_point {
-	margin-top: 5px;
+	margin-top: 15px;
 	text-align: center;
 	font-weight: bold;
 	text-shadow: 0 0 4px #000;
@@ -1023,7 +1045,8 @@ ul.users-online li a strong {
 }
 
 .member_grade {
-	margin-top: 1px;
+
+	margin-top: 5px;
 	text-align: center;
 	font-family: Roboto;
 	font-size: 18px;
@@ -1055,6 +1078,15 @@ ul.users-online li a strong {
 }
 
 #eval_input_ft_rating_val {
+	float: left;
+}
+
+#eval_input_best_rating {
+	margin-left: 10px;
+	font-family: Roboto;
+	font-size: 18px;
+	line-height: 28px;
+	color: #444;
 	float: left;
 }
 
@@ -1102,5 +1134,23 @@ ul.users-online li a strong {
 	cursor: pointer;
 }
 
+#eval_input_meeting_rating_val {
+	margin-left:10px;
+	line-height: 28px;
+}
+
+#eval_input_ft_rating_val {
+	margin-left:10px;
+	line-height: 28px;
+}
+
+.best_member_box:hover {
+	background-color: #c0c0c0;
+	cursor: pointer;
+}
+
+.best_member_clicked {
+	background-color: #c0c0c0;
+}
 
 /* /회의 평가 부트박스 */

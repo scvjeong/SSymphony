@@ -34,6 +34,10 @@ function server(io)
 			console.log("</_meeting_contents>");
 			*/
 
+			console.log("group : " + group);
+			console.log("idx_meeting : " + idx_meeting);
+			console.log("_meeting_contents");
+
 			// 그룹이 등록되어 있지 않으면 새로 등록
 			if (_meeting_contents[group] == undefined)
 			{

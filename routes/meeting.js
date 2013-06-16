@@ -107,6 +107,7 @@ exports.main = function(req, res){
 			if( run_time < 1 ) run_time = 0;
 			result.meeting[0].run_time = run_time;
 			result.meeting[0].limit_time = util.getTimeFormat(e_t.t-s_t.t);
+			result.process = {time:run_time};
 
 			if( rows.length > 0 )
 			{
@@ -148,7 +149,7 @@ exports.main = function(req, res){
 					{
 						result.meeting[i].class_name = "processing";
 						used_time = util.getTime(result.meeting[i].agenda_used_time);
-						result.process = { time:used_time.t };
+						result.process.time = used_time.t;
 						start_point = false;
 					}
 					else

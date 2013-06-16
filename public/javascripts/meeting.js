@@ -1169,7 +1169,12 @@ function showTime()
 
 	var nowTime = "(" + tHour + ":" + tMinute + ":" + tSecond + ")";
 
+	var limit_time = $('.processing .use_time').attr("limit_time")*1;
+	var persent = Math.floor(_process_time / limit_time * 100);
+	if( persent > 100 ) persent = 100;
+
 	$('.processing .use_time').html(nowTime);
+	$('.processing .progress-bar-fill').width(persent+"%");
 
 	_process_time++;
 }

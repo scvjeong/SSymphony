@@ -105,7 +105,7 @@ exports.main = function(req, res){
 			var e_t = util.getTime(result.meeting[0].end_time);
 			var run_time = ((c_t.getTime() - d_t.getTime() + 3600000*9) / 1000) - s_t.t;
 			if( run_time < 1 ) run_time = 0;
-			result.meeting[0].run_time = run_time;
+			result.meeting[0].run_time = Math.floor(run_time);
 			result.meeting[0].limit_time = util.getTimeFormat(e_t.t-s_t.t);
 			result.process = {time:run_time};
 
@@ -119,11 +119,22 @@ exports.main = function(req, res){
 					if(i===0)
 					{
 						result.meeting[i].agenda_start_time = "00:00:00";
-						result.meeting[i].agenda_end_time = util.getTimeFormat(result.meeting[i].agenda_time*60);
-						// total_time
-						total_time += Math.floor(result.meeting[i].run_time);
-						// used_time
-						result.meeting[i].agenda_used_time = util.getTimeFormat(total_time);
+						if( result.meeting[i].agenda_use_time > 0 )
+							result.meeting[i].agenda_end_time = util.getTimeFormat(result.meeting[i].agenda_use_time*60);
+						else
+							result.meeting[i].agenda_end_time = util.getTimeFormat(result.meeting[i].agenda_time*60);
+						if( result.meeting[i].agenda_status === "ing" )
+						{
+							// used_time
+							result.meeting[i].agenda_used_time = util.getTimeFormat(total_time);
+							// total_time
+							total_time += Math.floor(result.meeting[i].run_time);
+						}
+						else
+						{
+							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[i].agenda_use_time*60);
+							total_time += result.meeting[i].agenda_use_time*60;
+						}
 					}
 					else
 					{
@@ -134,13 +145,17 @@ exports.main = function(req, res){
 						time_obj = util.getTime(result.meeting[i].agenda_start_time);
 						time = time_obj.t + result.meeting[i].agenda_time*60;
 						result.meeting[i].agenda_end_time = util.getTimeFormat(time);
-						// total_time
-						total_time += result.meeting[i].agenda_use_time;
 						// used_time
 						if( result.meeting[i].agenda_status === "ing" )
-							result.meeting[i].agenda_used_time = util.getTimeFormat(0);
+						{
+							console.log("total_time : " + total_time);
+							console.log("run_time : " + result.meeting[0].run_time);
+							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[0].run_time-total_time);
+						}
 						else
 							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[i].agenda_use_time*60);
+						// total_time
+						total_time += result.meeting[i].agenda_use_time;
 					}
 					// total_time
 					result.meeting[i].agenda_total_time = total_time;

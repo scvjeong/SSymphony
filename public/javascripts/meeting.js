@@ -205,7 +205,7 @@ function openSocket()
 	_socket_vote = io.connect('http://61.43.139.69:50004/group');
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
-	
+
 
 	/* 서버 리스너 등록 */
 	_socket_common.on('get_list_of_tools', function (data) {

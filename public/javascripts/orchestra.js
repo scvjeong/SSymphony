@@ -156,8 +156,8 @@ function showMeetingResultWindow()
 			//setupUserListChart();
 			//setupWordChart();
 			
-			var meeting_val = $("#meeting_val").val();
-			//console.log(meeting_val);
+			var meeting_val = $("#meeting_val").text();
+			console.log(meeting_val);
 			var ft_val = $("#proceeding_val").text();
 			console.log(ft_val);
 

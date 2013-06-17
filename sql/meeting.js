@@ -124,7 +124,7 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 	// 임시로 해놓은 회의 번호 //
 	params['idx_meeting'] = 19;
-//	params['idx_group'] = 1;
+	params['idx_group'] = 1;
 	
 	var sql = "SELECT ";
 	sql += "`A`.`idx`, ";
@@ -132,12 +132,14 @@ exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 	sql += "`A`.`goal`, ";
 	sql += "`A`.`start_time`, ";
 	sql += "`A`.`end_time`, ";
-	sql += "`D`.`first_name`, ";
-	sql += "`D`.`last_name`, ";
+//	sql += "`D`.`first_name`, ";
+//	sql += "`D`.`last_name`, ";
 //	sql += "`E`.`satisfaction`, ";
 //	sql += "`E`.`ft_appraisal`, ";
 //	sql += "`E`.`mvp`, ";
-	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`first_name` ASC SEPARATOR ', ') AS `user_list` ";
+	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`idx` ASC SEPARATOR ', ') AS `user_list`, ";
+	sql += "GROUP_CONCAT( `C`.`time_evaluation` ORDER BY `D`.`idx` ASC SEPARATOR ', ') AS `time_evaluation`, ";
+	sql += "GROUP_CONCAT( `C`.`activity_evaluation` ORDER BY `D`.`idx` ASC SEPARATOR ', ') AS `activity_evaluation` ";
 	sql += "FROM `meeting_planning` AS `A` ";
 	sql += "INNER JOIN `agenda` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
@@ -148,7 +150,7 @@ exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 //	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
 //	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
-//	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
+	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
 //console.log(sql);

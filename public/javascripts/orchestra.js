@@ -157,9 +157,17 @@ function showMeetingResultWindow()
 			//setupWordChart();
 			
 			var meeting_val = $("#meeting_val").text();
-			console.log(meeting_val);
+			//console.log(meeting_val);
+			if (meeting_val == "")
+			{	
+				meeting_val = $("#meeting_val").val();
+			}
 			var ft_val = $("#proceeding_val").text();
-			console.log(ft_val);
+			if (ft_val == "")
+			{
+				ft_val = $("#proceeding_val").val();
+			}
+			//console.log(ft_val);
 
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });

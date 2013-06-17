@@ -95,7 +95,7 @@ exports.dao_search_user = function(evt, mysql_conn, params){
 	sql += "WHERE `A`.`id` like '%"+params['user_id']+"%' ";
 	sql += "	AND `B`.`idx_group` IS NULL ";
 	sql += "ORDER BY `A`.`first_name` DESC ";
-	sql += "LIMIT 15";
+	//sql += "LIMIT 15";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('search_user', err, rows);
 	});

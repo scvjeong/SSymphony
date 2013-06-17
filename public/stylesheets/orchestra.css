@@ -2473,6 +2473,10 @@ h6 small {
     width: 220px;
 	text-align: center;
 }
+#light-popup .light-popup-body .search-user-list{
+	max-height:300px;
+	overflow-y:scroll;
+}
 #light-popup .light-popup-body label{
 	display: block;
     margin-bottom: 6px;
@@ -2781,6 +2785,10 @@ h6 small {
 	float:left;
 	width:100%;
 	margin-bottom:10px;
+}
+#user-info .meetings .contents{
+	height:100px;
+	overflow-y:scroll;
 }
 #user-info .meetings .meetings-1, #user-info .meetings .meetings-2{
 	float:left;

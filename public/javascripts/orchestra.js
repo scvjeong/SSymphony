@@ -143,7 +143,7 @@ Date.prototype.format = function (mask, utc) {
 function showMeetingResultWindow()
 {
 	var source_url = "/page/meeting_result";
-	//console.log("1111111111111111111111");
+
 	$.ajax({
 		type: "GET",
 		url: source_url,

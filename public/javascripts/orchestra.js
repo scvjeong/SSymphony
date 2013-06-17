@@ -143,7 +143,7 @@ Date.prototype.format = function (mask, utc) {
 function showMeetingResultWindow()
 {
 	var source_url = "/page/meeting_result";
-	//console.log("1111111111111111111111");
+
 	$.ajax({
 		type: "GET",
 		url: source_url,
@@ -156,10 +156,18 @@ function showMeetingResultWindow()
 			//setupUserListChart();
 			//setupWordChart();
 			
-			var meeting_val = $("#meeting_val").val();
+			var meeting_val = $("#meeting_val").text();
 			//console.log(meeting_val);
+			if (meeting_val == "")
+			{	
+				meeting_val = $("#meeting_val").val();
+			}
 			var ft_val = $("#proceeding_val").text();
-			console.log(ft_val);
+			if (ft_val == "")
+			{
+				ft_val = $("#proceeding_val").val();
+			}
+			//console.log(ft_val);
 
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });

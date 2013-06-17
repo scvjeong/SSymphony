@@ -57,6 +57,7 @@
 								<div class="text_right">Today</div>
 							</div>
 						</div>
+						<!--
 						<div class="input_evaluate_contents">
 							<div class="pre_evaluate_rating_box">		
 								<div class="pre_rating_result">
@@ -67,6 +68,7 @@
 								</div>
 							</div>
 						</div>
+						-->
 					</div>
 					<div class="input_evaluate_ft_box">
 						<div class="input_ft_title">
@@ -78,6 +80,7 @@
 								<div class="text_right">Today</div>
 							</div>
 						</div>
+						<!--
 						<div class="input_evaluate_contents">
 							<div class="pre_evaluate_rating_box">
 								<div class="pre_rating_result">
@@ -88,6 +91,7 @@
 								</div>					
 							</div>
 						</div>
+						-->
 					</div>
 					<div class="input_evaluate_best_box">
 						<div class="input_best_title">
@@ -100,6 +104,7 @@
 								<div class="text_right">Today</div>
 							</div>
 						</div>
+						<!--
 						<div class="input_best_contents">
 							<div class="pre_best_rating_box">			
 								<div class="pre_rating_result">
@@ -110,85 +115,50 @@
 								</div>
 							</div>
 						</div>
-
+						-->
 					</div>
 					<div class="evaluate_best_box">
 						<div class="best_title">
 							<div class="evaluate_best_subject">Today's Best Member</div>
 						</div>
 						<div class="best_contents" >
-							<div class="best_member_box" id="eval_member0" onClick="clickBestMember(this)">
-								<div class="member_name">IreneWhite</div>
-								<div class="member_thumb"></div>
-								<div class="member_point_box">
-									<img id="member_point_icon" src="/images/member_point_icon.png">
-									<div class="member_point">89</div>
-								</div>
-								<div class="member_grade_box">
-									<img id="member_grade_icon" src="/images/member_grade_icon.png">
-									<div class="member_grade">Perfect</div>
-								</div>
-							</div>
-							<div class="best_member_box" id="eval_member1" onClick="clickBestMember(this)">
-								<div class="member_name">Go Donghyun</div>
-								<div class="member_thumb"></div>
-								<div class="member_point_box">
-									<img id="member_point_icon" src="/images/member_point_icon.png">
-									<div class="member_point">98</div>
-								</div>
-								<div class="member_grade_box">
-									<img id="member_grade_icon" src="/images/member_grade_icon.png">
-									<div class="member_grade">Good</div>
-								</div>
-							</div>
-							<div class="best_member_box" id="eval_member2" onClick="clickBestMember(this)">
-								<div class="member_name">Chicken</div>
-								<div class="member_thumb"></div>
-								<div class="member_point_box">
-									<img id="member_point_icon" src="/images/member_point_icon.png">
-									<div class="member_point">75</div>
-								</div>
-								<div class="member_grade_box">
-									<img id="member_grade_icon" src="/images/member_grade_icon.png">
-									<div class="member_grade">Good</div>
-								</div>
-							</div>
-							<div class="best_member_box" id="eval_member3" onClick="clickBestMember(this)">
-								<div class="member_name">SCV Jeong</div>
-								<div class="member_thumb"></div>
-								<div class="member_point_box">
-									<img id="member_point_icon" src="/images/member_point_icon.png">
-									<div class="member_point">69</div>
-								</div>
-								<div class="member_grade_box">
-									<img id="member_grade_icon" src="/images/member_grade_icon.png">
-									<div class="member_grade">Perfect</div>
-								</div>
-							</div>
-							<div class="best_member_box" id="eval_member4" onClick="clickBestMember(this)">
-								<div class="member_name">Mark J</div>
-								<div class="member_thumb"></div>
-								<div class="member_point_box">
-									<img id="member_point_icon" src="/images/member_point_icon.png">
-									<div class="member_point">78</div>
-								</div>
-								<div class="member_grade_box">
-									<img id="member_grade_icon" src="/images/member_grade_icon.png">
-									<div class="member_grade">Bad</div>
-								</div>
-							</div>
-							<div class="best_member_box" id="eval_member5" onClick="clickBestMember(this)">
-								<div class="member_name">Donald Trump</div>
-								<div class="member_thumb"></div>
-								<div class="member_point_box">
-									<img id="member_point_icon" src="/images/member_point_icon.png">
-									<div class="member_point">51</div>
-								</div>
-								<div class="member_grade_box">
-									<img id="member_grade_icon" src="/images/member_grade_icon.png">
-									<div class="member_grade">Perfect</div>
-								</div>
-							</div>
+							<%	
+								var user_array = result.meeting_evaluation[0].user_list.split(",");
+								var time_array = result.meeting_evaluation[0].time_evaluation.split(",");
+								var activity_array = result.meeting_evaluation[0].activity_evaluation.split(",");
+													
+								for (var i=0; i<user_array.length; i++) { %>
+								
+								<div class="best_member_box" id="eval_member<%=i%>" onClick="clickBestMember(this)">
+									<div class="member_name"><%=user_array[i] %></div>
+									<div class="member_thumb"></div>
+									<div class="member_point_box">
+										<img id="member_point_icon" src="/images/member_point_icon.png">
+										<div class="member_point"><%=activity_array[i] %></div>
+									</div>
+									<div class="member_grade_box">
+										<img id="member_grade_icon" src="/images/member_grade_icon.png">
+										<%
+											var tmp_time = "";
+											if (time_array[i] == "1" ||  time_array[i] == 1) {
+												tmp_time = "Perfect";
+											}
+											else if (time_array[i] == "2" || time_array[i] == 2) {
+												tmp_time = "Good";
+											}
+											else if (time_array[i] == "3"  || time_array[i] == 3) {
+												tmp_time = "Ok";
+											}
+											else if (time_array[i] == "4"  || time_array[i] == 4) {
+												tmp_time = "Bad";
+											}
+										%>
+										<div class="member_grade"><%=tmp_time %></div>
+									</div>
+								</div>	
+								
+							<% } %>
+							
 						</div>
 					</div>					
 				</div>

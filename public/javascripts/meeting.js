@@ -160,7 +160,10 @@ $(document).ready(function() {
 
 	// init meeting planning
 	initMeetingPlanning();
-	
+
+	// init next process
+	initNextProcess();
+
 	// 회의 종료 버튼
 	$("#result-btn").click(function(){
 		if( confirm("Are you sure?") )
@@ -616,6 +619,33 @@ function initMeetingPlanning()
 			// search
 			initSearchMeetingPlanningBtn();
 		},"html");
+	});
+}
+
+function initNextProcess()
+{
+	$("#next-process").click(function(e){
+		e.preventDefault();
+		//if( confirm("Do you want next process?") ) 
+		var $processing = $("#meeting .process-box .processing");
+		var bool = ($processing.length > 0 ); // 객채가 있는지 확인
+		bool = bool && (typeof ($processing.attr("idx")*1) === "number"); // 숫자 값 확인
+		bool = bool && (($processing.attr("idx")*1) > 0); // 0 이상의 index 인지 확인
+		if( bool )
+		{
+			var agenda = $processing.val();
+			$.ajax({
+				url: '/page/next_process',
+				type: 'POST',
+				data: {agenda:agenda},
+				dataType: 'json',
+				success: function(json) {
+					console.log(json);
+				}
+			});
+		}
+		else
+			alert("Current Process is NOT progressing");
 	});
 }
 

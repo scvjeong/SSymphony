@@ -131,7 +131,7 @@
 	<!-- /투표 도구 -->
 	
 </head>
-<body class="meeting" ondragstart="return false" onselectstart="return false">
+<body id="meeting" class="meeting" ondragstart="return false" onselectstart="return false">
 	<div class="container">
 		<div class="title-bar">
 			<div class="subject"><%=result.meeting[0].subject%></div>
@@ -359,7 +359,7 @@
 							if(result.meeting[i].agenda_subject === null)
 								break;
 					%>
-						<li class="process-unit <%=result.meeting[i].class_name%>">
+						<li class="process-unit <%=result.meeting[i].class_name%>" idx="<%=result.meeting[i].agenda_idx%>">
 							<span><%=result.meeting[i].agenda_subject%></span><span class="use_time" limit_time="<%=result.meeting[i].agenda_time*60%>">(<%=result.meeting[i].agenda_used_time%>)</span>
 							<div class="progress-bar">
 								<div class="progress-bar-fill" style="width:0%;"></div>
@@ -372,7 +372,7 @@
 						}
 					%>
 						
-						<li class="process-unit processing">
+						<!--li class="process-unit processing">
 							<span>Ice Breaking</span>
 							<div class="progress-bar">
 								<div class="progress-bar-fill" style="width:70%;"></div>
@@ -390,7 +390,7 @@
 									<li class="item_vote" id="btn_vote1"></li>
 								</ul>
 							</div>
-						</li>
+						</li-->
 						<!--
 						<li class="process-unit">
 							<span>Weekly Review</span>

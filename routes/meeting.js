@@ -17,6 +17,9 @@ exports.main = function(req, res){
 		res.render('no_explorer', {} );
 		return;
 	}
+	req.session.idx_user = 1;
+	req.session.email = "orchestra@gmail.com";
+	req.session.idx_group = 1;
 
 	/** session start **/
 	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
@@ -147,11 +150,7 @@ exports.main = function(req, res){
 						result.meeting[i].agenda_end_time = util.getTimeFormat(time);
 						// used_time
 						if( result.meeting[i].agenda_status === "ing" )
-						{
-							console.log("total_time : " + total_time);
-							console.log("run_time : " + result.meeting[0].run_time);
 							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[0].run_time-total_time);
-						}
 						else
 							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[i].agenda_use_time*60);
 						// total_time
@@ -183,6 +182,10 @@ exports.main = function(req, res){
 			res.render('meeting', { result:result });
 		});
 	}
+};
+
+exports.post_next_process = function(req, res){
+	res.send({result:"successful"})
 };
 
 exports.meeting_public = function(req, res){

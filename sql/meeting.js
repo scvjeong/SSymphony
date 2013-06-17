@@ -7,6 +7,7 @@ exports.dao_get_meeting = function(evt, mysql_conn, params){
 	sql += "`A`.`date`, ";
 	sql += "`A`.`start_time`, ";
 	sql += "`A`.`end_time`, ";
+	sql += "`B`.`idx` AS `agenda_idx`, ";
 	sql += "`B`.`subject` AS `agenda_subject`, ";
 	sql += "`B`.`goal` AS `agenda_goal`, ";
 	sql += "`B`.`status` AS `agenda_status`, ";

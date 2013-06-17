@@ -140,13 +140,18 @@ Date.prototype.format = function (mask, utc) {
 	return dateFormat(this, mask, utc);
 };
 
-function showMeetingResultWindow()
+
+function showMeetingResultWindow(idx)
 {
 	var source_url = "/page/meeting_result";
+	var send_params = {
+		idx_meeting: idx;
+	};	
 
 	$.ajax({
 		type: "GET",
 		url: source_url,
+		data: send_params,
 		dataType: "html",
 		success: function(data) {
 			dialog = bootbox.dialog(data);

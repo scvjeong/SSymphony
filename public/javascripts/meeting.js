@@ -1303,7 +1303,7 @@ function evaluateComplete()
 			data: send_params,
 			dataType: 'json',
 			success: function(json_data) {
-				showMeetingResultWindow();
+				showMeetingResultWindow("0");
 			}
 		});
 

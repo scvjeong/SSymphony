@@ -17,9 +17,9 @@ exports.main = function(req, res){
 		res.render('no_explorer', {} );
 		return;
 	}
-	req.session.idx_user = 1;
-	req.session.email = "orchestra@gmail.com";
-	req.session.idx_group = 1;
+//	req.session.idx_user = 1;
+//	req.session.email = "orchestra@gmail.com";
+//	req.session.idx_group = 1;
 
 	/** session start **/
 	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
@@ -332,14 +332,6 @@ exports.meeting_result = function(req, res){
 		idx_meeting:req.session.idx_meeting,	 
 		idx_group:req.session.idx_group
 	};	
-
-	var params_idx = req.param("idx_meeting");
-
-	console.log("[params_idx]"+params_idx);
-	if ( params_idx != "0" )
-	{
-		params["idx_meeting"] = params_idx;
-	}
 
 	console.log("[LOG]"+params['idx_meeting']);
 

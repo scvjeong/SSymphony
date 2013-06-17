@@ -330,6 +330,14 @@ exports.meeting_result = function(req, res){
 		idx_group:req.session.idx_group
 	};	
 
+	var params_idx = req.param("idx_meeting");
+
+	console.log("[params_idx]"+params_idx);
+	if ( params_idx != "0" )
+	{
+		params["idx_meeting"] = params_idx;
+	}
+
 	console.log("[LOG]"+params['idx_meeting']);
 
 	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };

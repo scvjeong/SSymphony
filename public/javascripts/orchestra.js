@@ -145,7 +145,7 @@ function showMeetingResultWindow(idx)
 {
 	var source_url = "/page/meeting_result";
 	var send_params = {
-		idx_meeting: idx;
+		idx_meeting: idx
 	};	
 
 	$.ajax({

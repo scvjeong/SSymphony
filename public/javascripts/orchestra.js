@@ -147,6 +147,7 @@ function showMeetingResultWindow(idx)
 	var send_params = {
 		idx_meeting: idx
 	};	
+	console.log(idx);
 
 	$.ajax({
 		type: "GET",
@@ -158,8 +159,8 @@ function showMeetingResultWindow(idx)
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_result_bootbox");
 			
-			//setupUserListChart();
-			//setupWordChart();
+			setupUserListChart();
+			setupWordChart();
 			
 			var meeting_val = $("#meeting_val").text();
 			//console.log(meeting_val);

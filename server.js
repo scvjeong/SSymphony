@@ -132,9 +132,6 @@ function server(io)
 			socket.emit('get_tool_list', { tool_list: result });
 		});
 
-
-		////  도구 추가  ////
-		var _meeting_contents = [];	// 회의 진행 중 데이터 보관
 /*
 	_meeting_contents = [
 		[
@@ -938,6 +935,9 @@ function server(io)
 var redis = require('redis'), 
 	client = redis.createClient(6379, '61.43.139.70'), multi;
 
+
+////  도구 추가  ////
+var _meeting_contents = [];	// 회의 진행 중 데이터 보관
 
 var _idArray = new Array();	//lastId 배열
 var _lastClient = 1;	//_lastClient 변수

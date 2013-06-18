@@ -355,6 +355,8 @@ function server(io)
 												idx_meeting: idx_meeting,
 												tool_data: tool_data
 											});
+
+			socket.emit('get_tool_list', { tool_list: _meeting_contents[group][idx_meeting].tools });
 		});
 
 		

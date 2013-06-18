@@ -268,6 +268,8 @@ function openSocket()
 	});
 
 	_socket_common.on('arrive_new_tool', function (data) {
+		console.log("ON arrive_new_tool");
+		console.log(data);
 		var group = data.group;
 
 		if (group == _group_id)
@@ -389,6 +391,9 @@ function getToolSource(tool_data, initFuncName)
 var _tool_windows = new Array();
 function createToolWindow(tool_data)
 {
+	console.log("CALL createToolWindow");
+	console.log(tool_data);
+
 	var list_window_width = 600;
 	var list_window_height = 400;
 	var postit_window_width = 600;

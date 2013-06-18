@@ -73,6 +73,7 @@ app.get('/page/meeting_template', meeting_planning.meeting_template); // 회의 
 app.get('/page/setting_agenda', meeting_planning.setting_agenda); // 회의 기획
 app.get('/page/setting_agenda_step', meeting_planning.setting_agenda_step); // 회의 상세 기획
 app.get('/page/ft_help', meeting.ft_help); // 퍼실리테이션 도움말
+app.get('/page/tool_help', meeting.tool_help); // 도구 활용법 도움말
 app.get('/page/minutes', meeting.minutes); // 회의록 페이지
 app.get('/page/need_help', meeting.need_help);
 app.get('/page/user_info', meeting_list.user_info); // 유저 정보

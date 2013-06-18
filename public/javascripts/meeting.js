@@ -158,6 +158,9 @@ $(document).ready(function() {
 	// init facilitator
 	initFacilitator();
 
+	// init toolHelp
+	initToolHelp();
+
 	// init meeting planning
 	initMeetingPlanning();
 
@@ -598,6 +601,46 @@ function initFacilitator()
 			});
 		},"html");
 	});
+}
+
+function initToolHelp() 
+{
+	var header = "<ul>";
+	header += "<li class='idea'>Idea Tool</li>";
+	header += "<li class='analysis'>Analysis Tool</li>";
+	header += "<li class='decision end'>Decision Tool</li>";
+	header += "</ul>";	
+	$("#tool-help").click(function(e){
+		e.preventDefault();
+		$.get("/page/tool_help",null,function(html){
+			dialog = bootbox.dialog(html, [],{
+				"header":header
+			});
+
+			$(".modal-body #tool_help .part", dialog).hide();
+			$(".modal-body #tool_help .part#idea", dialog).show();
+			$(".modal-header li", dialog).mouseover(function(){
+				var c = $(this).attr("class").trim();
+				switch(c)
+				{
+					case "idea":
+						$(".modal-body #tool_help .part", dialog).hide();
+						$(".modal-body #tool_help .part#idea", dialog).show();
+						break;
+					case "analysis":
+						$(".modal-body #tool_help .part", dialog).hide();
+						$(".modal-body #tool_help .part#analysis", dialog).show();
+						break;
+					case "decision end":
+						$(".modal-body #tool_help .part", dialog).hide();
+						$(".modal-body #tool_help .part#decision", dialog).show();
+						break;
+				}
+		
+			});
+		},"html");
+	});
+
 }
 
 function initMeetingPlanning()

@@ -502,6 +502,11 @@ exports.ft_help = function(req, res){
 	res.render('ft_help', {result:result} );
 };
 
+exports.tool_help = function(req, res){
+	result = { title:"tool_help" };
+	res.render('tool_help', {result:result} );
+};
+
 exports.need_help = function(req, res){
 	result = { title:"need_help" };
 	res.render('need_help', {result:result} );

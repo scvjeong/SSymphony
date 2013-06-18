@@ -1,7 +1,7 @@
 //var mindmap_var = {};
 //	socket = io.connect('http://61.43.139.69:50003/group');	// socket.io 서버에 접속
 var moveFlag = 0;
-var _now_tool_data.variables.preX = 0;
+var preX = 0;
 var preY = 0;
 var dataLinks = [];
 var dataNodes = [];

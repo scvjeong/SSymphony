@@ -413,6 +413,47 @@ function createToolWindow(tool_data)
 	var tool_name = tool_data.name;
 	var tool_title = tool_data.title;
 
+
+	switch (tool_type)
+	{
+	case "list":
+		if (_is_added_socket_listener_for_list == false)
+		{
+			addSocketListenerForList();
+			_is_added_socket_listener_for_list = true;
+		}
+		break;
+	case "postit":
+		if (_is_added_socket_listener_for_postit == false)
+		{
+			addSocketListenerForPostit();
+			_is_added_socket_listener_for_postit = true;
+		}
+		break;
+	case "mindmap":
+		if (_is_added_socket_listener_for_mindmap == false)
+		{
+			addSocketListenerForMindmap();
+			_is_added_socket_listener_for_mindmap = true;
+		}
+		break;
+	case "vote":
+		if (_is_added_socket_listener_for_vote == false)
+		{
+			addSocketListenerForVote();
+			_is_added_socket_listener_for_vote = true;
+		}
+		break;
+	case "matrix":
+		if (_is_added_socket_listener_for_matrix == false)
+		{
+			addSocketListenerForMatrix();
+			_is_added_socket_listener_for_matrix = true;
+		}
+		break;
+	}
+
+
 	if (_tool_windows[tool_name] == undefined)
 	{
 		_tool_windows[tool_name] = {
@@ -490,6 +531,9 @@ function createToolWindow(tool_data)
 				$('#' + tool_name).on('mouseenter', function() {
 					switchSelectedTool(tool_data.name);
 				});
+
+				if (_now_tool_data == undefined)
+					_now_tool_data = tool_data;
 				
 				switchSelectedTool(tool_data.name);
 
@@ -509,6 +553,8 @@ function createToolWindow(tool_data)
 var _pre_tool_data, _now_tool_data;
 function switchSelectedTool(tool_name)
 {
+	console.log("CALL switchSelectedTool {tool_name:" + tool_name + "}");
+
 	if (tool_name == _now_tool_data.name)
 		return;
 

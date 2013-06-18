@@ -348,6 +348,15 @@ function server(io)
 				break;
 			}
 
+			// 회의 최초 접속이면 회의 정보 새로 생성
+			if (_meeting_contents[group][idx_meeting] == undefined)
+			{
+				_meeting_contents[group][idx_meeting] = {
+					whiteboard: {},
+					tools: []
+				};
+			}
+
 			_meeting_contents[group][idx_meeting].tools.push(tool_data);
 
 			socket.emit('arrive_new_tool', {

@@ -1273,7 +1273,6 @@ function catchAlarmTime()
 	}
 }
 
-
 function upToFrontWindow(name)
 {
 	var size = _toolWindowList.length;
@@ -2106,4 +2105,3 @@ var input_point = null;
   }
 
   
-	

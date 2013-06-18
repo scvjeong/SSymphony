@@ -10,9 +10,10 @@ var _key_code = null // 키 입력 값 저장
 var _box_count = 0;
 var inputFlag = 0;	//키입력 감지하기 위한 변수
 
+function initmatrix(group, tool) { initMatrix(group, tool); }
 function initMatrix(group, tool)
 {
-	tmpGroup = "group"+group;
+	_now_tool_data.variables.tmpGroup = "group"+group;
 	// Select Tool Div
 	var tool_div = $('#matrix'+tool);
 
@@ -28,10 +29,10 @@ function initMatrix(group, tool)
 	$(window).resize(function(){
 		resizeMatrix();
 	});
-	_socket_matrix.emit('join_room', { group: tmpGroup });
+	_socket_matrix.emit('join_room', { group: _now_tool_data.variables.tmpGroup });
 	////  서버에 초기 데이터 요청하는 함수  ////
-	_socket_matrix.emit('set_tree_data', { group: tmpGroup, tool: "matrix"+tool });
-	_socket_matrix.emit('set_tree_option_data', { group: tmpGroup, tool: "matrix"+tool });
+	_socket_matrix.emit('set_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: "matrix"+tool });
+	_socket_matrix.emit('set_tree_option_data', { group: _now_tool_data.variables.tmpGroup, tool: "matrix"+tool });
 }
 
 function resizeMatrix(){
@@ -41,45 +42,45 @@ function resizeMatrix(){
 }
 
 function setMatrix(t, toolName){
-	if( setupFlag.data_init == true )
+	if( _now_tool_data.variables.setupFlag.data_init == true )
 	{
-		setupData.row = $('#rowNum', $(t).parent() ).val();
-		setupData.col = $('#colNum', $(t).parent() ).val();
-		setupFlag.row = true;
-		setupFlag.col = true;
-		_socket_matrix.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.row, option: "row", val: setupData.row });
-		_socket_matrix.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.col, option: "col", val: setupData.col });
-		_socket_matrix.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.set, option: "set", val: true });
+		_now_tool_data.variables.setupData.row = $('#rowNum', $(t).parent() ).val();
+		_now_tool_data.variables.setupData.col = $('#colNum', $(t).parent() ).val();
+		_now_tool_data.variables.setupFlag.row = true;
+		_now_tool_data.variables.setupFlag.col = true;
+		_socket_matrix.emit('set_option_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: _now_tool_data.variables.optionId.row, option: "row", val: _now_tool_data.variables.setupData.row });
+		_socket_matrix.emit('set_option_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: _now_tool_data.variables.optionId.col, option: "col", val: _now_tool_data.variables.setupData.col });
+		_socket_matrix.emit('set_option_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: _now_tool_data.variables.optionId.set, option: "set", val: true });
 		setDoMatrix(toolName);
 	}
 }
 
 function setClear(toolName) {
 	//if( confirm("정말 삭제하겠습니까?") ) {
-		_socket_matrix.emit('set_init_tool_data', { group: tmpGroup, tool: toolName });		
-		_socket_matrix.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.row, option: "row", val: false });
-		_socket_matrix.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.col, option: "col", val: false });
-		_socket_matrix.emit('set_option_data', { group: tmpGroup, tool: toolName, id: optionId.set, option: "set", val: false });
+		_socket_matrix.emit('set_init_tool_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName });		
+		_socket_matrix.emit('set_option_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: _now_tool_data.variables.optionId.row, option: "row", val: false });
+		_socket_matrix.emit('set_option_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: _now_tool_data.variables.optionId.col, option: "col", val: false });
+		_socket_matrix.emit('set_option_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: _now_tool_data.variables.optionId.set, option: "set", val: false });
 		setDoClear(toolName);
 	//}
 }
 
 function setDoClear(toolName) {
 	var toolBox = $('#'+toolName);
-	setupFlag.data_init = true;
-	setupFlag.row = false;
-	setupFlag.col = false;
+	_now_tool_data.variables.setupFlag.data_init = true;
+	_now_tool_data.variables.setupFlag.row = false;
+	_now_tool_data.variables.setupFlag.col = false;
 	$('.matrix_table tbody', toolBox).html("");
 	$('.matrix_table colgroup', toolBox).html("");
 }
 
 function setDoMatrix(toolName) {
-	if( setupFlag.data_init && setupFlag.row && setupFlag.col )
+	if( _now_tool_data.variables.setupFlag.data_init && _now_tool_data.variables.setupFlag.row && _now_tool_data.variables.setupFlag.col )
 	{
-		setupFlag.data_init = false;
-		var tmpRow = setupData.row*1;
-		var tmpCol = setupData.col*1;
-		_box_count = 0;
+		_now_tool_data.variables.setupFlag.data_init = false;
+		var tmpRow = _now_tool_data.variables.setupData.row*1;
+		var tmpCol = _now_tool_data.variables.setupData.col*1;
+		_now_tool_data.variables._box_count = 0;
 		var toolBox = $('#'+toolName);
 		var tmpMatrix = $('.matrix_table tbody', toolBox);
 		var colGroup =  $('.matrix_table colgroup', toolBox);
@@ -97,7 +98,7 @@ function setDoMatrix(toolName) {
 				var tmpInsertRow = tmpMatrix.find('.matrix-row:last', toolBox);
 				tmpTag = "<td><div class='input_line matrix-box' parent='"+( (i*tmpCol)+j )+"'></div></td>";
 				tmpInsertRow.append(tmpTag);
-				_socket_matrix.emit('set_last_id', { group: tmpGroup, tool: toolName });
+				_socket_matrix.emit('set_last_id', { group: _now_tool_data.variables.tmpGroup, tool: toolName });
 			}
 		}
 		$('.matrix_table tr:nth-child(even) td', toolBox).css({width:colWidth+"px"});
@@ -117,11 +118,11 @@ function setDoMatrix(toolName) {
 function keyDownCheck(t, e, toolName)
 {
 	var $div = $(t).parent();
-	_key_code = e.keyCode;
+	_now_tool_data.variables._key_code = e.keyCode;
 
 	if( $(t).val().trim().length > 0  )
 	{
-		switch( _key_code )
+		switch( _now_tool_data.variables._key_code )
 		{
 			case 13:
 				addInput(t, toolName);
@@ -136,7 +137,7 @@ function keyDownCheck(t, e, toolName)
 	}
 	else if( $(t).val().trim().length < 1 && $("input",$div).length > 1 )
 	{
-		switch( _key_code )
+		switch( _now_tool_data.variables._key_code )
 		{
 			case 8:
 				delInput(t, toolName);
@@ -162,7 +163,7 @@ function addInput(t, toolName)
 			idx = (i+1);
 	});
 	var val = $(t).val();
-	_socket_matrix.emit('set_insert_tree_data', { group: tmpGroup, tool: toolName, id: taskId, parent: parent, index: idx, val: val });
+	_socket_matrix.emit('set_insert_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: taskId, parent: parent, index: idx, val: val });
 
 	// 비어있는 input 박스 존재 유무 확인
 	var existObj = null;
@@ -171,15 +172,15 @@ function addInput(t, toolName)
 			existObj = $(this);
 	});
 	// 아래 화살표
-	if( existObj != null && _key_code == 40 )
+	if( existObj != null && _now_tool_data.variables._key_code == 40 )
 		$(t).next().focus();
 	// 위 화살표
-	else if( existObj != null && _key_code == 38 )
+	else if( existObj != null && _now_tool_data.variables._key_code == 38 )
 		$(t).prev().focus();
 	else if( existObj != null )
 		existObj.focus();
 	else
-		_socket_matrix.emit('set_last_id', { group: tmpGroup, tool: toolName });
+		_socket_matrix.emit('set_last_id', { group: _now_tool_data.variables.tmpGroup, tool: toolName });
 }
 
 function delInput(t, toolName)
@@ -187,7 +188,7 @@ function delInput(t, toolName)
 	var $div = $(t).parent();
 	var taskId = $(t).attr("taskid");
 	$(t).remove();
-	_socket_matrix.emit('set_delete_tree_data', { group: tmpGroup, tool: toolName, id: taskId });
+	_socket_matrix.emit('set_delete_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: taskId });
 	$("input",$div).focus();
 }
 
@@ -218,7 +219,7 @@ function addInputbox( lastId, val, toolName )
 	$("div.matrix-box", td_obj).css("min-height", h+"px");
 
 	// tab 키로 확장 했을 경우
-	if( _key_code == 9 )
+	if( _now_tool_data.variables._key_code == 9 )
 	{
 		if( $('div[parent='+((parent*1)+1)+'] input:last').length > 0 )
 			$('div[parent='+((parent*1)+1)+'] input:last').focus();
@@ -226,10 +227,10 @@ function addInputbox( lastId, val, toolName )
 			$('div[parent=0] input:last').focus();
 	}
 	// ↑
-	else if( _key_code == 38 )
+	else if( _now_tool_data.variables._key_code == 38 )
 		$input.prev().focus();
 	// ↓
-	else if( _key_code == 40 )
+	else if( _now_tool_data.variables._key_code == 40 )
 		$input.next().focus();
 	else
 		$('input:last', $div).focus();
@@ -270,15 +271,15 @@ function setupBox(lastId, toolName)
 	var toolBox = $('#'+toolName);
 	//var boxCount = $('.matrix_table input', toolBox).length;
 
-	var $div = $(".matrix-box:not(input):eq("+_box_count+")", toolBox);
+	var $div = $(".matrix-box:not(input):eq("+_now_tool_data.variables._box_count+")", toolBox);
 	$div.append(makeInputbox(lastId, "", toolName));
-	_box_count++;
+	_now_tool_data.variables._box_count++;
 }
 
 function focusInput(t, toolName)
 {
 	var taskId = $(t).attr("taskid");
-	_socket_matrix.emit('set_input_data', { group: tmpGroup, tool: toolName, id: taskId, index: 0, client: _client_id });
+	_socket_matrix.emit('set_input_data', { group: _now_tool_data.variables.tmpGroup, tool: toolName, id: taskId, index: 0, client: _client_id });
 	if( $(".writing") == t )
 		console.log("=");
 	$(".writing").each(function(){
@@ -293,25 +294,25 @@ function setOption(data)
 {
 	if( data.option == "row" && data.val != "false" )
 	{
-		setupFlag.row = true;
-		setupData.row = data.val;
+		_now_tool_data.variables.setupFlag.row = true;
+		_now_tool_data.variables.setupData.row = data.val;
 		setDoMatrix(data.tool);
 	}
 	else if( data.option == "row" && data.val == "false" )
 	{
-		setupFlag.row = false;
-		setupData.row = 0;
+		_now_tool_data.variables.setupFlag.row = false;
+		_now_tool_data.variables.setupData.row = 0;
 	}
 	else if( data.option == "col" && data.val != "false" )
 	{
-		setupFlag.col = true;
-		setupData.col = data.val;
+		_now_tool_data.variables.setupFlag.col = true;
+		_now_tool_data.variables.setupData.col = data.val;
 		setDoMatrix(data.tool);
 	}
 	else if( data.option == "col" && data.val == "false" )
 	{
-		setupFlag.col = false;
-		setupData.col = 0;
+		_now_tool_data.variables.setupFlag.col = false;
+		_now_tool_data.variables.setupData.col = 0;
 	}
 	else if( data.option == "set" && data.val )
 		setDoMatrix(data.tool);
@@ -324,13 +325,13 @@ function addSocketListenerForMatrix()
 {
 	console.log( "addSocketListenerForMatrix" );
 	_socket_matrix.on('get_tree_data', function (data) {
-		setupFlag.data_init = true;
+		_now_tool_data.variables.setupFlag.data_init = true;
 		index = $(".matrix-box[parent="+data.parent+"]").length;
 		addRemoteInputbox(data.id, data.val, data.parent, index, data.tool);
 	});
 	// matrix setup
 	_socket_matrix.on('get_init_tool_data', function (data) {
-		setupFlag.data_init = true;
+		_now_tool_data.variables.setupFlag.data_init = true;
 	});
 	_socket_matrix.on('get_tree_option_data', function (data) {
 		setOption(data);
@@ -352,7 +353,7 @@ function addSocketListenerForMatrix()
 		var toolBox = $('#'+data.tool);
 		var totalBoxCount = $('td', toolBox).length;
 		//var boxCount = $('.matrix_table input', toolBox).length;
-		if( totalBoxCount > _box_count )
+		if( totalBoxCount > _now_tool_data.variables._box_count )
 		{
 			setupBox(lastId, data.tool);
 			$(".matrix-input:first").focus();

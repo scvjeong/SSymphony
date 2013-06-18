@@ -30,6 +30,9 @@ var _is_added_socket_listener_for_matrix = false;
 
 var _notice_bar_idx = 1;
 
+var _now_process_idx = 0;
+var _tool_list;
+
 $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
@@ -80,15 +83,15 @@ $(document).ready(function() {
 
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
-	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 500);
+	/*setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 500);
 	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 700);
 	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 700);
-	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 800);
+	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 800);*/
 	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 5000);
 
 	// 파일 업로드 초기화
 	$('#btn_uploadFile').click(function() {
-            $('#uploadForm').submit();
+		$('#uploadForm').submit();
 	});
             
 	$('#uploadForm').submit(function() { 
@@ -269,16 +272,254 @@ function openSocket()
 			drawArrived(data.tool, data.val);
 		}
 	});
+
+	_socket_common.on('arrive_new_tool', function (data) {
+		var group = data.group;
+
+		if (group == _group_id)
+		{
+			var idx_meeting = data.idx_meeting;
+			var tool_data = data.tool_data;
+
+			_socket_common.emit('set_tool_list', {
+													group: _group_id,
+													idx_meeting: _idx_meeting
+												});
+
+			createToolWindow(tool_data);
+		}
+	});
+
+	_socket_common.on('get_tool_list', function (data) {
+		var tool_list = data.tool_list;
+
+		refreshToolList(tool_list);
+	});
+
+	// 지정된 도구창을 띄우는 신호를 받음
+	_socket_common.on('get_open_tool', function (data) {
+
+	});
 	/* /서버 리스너 등록 */
 
 	/* 서버 초기 이벤트 전송 */
 	_socket_common.emit('join_room', {group:_group_id, idx_meeting: _idx_meeting});
 	_socket_common.emit('set_client', {group:_group_id, user: _idx_user});
+	_socket_common.emit('set_tool_list', {
+											group: _group_id,
+											idx_meeting: _idx_meeting
+										});
 	/* /서버 초기 이벤트 전송 */
 	////////////////////////////////아래는 join_room 이후 init 콜백 만들어서 처리
 	//_socket_common.emit('set_list_of_tools', {group:_group_id, idx_meeting:_idx_meeting});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+/*	새로운 심장	*/
+
+function createNewTool(tool_type)
+{
+	_socket_common.emit("create_new_tool",
+		{
+			group: _group_id,
+			idx_meeting: _idx_meeting,
+			type: tool_type,
+			now_process_idx: _now_process_idx
+		});
+}
+
+function refreshToolList(tool_list)
+{
+	_tool_list = tool_list;
+
+	var tool_list_to_reset = $("#rightpanel #process_list .tool_list");
+	tool_list_to_reset.html("");
+
+	for (var i = 0; i < tool_list.length; i++)
+	{
+		var target_tool_list = $("#rightpanel #process_list .tool_list:eq(" + _tool_list[i].now_process_idx + ")");
+		var tool_type = _tool_list[i].type;
+		var tool_name = _tool_list[i].name;
+		var tool_title = _tool_list[i].title;
+		var source = '<a data-toggle="tooltip" '
+					+ 'data-placement="bottom" '
+					+ 'title="" data-original-title="'+ tool_title +'">'
+					+ '<li class="item_'+ tool_type +'" id="btn_'+ tool_name +'"></li></a>';
+		target_tool_list.append(source);
+	}
+}
+
+function getToolSource(tool_data, initFuncName)
+{
+	var tool_type = tool_data.type;
+	var tool_id = tool_data.tool_id;
+
+	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_id;
+	console.log("[getToolSource] 부른 도구의 Source url :: " + source_url);
+	
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_id:" + tool_id + "]");
+			createToolWindow(tool_data, data);
+			console.log("tool_index = " + tool_index);
+			initFuncName(_group_id, tool_id);
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+}
+
+// 도구창 보여주는 함수
+var _tool_windows = new Array();
+function createToolWindow(tool_data)
+{
+	var list_window_width = 600;
+	var list_window_height = 400;
+	var postit_window_width = 600;
+	var postit_window_height = 400;
+	var mindmap_window_width = 600;
+	var mindmap_window_height = 400;
+	var vote_window_width = 500;
+	var vote_window_height= 400;
+	var matrix_window_width = 500;
+	var matrix_window_height= 400;
+
+	var tool_type = tool_data.type;
+	var tool_name = tool_data.name;
+	var tool_title = tool_data.title;
+
+	if (_tool_windows[tool_name] == undefined)
+	{
+		_tool_windows[tool_name] = {
+										top: _common_window_top,
+										left: _common_window_left,
+										width: eval(tool_type + "_window_width"),
+										height: eval(tool_type + "_window_height"),
+									};
+
+		_common_window_left += 100;
+		_common_window_top += 100;
+	}
+
+	var getToolSource = function(tool_data) {
+		$.ajax({
+			type: "GET",
+			url: source_url,
+			dataType: "html",
+			success: function(tool_source) {
+				var tool_id = tool_data.tool_id;
+				var tool_type = tool_data.type;
+				var tool_name = tool_data.name;
+				var tool_title = tool_data.title;
+
+				var tool_window_source;
+				tool_window_source = '<div class="toolwindow" id="' + tool_name + '" onclick="upToFrontWindow(\'' + tool_name + '\')">';
+				tool_window_source += '<div class="title">';
+					tool_window_source += '<div class="title_text">' + tool_title + '</div>';
+					//toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
+					//toolsource += '<div class="closewindow" onclick="transWindow(\'' + toolname + '\')">투명</div>';
+					//toolsource += '<div class="clearboth"></div>';
+					tool_window_source += '</div>';
+					tool_window_source += tool_source;
+				tool_window_source += '</div>';
+
+				var tool_width = _tool_windows[tool_name].width;
+				var titlebarHeight = 29;
+				var statusbarHeight = 20;
+				var tool_height = _tool_windows[tool_name].height
+								+ titlebarHeight + statusbarHeight;
+
+				$('#white-board').append(tool_window_source);
+				$('#' + tool_name).css('width', tool_width);
+				$('#' + tool_name).css('height', tool_height);
+
+				$('#' + tool_name).jqxWindow({
+					showCollapseButton : true,
+					maxHeight : 2000,
+					maxWidth : 2000,
+					minHeight : 200,
+					minWidth : 200,
+					height : tool_height,
+					width : tool_width,
+					theme : share_box.config.theme,
+			        initContent: function () {
+						$('#' + tool_name).jqxWindow('focus');
+					}
+			    });
+
+				var tool_top = _tool_windows[tool_name].top;
+				var tool_left = _tool_windows[tool_name].left;
+
+				$('#' + tool_name).css('top', tool_top + 'px');
+				$('#' + tool_name).css('left', tool_left + 'px');
+				
+				$('#' + tool_name).on('mouseenter', function() {
+					switchToolVariables(tool_name);
+				});
+				
+				switchSelectedTool(tool_data);			
+
+				eval("init" + tool_type + "(_group_id, tool_id);");
+				//initFuncName(_group_id, tool_id);
+			},
+			error: function(err) {
+				console.log(err);
+				return false;
+			}
+		});
+	}
+}
+
+var _pre_tool_data, _now_tool_data;
+function switchSelectedTool(tool_data)
+{
+	if (tool_data.name == _now_tool_data.name)
+		return;
+
+	_pre_tool_data = _now_tool_data;
+	_now_tool_data = tool_data;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 // 쉐어박스 아이템 추가
 function addShareItem(response)
@@ -718,21 +959,6 @@ function includeFileDynamically(list) {
 	}
 
 }
-
-////////////////////////////////////////////////////////////////////////////////////////
-/*	새로운 심장	*/
-
-function createNewTool(tool_type)
-{
-	_socket_common.emit("create_tool",
-		{
-			group: _group_id,
-			idx_meeting: _idx_meeting,
-			type: tool_type
-		});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
 
 
 var _tool_type = "";

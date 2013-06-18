@@ -274,6 +274,7 @@ function openSocket()
 
 		if (group == _group_id)
 		{
+			console.log("SAME GROUP");
 			var idx_meeting = data.idx_meeting;
 			var tool_data = data.tool_data;
 
@@ -287,6 +288,8 @@ function openSocket()
 	});
 
 	_socket_common.on('get_tool_list', function (data) {
+		console.log("ON get_tool_list");
+
 		var tool_list = data.tool_list;
 
 		refreshToolList(tool_list);
@@ -428,6 +431,14 @@ function createToolWindow(tool_data)
 			url: source_url,
 			dataType: "html",
 			success: function(tool_source) {
+				console.log("CALL getToolSource");
+				console.log("<tool_data>");
+					console.log(tool_data);
+				console.log("</tool_data>");
+				console.log("<tool_source>");
+					console.log(tool_source);
+				console.log("</tool_source>");
+
 				var tool_id = tool_data.tool_id;
 				var tool_type = tool_data.type;
 				var tool_name = tool_data.name;
@@ -488,7 +499,9 @@ function createToolWindow(tool_data)
 				return false;
 			}
 		});
-	}
+	};
+
+	getToolSource(tool_data);
 }
 
 var _pre_tool_data, _now_tool_data;

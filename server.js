@@ -355,8 +355,14 @@ function server(io)
 												idx_meeting: idx_meeting,
 												tool_data: tool_data
 											});
+			socket.broadcast.to(group).emit('arrive_new_tool', {
+												group: group,
+												idx_meeting: idx_meeting,
+												tool_data: tool_data
+											});
 
 			socket.emit('get_tool_list', { tool_list: _meeting_contents[group][idx_meeting].tools });
+			socket.broadcast.to(group).emit('get_tool_list', { tool_list: _meeting_contents[group][idx_meeting].tools });
 		});
 
 		

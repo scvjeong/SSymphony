@@ -488,10 +488,10 @@ function createToolWindow(tool_data)
 				$('#' + tool_name).css('left', tool_left + 'px');
 				
 				$('#' + tool_name).on('mouseenter', function() {
-					switchSelectedTool(tool_name);
+					switchSelectedTool(tool_data);
 				});
 				
-				switchSelectedTool(tool_data);			
+				switchSelectedTool(tool_data);	
 
 				eval("init" + tool_type + "(_group_id, tool_id);");
 				//initFuncName(_group_id, tool_id);

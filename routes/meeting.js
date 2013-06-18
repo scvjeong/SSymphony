@@ -212,7 +212,8 @@ exports.meeting_evaluation = function(req, res){
 	var dao_m = require('../sql/meeting');
 	var params = { 
 		idx_meeting:req.session.idx_meeting,	 
-		idx_group:req.session.idx_group
+		idx_group:req.session.idx_group,
+		idx_user:req.session.idx_user
 	};	
 
 	console.log("[LOG]"+params['idx_meeting']);

@@ -1307,11 +1307,11 @@ function showEvaluateMeetingWindow()
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_evaluate_bootbox");
 					
-		//	var meeting_val = $("#meeting_val").text();
+		//	var meeting_val = $("#meeting_val").text();WWWW
 		//	var ft_val = $("#proceeding_val").text();
 
-			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
-			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
+			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 25, theme: 'classic', disabled: true, value: "0" });
+			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 25, theme: 'classic', disabled: true, value: "0" });
 	
 			$('#eval_input_meeting_rating_val').bind('change', function (event) { 
 				$('#meeting_val').val(event.value);

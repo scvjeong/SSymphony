@@ -84,7 +84,7 @@ app.post('/page/sign_up', main.sign_up);
 app.post('/page/check_email', main.check_email);
 app.post('/page/new_group', group_select.new_group);
 app.post('/page/meeting_save', meeting.meeting_save);
-app.post('/page/next_process', meeting.post_next_process);
+app.get('/page/next_process', meeting.post_next_process);
 app.post('/page/meeting_appraisal', meeting.post_meeting_appraisal);
 app.post('/page/meeting_evaluation', meeting.post_meeting_evaluation);
 app.post('/page/meeting_close', meeting.post_meeting_close);

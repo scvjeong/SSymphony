@@ -633,11 +633,11 @@ function initNextProcess()
 		bool = bool && (($processing.attr("idx")*1) > 0); // 0 이상의 index 인지 확인
 		if( bool )
 		{
-			var agenda = $processing.val();
+			var idx_agenda = $processing.attr("idx");
 			$.ajax({
 				url: '/page/next_process',
 				type: 'POST',
-				data: {agenda:agenda},
+				data: {idx_agenda:idx_agenda},
 				dataType: 'json',
 				success: function(json) {
 					console.log(json);
@@ -1333,7 +1333,7 @@ function evaluateComplete()
 			data: send_params,
 			dataType: 'json',
 			success: function(json_data) {
-				showMeetingResultWindow("0");
+				showMeetingResultWindow();
 			}
 		});
 

@@ -494,7 +494,7 @@ function createToolWindow(tool_data)
 				$('#' + tool_name).css('left', tool_left + 'px');
 				
 				$('#' + tool_name).on('mouseenter', function() {
-					switchToolVariables(tool_name);
+					switchSelectedTool(tool_name);
 				});
 				
 				switchSelectedTool(tool_data);			

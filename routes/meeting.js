@@ -262,7 +262,8 @@ exports.meeting_evaluation = function(req, res){
 	var dao_m = require('../sql/meeting');
 	var params = { 
 		idx_meeting:req.session.idx_meeting,	 
-		idx_group:req.session.idx_group
+		idx_group:req.session.idx_group,
+		idx_user:req.session.idx_user
 	};	
 
 	console.log("[LOG]"+params['idx_meeting']);
@@ -550,6 +551,11 @@ exports.meeting_save = function(req, res){
 exports.ft_help = function(req, res){
 	result = { title:"ft_help" };
 	res.render('ft_help', {result:result} );
+};
+
+exports.tool_help = function(req, res){
+	result = { title:"tool_help" };
+	res.render('tool_help', {result:result} );
 };
 
 exports.need_help = function(req, res){

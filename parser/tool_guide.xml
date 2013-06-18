@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <root>
 	<guide_name>
-		<flag> </flag>
+		<flag>idea</flag>
 		<name>Brainwriting</name>
 		<tool>postit</tool>
 		<image>이미지 경로</image>
@@ -24,7 +24,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>idea</flag>
 		<name>6-3-5 Method</name>
 		<tool>matrix</tool>
 		<image>이미지 경로</image>
@@ -49,7 +49,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>idea</flag>
 		<name>Random Word</name>
 		<tool>mindmap, postit</tool>
 		<image>이미지 경로</image>
@@ -67,27 +67,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
-		<name>Rich Picture</name>
-		<tool>whiteboard</tool>
-		<image>이미지 경로</image>
-		<purpose>
-			복잡한 상황에서의 숨겨진 문제 표출
-		</purpose>
-		<rule>
-			- 의견이 아닌 실제로 경험한 사건과 그 때의 느낌이 표현되도록 안내
-		</rule> 
-		<method>
-			1) 그림으로 표현하고자 하는 문제상황의 선정
-			2) 그 문제상황과 관련된 이해관계자들이 자신의 경험을 말해보도록 함
-			3) 자신이 경험한 사항을 그림이나 이미지로 표현
-			4) 각각 표현된 그림과 이미지 간의 관계와 영향 등을 추가하여 표현
-			5) 표현이 불명확한 경우 그림을 보강하거나 설명 추가
-		</method>	
-	</guide_name>
-
-	<guide_name>
-		<flag> </flag>
+		<flag>idea</flag>
 		<name>SCAMPER</name>
 		<tool>list</tool>
 		<image>이미지 경로</image>
@@ -108,8 +88,31 @@
 		</method>		
 	</guide_name>
 
+
 	<guide_name>
-		<flag> </flag>
+		<flag>analysis</flag>
+		<name>Rich Picture</name>
+		<tool>whiteboard</tool>
+		<image>이미지 경로</image>
+		<purpose>
+			복잡한 상황에서의 숨겨진 문제 표출
+		</purpose>
+		<rule>
+			- 의견이 아닌 실제로 경험한 사건과 그 때의 느낌이 표현되도록 안내
+		</rule> 
+		<method>
+			1) 그림으로 표현하고자 하는 문제상황의 선정
+			2) 그 문제상황과 관련된 이해관계자들이 자신의 경험을 말해보도록 함
+			3) 자신이 경험한 사항을 그림이나 이미지로 표현
+			4) 각각 표현된 그림과 이미지 간의 관계와 영향 등을 추가하여 표현
+			5) 표현이 불명확한 경우 그림을 보강하거나 설명 추가
+		</method>	
+	</guide_name>
+
+	
+
+	<guide_name>
+		<flag>analysis</flag>
 		<name>SWOT</name>
 		<tool>matrix</tool>
 		<image>이미지 경로</image>
@@ -130,7 +133,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>analysis</flag>
 		<name>Logic tree</name>
 		<tool>mindmap</tool>
 		<image>이미지 경로</image>	
@@ -153,7 +156,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>analysis</flag>
 		<name>5 Why</name>
 		<tool>mindmap</tool>
 		<image>이미지 경로</image>
@@ -174,7 +177,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>analysis</flag>
 		<name>Stake Holder(이해관계자)</name>
 		<tool>matrix</tool>
 		<image>이미지 경로</image>
@@ -196,7 +199,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>analysis</flag>
 		<name>T-chart</name>
 		<tool>matrix</tool>
 		<image>이미지 경로</image>
@@ -216,7 +219,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>decision</flag>
 		<name>Pay-off Matrix</name>
 		<tool>matrix</tool>
 		<image>이미지 경로</image>
@@ -236,7 +239,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>decision</flag>
 		<name>Decision Grid</name>
 		<tool>matrix</tool>
 		<image>이미지 경로</image>
@@ -258,7 +261,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>decision</flag>
 		<name>Multi Voting</name>
 		<tool>list, vote</tool>
 		<image>이미지 경로</image>
@@ -278,7 +281,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>decision</flag>
 		<name>Fist to Five</name>
 		<tool>vote</tool>
 		<image>이미지 경로</image>
@@ -298,7 +301,7 @@
 	</guide_name>
 
 	<guide_name>
-		<flag> </flag>
+		<flag>decision</flag>
 		<name>Gradient Scale of Agreement(동의 정도 확인)</name>
 		<tool>vote</tool>
 		<image>이미지 경로</image>

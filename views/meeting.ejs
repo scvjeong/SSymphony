@@ -136,7 +136,6 @@
 		<div class="title-bar">
 			<div class="subject"><%=result.meeting[0].subject%></div>
 			<span class="sub-subject"><%=result.meeting[0].goal%></span>
-			<div class="stop-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
 			<div class="time">00:00:00 / 00:00:00</div>
 		</div>
 		<div id="white-board" class="white-board">
@@ -381,13 +380,6 @@
 							<div class="clearboth"></div>
 							<div class="tool_list_container">
 								<ul class="tool_list">
-									<a data-toggle="tooltip" data-placement="bottom" title="" data-original-title="List1"><li class="item_list" id="btn_list1"></li></a>
-									<li class="item_list" id="btn_list1"></li>
-									<li class="item_list" id="btn_list1"></li>
-									<li class="item_matrix" id="btn_matrix1"></li>
-									<li class="item_mindmap" id="btn_mindmap1"></li>
-									<li class="item_postit" id="btn_postit1"></li>
-									<li class="item_vote" id="btn_vote1"></li>
 								</ul>
 							</div>
 						</li-->
@@ -399,6 +391,10 @@
 							</div>
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+								</ul>
+							</div>
 						</li>
 						<li class="process-unit">
 							<span>Clarify Agenda</span>
@@ -407,6 +403,10 @@
 							</div>
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+								</ul>
+							</div>
 						</li>
 						<li class="process-unit">
 							<span>Discussion</span>
@@ -415,6 +415,10 @@
 							</div>
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+								</ul>
+							</div>
 						</li>
 						<li class="process-unit">
 							<span>Burning Issue</span>
@@ -423,6 +427,10 @@
 							</div>
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+								</ul>
+							</div>
 						</li>
 						<li class="process-unit">
 							<span>Review</span>
@@ -431,6 +439,10 @@
 							</div>
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+								</ul>
+							</div>
 						</li>
 						<li class="process-unit">
 							<span>Closing Round</span>
@@ -439,6 +451,10 @@
 							</div>
 							<div class="time_container"><span class="lead_time">00:00:00</span><span class="limit_time">00:00:00</span></div>
 							<div class="clearboth"></div>
+							<div class="tool_list_container">
+								<ul class="tool_list">
+								</ul>
+							</div>
 						</li>
 						-->
 					</ul>
@@ -470,6 +486,7 @@
 					<div class="facilitator-btn" id="plan-for-meeting">Plan for meeting</div>
 					<div class="facilitator-btn" id="next-process">Next Process</div>
 					<div class="facilitator-btn" id="facilitator-help">Help</div>
+					<div class="facilitator-btn" id="tool-help">Tool Help</div>
 					<div class="facilitator-btn" id="record-btn" onclick="startRecording();">Record</div>
 					<div class="facilitator-btn" id="stop-btn" onclick="stopRecording();" style="display:none">Stop</div>
 					<div class="facilitator-btn" id="result-btn">Exit</div>

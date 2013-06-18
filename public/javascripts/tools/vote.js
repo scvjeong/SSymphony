@@ -11,6 +11,7 @@ var _is_multi_vote = "";
 var _votelist = [];
 var _is_voting = false;
 
+function initvote(group, tool) { initVote(group, tool); }
 function initVote(group, tool)
 {
 	console.log("CALL initVote(" + group + ", " + tool + ")");

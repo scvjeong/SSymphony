@@ -1075,10 +1075,12 @@ ul.users-online li a strong {
 
 #eval_input_meeting_rating_val {
 	float: left;
+	line-height:25px;
 }
 
 #eval_input_ft_rating_val {
 	float: left;
+	line-height:25px;
 }
 
 #eval_input_best_rating {
@@ -1150,7 +1152,7 @@ ul.users-online li a strong {
 }
 
 .best_member_clicked {
-	background-color: #c0c0c0;
+	background-color: #9cf;
 }
 
 /* /회의 평가 부트박스 */

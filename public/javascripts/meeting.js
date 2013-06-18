@@ -30,6 +30,9 @@ var _is_added_socket_listener_for_matrix = false;
 
 var _notice_bar_idx = 1;
 
+var _now_process_idx = 0;
+var _tool_list;
+
 $(document).ready(function() {
 	// 크기 조정
 	$(window).resize();
@@ -80,15 +83,15 @@ $(document).ready(function() {
 
 	// 알림 예시
 	showPopupWindow("회의가 시작되었습니다.");
-	setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 500);
+	/*setTimeout('showPopupWindow("정용기님이 입장하셨습니다.")', 500);
 	setTimeout('showPopupWindow("김태하님이 입장하셨습니다.")', 700);
 	setTimeout('showPopupWindow("임종혁님이 입장하셨습니다.")', 700);
-	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 800);
+	setTimeout('showPopupWindow("고동현님이 입장하셨습니다.")', 800);*/
 	setTimeout('showPopupWindow("올바른 회의 진행을 위해서는 서로를 존중하는 마음을 가져야 합니다.")', 5000);
 
 	// 파일 업로드 초기화
 	$('#btn_uploadFile').click(function() {
-            $('#uploadForm').submit();
+		$('#uploadForm').submit();
 	});
             
 	$('#uploadForm').submit(function() { 
@@ -157,6 +160,9 @@ $(document).ready(function() {
 
 	// init facilitator
 	initFacilitator();
+
+	// init toolHelp
+	initToolHelp();
 
 	// init meeting planning
 	initMeetingPlanning();
@@ -266,16 +272,329 @@ function openSocket()
 			drawArrived(data.tool, data.val);
 		}
 	});
+
+	_socket_common.on('arrive_new_tool', function (data) {
+		console.log("ON arrive_new_tool");
+		console.log(data);
+		var group = data.group;
+
+		if (group == _group_id)
+		{
+			console.log("SAME GROUP");
+			var idx_meeting = data.idx_meeting;
+			var tool_data = data.tool_data;
+
+			_socket_common.emit('set_tool_list', {
+													group: _group_id,
+													idx_meeting: _idx_meeting
+												});
+
+			createToolWindow(tool_data);
+		}
+	});
+
+	_socket_common.on('get_tool_list', function (data) {
+		console.log("ON get_tool_list");
+
+		var tool_list = data.tool_list;
+
+		refreshToolList(tool_list);
+	});
+
+	// 지정된 도구창을 띄우는 신호를 받음
+	_socket_common.on('get_open_tool', function (data) {
+
+	});
 	/* /서버 리스너 등록 */
 
 	/* 서버 초기 이벤트 전송 */
 	_socket_common.emit('join_room', {group:_group_id, idx_meeting: _idx_meeting});
 	_socket_common.emit('set_client', {group:_group_id, user: _idx_user});
+	_socket_common.emit('set_tool_list', {
+											group: _group_id,
+											idx_meeting: _idx_meeting
+										});
 	/* /서버 초기 이벤트 전송 */
 	////////////////////////////////아래는 join_room 이후 init 콜백 만들어서 처리
 	//_socket_common.emit('set_list_of_tools', {group:_group_id, idx_meeting:_idx_meeting});
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+/*	새로운 심장	*/
+
+function createNewTool(tool_type)
+{
+	_socket_common.emit("create_new_tool",
+		{
+			group: _group_id,
+			idx_meeting: _idx_meeting,
+			type: tool_type,
+			now_process_idx: _now_process_idx
+		});
+}
+
+function refreshToolList(tool_list)
+{
+	_tool_list = tool_list;
+
+	var tool_list_to_reset = $("#rightpanel #process_list .tool_list");
+	tool_list_to_reset.html("");
+
+	for (var i = 0; i < tool_list.length; i++)
+	{
+		var target_tool_list = $("#rightpanel #process_list .tool_list:eq(" + _tool_list[i].now_process_idx + ")");
+		var tool_type = _tool_list[i].type;
+		var tool_name = _tool_list[i].name;
+		var tool_title = _tool_list[i].title;
+		var source = '<a data-toggle="tooltip" '
+					+ 'data-placement="bottom" '
+					+ 'title="" data-original-title="'+ tool_title +'">'
+					+ '<li class="item_'+ tool_type +'" id="btn_'+ tool_name +'"></li></a>';
+		target_tool_list.append(source);
+	}
+}
+
+function getToolSource(tool_data, initFuncName)
+{
+	var tool_type = tool_data.type;
+	var tool_id = tool_data.tool_id;
+
+	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_id;
+	console.log("[getToolSource] 부른 도구의 Source url :: " + source_url);
+	
+	$.ajax({
+		type: "GET",
+		url: source_url,
+		dataType: "html",
+		success: function(data) {
+			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_id:" + tool_id + "]");
+			createToolWindow(tool_data, data);
+			console.log("tool_index = " + tool_index);
+			initFuncName(_group_id, tool_id);
+		},
+		error: function(err) {
+			console.log(err);
+			return false;
+		}
+	});
+}
+
+// 도구창 보여주는 함수
+var _tool_windows = new Array();
+function createToolWindow(tool_data)
+{
+	console.log("CALL createToolWindow");
+	console.log(tool_data);
+
+	var list_window_width = 600;
+	var list_window_height = 400;
+	var postit_window_width = 600;
+	var postit_window_height = 400;
+	var mindmap_window_width = 600;
+	var mindmap_window_height = 400;
+	var vote_window_width = 500;
+	var vote_window_height= 400;
+	var matrix_window_width = 500;
+	var matrix_window_height= 400;
+
+	var tool_id = tool_data.tool_id;
+	var tool_type = tool_data.type;
+	var tool_name = tool_data.name;
+	var tool_title = tool_data.title;
+
+
+	switch (tool_type)
+	{
+	case "list":
+		if (_is_added_socket_listener_for_list == false)
+		{
+			addSocketListenerForList();
+			_is_added_socket_listener_for_list = true;
+		}
+		break;
+	case "postit":
+		if (_is_added_socket_listener_for_postit == false)
+		{
+			addSocketListenerForPostit();
+			_is_added_socket_listener_for_postit = true;
+		}
+		break;
+	case "mindmap":
+		if (_is_added_socket_listener_for_mindmap == false)
+		{
+			addSocketListenerForMindmap();
+			_is_added_socket_listener_for_mindmap = true;
+		}
+		break;
+	case "vote":
+		if (_is_added_socket_listener_for_vote == false)
+		{
+			addSocketListenerForVote();
+			_is_added_socket_listener_for_vote = true;
+		}
+		break;
+	case "matrix":
+		if (_is_added_socket_listener_for_matrix == false)
+		{
+			addSocketListenerForMatrix();
+			_is_added_socket_listener_for_matrix = true;
+		}
+		break;
+	}
+
+
+	if (_tool_windows[tool_name] == undefined)
+	{
+		_tool_windows[tool_name] = {
+										top: _common_window_top,
+										left: _common_window_left,
+										width: eval(tool_type + "_window_width"),
+										height: eval(tool_type + "_window_height"),
+									};
+
+		_common_window_left += 100;
+		_common_window_top += 100;
+	}
+
+	var source_url = "../tool/" + tool_type + "/" + _group_id + "/" + tool_id;
+	var getToolSource = function(tool_data, source_url) {
+		$.ajax({
+			type: "GET",
+			url: source_url,
+			dataType: "html",
+			success: function(tool_source) {
+				console.log("CALL getToolSource");
+				console.log("<tool_data>");
+					console.log(tool_data);
+				console.log("</tool_data>");
+				console.log("<tool_source>");
+					console.log(tool_source);
+				console.log("</tool_source>");
+
+				var tool_id = tool_data.tool_id;
+				var tool_type = tool_data.type;
+				var tool_name = tool_data.name;
+				var tool_title = tool_data.title;
+
+				var tool_window_source;
+				tool_window_source = '<div class="toolwindow" id="' + tool_name + '" onclick="upToFrontWindow(\'' + tool_name + '\')">';
+				tool_window_source += '<div class="title">';
+					tool_window_source += '<div class="title_text">' + tool_title + '</div>';
+					//toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
+					//toolsource += '<div class="closewindow" onclick="transWindow(\'' + toolname + '\')">투명</div>';
+					//toolsource += '<div class="clearboth"></div>';
+					tool_window_source += '</div>';
+					tool_window_source += tool_source;
+				tool_window_source += '</div>';
+
+				var tool_width = _tool_windows[tool_name].width;
+				var titlebarHeight = 29;
+				var statusbarHeight = 20;
+				var tool_height = _tool_windows[tool_name].height
+								+ titlebarHeight + statusbarHeight;
+
+				$('#white-board').append(tool_window_source);
+				$('#' + tool_name).css('width', tool_width);
+				$('#' + tool_name).css('height', tool_height);
+
+				$('#' + tool_name).jqxWindow({
+					showCollapseButton : true,
+					maxHeight : 2000,
+					maxWidth : 2000,
+					minHeight : 200,
+					minWidth : 200,
+					height : tool_height,
+					width : tool_width,
+					theme : share_box.config.theme,
+			        initContent: function () {
+						$('#' + tool_name).jqxWindow('focus');
+					}
+			    });
+
+				var tool_top = _tool_windows[tool_name].top;
+				var tool_left = _tool_windows[tool_name].left;
+
+				$('#' + tool_name).css('top', tool_top + 'px');
+				$('#' + tool_name).css('left', tool_left + 'px');
+				
+				$('#' + tool_name).on('mouseenter', function() {
+					switchSelectedTool(tool_data.name);
+				});
+
+				if (_now_tool_data == undefined)
+					_now_tool_data = tool_data;
+				
+				switchSelectedTool(tool_data.name);
+
+				eval("init" + tool_type + "(_group_id, tool_id);");
+				//initFuncName(_group_id, tool_id);
+			},
+			error: function(err) {
+				console.log(err);
+				return false;
+			}
+		});
+	};
+
+	getToolSource(tool_data, source_url);
+}
+
+var _pre_tool_data, _now_tool_data;
+function switchSelectedTool(tool_name)
+{
+	console.log("CALL switchSelectedTool {tool_name:" + tool_name + "}");
+
+	if (tool_name == _now_tool_data.name)
+		return;
+
+	var i ;
+	for (i = 0; i < _tool_list.length; i++)
+	{
+		if (_tool_list[i].name == tool_name)
+		{
+			break;
+		}
+	}
+
+	_pre_tool_data = _now_tool_data;
+	_now_tool_data = _tool_list[i];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 // 쉐어박스 아이템 추가
 function addShareItem(response)
@@ -600,6 +919,46 @@ function initFacilitator()
 	});
 }
 
+function initToolHelp() 
+{
+	var header = "<ul>";
+	header += "<li class='idea'>Idea Tool</li>";
+	header += "<li class='analysis'>Analysis Tool</li>";
+	header += "<li class='decision end'>Decision Tool</li>";
+	header += "</ul>";	
+	$("#tool-help").click(function(e){
+		e.preventDefault();
+		$.get("/page/tool_help",null,function(html){
+			dialog = bootbox.dialog(html, [],{
+				"header":header
+			});
+
+			$(".modal-body #tool_help .part", dialog).hide();
+			$(".modal-body #tool_help .part#idea", dialog).show();
+			$(".modal-header li", dialog).mouseover(function(){
+				var c = $(this).attr("class").trim();
+				switch(c)
+				{
+					case "idea":
+						$(".modal-body #tool_help .part", dialog).hide();
+						$(".modal-body #tool_help .part#idea", dialog).show();
+						break;
+					case "analysis":
+						$(".modal-body #tool_help .part", dialog).hide();
+						$(".modal-body #tool_help .part#analysis", dialog).show();
+						break;
+					case "decision end":
+						$(".modal-body #tool_help .part", dialog).hide();
+						$(".modal-body #tool_help .part#decision", dialog).show();
+						break;
+				}
+		
+			});
+		},"html");
+	});
+
+}
+
 function initMeetingPlanning()
 {
 	$("#plan-for-meeting").click(function(e){
@@ -675,21 +1034,6 @@ function includeFileDynamically(list) {
 	}
 
 }
-
-////////////////////////////////////////////////////////////////////////////////////////
-/*	새로운 심장	*/
-
-function createNewTool(tool_type)
-{
-	_socket_common.emit("create_tool",
-		{
-			group: _group_id,
-			idx_meeting: _idx_meeting,
-			type: tool_type
-		});
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
 
 
 var _tool_type = "";
@@ -1230,7 +1574,6 @@ function catchAlarmTime()
 	}
 }
 
-
 function upToFrontWindow(name)
 {
 	var size = _toolWindowList.length;
@@ -1265,11 +1608,11 @@ function showEvaluateMeetingWindow()
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_evaluate_bootbox");
 					
-		//	var meeting_val = $("#meeting_val").text();
+		//	var meeting_val = $("#meeting_val").text();WWWW
 		//	var ft_val = $("#proceeding_val").text();
 
-			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
-			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: "0" });
+			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 25, theme: 'classic', disabled: true, value: "0" });
+			$("#eval_input_ft_rating_val").jqxRating({ width: 100, height: 25, theme: 'classic', disabled: true, value: "0" });
 	
 			$('#eval_input_meeting_rating_val').bind('change', function (event) { 
 				$('#meeting_val').val(event.value);
@@ -2063,4 +2406,3 @@ var input_point = null;
   }
 
   
-	

@@ -363,7 +363,7 @@ function refreshToolList(tool_list)
 		var tool_type = _tool_list[i].type;
 		var tool_name = _tool_list[i].name;
 		var tool_title = _tool_list[i].title;
-		var source = '<a data-toggle="tooltip" '
+		var source = '<a onclick="' + tool_name + '" data-toggle="tooltip" '
 					+ 'data-placement="bottom" '
 					+ 'title="" data-original-title="'+ tool_title +'">'
 					+ '<li class="item_'+ tool_type +'" id="btn_'+ tool_name +'"></li></a>';
@@ -398,6 +398,21 @@ function getToolSource(tool_data, initFuncName)
 
 // 도구창 보여주는 함수
 var _tool_windows = new Array();
+
+function openToolWindow(tool_name)
+{
+	console.log("CALL openToolWindow {tool_name:" + tool_name + "}");
+
+	for (var i = 0; i < _tool_list.length; i++)
+	{
+		if (_tool_list[i].name == tool_name)
+		{
+			createToolWindow(_tool_list[i]);
+			break;
+		}
+	}
+}
+
 function createToolWindow(tool_data)
 {
 	console.log("CALL createToolWindow");

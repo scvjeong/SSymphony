@@ -494,10 +494,10 @@ function createToolWindow(tool_data)
 				$('#' + tool_name).css('left', tool_left + 'px');
 				
 				$('#' + tool_name).on('mouseenter', function() {
-					switchSelectedTool(tool_data);
+					switchSelectedTool(tool_data.name);
 				});
 				
-				switchSelectedTool(tool_data);	
+				switchSelectedTool(tool_data.name);
 
 				eval("init" + tool_type + "(_group_id, tool_id);");
 				//initFuncName(_group_id, tool_id);
@@ -513,13 +513,22 @@ function createToolWindow(tool_data)
 }
 
 var _pre_tool_data, _now_tool_data;
-function switchSelectedTool(tool_data)
+function switchSelectedTool(tool_name)
 {
-	if (tool_data.name == _now_tool_data.name)
+	if (tool_name == _now_tool_data.name)
 		return;
 
+	var i ;
+	for (i = 0; i < _tool_list.length; i++)
+	{
+		if (_tool_list[i].name == tool_name)
+		{
+			break;
+		}
+	}
+
 	_pre_tool_data = _now_tool_data;
-	_now_tool_data = tool_data;
+	_now_tool_data = _tool_list[i];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

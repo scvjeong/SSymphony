@@ -414,6 +414,7 @@ function createToolWindow(tool_data)
 	var matrix_window_width = 500;
 	var matrix_window_height= 400;
 
+	var tool_id = tool_data.tool_id;
 	var tool_type = tool_data.type;
 	var tool_name = tool_data.name;
 	var tool_title = tool_data.title;
@@ -431,7 +432,8 @@ function createToolWindow(tool_data)
 		_common_window_top += 100;
 	}
 
-	var getToolSource = function(tool_data) {
+	var source_url = "../tool/" + tool_type + "/" + _group_id + "/" + tool_id;
+	var getToolSource = function(tool_data, source_url) {
 		$.ajax({
 			type: "GET",
 			url: source_url,
@@ -507,7 +509,7 @@ function createToolWindow(tool_data)
 		});
 	};
 
-	getToolSource(tool_data);
+	getToolSource(tool_data, source_url);
 }
 
 var _pre_tool_data, _now_tool_data;

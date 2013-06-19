@@ -160,7 +160,7 @@ function showMeetingResultWindow(idx)
 			bootbox_select.addClass("meeting_result_bootbox");
 			
 			setupUserChart();
-			//setupWordChart();
+			setupWordChart();
 
 			var meeting_val = $("#meeting_val").text();
 			if (meeting_val == "")
@@ -291,7 +291,6 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 		default : tool_name = ""; break;
 	}
 	
-
 	//console.log("tool_name->"+tool_name);
 
 	var tmp_canvas = tool_name+idx_tool;
@@ -314,13 +313,13 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 
 }
 
-
 function hideMeetingResultWindow()
 {
 	var bootbox_select = $('.meeting_result_bootbox');
 	bootbox_select.modal('hide');
 }
 
+/*
 function setupUserChart()
 {
 	var data = [ ["SCV Jeong", 10], ["Chicken", 8], ["Godong", 4], ["Stargt", 13], ["Chaehyun", 17] ];
@@ -335,15 +334,13 @@ function setupUserChart()
 		},
 		xaxis: {
 			show: true,
-			mode: "categories",
-			tickLength: 0
-		},
-		legend : true
+			mode: "categories"
+		}
 	});
 
 }
 
-function setupWordChart()
+function setupUserChart()
 {
 	var d1 = [[20,20,10], [40,50,20], [70,10,5], [80,80,7]];
 	var d2 = [[60,25,15], [70,40,6], [30,80,4]];
@@ -353,7 +350,85 @@ function setupWordChart()
 		series:{bubbles:{active:true,show:true,linewidth:2},editMode:'xy'},
 		grid:{hoverable:true,clickable:true,editable:true }
 	};
-	$.plot( $("#placeholder") , [d1,d2,d3,d4], options );
+	$.plot( $("#placeholder1") , [d1,d2,d3,d4], options );
+}
+*/
+function setupUserChart()
+{
+	//var data = [],
+	var series = 5;
+
+	var data = [ ["SCV Jeong", 10], ["Chicken", 8], ["Godong", 4], ["Stargt", 13], ["Chaehyun", 17] ];
+
+
+	/*
+	
+	for (var i = 0; i < series; i++) {
+		data[i] = {
+			label: "Test" + (i + 1)
+			//data: Math.floor(Math.random() * 100) + 1
+		}
+	}
+	*/
+	$.plot( $("#placeholder1") , [ data ], {
+		series: {
+			bars: {
+				show: true,
+				barWidth: 0.6,
+				align: "center"
+			}
+		},
+		xaxis: {
+			show: true,
+			mode: "categories",
+			label: "test"
+		},
+		legend: {
+				show: false
+			}
+	});
+
+	
+}
+
+
+function setupWordChart()
+{
+	var data = [],
+		series = 3;
+
+	for (var i = 0; i < series; i++) {
+		data[i] = {
+			label: "Series" + (i + 1),
+			data: Math.floor(Math.random() * 100) + 1
+		}
+	}
+
+	$.plot( $("#placeholder2") , data, {
+		series: {
+					pie: { 
+						show: true,
+						radius: 1,
+						label: {
+							show: true,
+							radius: 3/4,
+							formatter: labelFormatter,
+							background: { 
+								opacity: 0.5,
+								color: "#000"
+							}
+						}
+					}
+				},
+				legend: {
+					show: false
+				}
+	});
+
+}
+
+function labelFormatter(label, series) {
+	return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 }
 
 function setupUserListChart()

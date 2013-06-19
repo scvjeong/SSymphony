@@ -397,12 +397,21 @@ function setupWordChart()
 	var data = [],
 		series = 3;
 
-	for (var i = 0; i < series; i++) {
-		data[i] = {
-			label: "Series" + (i + 1),
-			data: Math.floor(Math.random() * 100) + 1
-		}
+	data[0] = {
+		label: "개선",
+		data: Math.floor(Math.random() * 100) + 1
 	}
+
+	data[1] = {
+		label: "시스템",
+		data: Math.floor(Math.random() * 100) + 1
+	}
+
+	data[2] = {
+		label: "시간",
+		data: Math.floor(Math.random() * 100) + 1
+	}
+	
 
 	$.plot( $("#placeholder2") , data, {
 		series: {

@@ -159,11 +159,10 @@ function showMeetingResultWindow(idx)
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_result_bootbox");
 			
-			setupUserListChart();
+			setupUserChart();
 			setupWordChart();
-			
+
 			var meeting_val = $("#meeting_val").text();
-			//console.log(meeting_val);
 			if (meeting_val == "")
 			{	
 				meeting_val = $("#meeting_val").val();
@@ -173,7 +172,6 @@ function showMeetingResultWindow(idx)
 			{
 				ft_val = $("#proceeding_val").val();
 			}
-			//console.log(ft_val);
 
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
@@ -194,11 +192,9 @@ function showMeetingResultWindow(idx)
 				//console.log(tmp_selector);
 				var image_value = tmp_selector.children('canvas').attr('image_val');
 				image_value_array.push(image_value);
-			
-			//	result_selector = result_selector.next('.agenda_result_box');
+		
 				num++;
 			}
-
 
 			var tmp_select_box = $(".agenda_result_box:first");
 
@@ -211,7 +207,6 @@ function showMeetingResultWindow(idx)
 			
 					var find_canvas = "canvas"+cnt_num;
 					var tmp_selector = $('#'+find_canvas);
-					//console.log(find_canvas);
 					
 					var canvas_selector =document.getElementById(find_canvas);
 					var ctx = canvas_selector.getContext("2d");
@@ -326,7 +321,27 @@ function hideMeetingResultWindow()
 	bootbox_select.modal('hide');
 }
 
+function setupUserChart()
+{
+	var data = [ ["SCV Jeong", 10], ["Chicken", 8], ["Godong", 4], ["Stargt", 13], ["Chaehyun", 17] ];
 
+	$.plot("#placeholder", [ data ], {
+		series: {
+			bars: {
+				show: true,
+				barWidth: 0.6,
+				align: "center"
+			}
+		},
+		xaxis: {
+			show: true,
+			mode: "categories",
+			tickLength: 0
+		},
+		legend : true
+	});
+
+}
 
 function setupWordChart()
 {

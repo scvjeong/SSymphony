@@ -1629,7 +1629,7 @@ function showEvaluateMeetingWindow()
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_evaluate_bootbox");
 					
-		//	var meeting_val = $("#meeting_val").text();WWWW
+		//	var meeting_val = $("#meeting_val").text();
 		//	var ft_val = $("#proceeding_val").text();
 
 			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 25, theme: 'classic', disabled: true, value: "0" });

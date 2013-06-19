@@ -212,10 +212,13 @@ exports.meeting_evaluation = function(req, res){
 	var dao_m = require('../sql/meeting');
 	var params = { 
 		idx_meeting:req.session.idx_meeting,	 
-		idx_group:req.session.idx_group
+		idx_group:req.session.idx_group,
+		idx_user:req.session.idx_user
 	};	
 
 	console.log("[LOG]"+params['idx_meeting']);
+	console.log("[LOG]"+params['idx_group']);
+	console.log("[LOG]"+params['idx_user']);
 
 	var result = { meeting_evaluation:{} };
 	var complete_flag = 0;
@@ -264,7 +267,8 @@ exports.post_meeting_evaluation = function(req, res) {
 		ft_appraisal:req.param("ft_appraisal"),
 		mvp:req.param("mvp"),
 		idx_meeting:req.session.idx_meeting,	 
-		idx_group:req.session.idx_group
+		idx_group:req.session.idx_group,
+		idx_user:req.session.idx_user
 	};	
 	
 	var result = {  };
@@ -333,7 +337,12 @@ exports.meeting_result = function(req, res){
 		idx_group:req.session.idx_group
 	};	
 
-	console.log("[LOG]"+params['idx_meeting']);
+	if ( !params["idx_meeting"]  )
+	{	
+		params["idx_meeting"] = req.param("idx_meeting");
+	}
+
+	console.log("[Result LOG]"+params['idx_meeting']);
 
 	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };
 	var complete_flag = 0;

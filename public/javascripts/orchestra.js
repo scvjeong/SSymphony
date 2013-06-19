@@ -160,7 +160,7 @@ function showMeetingResultWindow(idx)
 			bootbox_select.addClass("meeting_result_bootbox");
 			
 			setupUserChart();
-			setupWordChart();
+			//setupWordChart();
 
 			var meeting_val = $("#meeting_val").text();
 			if (meeting_val == "")

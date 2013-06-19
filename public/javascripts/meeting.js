@@ -378,9 +378,8 @@ function getToolSource(tool_data, initFuncName)
 		url: source_url,
 		dataType: "html",
 		success: function(data) {
-			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_id:" + tool_id + "]");
 			createToolWindow(tool_data, data);
-			console.log("tool_index = " + tool_index);
+			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_id:" + tool_id + "]");
 			initFuncName(_group_id, tool_id);
 		},
 		error: function(err) {
@@ -573,17 +572,24 @@ function switchSelectedTool(tool_name)
 	if (tool_name == _now_tool_data.name)
 		return;
 
-	var i ;
+	var i;
 	for (i = 0; i < _tool_list.length; i++)
 	{
-		if (_tool_list[i].name == tool_name)
+		if (_tool_list[i].name == _now_tool_data.name)
 		{
+			_tool_list[i] = _now_tool_data;
 			break;
 		}
 	}
 
-	_pre_tool_data = _now_tool_data;
-	_now_tool_data = _tool_list[i];
+	for (i = 0; i < _tool_list.length; i++)
+	{
+		if (_tool_list[i].name == tool_name)
+		{
+			_now_tool_data = _tool_list[i];
+			break;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

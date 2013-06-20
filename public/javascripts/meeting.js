@@ -209,14 +209,6 @@ $(window).resize(function() {
 // 소켓 열기
 function openSocket()
 {
-	_socket_common = io.connect('http://orchestra.com:50000/group');
-	_socket_list = io.connect('http://orchestra.com:50001/group');
-	_socket_postit = io.connect('http://orchestra.com:50002/group');
-	_socket_mindmap = io.connect('http://orchestra.com:50003/group');
-	_socket_vote = io.connect('http://orchestra.com:50004/group');
-	_socket_matrix = io.connect('http://orchestra.com:50005/group');
-	_socket_board = io.connect('http://orchestra.com:50006/group');
-	/*
 	_socket_common = io.connect('http://61.43.139.69:50000/group');
 	_socket_list = io.connect('http://61.43.139.69:50001/group');
 	_socket_postit = io.connect('http://61.43.139.69:50002/group');
@@ -224,7 +216,6 @@ function openSocket()
 	_socket_vote = io.connect('http://61.43.139.69:50004/group');
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
-	*/
 
 	/* 서버 리스너 등록 */
 	_socket_common.on('get_list_of_tools', function (data) {
@@ -519,9 +510,6 @@ function createToolWindow(tool_data)
 				tool_window_source = '<div class="toolwindow" id="' + tool_name + '" onclick="upToFrontWindow(\'' + tool_name + '\')">';
 				tool_window_source += '<div class="title">';
 					tool_window_source += '<div class="title_text">' + tool_title + '</div>';
-					//toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
-					//toolsource += '<div class="closewindow" onclick="transWindow(\'' + toolname + '\')">투명</div>';
-					//toolsource += '<div class="clearboth"></div>';
 					tool_window_source += '</div>';
 					tool_window_source += tool_source;
 				tool_window_source += '</div>';

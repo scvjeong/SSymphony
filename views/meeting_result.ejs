@@ -12,7 +12,7 @@
 			</div>
 			<div class="body" id="result_contents_box">
 				<div class="result_contents">
-					<div class="meta">
+					<div class="meta" style="height: 190px">
 					<%
 						if( result.meeting_result.length > 0 ) { 
 					%>
@@ -93,8 +93,16 @@
 					</div>
 					<div class="chart">
 						<div id="chart_title_box">Chart</div>
-						<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>
-						<div id="placeholder" style="width:600px;height:300px;display:none;"></div>
+						<div class="demo-container">
+							<div class="demo_title">입력문자 수</div>
+							<div id="placeholder1" class="demo-placeholder"></div>
+						</div>
+						<div class="demo-container">
+							<div class="demo_title">핵심 키워드</div>
+							<div id="placeholder2" class="demo-placeholder"></div>
+						</div>
+						<!--<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>-->
+						<!--<div id="placeholder" style="width:600px;height:300px;display:none;"></div>-->
 						<!--<div id="" class=" input_chart" style="display:none;"></div> -->
 					</div>
 					<div class="agenda">					

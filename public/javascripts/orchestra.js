@@ -147,6 +147,7 @@ function showMeetingResultWindow(idx)
 	var send_params = {
 		idx_meeting: idx
 	};	
+	console.log(idx);
 
 	$.ajax({
 		type: "GET",
@@ -158,11 +159,10 @@ function showMeetingResultWindow(idx)
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_result_bootbox");
 			
-			//setupUserListChart();
-			//setupWordChart();
-			
+			setupUserChart();
+			setupWordChart();
+
 			var meeting_val = $("#meeting_val").text();
-			//console.log(meeting_val);
 			if (meeting_val == "")
 			{	
 				meeting_val = $("#meeting_val").val();
@@ -172,7 +172,6 @@ function showMeetingResultWindow(idx)
 			{
 				ft_val = $("#proceeding_val").val();
 			}
-			//console.log(ft_val);
 
 			$("#meeting_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: meeting_val });
 			$("#ft_rating").jqxRating({ width: 100, height: 60, theme: 'classic', disabled: true, value: ft_val });
@@ -193,11 +192,9 @@ function showMeetingResultWindow(idx)
 				//console.log(tmp_selector);
 				var image_value = tmp_selector.children('canvas').attr('image_val');
 				image_value_array.push(image_value);
-			
-			//	result_selector = result_selector.next('.agenda_result_box');
+		
 				num++;
 			}
-
 
 			var tmp_select_box = $(".agenda_result_box:first");
 
@@ -210,7 +207,6 @@ function showMeetingResultWindow(idx)
 			
 					var find_canvas = "canvas"+cnt_num;
 					var tmp_selector = $('#'+find_canvas);
-					//console.log(find_canvas);
 					
 					var canvas_selector =document.getElementById(find_canvas);
 					var ctx = canvas_selector.getContext("2d");
@@ -295,7 +291,6 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 		default : tool_name = ""; break;
 	}
 	
-
 	//console.log("tool_name->"+tool_name);
 
 	var tmp_canvas = tool_name+idx_tool;
@@ -318,16 +313,34 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 
 }
 
-
 function hideMeetingResultWindow()
 {
 	var bootbox_select = $('.meeting_result_bootbox');
 	bootbox_select.modal('hide');
 }
 
+/*
+function setupUserChart()
+{
+	var data = [ ["SCV Jeong", 10], ["Chicken", 8], ["Godong", 4], ["Stargt", 13], ["Chaehyun", 17] ];
 
+	$.plot("#placeholder", [ data ], {
+		series: {
+			bars: {
+				show: true,
+				barWidth: 0.6,
+				align: "center"
+			}
+		},
+		xaxis: {
+			show: true,
+			mode: "categories"
+		}
+	});
 
-function setupWordChart()
+}
+
+function setupUserChart()
 {
 	var d1 = [[20,20,10], [40,50,20], [70,10,5], [80,80,7]];
 	var d2 = [[60,25,15], [70,40,6], [30,80,4]];
@@ -337,7 +350,94 @@ function setupWordChart()
 		series:{bubbles:{active:true,show:true,linewidth:2},editMode:'xy'},
 		grid:{hoverable:true,clickable:true,editable:true }
 	};
-	$.plot( $("#placeholder") , [d1,d2,d3,d4], options );
+	$.plot( $("#placeholder1") , [d1,d2,d3,d4], options );
+}
+*/
+function setupUserChart()
+{
+	//var data = [],
+	var series = 5;
+
+	var data = [ ["SCV Jeong", 10], ["Chicken", 8], ["Godong", 4], ["Stargt", 13], ["Chaehyun", 17] ];
+
+
+	/*
+	
+	for (var i = 0; i < series; i++) {
+		data[i] = {
+			label: "Test" + (i + 1)
+			//data: Math.floor(Math.random() * 100) + 1
+		}
+	}
+	*/
+	$.plot( $("#placeholder1") , [ data ], {
+		series: {
+			bars: {
+				show: true,
+				barWidth: 0.6,
+				align: "center"
+			}
+		},
+		xaxis: {
+			show: true,
+			mode: "categories",
+			label: "test"
+		},
+		legend: {
+				show: false
+			}
+	});
+
+	
+}
+
+
+function setupWordChart()
+{
+	var data = [],
+		series = 3;
+
+	data[0] = {
+		label: "개선",
+		data: Math.floor(Math.random() * 100) + 1
+	}
+
+	data[1] = {
+		label: "시스템",
+		data: Math.floor(Math.random() * 100) + 1
+	}
+
+	data[2] = {
+		label: "시간",
+		data: Math.floor(Math.random() * 100) + 1
+	}
+	
+
+	$.plot( $("#placeholder2") , data, {
+		series: {
+					pie: { 
+						show: true,
+						radius: 1,
+						label: {
+							show: true,
+							radius: 3/4,
+							formatter: labelFormatter,
+							background: { 
+								opacity: 0.5,
+								color: "#000"
+							}
+						}
+					}
+				},
+				legend: {
+					show: false
+				}
+	});
+
+}
+
+function labelFormatter(label, series) {
+	return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 }
 
 function setupUserListChart()

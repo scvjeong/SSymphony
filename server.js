@@ -18,6 +18,7 @@ function server(io)
 			socket.join(group);
 
 			/*
+			
 			// join하려는 그룹이 _meeting_contents에 없으면 새 그룹 생성하기
 			if (!_meeting_contents.hasOwnProperty(group_id))
 			{
@@ -32,6 +33,7 @@ function server(io)
 			console.log("<_meeting_contents>");
 			console.log(_meeting_contents);
 			console.log("</_meeting_contents>");
+
 			*/
 
 			console.log("group : " + group);

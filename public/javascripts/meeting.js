@@ -363,7 +363,7 @@ function refreshToolList(tool_list)
 		var tool_type = _tool_list[i].type;
 		var tool_name = _tool_list[i].name;
 		var tool_title = _tool_list[i].title;
-		var source = '<a data-toggle="tooltip" '
+		var source = '<a onclick="' + tool_name + '" data-toggle="tooltip" '
 					+ 'data-placement="bottom" '
 					+ 'title="" data-original-title="'+ tool_title +'">'
 					+ '<li class="item_'+ tool_type +'" id="btn_'+ tool_name +'"></li></a>';
@@ -384,9 +384,8 @@ function getToolSource(tool_data, initFuncName)
 		url: source_url,
 		dataType: "html",
 		success: function(data) {
-			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_id:" + tool_id + "]");
 			createToolWindow(tool_data, data);
-			console.log("tool_index = " + tool_index);
+			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_id:" + tool_id + "]");
 			initFuncName(_group_id, tool_id);
 		},
 		error: function(err) {
@@ -398,6 +397,21 @@ function getToolSource(tool_data, initFuncName)
 
 // 도구창 보여주는 함수
 var _tool_windows = new Array();
+
+function openToolWindow(tool_name)
+{
+	console.log("CALL openToolWindow {tool_name:" + tool_name + "}");
+
+	for (var i = 0; i < _tool_list.length; i++)
+	{
+		if (_tool_list[i].name == tool_name)
+		{
+			createToolWindow(_tool_list[i]);
+			break;
+		}
+	}
+}
+
 function createToolWindow(tool_data)
 {
 	console.log("CALL createToolWindow");
@@ -564,17 +578,24 @@ function switchSelectedTool(tool_name)
 	if (tool_name == _now_tool_data.name)
 		return;
 
-	var i ;
+	var i;
 	for (i = 0; i < _tool_list.length; i++)
 	{
-		if (_tool_list[i].name == tool_name)
+		if (_tool_list[i].name == _now_tool_data.name)
 		{
+			_tool_list[i] = _now_tool_data;
 			break;
 		}
 	}
 
-	_pre_tool_data = _now_tool_data;
-	_now_tool_data = _tool_list[i];
+	for (i = 0; i < _tool_list.length; i++)
+	{
+		if (_tool_list[i].name == tool_name)
+		{
+			_now_tool_data = _tool_list[i];
+			break;
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1608,7 +1629,7 @@ function showEvaluateMeetingWindow()
 			var bootbox_select = $('.bootbox');
 			bootbox_select.addClass("meeting_evaluate_bootbox");
 					
-		//	var meeting_val = $("#meeting_val").text();WWWW
+		//	var meeting_val = $("#meeting_val").text();
 		//	var ft_val = $("#proceeding_val").text();
 
 			$("#eval_input_meeting_rating_val").jqxRating({ width: 100, height: 25, theme: 'classic', disabled: true, value: "0" });

@@ -87,9 +87,13 @@ exports.dao_set_meeting_appraisal = function(evt, mysql_conn, params){
 // params['mvp']
 exports.dao_set_meeting_evaluation = function(evt, mysql_conn, params){
 	// 임시로 해놓은 변수들 //
-	params['idx_meeting'] = 19;
-	params['idx_group'] = 1;
-	params['idx_user'] = 1;
+//	params['idx_meeting'] = 19;
+//	params['idx_group'] = 1;
+//	params['idx_user'] = 1;
+
+	console.log(params['idx_meeting']);
+	console.log(params['idx_group']);
+	console.log(params['idx_user']);
 
 	var sql = "INSERT INTO `meeting_appraisal` ";
 	sql += "SET `idx_meeting` = '"+params['idx_meeting']+"', ";
@@ -151,9 +155,13 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 
 exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 	// 임시로 해놓은 회의 번호 //
-	params['idx_meeting'] = 19;
-	params['idx_group'] = 1;
+//	params['idx_meeting'] = 19;
+//	params['idx_group'] = 1;
 	
+	console.log(params['idx_meeting']);
+	console.log(params['idx_group']);
+	console.log(params['idx_user']);
+
 	var sql = "SELECT ";
 	sql += "`A`.`idx`, ";
 	sql += "`A`.`subject`, ";
@@ -183,9 +191,8 @@ exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 	sql += "ORDER BY `B`.`order` ASC";
 //console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
-		evt.emit('get_meeting_evaluation_info', err, rows);
-
 		console.log(rows);
+		evt.emit('get_meeting_evaluation_info', err, rows);		
 	});
 	return sql;
 }

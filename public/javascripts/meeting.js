@@ -1694,6 +1694,8 @@ function evaluateComplete()
 			dataType: 'json',
 			success: function(json_data) {
 
+
+
 				showMeetingResultWindow(0);
 			}
 

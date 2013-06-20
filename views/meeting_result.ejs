@@ -12,7 +12,7 @@
 			</div>
 			<div class="body" id="result_contents_box">
 				<div class="result_contents">
-					<div class="meta" style="height: 190px">
+					<div class="meta" style="height: 200px">
 					<%
 						if( result.meeting_result.length > 0 ) { 
 					%>
@@ -92,13 +92,19 @@
 					<br>
 					</div>
 					<div class="chart">
-						<div id="chart_title_box">Chart</div>
+						<div id="chart_title_box">
+							<div class="chart_subject">Chart</div>
+						</div>
 						<div class="demo-container">
 							<div class="demo_title">입력문자 수</div>
+							<div id="word_chart_user" style="display:none;"><%=result.meeting_result[0].user_list %></div>
+							<div id="word_chart_words" style="display:none;"><%=result.meeting_result[0].user_words %></div>	
 							<div id="placeholder1" class="demo-placeholder"></div>
 						</div>
 						<div class="demo-container">
 							<div class="demo_title">핵심 키워드</div>
+							<div id="keyword_chart_keyword" style="display:none;"><%=result.meeting_charts[0].keyword %></div>
+							<div id="keyword_chart_num" style="display:none;"><%=result.meeting_charts[0].num %></div>
 							<div id="placeholder2" class="demo-placeholder"></div>
 						</div>
 						<!--<div id="user-list-chart" class="bar-chart" style="width:200px;height:200px;"></div>-->

@@ -1462,7 +1462,7 @@ h6 small {
 	/* ---------------------------------------------------------------------- */
 
 	.chart {
-		height: 340px;
+		height: 350px;
 	}
 	.chart-title{
 		width:100%;
@@ -3023,6 +3023,7 @@ h6 small {
 }
 /*** user-info ***/
 
+
 /*** time-picker ***/
 .bootstrap-timepicker.dropdown-menu {
 	position:absolute;
@@ -3105,6 +3106,7 @@ h6 small {
 }
 /*** time-picker ***/
 
+
 .demo-container {
 	float: left;
 	box-sizing: border-box;
@@ -3140,3 +3142,13 @@ h6 small {
 	font-size: 18px;
 	line-height: 25px;
 }
+
+
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+

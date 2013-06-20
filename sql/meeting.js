@@ -130,7 +130,8 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 //	sql += "`E`.`satisfaction`, ";
 //	sql += "`E`.`ft_appraisal`, ";
 //	sql += "`E`.`mvp`, ";
-	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`first_name` ASC SEPARATOR ', ') AS `user_list` ";
+	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`idx` ASC SEPARATOR ', ') AS `user_list`, ";
+	sql += "GROUP_CONCAT( DISTINCT `E`.`word_num` ORDER BY `E`.`idx_user` ASC SEPARATOR ', ') AS `user_words` ";
 	sql += "FROM `meeting_planning` AS `A` ";
 	sql += "INNER JOIN `agenda` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
@@ -138,8 +139,8 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 	sql += "ON `A`.`idx` = `C`.`idx_meeting` ";	
 	sql += "INNER JOIN `user` AS `D` ";
 	sql += "ON `C`.`idx_user` = `D`.`idx` ";
-//	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
-//	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
+	sql += "INNER JOIN `relation_user_words` AS `E` ";
+	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
 //	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
@@ -191,7 +192,7 @@ exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 	sql += "ORDER BY `B`.`order` ASC";
 //console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
-		console.log(rows);
+		//console.log(rows);
 		evt.emit('get_meeting_evaluation_info', err, rows);		
 	});
 	return sql;
@@ -340,6 +341,43 @@ exports.dao_get_meeting_tools_image = function(evt, mysql_conn, params){
 
 	return sql;
 }
+
+
+// get_meeting_charts
+// params['idx_meeting']
+exports.dao_get_meeting_charts = function(evt, mysql_conn, params){
+
+	console.log(params["idx_meeting"]);
+
+	var sql = "SELECT ";
+//	sql += "`A`.`keyword`, ";
+//	sql += "`A`.`num` ";
+//	sql += "`D`.`last_name`, ";
+//	sql += "`E`.`satisfaction`, ";
+//	sql += "`E`.`ft_appraisal`, ";
+//	sql += "`E`.`mvp`, ";
+	sql += "GROUP_CONCAT( `A`.`keyword` ORDER BY `A`.`order` ASC SEPARATOR ', ') AS `keyword`, ";
+	sql += "GROUP_CONCAT( `A`.`num` ORDER BY `A`.`order` ASC SEPARATOR ', ') AS `num` ";
+//	sql += "GROUP_CONCAT( DISTINCT `C`.`first_name` ORDER BY `C`.`idx` ASC SEPARATOR ', ') AS `user_list`, ";
+//	sql += "GROUP_CONCAT( `B`.`word_num` ORDER BY `B`.`idx_user` ASC SEPARATOR ', ') AS `user_words`, ";
+	sql += "FROM `keyword` AS `A` ";
+//	sql += "INNER JOIN `relation_user_words` AS `B` ";
+//	sql += "ON `A`.`idx_meeting` = `B`.`idx_meeting` ";
+//	sql += "INNER JOIN `user` AS `C` ";
+//	sql += "ON `B`.`idx_user` = `C`.`idx` ";	
+	sql += "WHERE `A`.`idx_meeting` = '"+params['idx_meeting']+"' ";
+//	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
+//	sql += "GROUP BY `B`.`idx` ";
+//	sql += "ORDER BY `A`.`num` ASC";
+
+	var query = mysql_conn.query(sql, params, function(err, rows, fields) {
+		//console.log(rows);
+		evt.emit('get_meeting_charts', err, rows);
+	});
+
+	return sql;
+}
+
 
 // set_quick_meeting
 // params['idx_user']

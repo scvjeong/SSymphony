@@ -1693,10 +1693,6 @@ function evaluateComplete()
 			data: send_params,
 			dataType: 'json',
 			success: function(json_data) {
-<<<<<<< HEAD
-=======
-
->>>>>>> 40b2f91f5e76c687902620caa38b5962486d5ae6
 				showMeetingResultWindow(0);
 			}
 

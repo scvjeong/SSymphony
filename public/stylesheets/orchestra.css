@@ -1871,6 +1871,21 @@ h6 small {
 	background-color:#336699;
 	overflow:hidden;
 }
+#menu #start-btn .list{
+	background:url("/images/icons/menu_list_icon.png") no-repeat 40px 45px;
+}
+#menu #start-btn .postit{
+	background:url("/images/icons/menu_postit_icon.png") no-repeat 40px 45px;
+}
+#menu #start-btn .mindmap{
+	background:url("/images/icons/menu_mindmap_icon.png") no-repeat 40px 45px;
+}
+#menu #start-btn .matrix{
+	background:url("/images/icons/menu_matrix_icon.png") no-repeat 40px 45px;
+}
+#menu #start-btn .vote{
+	background:url("/images/icons/menu_vote_icon.png") no-repeat 40px 45px;
+}
 #menu #start-btn div{
 	float:left;
 	width:90px;

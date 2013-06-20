@@ -1,64 +1,141 @@
+<script src="/javascripts/jquery.form.js"></script>
 <div id="meeting-template">
 	<div class="meeting-template-header"></div>
 	<div class="meeting-template-body">
 		<div class="left-body">
-			<div class="custom">Custom</div>
-			<ul class="fancy-scrollbar">
-				<% for(var i=0; i<result.meeting_planning.length; i++) {%>
-					<li title="<%= result.meeting_planning[i].subject %>" onclick="javascript:show_setting_agenda('<%= result.meeting_planning[i].idx %>');" idx="<%= result.meeting_planning[i].idx %>" class="meeting-planning-node"><%= result.meeting_planning[i].subject %></li>
-				<% } %>
-			</ul>
+			<div class="meeting-setting hide">
+				<div id="datepicker-js"></div>
+				<div class="meeting-date-time">
+					<div class="meeting-date">
+						<div class="meeting-date-title b_57acff bold">Date</div>
+						<div class="meeting-date-contents">
+							<input type="text" name="meeting_date_m" readonly="readonly">
+							<input type="text" name="meeting_date_d" readonly="readonly">
+							<input type="text" name="meeting_date_y" readonly="readonly">
+						</div>
+						<div class="meeting-date-contents">
+							<input type="text" name="meeting_date_w" readonly="readonly">
+						</div>
+					</div>
+					<div  class="meeting-time">
+						<div class="meeting-time-title b_57acff bold">Time Set</div>
+						<div class="meeting-time-contents b_57acff">
+							<input type="text" name="meeting_start_time" class="timepicker-input" readonly="readonly"> am ~
+						</div>
+						<div class="meeting-time-contents b_57acff">
+							<input type="text" name="meeting_end_time" class="timepicker-input" readonly="readonly"> pm
+						</div>
+					</div>
+				</div>
+				<div class="meeting-members">
+					<div class="meeting-member-title b_57acff bold">Members</div>
+					<div class="meeting-member-list b_57acff bold"><span><%=result.user_name%></span></div>
+					<div class="meeting-member-search">
+						<input type="text" name="member">
+					</div>
+					<div class="meeting-member-explain">
+						Search for a person in here by name or email address, or enter an email address to invite someone new.
+					</div>
+				</div>
+			</div>
+			<div class="meeting-template-view">
+				<div class="custom">Custom</div>
+				<ul class="fancy-scrollbar">
+					<% for(var i=0; i<result.meeting_planning.length; i++) {%>
+						<li title="<%= result.meeting_planning[i].subject %>" idx="<%= result.meeting_planning[i].idx %>" class="meeting-planning-node"><%= result.meeting_planning[i].subject %></li>
+					<% } %>
+				</ul>
+			</div>
 		</div>
 		<div class="right-body">
-			<ul class="agenda">
 				<% 
 					for(var i=0; i<result.meeting_planning.length; i++) {
-						var c;
-						if( i === 0 )
-							c = "show";
-						else
-							c = "hide";
 						var idx_meeting_planning = result.meeting_planning[i].idx;
 				%>
-					<li class="agenda-preview <%=c%>" idx="<%=idx_meeting_planning%>">
-						<div class="subject"><%= result.meeting_planning[i].subject %></div>
-						<div class="goal"><%= result.meeting_planning[i].goal %></div>
-						<ul>
-							<% 
-								for(var j=0; j<result.agenda[idx_meeting_planning].length; j++) {
-									if( result.agenda[idx_meeting_planning][j].subject && (j+1) === result.agenda[idx_meeting_planning].length ){
-							%>
-									<li>
-										<div class="process-subject"><%= result.agenda[idx_meeting_planning][j].subject %></div>
-									</li>
-								<% } else if ( result.agenda[idx_meeting_planning][j].subject ){ %>
-									<li>
-										<div class="process-subject"><%= result.agenda[idx_meeting_planning][j].subject %></div>
-										<div class="process-arrow"></div>
-									</li>
+				<div class="meeting-agenda-edit hide" idx="<%=idx_meeting_planning%>">
+					<form name="meeting_planning">
+						<input type="hidden" name="meeting_user_list[]" value="<%=result.idx_user%>">
+						<input type="hidden" name="meeting_date">
+						<input type="hidden" name="meeting_start_time">
+						<input type="hidden" name="meeting_end_time">
+						<div class="meeting-agenda-contents"><input type="text" class="meeting-agenda-edit-subject" value="<%= result.meeting_planning[i].subject %>" name="meeting_subject"><input type="button" class="meeting-template-btn bold ok-btn" value="O K"></div>
+						<div class="meeting-agenda-contents"><input type="text" class="meeting-agenda-edit-goal" value="<%= result.meeting_planning[i].goal %>" name="meeting_goal"><input type="button" class="meeting-template-btn bold prev-btn" value="Prev"></div>
+						<div>
+							<div class="meeting-agenda-list">
+								<div class="meeting-agenda-list-btn"><input type="button" class="meeting-template-btn bold" value="Delete Process"><input type="button" class="meeting-template-btn bold" value="Add Process"></div>
+								<ul>
+									<% 
+										for(var j=0; j<result.agenda[idx_meeting_planning].length; j++) {
+											if( result.agenda[idx_meeting_planning][j].subject && (j+1) === result.agenda[idx_meeting_planning].length ){
+									%>
+											<li><input type="text" class="meeting-agenda-list-node" name="meeting_agenda[]" value="<%= result.agenda[idx_meeting_planning][j].subject %>"><input type="hidden" name="meeting_agenda_time"></li>
+
+										<% } else if ( result.agenda[idx_meeting_planning][j].subject ){ %>
+											<li>
+												<input type="text" class="meeting-agenda-list-node" name="meeting_agenda[]" value="<%= result.agenda[idx_meeting_planning][j].subject %>"><input type="hidden" name="meeting_agenda_time">
+												<div class="process-arrow"></div>
+											</li>
+										<% } %>
+									<% } %>
+								</ul>
+							</div>
+						</div>
+					</form>
+				</div>
+				<%
+					}
+				%>
+			<div class="meeting-template-view">
+				<ul class="agenda">
+					<% 
+						for(var i=0; i<result.meeting_planning.length; i++) {
+							var c;
+							if( i === 0 )
+								c = "show";
+							else
+								c = "hide";
+							var idx_meeting_planning = result.meeting_planning[i].idx;
+					%>
+						<li class="agenda-preview <%=c%>" idx="<%=idx_meeting_planning%>">
+							<div class="subject"><%= result.meeting_planning[i].subject %></div>
+							<div class="goal"><%= result.meeting_planning[i].goal %></div>
+							<ul>
+								<% 
+									for(var j=0; j<result.agenda[idx_meeting_planning].length; j++) {
+										if( result.agenda[idx_meeting_planning][j].subject && (j+1) === result.agenda[idx_meeting_planning].length ){
+								%>
+										<li>
+											<div class="process-subject"><%= result.agenda[idx_meeting_planning][j].subject %></div>
+										</li>
+									<% } else if ( result.agenda[idx_meeting_planning][j].subject ){ %>
+										<li>
+											<div class="process-subject"><%= result.agenda[idx_meeting_planning][j].subject %></div>
+											<div class="process-arrow"></div>
+										</li>
+									<% } %>
 								<% } %>
-							<% } %>
+							</ul>
+						</li>
+					<% } %>
+					<!--li>
+						<div class="subject">Decision Making</div>
+						<div class="goal">This is Photoshop's version of Lorem lpsum.</div>
+						<ul>
+							<li>
+								<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+								<div class="process-arrow"></div>
+							</li>
+							<li>
+								<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+								<div class="process-arrow"></div>
+							</li>
+							<li>
+								<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
+							</li>
 						</ul>
-					</li>
-				<% } %>
-				<!--li>
-					<div class="subject">Decision Making</div>
-					<div class="goal">This is Photoshop's version of Lorem lpsum.</div>
-					<ul>
-						<li>
-							<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
-							<div class="process-arrow"></div>
-						</li>
-						<li>
-							<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
-							<div class="process-arrow"></div>
-						</li>
-						<li>
-							<div class="process-subject">This is Photoshop's version of Lorem lpsum.</div>
-						</li>
-					</ul>
-				</li-->
-			</ul>
+					</li-->
+				</ul>
+			</div>
 		</div>
 	</div>
 </div>

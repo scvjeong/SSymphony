@@ -121,42 +121,24 @@
 				e.preventDefault();
 				var search_input = '<input type="text" name="search" class="search">';
 				$.get("/page/meeting_template",null,function(html){
-					dialog = bootbox.dialog(html, [{
-						"label" : "Prev",
-						"class" : "btn-success medium hide prev",
-						"callback": function() {
-							prev_meeting_planning();
-							return false;
-						}
-					},{
-						"label" : "Next",
-						"class" : "btn-success medium hide next",
-						"callback": function() {
-							next_meeting_planning();
-							return false;
-						}
-					},{
-						"label" : "Complete",
-						"class" : "btn-success medium hide complete",
-						"callback": function() {
-							pmp = 0;
-							set_meeting_planning();
-							location.href="/page/meeting";
-							return true;
-						}
-					},{
-						"label" : "<img src='/images/exit_icon.png'>",
-						"class" : "btn-primary medium",
-						"callback": function() {
-							return true;
-						}
-					}],{
+					dialog = bootbox.dialog(html, [],{
 						"header":search_input
 					});
-					$(".meeting-planning-node").mouseover(function(){
+					$(".meeting-planning-node").on("mouseover", function(){
 						var idx = $(this).attr("idx");
 						$("#meeting-template .agenda-preview").hide();
 						$("#meeting-template .agenda-preview[idx="+idx+"]").show();
+					});
+
+					$(".meeting-planning-node").on("click", function(){
+						var idx = $(this).attr("idx");
+						$("#meeting-template .meeting-template-view").hide();
+						$("#meeting-template .meeting-setting").show();
+						$("#meeting-template .meeting-agenda-edit").hide();
+						var $target = $("#meeting-template .meeting-agenda-edit[idx="+idx+"]");
+						$target.show();
+						$("#meeting-template form[name=meeting_planning]").removeClass("active");
+						$("form[name=meeting_planning]", $target).addClass("active");
 					});
 
 					$(".modal-body", dialog).css("max-height", window_height*0.7);
@@ -164,11 +146,112 @@
 						width: '90'
 					}, 640);
 
+					if ($('#datepicker-js').length){
+						var now = new Date();
+						$('#datepicker-js').datepicker({
+							monthNames: [". 1",". 2",". 3",". 4",". 5",". 6",". 7",". 8",". 9",". 10",". 11",". 12"],
+							showMonthAfterYear: true,
+							prevText: "◀",
+							nextText: "▶",
+							minDate: now,
+							dateFormat: "mm-dd-y-D",
+							onSelect : function(dateText){
+								var d = dateText.toString().split("-");
+								$("#meeting-template input[name=meeting_date_m]").val(d[0]);
+								$("#meeting-template input[name=meeting_date_d]").val(d[1]);
+								$("#meeting-template input[name=meeting_date_y]").val(d[2]);
+								$("#meeting-template input[name=meeting_date_w]").val(d[3]);
+								$("#meeting-template input[name=meeting_date]").val("20"+d[2]+"-"+d[0]+"-"+d[1]);
+							}
+						});
+						var day;
+						switch(now.getDay())
+						{
+							case 0:
+								day = "Sun";
+								break;
+							case 1:
+								day = "Mon";
+								break;
+							case 2:
+								day = "Tue";
+								break;
+							case 3:
+								day = "Wed";
+								break;
+							case 4:
+								day = "Thu";
+								break;
+							case 5:
+								day = "Fri";
+								break;
+							case 6:
+								day = "Sat";
+								break;
+						}
+						$("#meeting-template input[name=meeting_date_m]").val(now.getMonth()+1);
+						$("#meeting-template input[name=meeting_date_d]").val(now.getDate());
+						$("#meeting-template input[name=meeting_date_y]").val(now.getFullYear().toString().substring(2,4));
+						$("#meeting-template input[name=meeting_date_w]").val(day);
+						$("#meeting-template input[name=meeting_date]").val(now.format("yyyy-mm-dd"));
+					}
+					if ($('.timepicker-input').length) {
+						$('.timepicker-input').each(function(){
+							var d_t;
+							var name = $(this).attr("name");
+							var d = new Date();
+							switch(name)
+							{
+								case "meeting_start_time":
+									d_t = (d.getHours()+1)+":00";
+									break;
+								case "meeting_end_time":
+									d_t = (d.getHours()+2)+":00";
+									break;
+								default:
+									d_t = false;
+							}
+							$(this).val(d_t);
+							$(this).timepicker({
+								minuteStep: 10,
+								showMeridian: false,
+								defaultTime: "value"
+							});
+						});
+					}
+					$(".ok-btn").on("click", function(){
+						setMeetingPlanning();
+					});
+					$(".prev-btn").on("click", function(){
+						$(".meeting-template-view").show();
+						$(".meeting-setting").hide();
+						$(".meeting-agenda-edit").hide();
+					});
 					// search
 					initSearchMeetingPlanningBtn();
+					// member search
+					initSearchMemberForMeetingBtn();
 				},"html");
 			});
 		}// end if
+	}
+
+	function setMeetingPlanning()
+	{
+		var Options = {
+			url: '/page/set_meeting_planning',
+			type: 'POST',
+			dataType: 'json',
+			resetForm: false,
+			beforeSubmit: function(){},
+			success: function(json) {
+				if(json.result === "successful")
+					location.href="/page/meeting?idx_meeting="+json.idx_meeting;
+				else
+					alert(json.msg);
+			}
+		};
+		$("#meeting-template form[name=meeting_planning][class=active]").ajaxSubmit(Options);
 	}
 	var _search_meeting_planing_flag = false;
 	function initSearchMeetingPlanningBtn()
@@ -242,6 +325,101 @@
 				});
 			}
 		});
+	}
+	
+	var _search_member_for_meeting_flag;
+	function initSearchMemberForMeetingBtn()
+	{
+		var cb = function(t, val)
+		{
+			if( $(t).val() === val )
+			{
+				if( _search_member_for_meeting_flag )
+				{
+					_search_member_for_meeting_flag = false;
+					searchMemberForMeeting(val);
+				}
+			}
+		}
+		$("#meeting-template input[name=member]").keyup(function(){
+			var val = $(this).val();
+			_search_member_for_meeting_flag = true;
+			window.setTimeout(cb, 500, this, val)
+		});
+	}
+	function searchMemberForMeeting(user_id)
+	{
+		var html = "";
+		if( user_id.length > 0 )
+		{
+			$.ajax({
+				url: '/page/search_user_for_meeting',
+				type: 'POST',
+				data: {user_id:user_id},
+				dataType: 'json',
+				success: function(json) {
+					if( json.length > 0 )
+					{
+						var id_name;
+						var id_name_html;
+						html += '<div class="contents-title">Select to add.</div>';
+						html += '<ul class="search-user-list fancy-scrollbar">';
+						for(var i=0; i<json.length; i++)
+						{
+							id_name_html = '<span class="user_id">'+json[i].id+'</span>';
+							if( json[i].last_name.length < 1 )
+								id_name_html += '<span class="user_name">('+json[i].first_name.trim()+')</span>';
+							else
+								id_name_html += '<span class="user_name">('+json[i].first_name.trim()+' '+json[i].last_name.trim()+')</span>';
+							id_name = json[i].id+'('+json[i].first_name+' '+json[i].last_name+')';
+							html += '<li class="searched-user-node" idx="'+json[i].idx+'" title="'+id_name+'">'+id_name_html+'</li>';
+						}
+						html += '</ul>';
+					}
+					else
+						html = '<div class="no-result">No results</div>';
+					$("#light-popup").css({
+						"display":"block",
+						"top":"455px",
+						"left":"335px",
+						"z-index":"999999"
+					});
+					$("#light-popup .contents").html(html);
+					$("#light-popup .searched-user-node").on("click", function(){
+						var idx_user = $(this).attr("idx");
+						var user_id = $(".user_id", this).html();
+						var user_name = $(".user_name", this).html();
+						addMemberForMeeting(idx_user, user_name);
+					});
+				}
+			});
+		}
+		else
+		{
+			html = '<div class="no-result">No results</div>';
+			$("#light-popup .contents").html(html);
+		}
+	}
+	function addMemberForMeeting(idx_user, user_name)
+	{
+		user_name = user_name.replace("(","").replace(")","");
+		var user_name_arr = user_name.split(" ");
+
+		var html = "<span idx='"+idx_user+"' title='"+user_name+"'>";
+		html += user_name_arr[0].substr(0,1);
+		html += user_name_arr[1].substr(0,1)+"</span>";
+		var input_html = "<input type='hidden' name='meeting_user_list[]' value='"+idx_user+"'>";
+		$("#meeting-template .meeting-member-list").append(html);
+		$("#meeting-template form[name=meeting_planning][class=active]").append(input_html);
+		$("#meeting-template .meeting-member-list span").on("click",function(){
+			delMemberForMeeting(idx_user);
+		});
+		initAddMemberPopdown();
+	}
+	function delMemberForMeeting(idx_user)
+	{
+		$("#meeting-template .meeting-member-list span[idx="+idx_user+"]").remove();
+		$("#meeting-template form[name=meeting_planning][class=active] input[value="+idx_user+"]").remove();
 	}
 
 	// meeting planning page pointer
@@ -359,7 +537,7 @@
 			$(".modal-footer a.prev", dialog).show();
 			setup_meeting_wizard();
 			setup_timepicker();
-			setup_datepicker();
+			//setup_datepicker();
 			enable_select2();
 		},"html");
 	}

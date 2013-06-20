@@ -79,7 +79,7 @@ app.get('/page/need_help', meeting.need_help);
 app.get('/page/user_info', meeting_list.user_info); // 유저 정보
 
 /* post */
-app.post('/ajax/set_meeting_planning', meeting_planning.set_meeting_planning);
+app.post('/page/set_meeting_planning', meeting_planning.set_meeting_planning);
 app.post('/page/login', main.login);
 app.post('/page/sign_up', main.sign_up);
 app.post('/page/check_email', main.check_email);
@@ -92,6 +92,7 @@ app.post('/page/meeting_close', meeting.post_meeting_close);
 app.post('/page/save_tools_image', meeting.meeting_save_tools_image);
 app.post('/page/get_tools_image', meeting.result_get_tools_image);
 app.post('/page/search_user', meeting_list.post_search_user);
+app.post('/page/search_user_for_meeting', meeting_list.post_search_user_for_meeting);
 app.post('/page/add_user', meeting_list.post_set_add_user);
 app.post('/page/user_info', meeting_list.post_user_info);
 app.post('/page/delete_user', meeting_list.post_set_delete_user);

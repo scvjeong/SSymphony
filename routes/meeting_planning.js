@@ -8,20 +8,33 @@ var EventEmitter = require('events').EventEmitter;
 var _SET_MEETING_PLANNING_COMPLETE_FLAG_CNT = 3;
 
 exports.set_meeting_planning = function(req, res){
-	/** session start **/
-	if( !req.session.email || typeof req.session.email === "undefined" )
-		res.redirect("/");
-	/** session end **/
 
+	/** session start *
+	if( !req.session.email || typeof req.session.email === "undefined" )
+	{
+		result = { result:"failed", msg:"You should be logged.", target:"" };
+		res.send(result);
+	}
+	/** session end **/
+	
 	var evt = new EventEmitter();
 	var dao_c = require('../sql/common');
 	var dao_mp = require('../sql/meeting_planning');
 	var post = util.regroup_post_for_meeting_planning(req.body);
-	var params = {idx_group:req.session.idx_group}
+	var params = {
+			idx_group:req.session.idx_group,
+			meeting_subject:req.param("meeting_subject"),
+			meeting_goal:req.param("meeting_goal"),
+			meeting_date:req.param("meeting_date"),
+			meeting_start_time:req.param("meeting_start_time"),
+			meeting_end_time:req.param("meeting_end_time"),
+			meeting_agenda:req.param("meeting_agenda"),
+			meeting_user_list:req.param("meeting_user_list")
+	}
 	var unit_2_cnt = 0;
 	var unit_3_cnt = 0;
 	var complete_flag = 0;
-	var unit_3_total_cnt = 1;
+	var unit_3_total_cnt = 0;
 
 	// 트랜젝션 실행
 	dao_c.dao_begin_work(evt, mysql_conn);
@@ -30,7 +43,7 @@ exports.set_meeting_planning = function(req, res){
 	evt.on('begin_work', function(err, rows){
 		if(err) throw err;
 		// unit 쿼리 실행 - Insert meeting_planning
-		dao_mp.dao_set_meeting_planning(evt, mysql_conn, post[0]);
+		dao_mp.dao_set_meeting_planning(evt, mysql_conn, params);
 	});
 	evt.on('query_unit_1', function(err, rows){
 		console.log("query_unit_1");
@@ -41,35 +54,28 @@ exports.set_meeting_planning = function(req, res){
 			var idx_meeting = rows.insertId;
 			params.idx_meeting = idx_meeting;
 			// unit 쿼리 실행 - Insert agenda
-			for( var i=0; i<post.length; i++ )
+			for( var i=0; i<params.meeting_agenda.length; i++ )
 			{
 				// set order 
-				post[i]['order'] = (i+1);
-				dao_mp.dao_set_meeting_planning_agenda(evt, mysql_conn, post[i]);
+				params.meeting_agenda[i] = { 
+					subject:params.meeting_agenda[i], 
+					order:i,
+					time:10,
+					idx_meeting:params.idx_meeting
+				}
+				dao_mp.dao_set_meeting_planning_agenda(evt, mysql_conn, params.meeting_agenda[i]);
 			}
 
 			// unit_3 쿼리 실행 - Insert relation_user_meeting
-			var users = new Array;
-			users[0] = { idx_user:req.session.idx_user, idx_meeting:idx_meeting };
-
-			if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "string" )
+			unit_3_total_cnt = params.meeting_user_list.length;
+			for( var i=0; i<unit_3_total_cnt; i++ )
 			{
-				unit_3_total_cnt += 1;
-				users[1] = { idx_user:post[0].users, idx_meeting:idx_meeting };
-				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users);
-			}
-			else if( typeof(post[0].users) != "undefined" && typeof(post[0].users) == "object" )
-			{
-				unit_3_total_cnt += post[0].users.length;
-				for( var i=0; i<unit_3_total_cnt; i++ )
-				{
-					users[i+1] = { idx_user:post[0].users[i], idx_meeting:idx_meeting };
-					dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[i]);
+				params.meeting_user_list[i] = { 
+					idx_user:params.meeting_user_list[i], 
+					idx_meeting:params.idx_meeting
 				}
+				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, params.meeting_user_list[i]);
 			}
-			else
-				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, users[0]);
-
 			dao_mp.dao_set_meeting_planning_group(evt, mysql_conn, params);
 		}
 	});
@@ -126,7 +132,8 @@ exports.set_meeting_planning = function(req, res){
 	// 트랜젝션 커밋 실행 후
 	evt.on('commit', function(err, rows){
 		if(err) throw err;
-		res.render('ajax/set_meeting_planning', {result:"successful"} );
+		result = { result:"successful", msg:"successful", idx_meeting:params.idx_meeting  };
+		res.send(result);
 	});
 	evt.on('rollback', function(err, rows){
 		if(err) throw err;
@@ -136,21 +143,28 @@ exports.set_meeting_planning = function(req, res){
 
 exports.meeting_template = function(req, res){
 	/** session start **/
-	/*
+	
 	if( !req.session.email || typeof req.session.email === "undefined" )
-		res.redirect("/");
-	*/
+		res.send("");
+	
 	/** session end **/
 
 	var evt = new EventEmitter();
 	var dao_mp = require('../sql/meeting_planning');
 	var result = { agenda:[] };
+	var idx_user = req.session.idx_user;
 	var idx_group = req.session.idx_group;
+	var first_name = req.session.first_name;
+	var last_name = req.session.last_name;
 	var complete_flag = 0;
 	var total_complete_flag = 0;
-	// params['idx_owner']
-	// params['idx_owner_type']
-	var params = { idx_owner:null, idx_owner_type:null, idx_group:idx_group }
+	// params['idx_user']
+	// params['idx_group']
+	var params = { 
+		idx_owner:null, 
+		idx_owner_type:null, 
+		idx_group:idx_group
+	}
 	dao_mp.dao_meeting_template(evt, mysql_conn, params);
 	evt.on('meeting_template', function(err, rows){
 		if(err) throw err;
@@ -169,8 +183,11 @@ exports.meeting_template = function(req, res){
 		if( rows.length > 0 )
 		{
 			result.agenda[rows[0].idx] = rows;
-			if( total_complete_flag === complete_flag )
+			if( total_complete_flag === complete_flag ){
+				result.idx_user = idx_user;
+				result.user_name = first_name.substring(0,1).toUpperCase()+last_name.substring(0,1).toUpperCase();
 				res.render('select_meeting_template', {result:result} );		
+			}
 		}
 	});
 };

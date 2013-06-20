@@ -1,7 +1,8 @@
 exports.dao_set_meeting_planning = function(evt, mysql_conn, params){
-	var sql = "INSERT INTO `meeting_planning` SET `idx_owner` = '1', `idx_owner_type` = 'user', `subject` = '"+params['meeting_subject']+"', ";
+	var sql = "INSERT INTO `meeting_planning` SET `idx_owner` = '1', `idx_owner_type` = 'user', ";
+	sql += "`subject` = '"+params['meeting_subject']+"', ";
 	sql += "`goal` = '"+params['meeting_goal']+"', ";
-	sql += "`date` = '"+params['date']+"', ";
+	sql += "`date` = '"+params['meeting_date']+"', ";
 	sql += "`start_time` = '"+params['meeting_start_time']+"', ";
 	sql += "`end_time` = '"+params['meeting_end_time']+"', ";
 	sql += "`reg_time` = now(), ";
@@ -13,7 +14,11 @@ exports.dao_set_meeting_planning = function(evt, mysql_conn, params){
 }
 
 exports.dao_set_meeting_planning_agenda = function(evt, mysql_conn, params){
-	var sql = "INSERT INTO `agenda` SET `subject` = '"+params['subject']+"', `goal` = '"+params['goal']+"', `start_time` = '"+params['start_time']+"', `end_time` = '"+params['end_time']+"', `order` = '"+params['order']+"', idx_meeting_planning='"+params['idx_meeting']+"'";
+	var sql = "INSERT INTO `agenda` SET `subject` = '"+params['subject']+"', ";
+	sql += "`goal` = '"+params['goal']+"', ";
+	sql += "`time` = '"+params['time']+"', ";
+	sql += "`order` = '"+params['order']+"', ";
+	sql += "`idx_meeting_planning` = '"+params['idx_meeting']+"'";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('query_unit_2', err, rows);
 	});
@@ -40,7 +45,7 @@ exports.dao_set_meeting_planning_group = function(evt, mysql_conn, params){
 	return sql;
 }
 
-// select_meeting_template
+// dao_meeting_template
 // params['idx_owner']
 // params['idx_owner_type']
 exports.dao_meeting_template = function(evt, mysql_conn, params){

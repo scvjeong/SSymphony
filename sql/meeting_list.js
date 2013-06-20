@@ -102,6 +102,25 @@ exports.dao_search_user = function(evt, mysql_conn, params){
 	return sql;
 }
 
+exports.dao_search_user_for_meeting = function(evt, mysql_conn, params){
+	var sql = "SELECT  ";
+	sql += "DISTINCT `A`.`idx`, ";
+	sql += "`A`.`id`, ";
+	sql += "`A`.`first_name`, ";
+	sql += "`A`.`last_name` ";
+	sql += "FROM `user` AS `A` ";
+	sql += "INNER JOIN `relation_user_group` AS `B` ";
+	sql += "ON `A`.`idx` = `B`.`idx_user` ";
+	sql += "AND `B`.`idx_group` = '"+params['idx_group']+"' ";
+	sql += "AND `A`.`idx` != '"+params['idx_user']+"' ";
+	sql += "WHERE `A`.`id` like '%"+params['user_id']+"%' ";
+	sql += "ORDER BY `A`.`first_name` DESC ";
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('search_user_for_meeting', err, rows);
+	});
+	return sql;
+}
+
 exports.dao_set_add_user = function(evt, mysql_conn, params){
 	var sql = "INSERT INTO `relation_user_group` ";
 	sql += "SET `idx_user` = '"+params['idx_user']+"', ";

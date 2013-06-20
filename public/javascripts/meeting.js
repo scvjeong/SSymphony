@@ -38,23 +38,25 @@ $(document).ready(function() {
 	$(window).resize();
 
 	// 오디오 관련 초기화
-	
-	 try {
-      // webkit shim
-      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-      window.URL = window.URL || window.webkitURL;
-      
-      audio_context = new AudioContext;
-      console.log('Audio context set up.');
-      console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-    } catch (e) {
-      alert('No web audio support in this browser!');
-    }
 
-    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-      console.log('No live audio input: ' + e);
-    });
+	try {
+	  // webkit shim
+	  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+	  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+	  window.URL = window.URL || window.webkitURL;
+	  
+	  audio_context = new AudioContext;
+	  console.log('Audio context set up.');
+	  console.log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+
+		navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+		  console.log('No live audio input: ' + e);
+		});
+
+	} catch (e) {
+	  alert('No web audio support in this browser!');
+	}
+
 
 	// 소켓 열기
 	openSocket();
@@ -215,7 +217,6 @@ function openSocket()
 	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
 	_socket_board = io.connect('http://61.43.139.69:50006/group');
 
-
 	/* 서버 리스너 등록 */
 	_socket_common.on('get_list_of_tools', function (data) {
 		console.log("<get_list_of_tools>");
@@ -274,13 +275,11 @@ function openSocket()
 	});
 
 	_socket_common.on('arrive_new_tool', function (data) {
-		console.log("ON arrive_new_tool");
-		console.log(data);
 		var group = data.group;
+		var idx_meeting = data.idx_meeting;
 
-		if (group == _group_id)
+		if (group === _group_id && idx_meeting === _idx_meeting )
 		{
-			console.log("SAME GROUP");
 			var idx_meeting = data.idx_meeting;
 			var tool_data = data.tool_data;
 
@@ -511,9 +510,6 @@ function createToolWindow(tool_data)
 				tool_window_source = '<div class="toolwindow" id="' + tool_name + '" onclick="upToFrontWindow(\'' + tool_name + '\')">';
 				tool_window_source += '<div class="title">';
 					tool_window_source += '<div class="title_text">' + tool_title + '</div>';
-					//toolsource += '<div class="closewindow" onclick="closeToolWindow(\'' + idx + '\')">닫기</div>';
-					//toolsource += '<div class="closewindow" onclick="transWindow(\'' + toolname + '\')">투명</div>';
-					//toolsource += '<div class="clearboth"></div>';
 					tool_window_source += '</div>';
 					tool_window_source += tool_source;
 				tool_window_source += '</div>';

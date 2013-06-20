@@ -92,6 +92,7 @@ function server(io)
 		////  클라이언트 해당 tool의 lastId 요청 처리하는 함수  ////
 		socket.on('set_last_id', function(data) {
 			console.log("Call: set_last_id");
+			console.log(data);
 			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpLastId;
@@ -566,6 +567,7 @@ function server(io)
 			////  클라이언트 해당 tool에 추가된 값을 DB에 저장_tree  ////
 		socket.on('set_insert_tree_data', function(data) {
 			console.log("Call: insert_tree_data");
+			console.log(data);
 			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;	
@@ -578,7 +580,6 @@ function server(io)
 			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
 			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
 			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
-			console.log("Id: "+tmpId+" / Parent: "+tmpParent+" / Val: "+tmpVal);		
 			
 			////  부모 필드 존재하는지 검사  ////
 			client.hlen(storeId, function (err, num) {

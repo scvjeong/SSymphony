@@ -6,7 +6,7 @@ var check = require('validator').check,
 
 var _APPRAISAL_COMPLETE_FLAG_CNT = 1;
 var _EVALUATION_COMPLETE_FLAG_CNT = 1;
-var _RESULT_COMPLETE_FLAG_CNT = 3;
+var _RESULT_COMPLETE_FLAG_CNT = 4;
 var _EVALUATION_INFO_FLAG_CNT = 1;
 
 exports.main = function(req, res){
@@ -17,9 +17,10 @@ exports.main = function(req, res){
 		res.render('no_explorer', {} );
 		return;
 	}
-//	req.session.idx_user = 1;
-//	req.session.email = "orchestra@gmail.com";
-//	req.session.idx_group = 1;
+	/* debug */
+	req.session.idx_user = 1;
+	req.session.email = "orchestra@gmail.com";
+	req.session.idx_group = 1;
 
 	/** session start **/
 	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
@@ -49,7 +50,6 @@ exports.main = function(req, res){
 		else
 		{
 			params.idx_meeting = req.param("idx_meeting");
-			req.session.idx_meeting = req.param("idx_meeting");
 			dao_m.dao_get_meeting(evt, mysql_conn, params);
 		}
 		
@@ -98,25 +98,28 @@ exports.main = function(req, res){
 			if(err) throw err;
 
 			result.meeting = rows;
-			result.idx_user = req.session.idx_user;	// idx_user
-			result.idx_group = req.session.idx_group;	// idx_group
-			result.idx_meeting = req.param("idx_meeting");	// idx_meeting
-			
-			var d_t = new Date(result.meeting[0].date);
-			var c_t = new Date();
-			var s_t = util.getTime(result.meeting[0].start_time);
-			var e_t = util.getTime(result.meeting[0].end_time);
-			var run_time = ((c_t.getTime() - d_t.getTime() + 3600000*9) / 1000) - s_t.t;
-			if( run_time < 1 ) run_time = 0;
-			result.meeting[0].run_time = Math.floor(run_time);
-			result.meeting[0].limit_time = util.getTimeFormat(e_t.t-s_t.t);
-			result.process = {time:run_time};
 
 			if( rows.length > 0 )
 			{
+				result.idx_user = req.session.idx_user;	// idx_user
+				result.idx_group = req.session.idx_group;	// idx_group
+				result.idx_meeting = params.idx_meeting;	// idx_meeting
+				req.session.idx_meeting = params.idx_meeting;
+				
+				var d_t = new Date(result.meeting[0].date);
+				var c_t = new Date();
+				var s_t = util.getTime(result.meeting[0].start_time);
+				var e_t = util.getTime(result.meeting[0].end_time);
 				var time, time_obj, used_time;
 				var total_time = 0;
 				var start_point = true;
+				var run_time = ((c_t.getTime() - d_t.getTime() + 3600000*9) / 1000) - s_t.t;
+				if( run_time < 1 ) run_time = 0;
+				result.meeting[0].run_time = Math.floor(run_time);
+				result.meeting[0].limit_time = util.getTimeFormat(e_t.t-s_t.t);
+				result.process = {time:run_time};
+
+
 				for(var i=0;i<result.meeting.length;i++)
 				{
 					if(i===0)
@@ -185,7 +188,54 @@ exports.main = function(req, res){
 };
 
 exports.post_next_process = function(req, res){
-	res.send({result:"successful"})
+
+	/* debug */
+	req.session.idx_user = 1;
+	req.session.email = "orchestra@gmail.com";
+	req.session.idx_group = 1;
+	req.session.idx_meeting = 19;
+
+	var result = {};
+	/** session start **/
+	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
+	{
+		result = { result:"failed", msg:"You should be logged.", target:"" };
+		res.send(result);
+	}
+	/** session end **/
+	else
+	{	
+		req.assert("idx_agenda", "valid meeting required").notEmpty().isInt();
+		var errors = req.validationErrors();
+		if( errors )
+			res.send(errors);
+		else
+		{
+			var evt = new EventEmitter();
+			var dao_c = require('../sql/common');
+			var dao_m = require('../sql/meeting');
+			var dao_ml = require('../sql/meeting_list');
+			var dao_mp = require('../sql/meeting_planning');
+			var params = {
+				idx_meeting:req.session.idx_meeting
+			};
+			
+			var c_d = new Date();
+			dao_m.dao_get_meeting(evt, mysql_conn, params);
+				
+			evt.on('get_meeting', function(err, rows){
+				if(err) throw err;
+				if( rows.length > 0 )
+				{
+					result.result = rows;
+					result.session = req.session;
+				}
+				else
+					result = { result:"failed", msg:"You should be logged.", target:"" };
+				res.send({result:result});
+			});
+		}
+	}
 };
 
 exports.meeting_public = function(req, res){
@@ -336,15 +386,17 @@ exports.meeting_result = function(req, res){
 		idx_meeting:req.session.idx_meeting,	 
 		idx_group:req.session.idx_group
 	};	
+	
+	console.log("rep: "+req.param("idx_meeting"));
 
-	if ( !params["idx_meeting"]  )
+	if ( params["idx_meeting"] != req.param("idx_meeting") && req.param("idx_meeting") != 0  )
 	{	
 		params["idx_meeting"] = req.param("idx_meeting");
 	}
 
 	console.log("[Result LOG]"+params['idx_meeting']);
 
-	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };
+	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{}, meeting_charts:{} };
 	var complete_flag = 0;
 
 	dao_m.dao_get_meeting_result(evt, mysql_conn, params);
@@ -369,6 +421,15 @@ exports.meeting_result = function(req, res){
 	evt.on('get_meeting_tools_image', function(err, rows){
 		if(err) throw err;
 		result.meeting_tools_image = rows;
+		complete_flag++;
+		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
+			res.render('meeting_result', {result:result} );
+	});
+
+	dao_m.dao_get_meeting_charts(evt, mysql_conn, params);
+	evt.on('get_meeting_charts', function(err, rows){
+		if(err) throw err;
+		result.meeting_charts = rows;
 		complete_flag++;
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );

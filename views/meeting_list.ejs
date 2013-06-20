@@ -9,11 +9,8 @@
 	<link rel="stylesheet" href="/stylesheets/font.css" />
 	<link rel="stylesheet" href="/stylesheets/orchestra.css" />
 	<link rel="stylesheet" href="/stylesheets/fullcalendar.css">
-	<link rel="stylesheet" href="/stylesheets/datepicker.css">
-	<link rel="stylesheet" href="/stylesheets/select2.css">
 	<link rel="stylesheet" href="/stylesheets/theme.css">
 	<link rel="stylesheet" href="../javascripts/jqwidgets/styles/jqx.base.css" type="text/css" />
-	<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
 </head>
 
 <body>
@@ -39,12 +36,8 @@
 		<ul>
 			<li id="start-btn">
 				<div class="make">START</div>
-				<div class="tool list">
-					LIST
-				</div>
-				<div class="tool postit">
-					POSTIT
-				</div>
+				<div class="tool list">LIST</div>
+				<div class="tool postit">POSTIT</div>
 				<div class="tool mindmap">MindMap</div>
 				<div class="tool matrix">Matrix</div>
 				<div class="tool vote">Vote</div>
@@ -341,7 +334,7 @@
 	<div class="light-popup-body">
 		<input id="member" name="member" type="text" autocomplete="off">
 		<div class="contents">
-			Search for a person in Orchestra by name or email address, or enter an email address to invite someone new.
+			Search for a person in here by name or email address, or enter an email address to invite someone new.
 		</div>
 	</div>
 </div>
@@ -378,27 +371,21 @@
 	<script src="/javascripts/bootbox.js"></script>
 	<script src="/javascripts/bootstrap.wizard.min.js"></script>
 	<script src="/javascripts/bootstrap.timepicker.min.js"></script>
-	<script src="/javascripts/bootstrap.datepicker.min.js"></script>
 	<!-- Flot Plotting -->
-	<script src="/javascripts/libs/flot/excanvas.min.js"></script>
-	<script src="/javascripts/libs/flot/jquery.flot.js"></script>
 
-
-
-	<!-- REQUIRED: Flot Chart Engine -->
 	<script src="/javascripts/libs/flot/jquery.flot.cust.min.js"></script>
 	<script src="/javascripts/libs/flot/jquery.flot.resize.min.js"></script>	
 	<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>
 	<script src="/javascripts/libs/flot/jquery.flot.orderBar.min.js"></script>
 	<script src="/javascripts/libs/flot/jquery.flot.fillbetween.min.js"></script>
-	<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
 	<script src="/javascripts/libs/flot/jquery.flot.JUMlib.js"></script>
 	<script src="/javascripts/libs/flot/jquery.flot.bubbles.js"></script>
-	<script src="/javascripts/libs/flot/jquery.flot.categories.min.js"></script>
+	<script src="/javascripts/libs/flot/jquery.flot.js"></script>
+	<script src="/javascripts/libs/flot/jquery.flot.categories.js"></script>
+	<script src="/javascripts/libs/flot/jquery.flot.pie.min.js"></script>
 
 	<!-- REQUIRED: Flot Chart Engine -->
 	<script src="/javascripts/libs/flot/jquery.flot.tooltip.min.js"></script>		
-	<script src="/javascripts/select2.js"></script>
 	<script src="/javascripts/jquery.uniform.js"></script>
 	<script src="/javascripts/jquery.form.js"></script>
 	<script src="/javascripts/orchestra.js"></script>
@@ -712,9 +699,10 @@
 		function initAddMemberPopdown()
 		{
 			$("#light-popup").css({
-				display:"none",
-				top:"0px",
-				left:"0px"
+				"display":"none",
+				"top":"0px",
+				"left":"0px",
+				"z-index":"20"
 			});
 			$("#light-popup #member").val("");
 			$("#light-popup .contents").html("Search for a person in Orchestra by email address, or enter an email address to invite someone new.");

@@ -88,7 +88,7 @@ exports.meeting_list = function(req, res){
 exports.post_search_user = function (req, res){
 
 	var result;
-	/** session start 
+	/** session start **/
 	if( !req.session.email || typeof req.session.email === "undefined" )
 	{
 		result = { result:"failed", msg:"You should be logged.", target:"" };
@@ -117,10 +117,45 @@ exports.post_search_user = function (req, res){
 		res.send("");
 };
 
+exports.post_search_user_for_meeting = function (req, res){
+
+	var result;
+	/** session start **/
+	if( !req.session.email || typeof req.session.email === "undefined" )
+	{
+		result = { result:"failed", msg:"You should be logged.", target:"" };
+		res.send(result);
+	}
+	/** session end **/
+	
+	var evt = new EventEmitter();
+	var dao_ml = require('../sql/meeting_list');
+	var user_id = req.param("user_id");
+	var idx_user = req.session.idx_user;
+	var idx_group = req.session.idx_group;
+
+	if( idx_group > 0 )
+	{
+		// params['idx_group']
+		// params['user_id']
+		// params['idx_user']		
+		var params = { idx_user:idx_user, idx_group:idx_group, user_id:user_id }
+		
+		dao_ml.dao_search_user_for_meeting(evt, mysql_conn, params);
+		evt.on('search_user_for_meeting', function(err, rows){
+			if(err) throw err;
+			res.send(rows);
+		});	
+	}
+	else
+		res.send("");
+};
+
+
 exports.post_set_add_user = function (req, res){
 
 	var result;
-	/** session start 
+	/** session start **/
 	if( !req.session.email || typeof req.session.email === "undefined" )
 	{
 		result = { result:"failed", msg:"You should be logged.", target:"" };

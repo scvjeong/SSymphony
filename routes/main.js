@@ -12,6 +12,8 @@ function register_session(req, idx_user, id, first_name, last_name)
 	req.session.idx_user = idx_user;
 	req.session.email = id;
 	req.session.nickname = first_name + " " + last_name;
+	req.session.first_name = first_name;
+	req.session.last_name = last_name;
 }
 
 exports.jeong = function(req, res){

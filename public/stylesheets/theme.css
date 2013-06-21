@@ -748,6 +748,14 @@ ul.users-online li a strong {
 	margin-right: 5px;
 }
 
+.chart_subject {
+	float: left;
+	font-family: "Fjalla One";
+	font-size: 21px;
+	color: #004adf;
+	line-height: 40px;
+}
+
 /* /회의 결과 부트박스 */
 
 

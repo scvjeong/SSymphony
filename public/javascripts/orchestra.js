@@ -353,23 +353,24 @@ function setupUserChart()
 	$.plot( $("#placeholder1") , [d1,d2,d3,d4], options );
 }
 */
+
 function setupUserChart()
 {
 	//var data = [],
 	var series = 5;
 
-	var data = [ ["SCV Jeong", 10], ["Chicken", 8], ["Godong", 4], ["Stargt", 13], ["Chaehyun", 17] ];
+	var data_user = $('#word_chart_user').text();
+	var data_words = $('#word_chart_words').text();
+	var user_array = data_user.split(',');
+	var words_array = data_words.split(',');
 
+	var data = [];
 
-	/*
-	
-	for (var i = 0; i < series; i++) {
-		data[i] = {
-			label: "Test" + (i + 1)
-			//data: Math.floor(Math.random() * 100) + 1
-		}
+	for (var i = 0; i < user_array.length; i++) {
+		data[i] = [ user_array[i], words_array[i] ];
 	}
-	*/
+
+
 	$.plot( $("#placeholder1") , [ data ], {
 		series: {
 			bars: {
@@ -394,24 +395,23 @@ function setupUserChart()
 
 function setupWordChart()
 {
-	var data = [],
-		series = 3;
+	//var data = [],
+	//	series = 3;
 
-	data[0] = {
-		label: "개선",
-		data: Math.floor(Math.random() * 100) + 1
-	}
-
-	data[1] = {
-		label: "시스템",
-		data: Math.floor(Math.random() * 100) + 1
-	}
-
-	data[2] = {
-		label: "시간",
-		data: Math.floor(Math.random() * 100) + 1
-	}
+	var data_keyword = $('#keyword_chart_keyword').text();
+	var data_num = $('#keyword_chart_num').text();
+	var keyword_array = data_keyword.split(',');
+	var num_array = data_num.split(',');
+	//console.log(data_keyword);
 	
+	var data = [];
+
+	for (var i = 0; i < keyword_array.length; i++) {
+		data[i] = {
+			label: keyword_array[i],
+			data: Math.floor(num_array[i])
+		}
+	}
 
 	$.plot( $("#placeholder2") , data, {
 		series: {

@@ -6,7 +6,7 @@ var check = require('validator').check,
 
 var _APPRAISAL_COMPLETE_FLAG_CNT = 1;
 var _EVALUATION_COMPLETE_FLAG_CNT = 1;
-var _RESULT_COMPLETE_FLAG_CNT = 3;
+var _RESULT_COMPLETE_FLAG_CNT = 4;
 var _EVALUATION_INFO_FLAG_CNT = 1;
 
 exports.main = function(req, res){
@@ -386,15 +386,17 @@ exports.meeting_result = function(req, res){
 		idx_meeting:req.session.idx_meeting,	 
 		idx_group:req.session.idx_group
 	};	
+	
+	console.log("rep: "+req.param("idx_meeting"));
 
-	if ( !params["idx_meeting"]  )
+	if ( params["idx_meeting"] != req.param("idx_meeting") && req.param("idx_meeting") != 0  )
 	{	
 		params["idx_meeting"] = req.param("idx_meeting");
 	}
 
 	console.log("[Result LOG]"+params['idx_meeting']);
 
-	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{} };
+	var result = { meeting_result:{}, meeting_result_appraisal:{}, meeting_tools_image:{}, meeting_charts:{} };
 	var complete_flag = 0;
 
 	dao_m.dao_get_meeting_result(evt, mysql_conn, params);
@@ -419,6 +421,15 @@ exports.meeting_result = function(req, res){
 	evt.on('get_meeting_tools_image', function(err, rows){
 		if(err) throw err;
 		result.meeting_tools_image = rows;
+		complete_flag++;
+		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
+			res.render('meeting_result', {result:result} );
+	});
+
+	dao_m.dao_get_meeting_charts(evt, mysql_conn, params);
+	evt.on('get_meeting_charts', function(err, rows){
+		if(err) throw err;
+		result.meeting_charts = rows;
 		complete_flag++;
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );

@@ -1000,10 +1000,19 @@ function initNextProcess()
 					else if( json.result === "successful" )
 					{
 						var process_num = $('.process-unit').index($processing);
-						console.log(process_num);
-
-						//// 툴별로 캡쳐하고 숨기는 부분 추가 ////
-
+						//console.log(process_num);
+						
+						var $tool_window = $('.toolwindow');
+						for ( var i=0; i<$tool_window.length; i++  )
+						{
+							var tmp_tool = $('.toolwindow:eq('+i+')');
+							var tmp_tool_id = tmp_tool.attr('id');
+							tmp_tool.css("display","block");
+							tmp_tool.css("top","100px");
+							tmp_tool.css("left","10px");
+							makeCanvasImage(tmp_tool_id, process_num);	
+						}						
+						
 
 						var used_time = getTimeFormat(json.use_time*60);
 						var $use_time_obj = $("#meeting .process-box .process-unit[idx="+idx_agenda+"] .use_time");
@@ -1714,15 +1723,11 @@ function evaluateComplete()
 
 function makeCanvasImage(tool, process_idx)
 {
-	console.log(tool);
 	var exp_num = /[0-9]/gi;  
 	var exp_al = /[a-z]/gi;
 	var tool_name = tool.replace(exp_num, '');
-	
 	var idx_tool = tool.replace(exp_al, '');
 		
-	console.log(idx_tool);
-
 	var idx_process = process_idx;
 	var tool_num = 0;
 	var image_value = 0;
@@ -1752,7 +1757,8 @@ function makeCanvasImage(tool, process_idx)
 
 			var canvas_image = canvas.toDataURL();		
 			image_value = canvas_image;		
-			
+			console.log(canvas_image);
+
 			var send_params = {
 				idx_tool: idx_tool,
 				idx_process: idx_process,
@@ -1767,6 +1773,7 @@ function makeCanvasImage(tool, process_idx)
 				dataType: 'json',
 				success: function(json_data) {
 					console.log("Success");
+					$('#'+tmp_make).css("display","none");
 				}
 			});
 		  }

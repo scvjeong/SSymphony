@@ -219,8 +219,25 @@ function openSocket()
 		console.log("</get_list_of_tools>");
 	});
 
-	_socket_common.on('get_client', function (data) {
-		_client_id = data.client;
+	_socket_common.on('get_request_user_list', function (data) {
+		console.log("Call get_request_user_list");
+		_socket_common.emit('set_user_list', { idx_meeting: _idx_meeting	});			
+	});
+
+	_socket_common.on('get_user_list', function (data) {
+		console.log("Call get_user_list");
+		$("#meeting .member-unit").each(function(){
+			$(this).attr("class", "member-unit");
+			var idx = $(this).attr("idx")*1;
+			for(var i=0;i<data.user_list.length;i++)
+			{
+				if( idx == data.user_list[i])
+				{
+					$(this).addClass("color-"+(i+1));
+					break;
+				}
+			}
+		});		
 	});
 
 	_socket_common.on('get_last_id', function (data) {
@@ -300,7 +317,7 @@ function openSocket()
 	/* /서버 리스너 등록 */
 
 	/* 서버 초기 이벤트 전송 */
-	_socket_common.emit('join_room', { idx_meeting: _idx_meeting});
+	_socket_common.emit('join_room', { idx_meeting: _idx_meeting, idx_user: _idx_user});
 	_socket_common.emit('set_client', {idx_meeting: _idx_meeting, idx_user: _idx_user});
 	_socket_common.emit('set_tool_list', { idx_meeting: _idx_meeting	});
 	/* /서버 초기 이벤트 전송 */
@@ -982,6 +999,7 @@ function initNextProcess()
 		e.preventDefault();
 		//if( confirm("Do you want next process?") ) 
 		var $processing = $("#meeting .process-box .processing");
+		var $next_process_obj;
 		var bool = ($processing.length > 0 ); // 객체가 있는지 확인
 		bool = bool && (typeof ($processing.attr("idx")*1) === "number"); // 숫자 값 확인
 		bool = bool && (($processing.attr("idx")*1) > 0); // 0 이상의 index 인지 확인
@@ -1025,10 +1043,20 @@ function initNextProcess()
 						$limit_time.html(limit_time);
 						$processing.removeClass("processing");
 						_process_time = 0;
-						$processing.next().addClass("processing");
-						var next_limit_time = $(".use_time", $processing.next()).attr("limit_time")*1 + use_time_t;
-						$(".lead_time", $processing.next()).html(limit_time);
-						$(".limit_time", $processing.next()).html( getTimeFormat(next_limit_time) );
+						$next_process_obj = $processing.next();
+						$next_process_obj.addClass("processing");
+						var next_limit_time = $(".use_time", $next_process_obj).attr("limit_time")*1 + lead_time_t + use_time_t;
+						$(".lead_time", $next_process_obj).html(limit_time);
+						$(".limit_time", $next_process_obj).html( getTimeFormat(next_limit_time) );
+						
+						$next_process_obj = $next_process_obj.next();
+						while( $next_process_obj.hasClass("process-unit") )
+						{
+							$(".lead_time", $next_process_obj).html( getTimeFormat(next_limit_time) );
+							next_limit_time = $(".use_time", $next_process_obj).attr("limit_time")*1 + next_limit_time;
+							$(".limit_time", $next_process_obj).html( getTimeFormat(next_limit_time) );
+							$next_process_obj = $next_process_obj.next();
+						}
 					}
 				}
 			});

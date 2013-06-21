@@ -67,6 +67,7 @@ exports.dao_meeting_list = function(evt, mysql_conn, params){
 
 exports.dao_meeting_user = function(evt, mysql_conn, params){
 	var sql = "SELECT  ";
+	sql += "`A`.`idx` AS `idx_user`, ";
 	sql += "`A`.`first_name`, ";
 	sql += "`A`.`last_name`, ";
 	sql += "`C`.`idx` AS `idx_meeting` ";

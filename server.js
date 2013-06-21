@@ -5,16 +5,43 @@
 
 function server(io)
 {
+	var _connection_manager = new Array;
+
 	////  group 채널 개설  ////
 	var meeting = io.of('/meeting').on('connection', function (socket) {
 		console.log("Connect meeting");
 
+		socket.on('disconnect', function() {
+			var idx_meeting;
+			for(var i=0;i<_connection_manager.length;i++)
+			{
+				if(_connection_manager[i].id === socket.id)
+				{
+					idx_meeting = _connection_manager[i].idx_meeting;
+					_connection_manager.splice(i, 1);
+					socket.broadcast.to(idx_meeting).emit('get_request_user_list');
+				}
+			}
+		});	
+
 		////  회의에 join하는 함수  ////
 		socket.on('join_room', function(data) {
 			console.log("Call: join_room");
-			//var group = data.idx_meeting;
 			var idx_meeting = data.idx_meeting;
+			var idx_user = data.idx_user;
+			var user_node = { id:socket.id, idx_user:idx_user, idx_meeting:idx_meeting };
+			var user_list = new Array;
 			socket.join(idx_meeting);
+			_connection_manager.push({
+				id:user_node.id,
+				idx_meeting:idx_meeting,
+				idx_user:idx_user
+			});
+			for(var i=0;i<_connection_manager.length;i++)
+			{
+				if(_connection_manager[i].idx_meeting === idx_meeting && user_list.indexOf(_connection_manager[i].idx_user) )
+					user_list.push(_connection_manager[i].idx_user);
+			}
 
 			// 회의 최초 접속이면 회의 정보 새로 생성
 			if (_meeting_contents[idx_meeting] == undefined)
@@ -23,26 +50,29 @@ function server(io)
 					whiteboard: {},
 					tools: []
 				};
-			}			
+			}
+			socket.emit('get_user_list', { user_list: user_list });
+			socket.broadcast.to(idx_meeting).emit('get_user_list', { user_list: user_list });
 		});
 
 		////  유저 정보 리스트에 저장하여 관리하는 함수  ////
 		socket.on('set_client', function(data) {
 			console.log("Call: set_client");
+			console.log(data);
 			var idx_meeting = data.idx_meeting;
 			var idx_user = data.idx_user;
-			//var idx_meeting = data.idx_meeting;	// 수면 아래로 집어 넣은 소스
 			
 			var userInfo = idx_meeting+":user";
 			var userNum = -1;
 			var countUser = 0;
+			var user_list = [];
 
 			////  해당 user가 리스트에 존재하는지 확인해서 없으면 추가  ////
 			client.llen(userInfo, function (err, num) {
 				countUser = num;					
 				client.lrange(userInfo, 0, -1, function (err, replies) {	
 					replies.forEach( function (user, index) {
-						console.log("user: "+user);
+						user_list[index] = user;
 						if ( user == idx_user ) {		//해당 user가 존재할 때
 							userNum = index;
 						}
@@ -51,8 +81,9 @@ function server(io)
 						client.rpush(userInfo, idx_user);
 						userNum =countUser;
 						_lastClient = userNum;
+						user_list.push(idx_user);
 					}
-					socket.emit('get_client', { client: userNum });
+					socket.emit('get_client', { client: user_list });
 				});
 			});	
 		});
@@ -495,7 +526,7 @@ function server(io)
 			var storeParent = idx_meeting + ":" + tmpTool + ":" + tmpParent;
 			var clientId = idx_meeting + ":" + tmpTool + ":" + tmpId + ":client";
 			console.log("Id: "+tmpId+" / Parent: "+tmpParent+" / Val: "+tmpVal);		
-	
+
 			multi = client.multi();
 			multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
 			multi.set(clientId, tmpClient);	//key에 클라이언트 ID 저장
@@ -807,7 +838,24 @@ function server(io)
 			
 			
 		});
-		
+
+		// emit user_list
+		/*
+		setInterval(function(){
+			socket.emit('get_request_user_list', true); 
+		}, 10000);
+		*/
+		socket.on('set_user_list',function(data){
+			var idx_meeting = data.idx_meeting;
+			var user_list = new Array;
+			for(var i=0;i<_connection_manager.length;i++)
+			{
+				if(_connection_manager[i].idx_meeting === idx_meeting && user_list.indexOf(_connection_manager[i].idx_user) )
+					user_list.push(_connection_manager[i].idx_user);
+			}
+			socket.emit('get_user_list', { user_list: user_list }); 
+		});		
+
 		function timeEnd() {
 			
 		}

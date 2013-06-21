@@ -1730,8 +1730,6 @@ function evaluateComplete()
 
 		});
 
-	
-	// setTimeout("showMeetingResultWindow()", 5000); 
 }
 
 function makeCanvasImage(params)

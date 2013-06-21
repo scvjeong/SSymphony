@@ -16,6 +16,7 @@
 					<%
 						if( result.meeting_result.length > 0 ) { 
 					%>
+						<div id="idx_meeting" style="display:none"><%= result.meeting_result[0].idx %></div>
 						<div class="result_title"><%= result.meeting_result[0].subject %></div>
 						<div class="result_subject"><%= result.meeting_result[0].goal %></div>
 						<div class="result_time">

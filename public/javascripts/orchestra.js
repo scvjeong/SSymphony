@@ -22,7 +22,7 @@ $.extend({
  * Includes enhancements by Scott Trenda <scott.trenda.net>
  * and Kris Kowal <cixar.com/~kris.kowal/>
  *
- * Accepts a date, a mask, or a date and a mask.
+ * Accepts a date, a mask, or a date and a mask.F
  * Returns a formatted version of the given date.
  * The date defaults to the current date/time.
  * The mask defaults to dateFormat.masks.default.
@@ -471,6 +471,68 @@ function setupWordChart()
 
 function labelFormatter(label, series) {
 	return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+}
+
+function makeMeetingForm(idx) {
+	
+	var result_subject = $('.result_title').text();
+	var result_goal = $('.result_subject').text();
+	var result_time = $('#result_time_clock').text();
+	var meeting_val = $('#meeting_val').text();
+	var ft_val = $('#proceeing_val').text();
+	var best_val = $('#best_member_val').text();
+	var meeting_user = $('#word_chart_user').text();
+	var meeting_keyword = $('#keyword_chart_keyword').text();
+
+	result_time = result_time.replace('(', '');
+	result_time = result_time.replace(')', '');
+
+	//console.log(result_subject+"//"+result_goal+"//"+result_time+"//"+best_val+"//"+"//"+"//"+"//");
+	console.log(meeting_user);
+	var doc = new jsPDF();
+
+	var doc_font = doc.getFontList();
+	console.log(doc_font);
+	
+	//doc.setFont('Helvetica');
+	doc.setTextColor(0,51,153);
+	doc.setFontSize(35);
+	doc.text(15, 20, result_subject);
+	doc.setTextColor(102,153,204);
+	doc.setFontSize(25);
+	doc.text(15, 40, result_goal);
+	doc.setTextColor(0,0,0);
+	doc.setFontSize(15);
+	doc.text(150, 40, result_time);
+	doc.setFontSize(10);
+	doc.text(15, 55, meeting_user);
+//	doc.setFontSize(15);
+//	doc.text(15, 65, meeting_keyword);
+	
+	
+
+	doc.save('Test.pdf');
+	
+/*
+	var doc_pdf = new jsPDF();
+	
+	console.log($('#rightpanel').get(0));
+
+
+	// We'll make our own renderer to skip this editor
+	var specialElementHandlers = {
+		'#white-board': function(element, renderer){
+			return true;
+		}
+	};
+
+	doc_pdf.fromHTML($('#rightpanel').get(0), 15, 15, {
+		'width': 170, 
+		'elementHandlers': specialElementHandlers
+	});
+	
+	doc_pdf.save('test.pdf');
+	*/
 }
 
 function setupUserListChart()

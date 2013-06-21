@@ -206,13 +206,6 @@ exports.main = function(req, res){
 
 exports.post_next_process = function(req, res){
 
-	/* debug 
-	req.session.idx_user = 1;
-	req.session.email = "orchestra@gmail.com";
-	req.session.idx_group = 1;
-	req.session.idx_meeting = 19;
-	*/
-
 	var result = {};
 	/** session start **/
 	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
@@ -311,36 +304,43 @@ exports.meeting_appraisal = function(req, res){
 
 
 exports.meeting_evaluation = function(req, res){
+
+	var result = {};
 	/** session start **/
-	//if( !req.session.email || typeof req.session.email === "undefined" )
-	//	res.redirect("/");
+	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
+	{
+		result = { result:"failed", msg:"You should be logged.", target:"" };
+		res.send(result);
+	}
 	/** session end **/
+	else
+	{	
+		var evt = new EventEmitter();
+		var dao_c = require('../sql/common');
+		var dao_m = require('../sql/meeting');
+		var params = { 
+			idx_meeting:req.session.idx_meeting,	 
+			idx_group:req.session.idx_group,
+			idx_user:req.session.idx_user
+		};	
 
-	var evt = new EventEmitter();
-	var dao_c = require('../sql/common');
-	var dao_m = require('../sql/meeting');
-	var params = { 
-		idx_meeting:req.session.idx_meeting,	 
-		idx_group:req.session.idx_group,
-		idx_user:req.session.idx_user
-	};	
+		console.log("[LOG]"+params['idx_meeting']);
+		console.log("[LOG]"+params['idx_group']);
+		console.log("[LOG]"+params['idx_user']);
 
-	console.log("[LOG]"+params['idx_meeting']);
-	console.log("[LOG]"+params['idx_group']);
-	console.log("[LOG]"+params['idx_user']);
+		var result = { meeting_evaluation:{} };
+		var complete_flag = 0;
 
-	var result = { meeting_evaluation:{} };
-	var complete_flag = 0;
-
-	dao_m.dao_get_meeting_evaluation_info(evt, mysql_conn, params);
-	evt.on('get_meeting_evaluation_info', function(err, rows){
-		if(err) throw err;
-		result.meeting_evaluation = rows;
-		complete_flag++;
-		if( complete_flag === _EVALUATION_INFO_FLAG_CNT )
-			res.render('meeting_evaluation', {result:result} );
-	});
-
+		dao_m.dao_get_meeting_evaluation_info(evt, mysql_conn, params);
+		evt.on('get_meeting_evaluation_info', function(err, rows){
+			if(err) throw err;
+			result.meeting_evaluation = rows;
+			console.log(result);
+			complete_flag++;
+			if( complete_flag === _EVALUATION_INFO_FLAG_CNT )
+				res.render('meeting_evaluation', {result:result} );
+		});
+	}
 };
 
 exports.post_meeting_appraisal = function(req, res){
@@ -396,42 +396,6 @@ exports.post_meeting_evaluation = function(req, res) {
 	});
 };
 
-exports.post_meeting_close = function(req, res){
-
-	var result;
-	/** session start **
-	if( !req.session.email || typeof req.session.email === "undefined" )
-	{
-		result = { result:"failed", msg:"You should be logged.", target:"" };
-		res.send(result);
-	}
-	/** session end **/
-
-	var evt = new EventEmitter();
-	var dao_c = require('../sql/common');
-	var dao_m = require('../sql/meeting');
-	var params = { 
-		idx_meeting:req.session.idx_meeting,	 
-		idx_group:req.session.idx_group,
-		idx_user:req.session.idx_user
-	};
-	var complete_flag = 0;
-
-	if( params['idx_meeting'].length < 1 )
-	{
-		result = { result:"failed", msg:"You should select meeting", target:"" };
-		res.send(result);
-	}
-	else
-		dao_m.dao_set_meeting_close(evt, mysql_conn, params);
-
-	evt.on('set_meeting_close', function(err, rows){
-		if(err) throw err;
-		result = { result:"successful", msg:"successful"  };
-		res.send(result);
-	});
-};
-
 exports.meeting_result = function(req, res){
 	/** session start **/
 	//if( !req.session.email || typeof req.session.email === "undefined" )
@@ -463,6 +427,7 @@ exports.meeting_result = function(req, res){
 		if(err) throw err;
 		result.meeting_result = rows;
 		complete_flag++;
+		console.log(result);
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
@@ -472,6 +437,7 @@ exports.meeting_result = function(req, res){
 		if(err) throw err;
 		result.meeting_result_appraisal = rows;
 		complete_flag++;
+		console.log(result);
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
@@ -481,6 +447,7 @@ exports.meeting_result = function(req, res){
 		if(err) throw err;
 		result.meeting_tools_image = rows;
 		complete_flag++;
+		console.log(result);
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
@@ -490,6 +457,7 @@ exports.meeting_result = function(req, res){
 		if(err) throw err;
 		result.meeting_charts = rows;
 		complete_flag++;
+		console.log(result);
 		if( complete_flag === _RESULT_COMPLETE_FLAG_CNT )
 			res.render('meeting_result', {result:result} );
 	});
@@ -505,15 +473,7 @@ exports.minutes = function(req, res){
 	res.render('minutes', { title: '' });
 };
 
-exports.meeting_save = function(req, res){
-
-	/* debug */
-	req.session.idx_user = 1;
-	req.session.email = "orchestra@gmail.com";
-	req.session.idx_group = 1;
-	req.session.idx_meeting = 19;
-	
-
+exports.post_meeting_close = function(req, res){
 	var result = {};
 	/** session start **/
 	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
@@ -533,21 +493,20 @@ exports.meeting_save = function(req, res){
 		{	
 			var idx_meeting = req.session.idx_meeting;
 			var idx_group = req.session.idx_group;
+			var idx_user = req.session.idx_user;
 
 			var evt = new EventEmitter();
 			var dao_m = require('../sql/meeting');
+			var dao_c = require('../sql/common');
 
 			////  redis 클라이언트 생성  ////
 			var redis = require('redis'), 
 				client = redis.createClient(6379, '61.43.139.70'), multi;
 
-			var tmpGroup = "group1";
-			var tmpTool = "matrix1";
-			var tmpOrder = tmpGroup+":"+tmpTool+":order";
-			var tmpOption = tmpGroup+":"+tmpTool+":options";
 			var params = {
 				idx_meeting:idx_meeting,
-				idx_group:idx_group
+				idx_group:idx_group,
+				idx_user:idx_user
 			};
 
 			var dataCnt = 0;
@@ -557,100 +516,112 @@ exports.meeting_save = function(req, res){
 			var optionsCompleteFlag = 0;
 			var optionsFlag = false;
 
-			// group 
-			
-			// data 
-			client.keys("group1:*:order", function(err, replies) {
-				// data 가 없을 경우
-				if( replies.length < 1 )
-					dataFlag = true;
-				replies.forEach( function(key, index) {
-					var keySplit = key.toString().split(":");
-					client.lrange(key, 0, -1, function (err, replies) {	
-						dataCnt +=replies.length;
-						replies.forEach( function (data, index) {
-							var dataSplit = data.toString().split(":");
-							client.hkeys(data, function (err, parent){
-								var parentSplit = parent.toString().split(":");
-								client.hget(data, parent, function (err, val) {
-									client.get(data+":client", function (err, client){
-										var idx_tool = 1;
-										params['idx_tool'] = idx_tool;
-										params['delimiter'] = dataSplit[0]+":"+dataSplit[1];
-										params['key'] = dataSplit[2];
-										params['parent'] = parentSplit[2];
-										params['value'] = val;
-										params['type'] = 'data';
-										params['client'] = client;
-										console.log(params);
-										//dao_m.dao_set_meeting_save_data(evt, mysql_conn, params);
-										//var err = null;
-										//var rows = null;
-										//evt.emit('set_meeting_save_data', err, rows);
+			dao_c.dao_begin_work(evt, mysql_conn);
+			// 트랜젝션 실행 후
+			evt.on('begin_work', function(err, rows){
+				if(err) throw err;
+
+				// data 
+				// meeting data select
+				var m_d_selector = idx_meeting+":*:order"
+				client.keys(m_d_selector, function(err, replies) {
+					// data 가 없을 경우
+					if( replies.length < 1 )
+						dataFlag = true;
+					replies.forEach( function(key, index) {
+						var keySplit = key.toString().split(":");
+						client.lrange(key, 0, -1, function (err, replies) {	
+							dataCnt +=replies.length;
+							replies.forEach( function (data, index) {
+								var dataSplit = data.toString().split(":");
+								client.hkeys(data, function (err, parent){
+									var parentSplit = parent.toString().split(":");
+									client.hget(data, parent, function (err, val) {
+										client.get(data+":client", function (err, client){
+											params['tool'] = dataSplit[1];
+											params['delimiter'] = dataSplit[0]+":"+dataSplit[1];
+											params['key'] = dataSplit[2];
+											params['parent'] = parentSplit[2];
+											params['value'] = val;
+											params['type'] = 'data';
+											params['client'] = client;
+											dao_m.dao_set_meeting_save_data(evt, mysql_conn, params);
+										});
 									});
 								});
 							});
 						});
 					});
 				});
-			});
-			
-			/*
-			// options
-			client.keys("group1:*:options", function(err, replies) {
-				// options 가 없을 경우
-				if( replies.length < 1 )
-					optionsFlag = true;
-				replies.forEach( function(key, index) {
-					var keySplit = key.toString().split(":");
-					client.hkeys(key, function (err, replies){
-						replies.forEach( function(parent, index){
-							optionsCnt += 1;
-							var parentSplit = parent.toString().split(":");
-							client.hget(key, parent, function (err, val) {
-								var idx_meeting = 1;
-								var idx_group = 1;
-								var idx_tool = 1;
-								params['idx_meeting'] = idx_meeting;
-								params['idx_group'] = idx_group;
-								params['idx_tool'] = idx_tool;
-								params['delimiter'] = keySplit[0]+":"+keySplit[1];
-								params['key'] = 0;
-								params['parent'] = parentSplit[2];
-								params['value'] = val;
-								params['type'] = 'options';
-								params['client'] = 0;
-								dao_m.dao_set_meeting_save_options(evt, mysql_conn, params);
-								//var err = null;
-								//var rows = null;
-								//evt.emit('set_meeting_save_options', err, rows);
+
+				// options
+				// meeting options select
+				var m_o_selector = idx_meeting+":*:options"
+				client.keys(m_o_selector, function(err, replies) {
+					// options 가 없을 경우
+					if( replies.length < 1 )
+						optionsFlag = true;
+					replies.forEach( function(key, index) {
+						var keySplit = key.toString().split(":");
+						client.hkeys(key, function (err, replies){
+							replies.forEach( function(parent, index){
+								optionsCnt += 1;
+								var parentSplit = parent.toString().split(":");
+								client.hget(key, parent, function (err, val) {
+									params['tool'] = keySplit[1];
+									params['delimiter'] = keySplit[0]+":"+keySplit[1];
+									params['key'] = 0;
+									params['parent'] = parentSplit[2];
+									params['value'] = val;
+									params['type'] = 'options';
+									params['client'] = 0;
+									dao_m.dao_set_meeting_save_options(evt, mysql_conn, params);
+								});
 							});
 						});
 					});
 				});
 			});
-			*/
 
 			evt.on('set_meeting_save_data', function(err, sql){
-				if(err) throw err;
-				dataCompleteFlag++;
-				console.log("dataCompleteFlag : " + dataCompleteFlag + " / " + dataCnt);
-				if( dataCnt === dataCompleteFlag )
-					dataFlag = true;
-				var redirectFlag = optionsFlag && dataFlag;
-				if( redirectFlag )
-					res.redirect("/page/meeting_result");
+				if(err) 
+					dao_c.dao_rollback(evt, mysql_conn);
+				else
+				{
+					dataCompleteFlag++;
+					if( dataCnt === dataCompleteFlag )
+						dataFlag = true;
+					var redirectFlag = optionsFlag && dataFlag;
+					if( redirectFlag )
+						dao_m.dao_set_meeting_close(evt, mysql_conn, params);
+				}
 			});
-
 			evt.on('set_meeting_save_options', function(err, sql){
+				if(err) 
+					dao_c.dao_rollback(evt, mysql_conn);
+				else
+				{
+					optionsCompleteFlag++;
+					if( optionsCnt === optionsCompleteFlag )
+						optionsFlag = true;
+					var redirectFlag = optionsFlag && dataFlag;
+					if( redirectFlag )
+						dao_m.dao_set_meeting_close(evt, mysql_conn, params);
+				}
+			});
+			evt.on('set_meeting_close', function(err, rows){
 				if(err) throw err;
-				optionsCompleteFlag++;
-				console.log("optionsCompleteFlag : " + optionsCompleteFlag + " / " + optionsCnt);
-				if( optionsCnt === optionsCompleteFlag )
-					optionsFlag = true;
-				var redirectFlag = optionsFlag && dataFlag;
-				if( redirectFlag )
-					res.redirect("/page/meeting_result");
+				dao_c.dao_commit(evt, mysql_conn);
+			});
+			evt.on('commit', function(err, rows){
+				if(err) throw err;
+				result = { result:"successful", msg:"successful"  };
+				res.send(result);
+			});
+			evt.on('rollback', function(err, rows){
+				if(err) throw err;
+				result = { result:"failed", msg:"failed"  };
+				res.send(result);
 			});
 		}
 	}

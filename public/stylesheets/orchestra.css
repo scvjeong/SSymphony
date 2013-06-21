@@ -1736,6 +1736,9 @@ h6 small {
 	background-repeat: repeat-x;
 	filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ffd7d7d7', endColorstr='#ffFFFFFF', GradientType=0);
 }
+.container-inner{
+	width:1300px;
+}
 #group-calendar{
 	float:left;
 	width:750px;
@@ -1939,7 +1942,7 @@ h6 small {
 }
 
 #meeting-list-page{
-	display:block;
+	float:left;
 }
 #group-info-page{
 	display:none;
@@ -2299,7 +2302,7 @@ h6 small {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	z-index: 1040;
+	z-index: 9500;
 	background-color: #000000;
 }
 

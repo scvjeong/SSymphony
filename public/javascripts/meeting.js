@@ -1021,7 +1021,26 @@ function initNextProcess()
 				data: {idx_agenda:idx_agenda},
 				dataType: 'json',
 				success: function(json) {
-					console.log(json);
+					if( json.result === "failed" )
+						alert( json.msg );
+					else if( json.result === "successful" )
+					{
+						var used_time = getTimeFormat(json.use_time*60);
+						var $use_time_obj = $("#meeting .process-box .process-unit[idx="+idx_agenda+"] .use_time");
+						var use_time = $use_time_obj.html().replace("(","").replace(")","");
+						var use_time_t = getTime(use_time).t;
+						var $lead_time = $("#meeting .process-box .process-unit[idx="+idx_agenda+"] .lead_time");
+						var lead_time_t = getTime($lead_time.html()).t;
+						var $limit_time = $("#meeting .process-box .process-unit[idx="+idx_agenda+"] .limit_time");
+						var limit_time = getTimeFormat(lead_time_t + use_time_t);
+						$limit_time.html(limit_time);
+						$processing.removeClass("processing");
+						_process_time = 0;
+						$processing.next().addClass("processing");
+						var next_limit_time = $(".use_time", $processing.next()).attr("limit_time")*1 + use_time_t;
+						$(".lead_time", $processing.next()).html(limit_time);
+						$(".limit_time", $processing.next()).html( getTimeFormat(next_limit_time) );
+					}
 				}
 			});
 		}
@@ -1563,11 +1582,18 @@ function showTime()
 	if (second < 10)	tSecond = "0" + second;
 	else	tSecond = second;
 
-	var nowTime = "(" + tHour + ":" + tMinute + ":" + tSecond + ")";
+	var nowTime = tHour + ":" + tMinute + ":" + tSecond;
 
 	var limit_time = $('.processing .use_time').attr("limit_time")*1;
 	var persent = Math.floor(_process_time / limit_time * 100);
-	if( persent > 100 ) persent = 100;
+	if( persent > 100 ) 
+	{
+		persent = 100; 
+		time_over = "time_over";
+		$('.processing .use_used_time').addClass("time_over");
+	}
+	else
+		$('.processing .use_used_time').removeClass("time_over");
 
 	$('.processing .use_time').html(nowTime);
 	$('.processing .progress-bar-fill').width(persent+"%");

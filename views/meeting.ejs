@@ -360,7 +360,7 @@
 								break;
 					%>
 						<li class="process-unit <%=result.meeting[i].class_name%>" idx="<%=result.meeting[i].agenda_idx%>">
-							<span><%=result.meeting[i].agenda_subject%></span><span class="use_time" limit_time="<%=result.meeting[i].agenda_time*60%>">(<%=result.meeting[i].agenda_used_time%>)</span>
+							<span><%=result.meeting[i].agenda_subject%></span><span class="use_used_time <%=result.meeting[i].agenda_time_over%>">(<span class="use_time" limit_time="<%=result.meeting[i].agenda_time%>"><%=result.meeting[i].agenda_used_time%></span>/<%=result.meeting[i].agenda_limit_time%>)</span>
 							<div class="progress-bar">
 								<div class="progress-bar-fill" style="width:0%;"></div>
 							</div>

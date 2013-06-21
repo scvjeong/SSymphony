@@ -110,59 +110,76 @@ exports.main = function(req, res){
 				var c_t = new Date();
 				var s_t = util.getTime(result.meeting[0].start_time);
 				var e_t = util.getTime(result.meeting[0].end_time);
-				var time, time_obj, used_time;
 				var total_time = 0;
 				var start_point = true;
-				var run_time = ((c_t.getTime() - d_t.getTime() + 3600000*9) / 1000) - s_t.t;
+				var run_time = Math.floor(((c_t.getTime() - d_t.getTime() + 3600000*9) / 1000) - s_t.t);
 				if( run_time < 1 ) run_time = 0;
-				result.meeting[0].run_time = Math.floor(run_time);
+				result.meeting[0].run_time = run_time;
 				result.meeting[0].limit_time = util.getTimeFormat(e_t.t-s_t.t);
 				result.process = {time:run_time};
 
+				var is_ing, is_prev_ing, start_time, end_time, used_time, time_over;
 
 				for(var i=0;i<result.meeting.length;i++)
 				{
+					is_ing = (result.meeting[i].agenda_status === "ing");
 					if(i===0)
 					{
-						result.meeting[i].agenda_start_time = "00:00:00";
-						if( result.meeting[i].agenda_use_time > 0 )
-							result.meeting[i].agenda_end_time = util.getTimeFormat(result.meeting[i].agenda_use_time*60);
-						else
-							result.meeting[i].agenda_end_time = util.getTimeFormat(result.meeting[i].agenda_time*60);
-						if( result.meeting[i].agenda_status === "ing" )
+						start_time = "00:00:00";
+						// 현재 단계 완료
+						if( !is_ing )
 						{
-							// used_time
-							result.meeting[i].agenda_used_time = util.getTimeFormat(total_time);
-							// total_time
-							total_time += Math.floor(result.meeting[i].run_time);
+							end_time = result.meeting[i].agenda_use_time;
+							used_time = result.meeting[i].agenda_use_time;
+							total_time += result.meeting[i].agenda_use_time;
 						}
 						else
 						{
-							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[i].agenda_use_time*60);
-							total_time += result.meeting[i].agenda_use_time*60;
+							end_time = result.meeting[i].agenda_time;
+							used_time = run_time;
+							total_time += result.meeting[i].agenda_time;
 						}
 					}
 					else
 					{
-						if( result.meeting[i-1].agenda_use_time > 0 )
-							result.meeting[i].agenda_start_time = util.getTimeFormat(result.meeting[i-1].agenda_use_time*60);
+						is_prev_ing = (result.meeting[i-1].agenda_status === "ing");
+						// 현재 단계 완료
+						if( !is_ing )
+						{
+							start_time = total_time;
+							end_time = start_time + result.meeting[i].agenda_use_time;
+							used_time = result.meeting[i].agenda_use_time;
+							total_time += used_time;
+						}
+						// 전 단계가 진행 됨 ( 현재 진행중 )
+						else if( !is_prev_ing )
+						{
+							start_time = total_time;
+							end_time = start_time + result.meeting[i].agenda_time;
+							used_time = run_time - total_time;
+							total_time += result.meeting[i].agenda_time;
+						}
+						// 전 단계가 진행 안됨
 						else
-							result.meeting[i].agenda_start_time = util.getTimeFormat(result.meeting[i-1].agenda_time*60);
-						time_obj = util.getTime(result.meeting[i].agenda_start_time);
-						time = time_obj.t + result.meeting[i].agenda_time*60;
-						result.meeting[i].agenda_end_time = util.getTimeFormat(time);
-						// used_time
-						if( result.meeting[i].agenda_status === "ing" )
-							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[0].run_time-total_time);
-						else
-							result.meeting[i].agenda_used_time = util.getTimeFormat(result.meeting[i].agenda_use_time*60);
-						// total_time
-						total_time += result.meeting[i].agenda_use_time;
+						{
+							start_time = total_time;
+							end_time = start_time + result.meeting[i].agenda_time;
+							used_time = 0;
+							total_time += result.meeting[i].agenda_time;
+						}
 					}
-					// total_time
+					if( used_time > result.meeting[i].agenda_time )
+						result.meeting[i].agenda_time_over = "time-over";
+					else
+						result.meeting[i].agenda_time_over = "";
+					result.meeting[i].agenda_start_time = util.getTimeFormat(start_time);
+					result.meeting[i].agenda_end_time = util.getTimeFormat(end_time);
+					result.meeting[i].agenda_time = result.meeting[i].agenda_time;
+					result.meeting[i].agenda_limit_time = util.getTimeFormat(result.meeting[i].agenda_time);
+					result.meeting[i].agenda_used_time = util.getTimeFormat(used_time);
 					result.meeting[i].agenda_total_time = total_time;
 
-					if( result.meeting[i].agenda_status === "ing" && start_point )
+					if( is_ing && start_point )
 					{
 						result.meeting[i].class_name = "processing";
 						used_time = util.getTime(result.meeting[i].agenda_used_time);
@@ -189,11 +206,12 @@ exports.main = function(req, res){
 
 exports.post_next_process = function(req, res){
 
-	/* debug */
+	/* debug 
 	req.session.idx_user = 1;
 	req.session.email = "orchestra@gmail.com";
 	req.session.idx_group = 1;
 	req.session.idx_meeting = 19;
+	*/
 
 	var result = {};
 	/** session start **/
@@ -208,7 +226,7 @@ exports.post_next_process = function(req, res){
 		req.assert("idx_agenda", "valid meeting required").notEmpty().isInt();
 		var errors = req.validationErrors();
 		if( errors )
-			res.send(errors);
+			res.send(errors[0]);
 		else
 		{
 			var evt = new EventEmitter();
@@ -217,7 +235,8 @@ exports.post_next_process = function(req, res){
 			var dao_ml = require('../sql/meeting_list');
 			var dao_mp = require('../sql/meeting_planning');
 			var params = {
-				idx_meeting:req.session.idx_meeting
+				idx_meeting:req.session.idx_meeting,
+				idx_agenda:req.param("idx_agenda")*1
 			};
 			
 			var c_d = new Date();
@@ -227,12 +246,52 @@ exports.post_next_process = function(req, res){
 				if(err) throw err;
 				if( rows.length > 0 )
 				{
-					result.result = rows;
-					result.session = req.session;
+					var current_time, date_time;
+					var use_time;
+					var prev_use_time = 0;
+					for(var i=0;i<rows.length;i++)
+					{
+						if( rows[i].agenda_idx === params.idx_agenda && i === (rows.length-1) )
+						{
+							result = { result:"failed", msg:"This is last process", next:"exit_meeting" }
+							break;
+						}
+						else if( rows[i].agenda_idx === params.idx_agenda )
+						{
+							result = {};
+							current_time = new Date().getTime();
+							date_time = new Date(rows[i].date).getTime()-9*3600000;
+							start_time = util.getTime(rows[i].start_time).t;
+							params.date_time = date_time;
+							params.start_time = start_time;
+							params.prev_use_time = prev_use_time;
+							params.prev_use_time_t = prev_use_time;
+							use_time = ((current_time - date_time)/1000) - start_time - prev_use_time;
+							params.u_t = use_time;
+							params.use_time = Math.floor(use_time);
+
+							console.log(params);
+							dao_m.dao_set_agenda_complete(evt, mysql_conn, params);
+							break; 
+						}
+						else
+							result = { result:"failed", msg:"Not exist process in meeting "+params.idx_agenda };
+						prev_use_time += rows[i].agenda_use_time;
+					}
+					if( result.result === "failed" )
+						res.send(result);
 				}
 				else
+				{
 					result = { result:"failed", msg:"You should be logged.", target:"" };
-				res.send({result:result});
+					res.send(result);
+				}
+			});
+			
+			evt.on('set_agenda_complete', function(err, rows){
+				if(err) throw err;
+				result = { result:"successful", use_time:params.use_time };
+				res.send(result);
 			});
 		}
 	}

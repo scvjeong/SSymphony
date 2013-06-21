@@ -1,8 +1,3 @@
-
-//var list_var = {};
-
-//socket = io.connect('http://61.43.139.69:50001/group');	// socket.io 서버에 접속
-
 var tmpIndent = 0;	// 현재 들여쓰기 상태
 var tmpLastId = 100;	// 마지막 ID 관리
 //var tmpClient = 0;	//현재 클라이언트 번호
@@ -11,12 +6,6 @@ var tmpTool = 0;  //현재 도구
 var tmpToolSelect = 0;
 var clientColor = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");	
 var inputFlag = 0;	//키입력 감지하기 위한 변수		
-	
-/*
-$(document).ready(function() {
-	init_list("list1", "group1");			
-});
-*/
 
 ////  리스트 초기 설정해주는 함수  ////
 function initlist(group, tool) { initList(group, tool); }
@@ -27,15 +16,11 @@ function initList(group, tool)
 	tool = "list" + tool;
 	group = "group" + group;
 	_now_tool_data.variables.tmpTool = tool;
-	_now_tool_data.variables.tmpGroup = group;
-	
 	_now_tool_data.variables.tmpToolSelect = $('[id='+_now_tool_data.variables.tmpTool+']');
 	
-	console.log(_now_tool_data.variables.tmpToolSelect.attr('id'));
-
-	_socket_list.emit('join_room', { group: _now_tool_data.variables.tmpGroup });
+	_socket_list.emit('join_room', { idx_meeting: _idx_meeting });
 	
-	_socket_list.emit('set_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });
+	_socket_list.emit('set_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });
 
 	////  Bullet 클릭 이벤트 등록 - 자식 노드 숨김  ////
 	_now_tool_data.variables.tmpToolSelect.find('.list_space').delegate('.bullet', 'click', function() {
@@ -64,7 +49,7 @@ function initList(group, tool)
 			tmpSelectInput.children('.tmp_editing').css({ "text-decoration": "" });	
 		}
 		var tmpId = tmpSelectInput.attr('taskid');
-		_socket_list.emit('set_option_data',  { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId }); 
+		_socket_list.emit('set_option_data',  { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId }); 
 		//console.log("Check ID: "+tmpId);
 		//socket.emit('set_check', { id: tmpId });
 	});		
@@ -78,7 +63,7 @@ function addSocketListenerForList()
 	////  다른 클라이언트가 데이터 초기화했을 때  ////
 	_socket_list.on('get_init_tool_data', function (data) {
 		_now_tool_data.variables.tmpToolSelect.find('.list_space > .children').children().remove();
-		_socket_list.emit('set_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });
+		_socket_list.emit('set_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });
 	});
 	
 	////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수_tree  ////
@@ -355,9 +340,9 @@ function addSocketListenerForList()
 
 function list_init_data() {
 	//alert("Init Data");
-	_socket_list.emit('set_init_tool_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });	
+	_socket_list.emit('set_init_tool_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });	
 	_now_tool_data.variables.tmpToolSelect.find('.list_space > .children').children().remove();
-	_socket_list.emit('set_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });
+	_socket_list.emit('set_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });
 }
 
 ////  input 영역 마우스로 클릭시 호출되는 함수  ////
@@ -391,7 +376,7 @@ function list_mouse_focus(){
 		var preIndex = _now_tool_data.variables.tmpToolSelect.find('.bullet').index(preBullet);	 // 이전 Index 구함
 		var preVal = _now_tool_data.variables.tmpToolSelect.find('.input_open > .tmp_editing').val();	// 이전 값 구함
 	
-		_socket_list.emit('set_insert_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+		_socket_list.emit('set_insert_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 		//서버 소켓으로 데이터 전송
 
 		////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
@@ -432,6 +417,7 @@ function list_set_indent(indentStatus) {
 
 ////  현재 값 서버로 전송해주고 inputbox 추가  ////
 function list_add_input_box(data){
+
 	var tool = data.tool;
 	//var preInput = _now_tool_data.variables.tmpToolSelect.find('.input_open');
 	var preInput = $("#"+tool).find('.input_open');
@@ -441,7 +427,6 @@ function list_add_input_box(data){
 	if( preIndentStatus != 0 ) {
 		var parentChildrenClass = preInput.parent().parent();
 		parentId = parentChildrenClass.prev('.input_task').attr('taskid');	// 부모 id 가져옴
-		//alert(parentId);
 	}
 	
 	//var preBullet = _now_tool_data.variables.tmpToolSelect.find('.input_open a');
@@ -453,7 +438,7 @@ function list_add_input_box(data){
 
 	preInput.css({ "background": _now_tool_data.variables.clientColor[0] });
 
-	_socket_list.emit('set_insert_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+	_socket_list.emit('set_insert_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 	//서버 소켓으로 데이터 전송
 
 	preInput.attr('class', 'input_task');					
@@ -505,7 +490,7 @@ function list_add_indent() {
 
 			list_set_indent(_now_tool_data.variables.tmpIndent);
 
-			_socket_list.emit('set_change_depth', {  group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
+			_socket_list.emit('set_change_depth', {  idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
 		}		
 		else if ( preClass.attr('class') == "edit_open" )	//직전 클래스가 edit_open인 경우 태그만 추가
 		{
@@ -516,7 +501,7 @@ function list_add_indent() {
 
 			list_set_indent(_now_tool_data.variables.tmpIndent);
 
-			_socket_list.emit('set_change_depth', {  group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
+			_socket_list.emit('set_change_depth', {  idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
 		}
 	}	
 }
@@ -541,7 +526,7 @@ function list_remove_indent() {
 		}
 		list_set_indent(_now_tool_data.variables.tmpIndent);	// 들여쓰기 설정 함수 호출
 
-		_socket_list.emit('set_change_depth', {  group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
+		_socket_list.emit('set_change_depth', {  idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
 	}
 }
 
@@ -593,7 +578,7 @@ function list_del_line() {
 			}						
 		}						
 		var delId = tmpInput.attr('taskid');
-		_socket_list.emit('set_delete_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: delId  } );
+		_socket_list.emit('set_delete_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: delId  } );
 	}
 }
 
@@ -614,7 +599,7 @@ function list_start_input() {
 	
 	console.log("Id: "+tmpId+"// addClient: "+_client_id);
 
-	_socket_list.emit('set_input_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
+	_socket_list.emit('set_input_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
 }
 
 //// input 영역에서 키보드 입력시 호출되는 함수  ////
@@ -623,7 +608,7 @@ function list_key_input(event) {
 	if ( inputKey == 13 )	// Input Enter
 	{
 		//alert("Enter");
-		_socket_list.emit('set_last_id', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });		
+		_socket_list.emit('set_last_id', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });		
 		_now_tool_data.variables.inputFlag = 0;
 	}
 	else if ( inputKey == 9 && event.shiftKey ) // Input Shift + Tab
@@ -671,11 +656,11 @@ function list_key_input(event) {
 }
 
 function list_add_new_input() {
-	_socket_list.emit('set_last_id', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });		
+	_socket_list.emit('set_last_id', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });		
 	_now_tool_data.variables.inputFlag = 0;
 }
 
 function list_change_data() {
-	_socket_list.emit('set_change_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, change: 'mindmap1' });
+	_socket_list.emit('set_change_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, change: 'mindmap1' });
 }
 

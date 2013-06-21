@@ -24,13 +24,12 @@ function initmindmap(group, tool) { initMindmap(group, tool); }
 function initMindmap(group, tool)
 {
 	_now_tool_data.variables.tmpTool = 'mindmap' + tool;
-	_now_tool_data.variables.tmpGroup = group;
 
 	_now_tool_data.variables.tmpToolSelect = $('[id='+_now_tool_data.variables.tmpTool+']');
 
 	////  socket.io 서버의 해당 그룹에 접속  ////
-	_socket_mindmap.emit('join_room', { group: _now_tool_data.variables.tmpGroup });	
-	_socket_mindmap.emit('set_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });
+	_socket_mindmap.emit('join_room', { idx_meeting: _idx_meeting });	
+	_socket_mindmap.emit('set_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });
 
 	////  Bullet 클릭 이벤트 등록 - 자식 노드 숨김  ////
 	_now_tool_data.variables.tmpToolSelect.find('.list_space').delegate('.bullet', 'click', function() {
@@ -406,7 +405,7 @@ function mindmap_add_input_box(){
 
 	preInput.css({ "background": clientColor[0] });
 
-	_socket_mindmap.emit('set_insert_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+	_socket_mindmap.emit('set_insert_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 	//서버 소켓으로 데이터 전송
 
 	preInput.attr('class', 'input_task');					
@@ -454,7 +453,7 @@ function mindmap_add_indent() {
 
 			mindmap_set_indent(_now_tool_data.variables.tmpIndent);
 
-			_socket_mindmap.emit('set_change_depth', {  group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
+			_socket_mindmap.emit('set_change_depth', {  idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
 		}		
 		else if ( preClass.attr('class') == "edit_open" )	//직전 클래스가 edit_open인 경우 태그만 추가
 		{
@@ -465,7 +464,7 @@ function mindmap_add_indent() {
 
 			mindmap_set_indent(_now_tool_data.variables.tmpIndent);
 
-			_socket_mindmap.emit('set_change_depth', {  group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
+			_socket_mindmap.emit('set_change_depth', {  idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
 		}
 	}	
 }
@@ -490,7 +489,7 @@ function mindmap_remove_indent() {
 		}
 		mindmap_set_indent(_now_tool_data.variables.tmpIndent);	// 들여쓰기 설정 함수 호출
 
-		_socket_mindmap.emit('set_change_depth', {  group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
+		_socket_mindmap.emit('set_change_depth', {  idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId,  depth: _now_tool_data.variables.tmpIndent });
 	}
 }
 
@@ -542,7 +541,7 @@ function mindmap_del_line() {
 			}						
 		}						
 		var delId = tmpInput.attr('taskid');
-		_socket_mindmap.emit('set_delete_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: delId  } );
+		_socket_mindmap.emit('set_delete_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: delId  } );
 	}
 }
 
@@ -563,7 +562,7 @@ function mindmap_start_input() {
 	
 	//console.log("Id: "+tmpId+"// addClient: "+tmpClient);
 
-	_socket_mindmap.emit('set_input_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
+	_socket_mindmap.emit('set_input_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: tmpId, parent: tmpParentId, index: tmpIndex, client: _client_id } );
 
 }
 
@@ -599,7 +598,7 @@ function mindmap_mouse_focus(){
 		var preIndex = _now_tool_data.variables.tmpToolSelect.find('.bullet').index(preBullet);	 // 이전 Index 구함
 		var preVal = _now_tool_data.variables.tmpToolSelect.find('.input_open > .tmp_editing').val();	// 이전 값 구함
 	
-		_socket_mindmap.emit('set_insert_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
+		_socket_mindmap.emit('set_insert_tree_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: preId, parent: parentId, index: preIndex, val: preVal } );
 		//서버 소켓으로 데이터 전송
 
 		////  포커싱된 클래스 상태 open으로 변경 및 기존 open 클래스 task로 변경  ////
@@ -617,7 +616,7 @@ function mindmap_key_input() {
 	if ( inputKey == 13 )	// Input Enter
 	{
 		//alert("Enter");
-		_socket_mindmap.emit('set_last_id', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });		
+		_socket_mindmap.emit('set_last_id', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool });		
 		_now_tool_data.variables.inputFlag = 0;
 	}
 	else if ( inputKey == 9 && event.shiftKey ) // Input Shift + Tab
@@ -707,7 +706,7 @@ function mindmap_get_list_data() {
 function mindmap_draw() {
 	console.log("CALL mindmap_draw");
 	mindmap_draw_mindmap();
-	_socket_mindmap.emit('set_option_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: '', option: 'draw', val: '' });
+	_socket_mindmap.emit('set_option_data', { idx_meeting: _idx_meeting, tool: _now_tool_data.variables.tmpTool, id: '', option: 'draw', val: '' });
 }
 
 function mindmap_draw_mindmap() {

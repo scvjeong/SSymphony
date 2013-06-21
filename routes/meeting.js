@@ -506,124 +506,154 @@ exports.minutes = function(req, res){
 };
 
 exports.meeting_save = function(req, res){
+
+	/* debug */
+	req.session.idx_user = 1;
+	req.session.email = "orchestra@gmail.com";
+	req.session.idx_group = 1;
+	req.session.idx_meeting = 19;
+	
+
+	var result = {};
 	/** session start **/
-	//if( !req.session.email || typeof req.session.email === "undefined" )
-	//	res.redirect("/");
+	if( !req.session.email || !req.session.idx_group || typeof req.session.email === "undefined" )
+	{
+		result = { result:"failed", msg:"You should be logged.", target:"" };
+		res.send(result);
+	}
 	/** session end **/
-	
-	var evt = new EventEmitter();
-	var dao_m = require('../sql/meeting');
+	else
+	{	
+		if( false )
+		{
+			result = { result:"failed", msg:"You should be logged.", target:"" };
+			res.send(result);
+		}		
+		else
+		{	
+			var idx_meeting = req.session.idx_meeting;
+			var idx_group = req.session.idx_group;
 
-	////  redis 클라이언트 생성  ////
-	var redis = require('redis'), 
-		client = redis.createClient(6379, '61.43.139.70'), multi;
+			var evt = new EventEmitter();
+			var dao_m = require('../sql/meeting');
 
-	var tmpGroup = "group1";
-	var tmpTool = "matrix1";
-	var tmpOrder = tmpGroup+":"+tmpTool+":order";
-	var tmpOption = tmpGroup+":"+tmpTool+":options";
-	var params = {};
-	var dataCnt = 0;
-	var dataCompleteFlag = 0;
-	var dataFlag = false;
-	var optionsCnt = 0;
-	var optionsCompleteFlag = 0;
-	var optionsFlag = false;
-	
-	// data 
-	client.keys("group1:*:order", function(err, replies) {
-		// data 가 없을 경우
-		if( replies.length < 1 )
-			dataFlag = true;
-		replies.forEach( function(key, index) {
-			var keySplit = key.toString().split(":");
-			client.lrange(key, 0, -1, function (err, replies) {	
-				dataCnt +=replies.length;
-				replies.forEach( function (data, index) {
-					var dataSplit = data.toString().split(":");
-					client.hkeys(data, function (err, parent){
-						var parentSplit = parent.toString().split(":");
-						client.hget(data, parent, function (err, val) {
-							client.get(data+":client", function (err, client){
+			////  redis 클라이언트 생성  ////
+			var redis = require('redis'), 
+				client = redis.createClient(6379, '61.43.139.70'), multi;
+
+			var tmpGroup = "group1";
+			var tmpTool = "matrix1";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var tmpOption = tmpGroup+":"+tmpTool+":options";
+			var params = {
+				idx_meeting:idx_meeting,
+				idx_group:idx_group
+			};
+
+			var dataCnt = 0;
+			var dataCompleteFlag = 0;
+			var dataFlag = false;
+			var optionsCnt = 0;
+			var optionsCompleteFlag = 0;
+			var optionsFlag = false;
+
+			// group 
+			
+			// data 
+			client.keys("group1:*:order", function(err, replies) {
+				// data 가 없을 경우
+				if( replies.length < 1 )
+					dataFlag = true;
+				replies.forEach( function(key, index) {
+					var keySplit = key.toString().split(":");
+					client.lrange(key, 0, -1, function (err, replies) {	
+						dataCnt +=replies.length;
+						replies.forEach( function (data, index) {
+							var dataSplit = data.toString().split(":");
+							client.hkeys(data, function (err, parent){
+								var parentSplit = parent.toString().split(":");
+								client.hget(data, parent, function (err, val) {
+									client.get(data+":client", function (err, client){
+										var idx_tool = 1;
+										params['idx_tool'] = idx_tool;
+										params['delimiter'] = dataSplit[0]+":"+dataSplit[1];
+										params['key'] = dataSplit[2];
+										params['parent'] = parentSplit[2];
+										params['value'] = val;
+										params['type'] = 'data';
+										params['client'] = client;
+										console.log(params);
+										//dao_m.dao_set_meeting_save_data(evt, mysql_conn, params);
+										//var err = null;
+										//var rows = null;
+										//evt.emit('set_meeting_save_data', err, rows);
+									});
+								});
+							});
+						});
+					});
+				});
+			});
+			
+			/*
+			// options
+			client.keys("group1:*:options", function(err, replies) {
+				// options 가 없을 경우
+				if( replies.length < 1 )
+					optionsFlag = true;
+				replies.forEach( function(key, index) {
+					var keySplit = key.toString().split(":");
+					client.hkeys(key, function (err, replies){
+						replies.forEach( function(parent, index){
+							optionsCnt += 1;
+							var parentSplit = parent.toString().split(":");
+							client.hget(key, parent, function (err, val) {
 								var idx_meeting = 1;
 								var idx_group = 1;
 								var idx_tool = 1;
 								params['idx_meeting'] = idx_meeting;
 								params['idx_group'] = idx_group;
 								params['idx_tool'] = idx_tool;
-								params['delimiter'] = dataSplit[0]+":"+dataSplit[1];
-								params['key'] = dataSplit[2];
+								params['delimiter'] = keySplit[0]+":"+keySplit[1];
+								params['key'] = 0;
 								params['parent'] = parentSplit[2];
 								params['value'] = val;
-								params['type'] = 'data';
-								params['client'] = client;
-								dao_m.dao_set_meeting_save_data(evt, mysql_conn, params);
+								params['type'] = 'options';
+								params['client'] = 0;
+								dao_m.dao_set_meeting_save_options(evt, mysql_conn, params);
 								//var err = null;
 								//var rows = null;
-								//evt.emit('set_meeting_save_data', err, rows);
+								//evt.emit('set_meeting_save_options', err, rows);
 							});
 						});
 					});
 				});
 			});
-		});
-	});
-	
-	// options
-	client.keys("group1:*:options", function(err, replies) {
-		// options 가 없을 경우
-		if( replies.length < 1 )
-			optionsFlag = true;
-		replies.forEach( function(key, index) {
-			var keySplit = key.toString().split(":");
-			client.hkeys(key, function (err, replies){
-				replies.forEach( function(parent, index){
-					optionsCnt += 1;
-					var parentSplit = parent.toString().split(":");
-					client.hget(key, parent, function (err, val) {
-						var idx_meeting = 1;
-						var idx_group = 1;
-						var idx_tool = 1;
-						params['idx_meeting'] = idx_meeting;
-						params['idx_group'] = idx_group;
-						params['idx_tool'] = idx_tool;
-						params['delimiter'] = keySplit[0]+":"+keySplit[1];
-						params['key'] = 0;
-						params['parent'] = parentSplit[2];
-						params['value'] = val;
-						params['type'] = 'options';
-						params['client'] = 0;
-						dao_m.dao_set_meeting_save_options(evt, mysql_conn, params);
-						//var err = null;
-						//var rows = null;
-						//evt.emit('set_meeting_save_options', err, rows);
-					});
-				});
+			*/
+
+			evt.on('set_meeting_save_data', function(err, sql){
+				if(err) throw err;
+				dataCompleteFlag++;
+				console.log("dataCompleteFlag : " + dataCompleteFlag + " / " + dataCnt);
+				if( dataCnt === dataCompleteFlag )
+					dataFlag = true;
+				var redirectFlag = optionsFlag && dataFlag;
+				if( redirectFlag )
+					res.redirect("/page/meeting_result");
 			});
-		});
-	});
 
-	evt.on('set_meeting_save_data', function(err, sql){
-		if(err) throw err;
-		dataCompleteFlag++;
-		console.log("dataCompleteFlag : " + dataCompleteFlag + " / " + dataCnt);
-		if( dataCnt === dataCompleteFlag )
-			dataFlag = true;
-		var redirectFlag = optionsFlag && dataFlag;
-		if( redirectFlag )
-			res.redirect("/page/meeting_result");
-	});
-
-	evt.on('set_meeting_save_options', function(err, sql){
-		if(err) throw err;
-		optionsCompleteFlag++;
-		console.log("optionsCompleteFlag : " + optionsCompleteFlag + " / " + optionsCnt);
-		if( optionsCnt === optionsCompleteFlag )
-			optionsFlag = true;
-		var redirectFlag = optionsFlag && dataFlag;
-		if( redirectFlag )
-			res.redirect("/page/meeting_result");
-	});
+			evt.on('set_meeting_save_options', function(err, sql){
+				if(err) throw err;
+				optionsCompleteFlag++;
+				console.log("optionsCompleteFlag : " + optionsCompleteFlag + " / " + optionsCnt);
+				if( optionsCnt === optionsCompleteFlag )
+					optionsFlag = true;
+				var redirectFlag = optionsFlag && dataFlag;
+				if( redirectFlag )
+					res.redirect("/page/meeting_result");
+			});
+		}
+	}
 };
 
 exports.ft_help = function(req, res){

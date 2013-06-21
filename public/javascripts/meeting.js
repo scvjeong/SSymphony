@@ -108,7 +108,7 @@ $(document).ready(function() {
             	
             	var fileObject = JSON.stringify(response);
             	console.log("fileObject : " + fileObject);
-            	_socket_common.emit('set_option_data', {group:_group_id, option:'new_share_box_item', tool:"0", id:"0", val:fileObject});
+            	_socket_common.emit('set_option_data', {idx_meeting:_idx_meeting, option:'new_share_box_item', tool:"0", id:"0", val:fileObject});
             	
             	var newfileitem = "";
             	var filetypeinfo = getFileTypeInfo(response.filetype);
@@ -209,13 +209,13 @@ $(window).resize(function() {
 // 소켓 열기
 function openSocket()
 {
-	_socket_common = io.connect('http://61.43.139.69:50000/group');
-	_socket_list = io.connect('http://61.43.139.69:50001/group');
-	_socket_postit = io.connect('http://61.43.139.69:50002/group');
-	_socket_mindmap = io.connect('http://61.43.139.69:50003/group');
-	_socket_vote = io.connect('http://61.43.139.69:50004/group');
-	_socket_matrix = io.connect('http://61.43.139.69:50005/group');
-	_socket_board = io.connect('http://61.43.139.69:50006/group');
+	_socket_common = io.connect('http://61.43.139.69:50000/meeting');
+	_socket_list = io.connect('http://61.43.139.69:50001/meeting');
+	_socket_postit = io.connect('http://61.43.139.69:50002/meeting');
+	_socket_mindmap = io.connect('http://61.43.139.69:50003/meeting');
+	_socket_vote = io.connect('http://61.43.139.69:50004/meeting');
+	_socket_matrix = io.connect('http://61.43.139.69:50005/meeting');
+	_socket_board = io.connect('http://61.43.139.69:50006/meeting');
 
 	/* 서버 리스너 등록 */
 	_socket_common.on('get_list_of_tools', function (data) {
@@ -226,7 +226,6 @@ function openSocket()
 
 	_socket_common.on('get_client', function (data) {
 		_client_id = data.client;
-		console.log("get_client:" + data.client);
 	});
 
 	_socket_common.on('get_last_id', function (data) {
@@ -277,30 +276,26 @@ function openSocket()
 	});
 
 	_socket_common.on('arrive_new_tool', function (data) {
-		var group = data.group;
+		console.log("ON arrive_new_tool");
 		var idx_meeting = data.idx_meeting;
-		console.log("[jeong] idx_meeting : " + idx_meeting);
-		console.log("[jeong] _idx_meeting : " + _idx_meeting);
-		if (group === _group_id && idx_meeting === _idx_meeting )
+		console.log(data);
+		if ( idx_meeting === _idx_meeting )
 		{
 			var idx_meeting = data.idx_meeting;
 			var tool_data = data.tool_data;
-
-			_socket_common.emit('set_tool_list', {
-													group: _group_id,
-													idx_meeting: _idx_meeting
-												});
-
+			
+			_socket_common.emit('set_tool_list', { idx_meeting: _idx_meeting	});
+			console.log("Jeong1");
 			createToolWindow(tool_data);
+			console.log("Jeong2");
 		}
 	});
 
 	_socket_common.on('get_tool_list', function (data) {
 		console.log("ON get_tool_list");
-
 		var tool_list = data.tool_list;
-
-		refreshToolList(tool_list);
+		if( typeof tool_list !== "undefined" )
+			refreshToolList(tool_list);
 	});
 
 	// 지정된 도구창을 띄우는 신호를 받음
@@ -310,15 +305,12 @@ function openSocket()
 	/* /서버 리스너 등록 */
 
 	/* 서버 초기 이벤트 전송 */
-	_socket_common.emit('join_room', {group:_group_id, idx_meeting: _idx_meeting});
-	_socket_common.emit('set_client', {group:_group_id, user: _idx_user});
-	_socket_common.emit('set_tool_list', {
-											group: _group_id,
-											idx_meeting: _idx_meeting
-										});
+	_socket_common.emit('join_room', { idx_meeting: _idx_meeting});
+	_socket_common.emit('set_client', {idx_meeting: _idx_meeting, idx_user: _idx_user});
+	_socket_common.emit('set_tool_list', { idx_meeting: _idx_meeting	});
 	/* /서버 초기 이벤트 전송 */
 	////////////////////////////////아래는 join_room 이후 init 콜백 만들어서 처리
-	//_socket_common.emit('set_list_of_tools', {group:_group_id, idx_meeting:_idx_meeting});
+	//_socket_common.emit('set_list_of_tools', {idx_meeting:_idx_meeting, idx_meeting:_idx_meeting});
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -345,7 +337,6 @@ function createNewTool(tool_type)
 {
 	_socket_common.emit("create_new_tool",
 		{
-			group: _group_id,
 			idx_meeting: _idx_meeting,
 			type: tool_type,
 			now_process_idx: _now_process_idx
@@ -378,8 +369,7 @@ function getToolSource(tool_data, initFuncName)
 	var tool_type = tool_data.type;
 	var tool_id = tool_data.tool_id;
 
-	source_url = "../tool/" + _tool_type + "/" + _group_id + "/" + tool_id;
-	console.log("[getToolSource] 부른 도구의 Source url :: " + source_url);
+	source_url = "../tool/" + _tool_type + "/" + _idx_meeting + "/" + tool_id;
 	
 	$.ajax({
 		type: "GET",
@@ -387,7 +377,6 @@ function getToolSource(tool_data, initFuncName)
 		dataType: "html",
 		success: function(data) {
 			createToolWindow(tool_data, data);
-			console.log("CALL initFuncName [_group_id:" + _group_id + " / tool_id:" + tool_id + "]");
 			initFuncName(_group_id, tool_id);
 		},
 		error: function(err) {
@@ -417,8 +406,6 @@ function openToolWindow(tool_name)
 function createToolWindow(tool_data)
 {
 	console.log("CALL createToolWindow");
-	console.log(tool_data);
-
 	var list_window_width = 600;
 	var list_window_height = 400;
 	var postit_window_width = 600;
@@ -489,22 +476,13 @@ function createToolWindow(tool_data)
 		_common_window_top += 100;
 	}
 
-	var source_url = "../tool/" + tool_type + "/" + _group_id + "/" + tool_id;
+	var source_url = "../tool/" + tool_type + "/" + _idx_meeting + "/" + tool_id;
 	var getToolSource = function(tool_data, source_url) {
 		$.ajax({
 			type: "GET",
 			url: source_url,
 			dataType: "html",
 			success: function(tool_source) {
-				/*
-				console.log("CALL getToolSource");
-				console.log("<tool_data>");
-					console.log(tool_data);
-				console.log("</tool_data>");
-				console.log("<tool_source>");
-					console.log(tool_source);
-				console.log("</tool_source>");
-				*/
 
 				var tool_id = tool_data.tool_id;
 				var tool_type = tool_data.type;
@@ -1098,7 +1076,7 @@ var _tool_type = "";
 function getToolSource(tool_type, initFuncName, is_broadcaster)
 {
 	if (is_broadcaster == true)
-		_socket_common.emit('set_option_data', {group:_group_id, option:'new_tool', tool:tool_type, id:"0", val:"0"});
+		_socket_common.emit('set_option_data', {idx_meeting:_idx_meeting, option:'new_tool', tool:tool_type, id:"0", val:"0"});
 
 	var source_url = "";
 	var tool_index = "";
@@ -1904,7 +1882,7 @@ _canvas.mouseup(function(e) {
 		_pen_data.line_color = _line_color;
 		_socket_common.emit('set_option_data',
 			{
-				group:_group_id,
+				idx_meeting:_idx_meeting,
 				option:'new_canvas_draw',
 				tool:'pen',
 				id:"0",
@@ -1936,7 +1914,7 @@ _canvas.mouseup(function(e) {
 
 		_socket_common.emit('set_option_data',
 			{
-				group:_group_id,
+				idx_meeting:_idx_meeting,
 				option:'new_canvas_draw',
 				tool:'line',
 				id:"0",
@@ -1973,7 +1951,7 @@ _canvas.mouseup(function(e) {
 
 		_socket_common.emit('set_option_data',
 			{
-				group:_group_id,
+				idx_meeting:_idx_meeting,
 				option:'new_canvas_draw',
 				tool:'rect',
 				id:"0",
@@ -2019,7 +1997,7 @@ _canvas.mouseup(function(e) {
 
 		_socket_common.emit('set_option_data',
 			{
-				group:_group_id,
+				idx_meeting:_idx_meeting,
 				option:'new_canvas_draw',
 				tool:'ellipse',
 				id:"0",
@@ -2259,7 +2237,7 @@ if(window.addEventListener) {
 				case 'pen':
 					console.log(now_point);
 					sendingData.data.push({x: now_point.x, y: now_point.y});
-					_socket_common.emit('set_option_data', {group:_group_id, option:'new_canvas_draw', tool:'pen', id:"0", val:sendingData});
+					_socket_common.emit('set_option_data', {idx_meeting:_idx_meeting, option:'new_canvas_draw', tool:'pen', id:"0", val:sendingData});
 					break;
 				case 'rect':
 					var width = now_point.x - prev_point.x;

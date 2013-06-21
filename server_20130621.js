@@ -6,34 +6,66 @@
 function server(io)
 {
 	////  group 채널 개설  ////
-	var meeting = io.of('/meeting').on('connection', function (socket) {
-		console.log("Connect meeting");
+	var meeting = io.of('/group').on('connection', function (socket) {
+		console.log("Connect group");
 
-		////  회의에 join하는 함수  ////
+		////  그룹에 join하는 함수  ////
 		socket.on('join_room', function(data) {
 			console.log("Call: join_room");
-			//var group = data.idx_meeting;
+			var group = data.group;
 			var idx_meeting = data.idx_meeting;
-			socket.join(idx_meeting);
+			var group_id = "group" + data.group;
+			socket.join(group);
+
+			/*
+			
+			// join하려는 그룹이 _meeting_contents에 없으면 새 그룹 생성하기
+			if (!_meeting_contents.hasOwnProperty(group_id))
+			{
+				var temp_group = {
+					whiteboard: {},
+					tools_for_each_process: []
+				};
+				eval("_meeting_contents." + group_id + " = temp_group;");
+				console.log("[!] CREATE GROUP:" + group_id);
+				console.log(eval("_meeting_contents." + group_id));
+			}
+			console.log("<_meeting_contents>");
+			console.log(_meeting_contents);
+			console.log("</_meeting_contents>");
+
+			*/
+
+			console.log("group : " + group);
+			console.log("idx_meeting : " + idx_meeting);
+			console.log("_meeting_contents");
+
+			// 그룹이 등록되어 있지 않으면 새로 등록
+			if (_meeting_contents[group] == undefined)
+			{
+				_meeting_contents[group] = [];
+			}
 
 			// 회의 최초 접속이면 회의 정보 새로 생성
-			if (_meeting_contents[idx_meeting] == undefined)
+			if (_meeting_contents[group][idx_meeting] == undefined)
 			{
-				_meeting_contents[idx_meeting] = {
+				_meeting_contents[group][idx_meeting] = {
 					whiteboard: {},
 					tools: []
 				};
 			}			
+
+			console.log("Join "+group);
 		});
 
 		////  유저 정보 리스트에 저장하여 관리하는 함수  ////
 		socket.on('set_client', function(data) {
 			console.log("Call: set_client");
-			var idx_meeting = data.idx_meeting;
-			var idx_user = data.idx_user;
+			var tmpGroup = data.group;
+			var tmpUser = data.user;
 			//var idx_meeting = data.idx_meeting;	// 수면 아래로 집어 넣은 소스
 			
-			var userInfo = idx_meeting+":user";
+			var userInfo = tmpGroup+":user";
 			var userNum = -1;
 			var countUser = 0;
 
@@ -43,12 +75,12 @@ function server(io)
 				client.lrange(userInfo, 0, -1, function (err, replies) {	
 					replies.forEach( function (user, index) {
 						console.log("user: "+user);
-						if ( user == idx_user ) {		//해당 user가 존재할 때
+						if ( user == tmpUser ) {		//해당 user가 존재할 때
 							userNum = index;
 						}
 					});
 					if ( userNum == -1 ) {	//user가 존재하지 않을 때
-						client.rpush(userInfo, idx_user);
+						client.rpush(userInfo, tmpUser);
 						userNum =countUser;
 						_lastClient = userNum;
 					}
@@ -60,16 +92,17 @@ function server(io)
 		////  클라이언트 해당 tool의 lastId 요청 처리하는 함수  ////
 		socket.on('set_last_id', function(data) {
 			console.log("Call: set_last_id");
-			var idx_meeting = data.idx_meeting;
+			console.log(data);
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpLastId;
 			
-			tmpLastId = getLastId(idx_meeting, tmpTool);
+			tmpLastId = getLastId(tmpGroup, tmpTool);
 
 			////  클라이언트로 lastId 전달  ////
-			socket.emit('get_last_id', { idx_meeting:idx_meeting, tool: tmpTool, last: tmpLastId });
+			socket.emit('get_last_id', { tool: tmpTool, last: tmpLastId });
 		});
-		var getLastId = function(idx_meeting, tool) {
+		var getLastId = function(group, tool) {
 			var last_id = 101;
 			var tmpCheckArray = _idArray.toString();
 
@@ -89,22 +122,128 @@ function server(io)
 		////  클라이언트로 도구 목록 전달  ////
 		socket.on('set_tool_list', function(data) {
 			console.log("Call: set_tool_list");
+			var group = data.group;
 			var idx_meeting = data.idx_meeting;
 
+			console.log("group : " + group);
 			console.log("idx_meeting : " + idx_meeting);
-			console.log("_meeting_contents[idx_meeting] : " + _meeting_contents[idx_meeting]);
-			console.log("_meeting_contents[idx_meeting].tools : " + _meeting_contents[idx_meeting].tools);
+			console.log("_meeting_contents[group][idx_meeting] : " + _meeting_contents[group][idx_meeting]);
+			console.log("_meeting_contents[group][idx_meeting].tools : " + _meeting_contents[group][idx_meeting].tools);
 			
-			var result = _meeting_contents[idx_meeting].tools;
+			var result = _meeting_contents[group][idx_meeting].tools;
 			
 			socket.emit('get_tool_list', { tool_list: result });
 		});
 
+/*
+	_meeting_contents = [
+		[
+			{
+				whiteboard: {
+	
+				},
+				tools: [
+					{
+						type: 'list',
+						name: 'list' + _tool_list_count,
+						title: '리스트 ' + _tool_list_count,
+						variables: {
+							tmpIndent: 0,	// 현재 들여쓰기 상태
+							tmpLastId: 0,	// 마지막 ID 관리
+							tmpClient: 0,	//현재 클라이언트 번호
+							tmpGroup: 0,	//현재 그룹
+							tmpTool: 0,  //현재 도구
+							tmpToolSelect: 0,
+							clientColor: new Array( "none", "#99FF99", "#CCCC99",
+													"#0099FF", "#CCFFCC", "#FFFF66",
+													"#FF9999", "#669999", "#9999FF",
+													"#00CCCC", "#CC9900"),
+							inputFlag: 0
+						}
+					},
+					{
+						type: 'postit',
+						name: 'postit' + _tool_postit_count,
+						title: '포스트잇 ' + _tool_postit_count,
+						variables: {
+							tmpLastId: 100,
+							tmpGroup: 0,
+							tmpTool: 0,
+							tmpItemGroup: 0,
+							tmpClient: 0,
+							tmpToolSelect: 0,
+							preSelectGroup: 0
+						}
+					},
+					{
+						type: 'mindmap',
+						name: 'mindmap' + _tool_mindmap_count,
+						title: '마인드맵 ' + _tool_mindmap_count,
+						variables: {
+							moveFlag: 0,
+							preX: 0,
+							preY: 0,
+							dataLinks: [],
+							dataNodes: [],
+							tmpIndent: 0,	// 현재 들여쓰기 상태 
+							tmpLastId: 100,	// 마지막 ID 관리
+							tmpClient: 0,	//현재 클라이언트 번호
+							tmpGroup: 0,	//현재 그룹
+							tmpTool: 0,
+							inputFlag: 0	//키입력 감지하기 위한 변수	
+						}
+					},
+					{
+						type: 'vote',
+						name: vote' + _tool_vote_count,
+						title: '투표 ' + _tool_vote_count,
+						variables: {
+							
+						}
+					},
+					{
+						type: 'matrix',
+						name: 'matrix' + _tool_matrix_count,
+						title: 'matrix ' + _tool_matrix_count,
+						variables: {
+							tmpClient: 0,	//현재 클라이언트 번호
+							tmpGroup: 0,	//현재 그룹
+							setupData: {
+										row: 0,
+										col: 0
+										}, // matrix 행, 열
+							setupFlag: {
+										data_init: true,
+										row: false,
+										col: false
+										},
+							optionId: {
+										set: 999999,
+										row: 999998,
+										col: 999997
+										},
+							_key_code: null, // 키 입력 값 저장
+							_box_count: 0,
+							inputFlag: 0	//키입력 감지하기 위한 변수
+						}
+					}
+					.
+					.
+					.
+				},
+				{
+					...
+				}
+			]
+		];
+*/
 		socket.on('create_new_tool', function(data) {
+			var group = data.group;
 			var idx_meeting = data.idx_meeting;
 			var type = data.type;
 			var now_process_idx = data.now_process_idx;
-			var tool_id = getLastId(idx_meeting, type);
+
+			var tool_id = getLastId(group, type);
 			var tool_data;
 
 			switch (type)
@@ -118,7 +257,7 @@ function server(io)
 							variables: {
 								tmpIndent: 0,	// 현재 들여쓰기 상태
 								tmpLastId: 0,	// 마지막 ID 관리
-								idx_meeting: 0,	//현재 그룹
+								tmpGroup: 0,	//현재 그룹
 								tmpTool: 0,  //현재 도구
 								tmpToolSelect: 0,
 								clientColor: new Array( "none", "#99FF99", "#CCCC99",
@@ -138,7 +277,7 @@ function server(io)
 							title: '포스트잇 ' + tool_id,
 							variables: {
 								tmpLastId: 100,
-								idx_meeting: 0,
+								tmpGroup: 0,
 								tmpTool: 0,
 								tmpItemGroup: 0,
 								tmpToolSelect: 0,
@@ -161,7 +300,7 @@ function server(io)
 								dataNodes: [],
 								tmpIndent: 0,	// 현재 들여쓰기 상태 
 								tmpLastId: 100,	// 마지막 ID 관리
-								idx_meeting: 0,	//현재 그룹
+								tmpGroup: 0,	//현재 그룹
 								tmpTool: 0,
 								tmpToolSelect: 0,
 								inputFlag: 0	//키입력 감지하기 위한 변수	
@@ -188,7 +327,7 @@ function server(io)
 							name: 'matrix' + tool_id,
 							title: 'matrix ' + tool_id,
 							variables: {
-								idx_meeting: 0,	//현재 그룹
+								tmpGroup: 0,	//현재 그룹
 								setupData: {
 											row: 0,
 											col: 0
@@ -213,36 +352,38 @@ function server(io)
 			}
 
 			// 회의 최초 접속이면 회의 정보 새로 생성
-			if (_meeting_contents[idx_meeting] == undefined || _meeting_contents[idx_meeting].length < 1 )
+			if (_meeting_contents[group][idx_meeting] == undefined)
 			{
-				_meeting_contents[idx_meeting] = {
+				_meeting_contents[group][idx_meeting] = {
 					whiteboard: {},
 					tools: []
 				};
 			}
 
-			_meeting_contents[idx_meeting].tools.push(tool_data);
+			_meeting_contents[group][idx_meeting].tools.push(tool_data);
 
 			socket.emit('arrive_new_tool', {
+												group: group,
 												idx_meeting: idx_meeting,
 												tool_data: tool_data
 											});
-			socket.broadcast.to(idx_meeting).emit('arrive_new_tool', {
+			socket.broadcast.to(group).emit('arrive_new_tool', {
+												group: group,
 												idx_meeting: idx_meeting,
 												tool_data: tool_data
 											});
 
-			socket.emit('get_tool_list', { tool_list: _meeting_contents[idx_meeting].tools });
-			socket.broadcast.to(idx_meeting).emit('get_tool_list', { tool_list: _meeting_contents[idx_meeting].tools });
+			socket.emit('get_tool_list', { tool_list: _meeting_contents[group][idx_meeting].tools });
+			socket.broadcast.to(group).emit('get_tool_list', { tool_list: _meeting_contents[group][idx_meeting].tools });
 		});
 
 		
 		////  클라이언트 해당 tool의 데이터 요청 처리하는 함수  ////
 		socket.on('set_data', function(data) {
 			console.log("Call: set_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
 			
 			client.lindex(tmpOrder, 0, function (err,reply) {
 				if ( reply == null ) {
@@ -270,10 +411,10 @@ function server(io)
 		////  클라이언트 해당 tool의 데이터 요청 처리하는 함수_tree  ////
 		socket.on('set_tree_data', function(data) {
 			console.log("Call: set_tree_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var tmpOption = idx_meeting+":"+tmpTool+":options";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var tmpOption = tmpGroup+":"+tmpTool+":options";
 			
 			client.lindex(tmpOrder, 0, function (err,reply) {
 				if ( reply == null ) {
@@ -309,9 +450,9 @@ function server(io)
 		////  클라이언트 해당 tool의 옵션 데이터 요청 처리하는 함수_tree  ////
 		socket.on('set_tree_option_data', function(data) {
 			console.log("Call: set_tree_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
-			var tmpOption = idx_meeting+":"+tmpTool+":options";
+			var tmpOption = tmpGroup+":"+tmpTool+":options";
 			// option return
 			client.hkeys(tmpOption, function (err, replies) {
 				replies.forEach(function (reply, i) {
@@ -326,20 +467,20 @@ function server(io)
 
 		////  클라이언트가 입력 시작한 경우 전달된 데이터 처리하는 함수  ////
 		socket.on('set_input_data', function (data) {
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var setId = data.id;
 			var setIndex = data.index;
 			var setClient = data.client;
 
 			////  다른 클라이언트들에게 데이터 전달  ////
-			socket.broadcast.to(idx_meeting).emit('get_input_data', {  tool: tmpTool, id: setId, index: setIndex, client: setClient } );
+			socket.broadcast.to(tmpGroup).emit('get_input_data', {  tool: tmpTool, id: setId, index: setIndex, client: setClient } );
 
 		});
 
 		////  클라이언트가 입력 시작한 경우 전달된 데이터 처리하는 함수_tree  ////
 		socket.on('set_input_tree_data', function (data) {
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var setId = data.id;
 			var setParent = data.parent;
@@ -347,12 +488,12 @@ function server(io)
 			var setClient = data.client;
 
 			////  다른 클라이언트들에게 데이터 전달_tree  ////
-			socket.broadcast.to(idx_meeting).emit('get_input_tree_data', { tool:tmpTool, id: setId, parent: setParent, index: setIndex, client: setClient } );
+			socket.broadcast.to(tmpGroup).emit('get_input_tree_data', { tool:tmpTool, id: setId, parent: setParent, index: setIndex, client: setClient } );
 		});
 
 		////  클라이언트가 depth 변경한 경우 전달된 데이터 처리하는 함수_tree  ////
 		socket.on('set_change_depth', function (data) {
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var setId = data.id;
 			var setDepth = data.depth;
@@ -360,12 +501,12 @@ function server(io)
 			// Redis 데이터 변경하는 부분 필요...
 
 			////  다른 클라이언트들에게 변경된 depth 전달_tree  ////
-			socket.broadcast.to(idx_meeting).emit('get_change_depth', { tool:tmpTool, id: setId, depth: setDepth } );
+			socket.broadcast.to(tmpGroup).emit('get_change_depth', { tool:tmpTool, id: setId, depth: setDepth } );
 		});
 
 		////  클라이언트가 parent 변경한 경우 전달된 데이터 처리하는 함수_tree  ////
 		socket.on('set_change_parent', function (data) {
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpVal = data.val;
 			var setId = data.id;
@@ -382,22 +523,22 @@ function server(io)
 			});	
 
 			////  다른 클라이언트들에게 변경된 parent 전달_tree  ////
-			socket.broadcast.to(idx_meeting).emit('get_change_parent', { tool:tmpTool, id: setId, parent: setParent } );
+			socket.broadcast.to(tmpGroup).emit('get_change_parent', { tool:tmpTool, id: setId, parent: setParent } );
 		});
 
 		////  클라이언트 해당 tool에 추가된 값을 DB에 저장  ////
 		socket.on('set_insert_data', function(data) {
 			console.log("Call: insert_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;	
 			var tmpIndex = data.index;
 			var tmpVal = data.val;
 			var tmpClient = data.client;
 		
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var storeId = idx_meeting + ":" + tmpTool + ":" + tmpId;	
-			var clientId = idx_meeting + ":" + tmpTool + ":" + tmpId + ":client";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;	
+			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 			
 			multi = client.multi();
 			multi.set(storeId, tmpVal);	 //key에 데이터 저장
@@ -418,7 +559,7 @@ function server(io)
 					}
 			
 					////  다른 클라이언트들에게 추가된 값 전달  ////
-					socket.broadcast.to(idx_meeting).emit('get_insert_data', {tool: tmpTool, id: tmpId, index: tmpIndex, val: tmpVal, client: tmpClient });
+					socket.broadcast.to(tmpGroup).emit('get_insert_data', {tool: tmpTool, id: tmpId, index: tmpIndex, val: tmpVal, client: tmpClient });
 				});	
 			});
 		});
@@ -427,7 +568,8 @@ function server(io)
 			////  클라이언트 해당 tool에 추가된 값을 DB에 저장_tree  ////
 		socket.on('set_insert_tree_data', function(data) {
 			console.log("Call: insert_tree_data");
-			var idx_meeting = data.idx_meeting;
+			console.log(data);
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;	
 			var tmpParent = data.parent;
@@ -435,10 +577,10 @@ function server(io)
 			var tmpVal = data.val;
 			var tmpClient = data.client;
 		
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var storeId = idx_meeting + ":" + tmpTool + ":" + tmpId;
-			var storeParent = idx_meeting + ":" + tmpTool + ":" + tmpParent;
-			var clientId = idx_meeting + ":" + tmpTool + ":" + tmpId + ":client";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
+			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
+			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 			
 			////  부모 필드 존재하는지 검사  ////
 			client.hlen(storeId, function (err, num) {
@@ -473,7 +615,7 @@ function server(io)
 						});	
 					}
 					////  다른 클라이언트들에게 추가된 값 전달_tree  ////
-					socket.broadcast.to(idx_meeting).emit('get_insert_tree_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
+					socket.broadcast.to(tmpGroup).emit('get_insert_tree_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
 				});	
 			});
 		});
@@ -482,7 +624,7 @@ function server(io)
 		////  클라이언트 해당 tool에 추가된 값을 DB에 저장_tree  ////
 		socket.on('set_insert_vote_data', function(data) {
 			console.log("Call: insert_tree_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;	
 			var tmpParent = data.parent;
@@ -490,10 +632,10 @@ function server(io)
 			var tmpVal = data.val;
 			var tmpClient = data.client;
 		
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var storeId = idx_meeting + ":" + tmpTool + ":" + tmpId;
-			var storeParent = idx_meeting + ":" + tmpTool + ":" + tmpParent;
-			var clientId = idx_meeting + ":" + tmpTool + ":" + tmpId + ":client";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var storeId = tmpGroup + ":" + tmpTool + ":" + tmpId;
+			var storeParent = tmpGroup + ":" + tmpTool + ":" + tmpParent;
+			var clientId = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 			console.log("Id: "+tmpId+" / Parent: "+tmpParent+" / Val: "+tmpVal);		
 	
 			multi = client.multi();
@@ -513,7 +655,7 @@ function server(io)
 						});	
 					}
 					////  다른 클라이언트들에게 추가된 값 전달_tree  ////
-					socket.broadcast.to(idx_meeting).emit('get_insert_vote_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
+					socket.broadcast.to(tmpGroup).emit('get_insert_vote_data', { tool: tmpTool, id: tmpId, parent: tmpParent, index: tmpIndex, val: tmpVal, client: tmpClient });
 				});	
 			});
 		});
@@ -521,13 +663,13 @@ function server(io)
 		////  클라이언트 해당 tool에 삭제된 값을 DB에서 제거  ////
 		socket.on('set_delete_data', function(data) {
 			console.log("Call: set_delete_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;	
 			
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var delId = idx_meeting + ":" + tmpTool + ":" + tmpId;
-			var delClient = idx_meeting + ":" + tmpTool + ":" + tmpId + ":client";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
+			var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 
 			multi = client.multi();
 			multi.del(delId);	
@@ -535,19 +677,19 @@ function server(io)
 			multi.lrem(tmpOrder, 0, delId);	
 			multi.exec();
 			////  다른 클라이언트들에게 삭제된 값 전달  ////
-			socket.broadcast.to(idx_meeting).emit('get_delete_data', { tool: tmpTool, id: tmpId });
+			socket.broadcast.to(tmpGroup).emit('get_delete_data', { tool: tmpTool, id: tmpId });
 		});
 		
 		////  클라이언트 해당 tool에 삭제된 값을 DB에서 제거_tree  ////
 		socket.on('set_delete_tree_data', function(data) {
 			console.log("Call: set_delete_tree_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;	
 			
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var delId = idx_meeting + ":" + tmpTool + ":" + tmpId;
-			var delClient = idx_meeting + ":" + tmpTool + ":" + tmpId + ":client";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var delId = tmpGroup + ":" + tmpTool + ":" + tmpId;
+			var delClient = tmpGroup + ":" + tmpTool + ":" + tmpId + ":client";
 			//console.log("delId: "+delId);
 				
 			var tmpDelParent = 0;
@@ -561,17 +703,17 @@ function server(io)
 			multi.exec();
 
 			////  다른 클라이언트들에게 삭제된 값 전달_tree  ////
-			socket.broadcast.to(idx_meeting).emit('get_delete_tree_data', { tool: tmpTool, id: tmpId });
+			socket.broadcast.to(tmpGroup).emit('get_delete_tree_data', { tool: tmpTool, id: tmpId });
 		});
 
 		////  다른 도구 형태로 데이터 변경  ////
 		socket.on('set_change_data', function(data) {
 			console.log("Call: set_change_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var newTool= data.change;	
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var newOrder = idx_meeting+":"+newTool+":order";		
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var newOrder = tmpGroup+":"+newTool+":order";		
 					
 			client.lindex(tmpOrder, 0, function (err,reply) {
 				if ( reply == null ) {
@@ -594,17 +736,17 @@ function server(io)
 
 			////  클라이언트는 change 받아서 새로 도구 창 띄우면 될 듯  ////
 			socket.emit('get_change_data', { tool: tmpTool, change: newTool });	
-			socket.broadcast.to(idx_meeting).emit('get_change_data', { tool: tmpTool, change: newTool });
+			socket.broadcast.to(tmpGroup).emit('get_change_data', { tool: tmpTool, change: newTool });
 		});
 
 		////  다른 도구 형태로 데이터 변경_tree  ////
 		socket.on('set_change_tree_data', function(data) {
 			console.log("Call: set_change_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var newTool = data.change;	
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var newOrder = idx_meeting+":"+newTool+":order";		
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var newOrder = tmpGroup+":"+newTool+":order";		
 
 			client.lindex(tmpOrder, 0, function (err,reply) {
 				if ( reply == null ) {
@@ -634,16 +776,16 @@ function server(io)
 		
 			////  클라이언트는 change 받아서 새로 도구 창 띄우면 될 듯  ////
 			socket.emit('get_change_tree_data', { tool: tmpTool, change: newTool });	
-			socket.broadcast.to(idx_meeting).emit('get_change_tree_data', { tool: tmpTool, change: newTool });
+			socket.broadcast.to(tmpGroup).emit('get_change_tree_data', { tool: tmpTool, change: newTool });
 		});
 
 		////  해당 tool의 데이터 초기화  ////
 		socket.on('set_init_tool_data', function(data) {
 			console.log("Call: set_init_tool_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var tmpOptions = idx_meeting+":"+tmpTool+":options";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var tmpOptions = tmpGroup+":"+tmpTool+":options";
 
 			multi = client.multi();
 			multi.del(tmpOrder).del(tmpOptions).exec();
@@ -658,19 +800,19 @@ function server(io)
 			});
 
 			////  다른 클라이언트들에게 초기화된 tool 전달  ////
-			socket.broadcast.to(idx_meeting).emit('get_init_tool_data', { tool: tmpTool });
+			socket.broadcast.to(tmpGroup).emit('get_init_tool_data', { tool: tmpTool });
 		});
 
 		////  클라이언트 tool의 옵션 데이터 처리하는 함수  ////
 		socket.on('set_option_data', function(data) {
 			console.log("Call: set_option_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;
 			var tmpOption = data.option;
 			var tmpVal = data.val;
-			var optionKey = idx_meeting + ":" + tmpTool + ":options";
-			var optionField = idx_meeting + ":" + tmpTool + ":" + tmpOption;
+			var optionKey = tmpGroup + ":" + tmpTool + ":options";
+			var optionField = tmpGroup + ":" + tmpTool + ":" + tmpOption;
 			var idx_meeting = data.idx_meeting;
 			
 			if( !idx_meeting )
@@ -680,16 +822,16 @@ function server(io)
 			multi.hset(optionKey, optionField, tmpVal).exec();
 
 			////  다른 클라이언트들에게 tool의 옵션 데이터 전달  ////
-			socket.broadcast.to(idx_meeting).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal, idx_meeting:idx_meeting });
+			socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal, idx_meeting:idx_meeting });
 		});
 		
 		////  클라이언트 투표 도구의 데이터 요청 처리하는 함수  ////
 		socket.on('set_vote_data', function(data) {
 			console.log("Call: set_vote_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
-			var tmpOrder = idx_meeting+":"+tmpTool+":order";
-			var tmpOption = idx_meeting+":"+tmpTool+":options";
+			var tmpOrder = tmpGroup+":"+tmpTool+":order";
+			var tmpOption = tmpGroup+":"+tmpTool+":options";
 			
 			client.lindex(tmpOrder, 0, function (err,reply) {
 				if ( reply == null ) {
@@ -737,15 +879,15 @@ function server(io)
 		////  클라이언트 투표 진행상황 및 투표 결과 함수  ////
 		socket.on('set_voting_data', function(data) {
 			console.log("Call: set_voting_data");
-			var idx_meeting = data.idx_meeting;
+			var tmpGroup = data.group;
 			var tmpTool = data.tool;
 			var tmpId = data.id;
 			var tmpResult = data.val;
 			var tmpOption = data.option;
 			var tmpUser = data.user;
 			
-			var vote_field = idx_meeting + ":" + tmpTool + ":" + tmpId + ":vote";
-			var vote_user_field = idx_meeting + ":" + tmpTool + ":" + tmpId + ":vote:user";
+			var vote_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote";
+			var vote_user_field = tmpGroup + ":" + tmpTool + ":" + tmpId + ":vote:user";
 
 			
 			if ( _vote_flag == false ) {
@@ -759,7 +901,7 @@ function server(io)
 								console.log("vote_num: "+vote_num);
 
 								socket.emit('get_voting_data', { text: vote_text, num: vote_num });	
-								socket.broadcast.to(idx_meeting).emit('get_voting_data', { text: vote_text, num: vote_num });	
+								socket.broadcast.to(tmpGroup).emit('get_voting_data', { text: vote_text, num: vote_num });	
 							});
 						});
 					});
@@ -779,8 +921,8 @@ function server(io)
 					//// 콜백함수 문제 해결해야함! - 타이밍 문제 ////		
 					(function ( ) {
 						
-						var store_val = idx_meeting + ":" + tmpTool + ":" + result_val[i];
-						var vote_user = idx_meeting + ":" + tmpTool + ":" + result_val[i] + ":user";
+						var store_val = tmpGroup + ":" + tmpTool + ":" + result_val[i];
+						var vote_user = tmpGroup + ":" + tmpTool + ":" + result_val[i] + ":user";
 				
 						client.hget(vote_field, store_val, function (err, val) {		
 							console.log("store_val: "+store_val);

@@ -22,6 +22,7 @@ exports.dao_group_info = function(evt, mysql_conn, params){
 	sql += "ORDER BY `E`.`first_name` ";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('group_info', err, rows);
+		//console.log(rows);
 	});
 	return sql;
 }
@@ -59,6 +60,7 @@ exports.dao_meeting_list = function(evt, mysql_conn, params){
 	sql += "ORDER BY `C`.`date` ASC, `C`.`start_time`";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('meeting_list', err, rows);
+		//console.log(rows);
 	});
 	return sql;
 }

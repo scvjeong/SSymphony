@@ -473,7 +473,7 @@ function labelFormatter(label, series) {
 	return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
 }
 
-function makeMeetingForm(idx) {
+function makeMeetingForm() {
 	
 	var result_subject = $('.result_title').text();
 	var result_goal = $('.result_subject').text();

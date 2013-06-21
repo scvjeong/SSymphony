@@ -1009,9 +1009,10 @@ function initNextProcess()
 		e.preventDefault();
 		//if( confirm("Do you want next process?") ) 
 		var $processing = $("#meeting .process-box .processing");
-		var bool = ($processing.length > 0 ); // 객채가 있는지 확인
+		var bool = ($processing.length > 0 ); // 객체가 있는지 확인
 		bool = bool && (typeof ($processing.attr("idx")*1) === "number"); // 숫자 값 확인
 		bool = bool && (($processing.attr("idx")*1) > 0); // 0 이상의 index 인지 확인
+
 		if( bool )
 		{
 			var idx_agenda = $processing.attr("idx");
@@ -1025,6 +1026,12 @@ function initNextProcess()
 						alert( json.msg );
 					else if( json.result === "successful" )
 					{
+						var process_num = $('.process-unit').index($processing);
+						console.log(process_num);
+
+						//// 툴별로 캡쳐하고 숨기는 부분 추가 ////
+
+
 						var used_time = getTimeFormat(json.use_time*60);
 						var $use_time_obj = $("#meeting .process-box .process-unit[idx="+idx_agenda+"] .use_time");
 						var use_time = $use_time_obj.html().replace("(","").replace(")","");
@@ -1732,13 +1739,19 @@ function evaluateComplete()
 
 }
 
-function makeCanvasImage(params)
+function makeCanvasImage(tool, process_idx)
 {
-	var tool_name = params['tool_name'];
+	console.log(tool);
+	var exp_num = /[0-9]/gi;  
+	var exp_al = /[a-z]/gi;
+	var tool_name = tool.replace(exp_num, '');
 	
-	var idx_tool = params['tool_idx'];
-	var idx_process = 0;
-	var tool_num = -1;
+	var idx_tool = tool.replace(exp_al, '');
+		
+	console.log(idx_tool);
+
+	var idx_process = process_idx;
+	var tool_num = 0;
 	var image_value = 0;
 
 	switch ( tool_name ) {
@@ -1747,7 +1760,7 @@ function makeCanvasImage(params)
 		case 'mindmap' : tool_num = 3; break;
 		case 'vote' : tool_num = 4; break;
 		case 'matrix' : tool_num = 5; break;	
-		default : tool_num = -1; break;
+		default : tool_num = 0; break;
 	}
 
 	var tmp_make = tool_name+idx_tool;
@@ -1758,15 +1771,15 @@ function makeCanvasImage(params)
 
 			//$('canvas:first').attr('id', 'myCanvas');
 			//var can =document.getElementById("myCanvas");
-			
-			var canvas_image = canvas.toDataURL();		
-			image_value = canvas_image;
-			
 			//var image = new Image();
 			//image.src = canvas_image;
 			//var ctx = can.getContext("2d");
 			//ctx.drawImage(image,10,10,250,200);
+			//console.log(canvas_image);
 
+			var canvas_image = canvas.toDataURL();		
+			image_value = canvas_image;		
+			
 			var send_params = {
 				idx_tool: idx_tool,
 				idx_process: idx_process,

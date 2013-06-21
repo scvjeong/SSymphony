@@ -209,13 +209,13 @@ $(window).resize(function() {
 // 소켓 열기
 function openSocket()
 {
-	_socket_common = io.connect('http://orchestra.com:50000/meeting');
-	_socket_list = io.connect('http://orchestra.com:50001/meeting');
-	_socket_postit = io.connect('http://orchestra.com:50002/meeting');
-	_socket_mindmap = io.connect('http://orchestra.com:50003/meeting');
-	_socket_vote = io.connect('http://orchestra.com:50004/meeting');
-	_socket_matrix = io.connect('http://orchestra.com:50005/meeting');
-	_socket_board = io.connect('http://orchestra.com:50006/meeting');
+	_socket_common = io.connect('http://61.43.139.69:50000/meeting');
+	_socket_list = io.connect('http://61.43.139.69:50001/meeting');
+	_socket_postit = io.connect('http://61.43.139.69:50002/meeting');
+	_socket_mindmap = io.connect('http://61.43.139.69:50003/meeting');
+	_socket_vote = io.connect('http://61.43.139.69:50004/meeting');
+	_socket_matrix = io.connect('http://61.43.139.69:50005/meeting');
+	_socket_board = io.connect('http://61.43.139.69:50006/meeting');
 
 	/* 서버 리스너 등록 */
 	_socket_common.on('get_list_of_tools', function (data) {

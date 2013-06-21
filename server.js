@@ -508,15 +508,16 @@ function server(io)
 		socket.on('set_change_parent', function (data) {
 			var tmpGroup = data.group;
 			var tmpTool = data.tool;
+			var tmpVal = data.val;
 			var setId = data.id;
 			var setParent = data.parent;
 
 			////  부모 필드 존재하는지 검사  ////
-			client.hlen(storeId, function (err, num) {
-				client.hkeys(storeId, function (err, parent) {
+			client.hlen(setId, function (err, num) {
+				client.hkeys(setId, function (err, parent) {
 					multi = client.multi();
-					multi.hdel(storeId, parent);	
-					multi.hset(storeId, storeParent, tmpVal);	 //hash에 데이터 저장
+					multi.hdel(setId, parent);	
+					multi.hset(setId, setParent, tmpVal);	 //hash에 데이터 저장
 					multi.exec();
 				});		
 			});	
@@ -812,12 +813,16 @@ function server(io)
 			var tmpVal = data.val;
 			var optionKey = tmpGroup + ":" + tmpTool + ":options";
 			var optionField = tmpGroup + ":" + tmpTool + ":" + tmpOption;
+			var idx_meeting = data.idx_meeting;
+			
+			if( !idx_meeting )
+				idx_meeting = 0;
 
 			multi = client.multi();
 			multi.hset(optionKey, optionField, tmpVal).exec();
 
 			////  다른 클라이언트들에게 tool의 옵션 데이터 전달  ////
-			socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal });
+			socket.broadcast.to(tmpGroup).emit('get_option_data', { tool: tmpTool, id: tmpId, option: tmpOption, val: tmpVal, idx_meeting:idx_meeting });
 		});
 		
 		////  클라이언트 투표 도구의 데이터 요청 처리하는 함수  ////

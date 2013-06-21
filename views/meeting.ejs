@@ -107,10 +107,10 @@
 	<!-- /리스트 도구 -->
   
 	<!-- 포스트잇 도구 -->
-		<link href="../stylesheets/tools/template.css" rel="stylesheet" type="text/css" />
-		<link href="../stylesheets/tools/postit.css" rel="stylesheet" type="text/css" />
-		<script type="text/JavaScript" src="../javascripts/jquery.ui.touch-punch.min.js"></script>
-		<script type="text/JavaScript" src="../javascripts/jquery.shapeshift.js"></script>	
+		<link href="/stylesheets/tools/template.css" rel="stylesheet" type="text/css" />
+		<link href="/stylesheets/tools/postit.css" rel="stylesheet" type="text/css" />
+		<script type="text/JavaScript" src="/javascripts/jquery.ui.touch-punch.min.js"></script>
+		<script type="text/JavaScript" src="/javascripts/jquery.shapeshift.js"></script>	
 		<script src="../javascripts/tools/postit.js"></script>
 	<!-- /포스트잇 도구 -->
 
@@ -131,7 +131,8 @@
 	<!-- /투표 도구 -->
 	
 </head>
-<body id="meeting" class="meeting" ondragstart="return false" onselectstart="return false">
+<!--body id="meeting" class="meeting" ondragstart="return false" onselectstart="return false"-->
+<body id="meeting" class="meeting" onselectstart="return false">
 	<div class="container">
 		<div class="title-bar">
 			<div class="subject"><%=result.meeting[0].subject%></div>

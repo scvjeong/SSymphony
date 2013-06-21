@@ -237,47 +237,50 @@ function openSocket()
 
 	_socket_common.on('get_option_data', function (data) {
 		// data.tool/id/option/val
+		var idx_meeting = data.idx_meeting
 		console.log('GET get_option_data');
-		if (data.option === 'new_tool')
+		if( idx_meeting === _idx_meeting )
 		{
-			console.log('새 도구 도착 : ' + data)
-			switch (data.tool)
+			if (data.option === 'new_tool')
 			{
-			case 'list':
-				getToolSource('list', initList);
-				break;
-			case 'mindmap':
-				getToolSource('mindmap', initMindmap);
-				break;
-			case 'postit':
-				getToolSource('postit', initPostit);
-				break;
-			case 'matrix':
-				getToolSource('matrix', initMatrix);
-				break;
-			case 'vote':
-				getToolSource('vote', initVote);
-				break;
+				console.log('새 도구 도착 : ' + data)
+				switch (data.tool)
+				{
+				case 'list':
+					getToolSource('list', initList);
+					break;
+				case 'mindmap':
+					getToolSource('mindmap', initMindmap);
+					break;
+				case 'postit':
+					getToolSource('postit', initPostit);
+					break;
+				case 'matrix':
+					getToolSource('matrix', initMatrix);
+					break;
+				case 'vote':
+					getToolSource('vote', initVote);
+					break;
+				}
 			}
-		}
-		else if (data.option === 'new_share_box_item')
-		{
-			console.log('새 쉐어박스 아이템 도착 : ');
-			console.log(data);
-			addShareItem(data.val);
-		}
-		else if (data.option === 'new_canvas_draw')
-		{
-			console.log("GET_OPTION_DATA new_canvas_draw");
-			console.log(data);
-			drawArrived(data.tool, data.val);
+			else if (data.option === 'new_share_box_item')
+			{
+				console.log('새 쉐어박스 아이템 도착 : ');
+				console.log(data);
+				addShareItem(data.val);
+			}
+			else if (data.option === 'new_canvas_draw')
+			{
+				drawArrived(data.tool, data.val);
+			}
 		}
 	});
 
 	_socket_common.on('arrive_new_tool', function (data) {
 		var group = data.group;
 		var idx_meeting = data.idx_meeting;
-
+		console.log("[jeong] idx_meeting : " + idx_meeting);
+		console.log("[jeong] _idx_meeting : " + _idx_meeting);
 		if (group === _group_id && idx_meeting === _idx_meeting )
 		{
 			var idx_meeting = data.idx_meeting;
@@ -493,6 +496,7 @@ function createToolWindow(tool_data)
 			url: source_url,
 			dataType: "html",
 			success: function(tool_source) {
+				/*
 				console.log("CALL getToolSource");
 				console.log("<tool_data>");
 					console.log(tool_data);
@@ -500,6 +504,7 @@ function createToolWindow(tool_data)
 				console.log("<tool_source>");
 					console.log(tool_source);
 				console.log("</tool_source>");
+				*/
 
 				var tool_id = tool_data.tool_id;
 				var tool_type = tool_data.type;
@@ -1857,7 +1862,8 @@ _canvas.mouseup(function(e) {
 				option:'new_canvas_draw',
 				tool:'pen',
 				id:"0",
-				val:_pen_data
+				val:_pen_data,
+				idx_meeting:_idx_meeting
 			});
 		_pen_data.points = [];	// 다음 사용을 위해 펜 데이터 초기화
 		break;
@@ -1888,7 +1894,8 @@ _canvas.mouseup(function(e) {
 				option:'new_canvas_draw',
 				tool:'line',
 				id:"0",
-				val:line_data
+				val:line_data,
+				idx_meeting:_idx_meeting
 			});
 		break;
 	case "rect":
@@ -1924,7 +1931,8 @@ _canvas.mouseup(function(e) {
 				option:'new_canvas_draw',
 				tool:'rect',
 				id:"0",
-				val:rect_data
+				val:rect_data,
+				idx_meeting:_idx_meeting
 			});
 		break;
 	case "ellipse":
@@ -1969,7 +1977,8 @@ _canvas.mouseup(function(e) {
 				option:'new_canvas_draw',
 				tool:'ellipse',
 				id:"0",
-				val:ellipse_data
+				val:ellipse_data,
+				idx_meeting:_idx_meeting
 			});
 		break;
 	}

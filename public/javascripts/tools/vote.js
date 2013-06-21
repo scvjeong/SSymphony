@@ -18,6 +18,7 @@ function initVote(group, tool)
 	
 	_socket_vote = io.connect('http://61.43.139.69:50004/group');
 
+	
 	tool = "vote" + tool;
 	group = "group" + group;
 	_voteid = tool;
@@ -31,6 +32,8 @@ function initVote(group, tool)
 	
 	// 투표 시작 버튼 작동
 	$('.btn_votestart').click(function() {
+		//console.log("DDDDDDDDDGEG");
+		//startVote();
 		_socket_vote.emit('set_last_id', { idx_meeting: _idx_meeting, tool: tool});	
 	});
 	
@@ -189,8 +192,7 @@ function addSocketListenerForVote()
 		startVote();
 	});
 	
-	/*	일단은 주석처리(필요할 수도?)
-	_socket.on('get_insert_vote_data', function(data) {
+	_socket_vote.on('get_insert_vote_data', function(data) {
 		console.log("get_insert_vote_data : " + data.val);
 				
 		if ( _is_voting == false ) {
@@ -216,7 +218,6 @@ function addSocketListenerForVote()
 		}
 				
 	});
-	*/
 
 	_socket_vote.on('get_tree_option_data', function(data) {
 		console.log("get_tree_option_data: "+data.val);

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="This is an HTML5 example">
+  <meta name="keywords" content="HTML5, CSS3, JavaScript">
+  <title>Idea Meeting</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+		function selectManual() {
+			alert("Click Manual");
+		}
+
+		function selectQuit() {
+			alert("Quit Meeting");
+		}
+
+		function allowDrop(ev) {
+			ev.preventDefault();
+		}
+		 
+		function drag(ev) {
+			ev.dataTransfer.setData("Text", ev.target.id);
+		}
+		 
+		function drop(ev) {
+			ev.preventDefault();
+			var data=ev.dataTransfer.getData("Text");
+			ev.target.appendChild(document.getElementById(data));
+		}
+
+		function selectAddProgress() {
+			alert("Add progress");
+		}
+
+  </script>	
+</head>
+<body>
+<div id="wrapper">
+  <header id="main_header">
+	<h1>아이디어 발상 회의</h1>
+	<button id="manual_button" onClick="selectManual()">매뉴얼</button>
+	<button id="quit_button" onClick="selectManual()">회의 종료</button>
+  </header>
+  <div id="container">
+    <section id="main_section">
+      <article id="meeting_space" ondrop="drop(event)" ondragover="allowDrop(event)">   
+		 회의 도구
+      </article>
+      <article id="meeting_progress">
+		 <div id="progress_title_box">
+			 <div id="progress_title">회의 프로세스</div>
+			 <button id="add_progress" onClick="selectAddProgress()">+</button>
+		 </div>
+		 <div id="progress_box"> 
+			 <div class="process">회의 준비</div>
+			 <div class="process">회의 시작</div>
+			 <div class="process">회의 종료</div>
+		 </div>
+      </article>
+    </section>
+    <aside id="main_aside">
+		<div id="meeting_tools">
+			<div id="chating" draggable="true" ondragstart="drag(event)">채팅</div>
+			<div id="mindmap" draggable="true" ondragstart="drag(event)">마인드맵</div>
+			<div id="brainstorming" draggable="true" ondragstart="drag(event)">브레인스토밍</div>
+			<div id="postit" draggable="true" ondragstart="drag(event)">포스트잇</div>
+		</div>
+		<div id="meeting_status">
+			<div id="meeting_type">회의 종류: 아이디어 발상</div>
+			<div id="meeting_purpose">회의 목적: 신제품 아이디어 발상</div>
+			<div id="meeting_rules">회의 규칙
+				<div class="meeting_rule">1. 적극적 참여</div>
+				<div class="meeting_rule">2. 비난 금지</div>
+			</div>
+		</div>
+		<div id="meeting_people">회의 참가자
+			<div class="people">퍼실리테이터</div>
+			<div class="people">참가자1</div>
+			<div class="people">참가자2</div>
+			<div class="people">참가자3</div>
+		</div>
+		<div id="guide_alert">
+			실시간 가이드
+		</div>
+	</aside>
+  </div>
+</div>
+</body>
+</html>

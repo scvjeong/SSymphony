@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<head>
+	<meta charset="utf-8">
+	<title>Chatting</title>
+	<link rel="stylesheet" href="./css/chatting.css">
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="./lib/socket.io.js"></script>	
+	<script>	
+		
+		var socket = io.connect('http://61.43.139.69:50007/group');	// socket.io 서버에 접속
+		var tmp_group = 0;
+		var tmp_tool = 0;
+		var tmp_client = 0;
+		var tmp_user_id = "godong";
+		var tmp_last_id = 100;
+		var client_color = new Array( "none", "#99FF99", "#CCCC99", "#0099FF", "#CCFFCC", "#FFFF66", "#FF9999", "#669999", "#9999FF", "#00CCCC", "#CC9900");		
+			
+		$(document).ready(function() {
+			init_chatting("chatting", "1");			
+		});
+
+		////  리스트 초기 설정해주는 함수  ////
+		function init_chatting( tool, group ){
+			tmp_tool = tool;
+			tmp_group = "group"+group;
+
+			socket.emit('join_room', { group: tmp_group });
+			socket.emit('set_client', { group: tmp_group, user: tmp_user_id });
+			socket.emit('set_data', { group: tmp_group, tool: "chatting" });
+		}
+		
+		////  클라이언트 번호 받아오는 함수  ////
+		socket.on('get_client', function (data) {
+			tmp_client = data.client;
+		});
+
+		////  last Id 받아오는 함수  ////
+		socket.on('get_last_id', function (data) {
+			tmp_last_id = data.last;
+			chatting_input_enter();
+		});
+
+		////  현재 group, tool에 해당하는 데이터 서버에서 응답 받는 함수  ////
+		socket.on('get_data', function (data) {
+			var tmp_id = data.id;
+			var tmp_val = data.val;	
+			var id_array = tmp_id.split('/');
+			tmp_id = id_array[0];
+			console.log(tmp_id);
+			if ( tmp_id != "100" ) {
+				var tmp_user_tag = "<div class='chatting_user_id'>"+tmp_id+" : </div>";
+				var tmp_val_tag = "<div>"+tmp_val+"</div>";
+				$('.chatting_space').append(tmp_user_tag);
+				$('.chatting_space').append(tmp_val_tag);			
+			}
+			
+			var offset = $('.chatting_space').offset().top;
+			$('.chatting_space').scrollTop( $('.chatting_space')[0].scrollHeight );
+		});
+		
+		////  서버로부터 데이터 받아오는 함수  ////
+		socket.on('get_insert_data', function (data) {
+			var tmp_tool = data.tool;
+			var tmp_id = data.id;
+			var tmp_val = data.val;
+			var id_array = tmp_id.split('/');
+			tmp_id = id_array[0];
+
+			//console.log("tool: "+tmp_tool+" // id: "+tmp_id+" // val: "+tmp_val);
+
+			var tmp_user_tag = "<div class='chatting_user_id'>"+tmp_id+" : </div>";
+			var tmp_val_tag = "<div>"+tmp_val+"</div>";
+			$('.chatting_space').append(tmp_user_tag);
+			$('.chatting_space').append(tmp_val_tag);	
+			
+			var offset = $('.chatting_space').offset().top;
+			$('.chatting_space').scrollTop( $('.chatting_space')[0].scrollHeight );
+			
+		});
+
+		////  엔터키 입력시 입력된 데이터 전송해주는 함수  ////
+		function chatting_input_enter() {
+			var tmp_input_val = $('.chatting_input').val();
+			
+			var tmp_user_tag = "<div class='chatting_user_id'>"+tmp_user_id+" : </div>";
+			var tmp_val_tag = "<div>"+tmp_input_val+"</div>";
+			$('.chatting_space').append(tmp_user_tag);
+			$('.chatting_space').append(tmp_val_tag);		
+			
+			tmp_user_tag = $('.chatting_user_id:last');
+			
+			var tmp_index = ( $('.chatting_user_id').index(tmp_user_tag) ) + 1;
+			var tmp_id = tmp_user_id+"/"+tmp_last_id;
+
+			console.log("index: "+tmp_index);
+			socket.emit('set_insert_data', { group: tmp_group, tool: "chatting", id: tmp_id, index: tmp_index, val: tmp_input_val, client: tmp_client });
+			$('.chatting_input').val('');
+			var offset = $('.chatting_space').offset().top;
+			$('.chatting_space').scrollTop( $('.chatting_space')[0].scrollHeight );
+		}
+
+		//// input 영역에서 키보드 입력시 호출되는 함수  ////
+		function chatting_key_input() {
+			var inputKey = event.keyCode;
+			if ( inputKey == 13 )	// Input Enter
+			{
+				//alert("Enter");
+				socket.emit('set_last_id', { group: tmp_group, tool: "chatting" });			
+			}	
+			else if ( inputKey == 27 )	// Input ESCKey
+			{				
+				//alert("ESC");
+				$('.chatting_input').val('');		
+			}
+		}
+
+	</script>
+</head>
+<body>
+
+	<div class="chatting_tool" id="chatting">
+		<div class="chatting_space">
+		</div>
+		<div class="chatting_input_space">
+			<input type="text" class="chatting_input" onKeyDown='chatting_key_input()'>
+		</div>
+	</div>
+
+</body>
+</html>

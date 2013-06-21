@@ -20,68 +20,70 @@
 	</div>
 </div>
 <div class="container">
-    <div id="group-calendar">
-    </div>
-	<div id="member-info" class="fancy-scrollbar">
-		<div class="my-profile">
-			<div class="profile-pic"></div>
-			<%if(result.user_info.length > 0) {%>
-			<div class="name"><%= result.user_info[0].first_name %> <%= result.user_info[0].last_name %></div>
+	<div class="container-inner">
+		<div id="group-calendar">
 		</div>
-		<%}%>
-		<!--div class="info-menu">
-			<ul>
-				<li><a href="#">Profile</a></li>
-				<li><a href="#">My Account</a></li>
-				<li><a href="#">Notice</a></li>
-			</ul>
-		</div-->
-		<div class="group-list-box">
-			<ul>
-				<li><span class="my-groups">My Groups</span> <a href="javascript:newGroupPopup();" class="new-group">New Group...</a></li>
-				<% 
-					for(var i=0; i<result.group_info.length; i++) {
-						var user_list = result.group_info[i].user_list.split(",");
-				%>
-						<li class="group-list" idx="<%= result.group_info[i].idx %>">
-							<div class="group-name group-<%= i+1 %>"><%= result.group_info[i].group_name %></div>
-							<div class="members">
-								<%
-									for(var j=0; j<user_list.length; j++) {
-										if( j === 0 ) {
-										%>
-											<span class="team-leader"><%= user_list[j].toString().trim() %></span>
-										<%
-										} else if( j === (user_list.length-1) ) {
-										%>
-											<span class="team-member"><%= user_list[j].toString().trim() %></span>
-										<%	
-										} else {
-										%>
-											<span class="team-member"><%= user_list[j].toString().trim() %>,</span>
-										<%	
+		<div id="member-info" class="fancy-scrollbar">
+			<div class="my-profile">
+				<div class="profile-pic"></div>
+				<%if(result.user_info.length > 0) {%>
+				<div class="name"><%= result.user_info[0].first_name %> <%= result.user_info[0].last_name %></div>
+			</div>
+			<%}%>
+			<!--div class="info-menu">
+				<ul>
+					<li><a href="#">Profile</a></li>
+					<li><a href="#">My Account</a></li>
+					<li><a href="#">Notice</a></li>
+				</ul>
+			</div-->
+			<div class="group-list-box">
+				<ul>
+					<li><span class="my-groups">My Groups</span> <a href="javascript:newGroupPopup();" class="new-group">New Group...</a></li>
+					<% 
+						for(var i=0; i<result.group_info.length; i++) {
+							var user_list = result.group_info[i].user_list.split(",");
+					%>
+							<li class="group-list" idx="<%= result.group_info[i].idx %>">
+								<div class="group-name group-<%= i+1 %>"><%= result.group_info[i].group_name %></div>
+								<div class="members">
+									<%
+										for(var j=0; j<user_list.length; j++) {
+											if( j === 0 ) {
+											%>
+												<span class="team-leader"><%= user_list[j].toString().trim() %></span>
+											<%
+											} else if( j === (user_list.length-1) ) {
+											%>
+												<span class="team-member"><%= user_list[j].toString().trim() %></span>
+											<%	
+											} else {
+											%>
+												<span class="team-member"><%= user_list[j].toString().trim() %>,</span>
+											<%	
+											}
 										}
-									}
-								%>
-							</div>
-						</li>
-				<% } %>
-			</ul>
+									%>
+								</div>
+							</li>
+					<% } %>
+				</ul>
+			</div>
 		</div>
-	</div>
-	<div id="light-popup">
-		<div class="light-popup-header">
-			<span class="light-popup-title">Create Group</span>
-			<a href="javascript:newGroupPopdown();" class="light-popup-close-btn"><span class="icon-close"></span></a>
-		</div>
-		<div class="light-popup-body">
-			<form id="create-new-group-form" name="create-new-group-form" onsubmit="createNewGroup();return false;">
-			<label for="group_name">Group Name</label>
-			<input id="group_name" name="group_name" type="text" placeholder="Enter Group Name">
-			<label for=" Organization">Organization</label>
-			<div class="contents">Organizations make sharing and working within a group even easier. It doesn’t look like you are a member of any organizations</div>
-			<input type="button" onclick="javascript:createNewGroup();" value="Create" class="light-popup-submit">
-			</form>
+		<div id="light-popup">
+			<div class="light-popup-header">
+				<span class="light-popup-title">Create Group</span>
+				<a href="javascript:newGroupPopdown();" class="light-popup-close-btn"><span class="icon-close"></span></a>
+			</div>
+			<div class="light-popup-body">
+				<form id="create-new-group-form" name="create-new-group-form" onsubmit="createNewGroup();return false;">
+				<label for="group_name">Group Name</label>
+				<input id="group_name" name="group_name" type="text" placeholder="Enter Group Name">
+				<label for=" Organization">Organization</label>
+				<div class="contents">Organizations make sharing and working within a group even easier. It doesn’t look like you are a member of any organizations</div>
+				<input type="button" onclick="javascript:createNewGroup();" value="Create" class="light-popup-submit">
+				</form>
+			</div>
 		</div>
 	</div>
 </div>

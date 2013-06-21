@@ -133,19 +133,18 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 	sql += "GROUP_CONCAT( DISTINCT `D`.`first_name` ORDER BY `D`.`idx` ASC SEPARATOR ', ') AS `user_list`, ";
 	sql += "GROUP_CONCAT( DISTINCT `E`.`word_num` ORDER BY `E`.`idx_user` ASC SEPARATOR ', ') AS `user_words` ";
 	sql += "FROM `meeting_planning` AS `A` ";
-	sql += "INNER JOIN `agenda` AS `B` ";
+	sql += "LEFT OUTER JOIN `agenda` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
 	sql += "INNER JOIN `relation_user_meeting` AS `C` ";
 	sql += "ON `A`.`idx` = `C`.`idx_meeting` ";	
 	sql += "INNER JOIN `user` AS `D` ";
 	sql += "ON `C`.`idx_user` = `D`.`idx` ";
-	sql += "INNER JOIN `relation_user_words` AS `E` ";
+	sql += "LEFT OUTER JOIN `relation_user_words` AS `E` ";
 	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
 //	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
-//console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('get_meeting_result', err, rows);
 
@@ -155,14 +154,6 @@ exports.dao_get_meeting_result = function(evt, mysql_conn, params){
 }
 
 exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
-	// 임시로 해놓은 회의 번호 //
-//	params['idx_meeting'] = 19;
-//	params['idx_group'] = 1;
-	
-	console.log(params['idx_meeting']);
-	console.log(params['idx_group']);
-	console.log(params['idx_user']);
-
 	var sql = "SELECT ";
 	sql += "`A`.`idx`, ";
 	sql += "`A`.`subject`, ";
@@ -178,21 +169,19 @@ exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 	sql += "GROUP_CONCAT( `C`.`time_evaluation` ORDER BY `D`.`idx` ASC SEPARATOR ', ') AS `time_evaluation`, ";
 	sql += "GROUP_CONCAT( `C`.`activity_evaluation` ORDER BY `D`.`idx` ASC SEPARATOR ', ') AS `activity_evaluation` ";
 	sql += "FROM `meeting_planning` AS `A` ";
-	sql += "INNER JOIN `agenda` AS `B` ";
+	sql += "LEFT OUTER JOIN `agenda` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_meeting_planning` ";
 	sql += "INNER JOIN `relation_user_meeting` AS `C` ";
 	sql += "ON `A`.`idx` = `C`.`idx_meeting` ";	
 	sql += "INNER JOIN `user` AS `D` ";
 	sql += "ON `C`.`idx_user` = `D`.`idx` ";
-//	sql += "INNER JOIN `meeting_appraisal` AS `E` ";
-//	sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
+	//sql += "INNER JOIN `meeting_appraisal` AS `E` ";
+	//sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
 	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
-//console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
-		//console.log(rows);
 		evt.emit('get_meeting_evaluation_info', err, rows);		
 	});
 	return sql;
@@ -200,8 +189,6 @@ exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 
 
 exports.dao_get_meeting_result_appraisal = function(evt, mysql_conn, params){
-	//params['idx_meeting'] = 60;
-	
 	var sql = "SELECT ";
 	sql += "`A`.`satisfaction`, ";
 	sql += "`A`.`ft_appraisal`, ";
@@ -228,7 +215,7 @@ exports.dao_set_meeting_save_data = function(evt, mysql_conn, params){
 	var sql = "INSERT INTO `tools_data` SET ";
 	sql += "`idx_meeting` = '"+params['idx_meeting']+"', ";
 	sql += "`idx_group` = '"+params['idx_group']+"', ";
-	sql += "`idx_tool` = '"+params['idx_tool']+"', ";
+	sql += "`tool` = '"+params['tool']+"', ";
 	sql += "`delimiter` = '"+params['delimiter']+"', ";
 	sql += "`key` = '"+params['key']+"', ";
 	sql += "`parent` = '"+params['parent']+"', ";
@@ -257,7 +244,7 @@ exports.dao_set_meeting_save_options = function(evt, mysql_conn, params){
 	var sql = "INSERT INTO `tools_data` SET ";
 	sql += "`idx_meeting` = '"+params['idx_meeting']+"', ";
 	sql += "`idx_group` = '"+params['idx_group']+"', ";
-	sql += "`idx_tool` = '"+params['idx_tool']+"', ";
+	sql += "`tool` = '"+params['tool']+"', ";
 	sql += "`delimiter` = '"+params['delimiter']+"', ";
 	sql += "`key` = '"+params['key']+"', ";
 	sql += "`parent` = '"+params['parent']+"', ";

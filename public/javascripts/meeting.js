@@ -182,20 +182,15 @@ $(document).ready(function() {
 				dataType: 'json',
 				success: function(json) {
 					if( json.result == "failed" )
-					{
 						console.log(json.msg);
-					}
 					else if( json.result == "successful" )
-					{
-						//showMeetingResultWindow();
 						showEvaluateMeetingWindow();
-					}
 				},
 				error: function(err) {
 					console.log(err);
 					return false;
 				}
-			});			
+			});
 		}
 	});
 });

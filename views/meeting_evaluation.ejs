@@ -10,6 +10,7 @@
 			</div>
 			<div id="evaluate_contents_box">
 				<div class="evaluate_contents">
+				<% if(result.meeting_evaluation.length > 0) { %>
 					<div class="evaluate_title"><%= result.meeting_evaluation[0].subject %></div>
 					<div class="evaluate_subject"><%= result.meeting_evaluation[0].goal %></div>
 					<div class="eval_result_time">
@@ -160,7 +161,8 @@
 							<% } %>
 							
 						</div>
-					</div>					
+					</div>
+				<% } %>
 				</div>
 			</div>
 

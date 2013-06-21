@@ -1,24 +1,23 @@
 .group_container {
-  outline: 1px dashed #CCC;
-  float:left;
-  margin: 0 1% 0 1%;
-  position: relative;
-  width:46%;
+	outline: 1px dashed #CCC;
+	float:left;
+	margin: 0 1% 0 1%;
+	position: relative;
+	width:46%;
+	padding:5px;
 }
 
-.container {
+.postit-container {
   width: 100%;
 }
 
-.container .object {
-  border: 1px solid #777;
-  border-radius: 3px;
-  box-shadow: 0px 0px 4px 1px #ccc;
-  position: absolute;
-  left: 25px;
-  top: 30px;
-  width: 160px;
-  height: 140px;
+.postit-container .object {
+	border: 1px solid #777;
+	border-radius: 3px;
+	box-shadow: 0px 0px 4px 1px #ccc;
+	position: absolute;
+	width: 160px;
+	height: 140px;
 	background-color: #fffdd6;
 	background-image: -webkit-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
 	background-image: -moz-linear-gradient(bottom, rgba(255,240,71,.3), rgba(255,254,238,.4));
@@ -27,11 +26,11 @@
 	background-image: linear-gradient(to top, rgba(255,240,71,.3), rgba(255,254,238,.4));
 }
 
-.container .object .placeholder {
+.postit-container .object .placeholder {
   width: 160px;
 }
 
-.container .object.ss-moving {
+.postit-container .object.ss-moving {
   cursor: move;
   z-index: 9999;
   opacity: .7;
@@ -42,25 +41,25 @@
   -o-transform:rotate(2deg); /* Opera */
 }
 
-.container .object img { border-radius: 2px 2px 0 0; }
+.postit-container .object img { border-radius: 2px 2px 0 0; }
 
 @media screen and (max-width: 1200px) {
-  .container .object {
+  .postit-container .object {
     width: 160px;
   }
 
-  .container .object .placeholder {
+  .postit-container .object .placeholder {
     width: 160px;
   }
 }
 
 
 @media screen and (max-width: 800px) {
-  .container .object {
+  .postit-container .object {
     width: 80px;
   }
 
-  .container .object .placeholder {
+  .postit-container .object .placeholder {
     width: 80px;
   }
 }
@@ -152,10 +151,11 @@
 
 .group_title {
 	float:left;
-	width: 80px;
+	width: 150px;
 	font-size: 12px;
 	background: none;
 	text-align: center;
+	border:1px solid #999999;
 }
 
 .add_postit {

@@ -79,7 +79,8 @@ exports.new_group = function(req, res){
 	var result = {};
 	var params = {};
 	var group_name = req.body.group_name;
-	
+	var idx_group;
+
 	if( group_name.length < 1 )
 		result = { result:"failed", msg:"You can't leave this empty.", target:"group_name" };
 
@@ -119,7 +120,7 @@ exports.new_group = function(req, res){
 			dao_c.dao_rollback(evt, mysql_conn);
 		else
 		{
-			var idx_group = rows.insertId;
+			idx_group = rows.insertId;
 			params = { idx_user:req.session.idx_user, idx_group:idx_group };
 			dao_gs.dao_set_relation_user_group(evt, mysql_conn, params);
 		}
@@ -138,7 +139,13 @@ exports.new_group = function(req, res){
 	evt.on('commit', function(err, rows){
 		if(err) throw err;
 		// 트랜젝션 커밋 실행 후
-		result = { result:"successful", msg:"successful", user_name:req.session.nickname, group_name:group_name  };
+		result = {
+			result:"successful", 
+			msg:"successful", 
+			user_name:req.session.nickname, 
+			group_name:group_name,
+			idx_group:idx_group
+		};
 		res.send(result);
 	});
 	// 롤백

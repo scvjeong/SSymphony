@@ -1651,9 +1651,12 @@ h6 small {
 .rightpanel-content-box .process-unit:hover{
 	color:#23466a;
 }
-.rightpanel-content-box .process-unit .use_time{
+.rightpanel-content-box .process-unit .use_used_time{
 	margin-left:5px;
 	font-size:8pt;
+}
+.rightpanel-content-box .process-unit .time-over{
+	color:#cc0000;
 }
 .rightpanel-content-box .processing{
 	color:#2674a1;

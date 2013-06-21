@@ -288,6 +288,22 @@ exports.dao_set_meeting_close = function(evt, mysql_conn, params){
 	return sql;
 }
 
+// set_agenda_complete
+// params['idx_agenda']
+// params['idx_use_time']
+exports.dao_set_agenda_complete = function(evt, mysql_conn, params){
+	var sql = "UPDATE `agenda` SET ";
+	sql += "`status` = 'complete', ";
+	sql += "`use_time` = '"+params['use_time']+"' ";
+	sql += "WHERE `idx` = '"+params['idx_agenda']+"' ";
+
+	var query = mysql_conn.query(sql, function(err, rows, fields) {
+		evt.emit('set_agenda_complete', err, rows);
+	});
+
+	return sql;
+}
+
 // set_meeting_save_options
 // params['idx_meeting']
 // params['idx_group']

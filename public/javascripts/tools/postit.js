@@ -4,13 +4,8 @@ var tmpLastId = 100;
 var tmpGroup = 0;
 var tmpTool = 0;
 var tmpItemGroup = 0;
-//var tmpClient = 0;
 var tmpToolSelect = 0;
 var preSelectGroup = 0;
-
-//$(document).ready(function() {
-//	init_postit("postit1", "group1");			
-//});
 
 ////  포스트잇 초기 설정해주는 함수  ////
 function initpostit(group, tool) { initPostit(group, tool); }
@@ -31,10 +26,10 @@ function initPostit(group, tool)
 	////  서버에 초기 데이터 요청하는 함수  ////
 	_socket_postit.emit('set_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });
 
-//	_socket_postit.on('get_client', function (data) {
-//		tmpClient = data.client;
-//		//console.log("client: "+data.client);
-//	});
+	//_socket_postit.on('get_client', function (data) {
+	//	tmpClient = data.client;
+		//console.log("client: "+data.client);
+	//});
 
 	////  X 버튼 클릭 이벤트 등록 - 포스트잇 삭제  ////
 	$('article').delegate('.del_button', 'click', function() {
@@ -62,7 +57,7 @@ function initPostit(group, tool)
 	});
 
 	////  입력창에서 포커스 잃었을 때 이벤트 등록  ////
-	$('.container').delegate('.input_area', 'blur', function() {
+	$('.postit-container').delegate('.input_area', 'blur', function() {
 		//데이터 전달하는 부분 작성
 	});
 
@@ -78,13 +73,12 @@ function addSocketListenerForPostit()
 		postit_render_children(_now_tool_data.variables.tmpLastId, _now_tool_data.variables.tmpItemGroup, "");
 		
 		var tmpSelect = _now_tool_data.variables.tmpToolSelect.find('[taskid='+_now_tool_data.variables.tmpLastId+']');
-	
+
 		var addIndex = _now_tool_data.variables.tmpToolSelect.find('.object').index(tmpSelect);	 // 현재 Index 구함
 		//console.log("index: "+addIndex);
 		_socket_postit.emit('set_insert_tree_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool, id: _now_tool_data.variables.tmpLastId, parent: _now_tool_data.variables.tmpItemGroup, index: addIndex, val:"", client: _client_id });
-	
 	});
-	
+
 	////  서버에서 데이터 받는 함수  ////
 	_socket_postit.on('get_tree_data', function (data) {
 		_now_tool_data.variables.tmpLastId = data.id;
@@ -92,14 +86,14 @@ function addSocketListenerForPostit()
 		var tmpVal = data.val;		
 		
 		console.log("get_data: "+_now_tool_data.variables.tmpLastId);
-	
+
 		var groupFlag = _now_tool_data.variables.tmpToolSelect.find('article').find('.group_container[groupid='+tmpParent+']');
 		
 		if (groupFlag.length == 0) {
 			postit_add_group(tmpParent);
 		}
 		postit_render_children(_now_tool_data.variables.tmpLastId, tmpParent, tmpVal);
-	
+
 		_socket_postit.emit('set_tree_option_data', { group: _now_tool_data.variables.tmpGroup, tool: _now_tool_data.variables.tmpTool });
 	});
 	
@@ -129,7 +123,7 @@ function addSocketListenerForPostit()
 		if (groupFlag.length == 0) {
 			postit_add_group(tmpParent);
 		}
-	
+
 		postit_render_children(tmpId, tmpParent, tmpVal);
 	});
 	
@@ -138,7 +132,7 @@ function addSocketListenerForPostit()
 		var delId = data.id;
 		
 		var delSelect = _now_tool_data.variables.tmpToolSelect.find('[taskid='+delId+']');
-	
+
 		delSelect.remove();
 	});
 	
@@ -146,14 +140,13 @@ function addSocketListenerForPostit()
 	_socket_postit.on('get_change_parent', function (data) {
 		var changeId = data.id;
 		var changeParent = data.parent;
-	
+
 		var delSelect = _now_tool_data.variables.tmpToolSelect.find('[taskid='+changeId+']');
 		var tmpVal = delSelect.children('textarea').val();
 		//console.log(tmpVal);
 		delSelect.remove();
 		
 		postit_render_children(changeId, changeParent, tmpVal);
-	
 	});
 	
 	////  서버에서 그룹제목 데이터 받는 함수  ////
@@ -162,7 +155,7 @@ function addSocketListenerForPostit()
 		var tmpVal = data.val;
 		
 		//console.log("11get_option: "+tmpOption+" val: "+tmpVal);
-	
+
 		var tmpTitle = _now_tool_data.variables.tmpToolSelect.find('[titleid='+tmpOption+']');
 		if ( tmpTitle.length > 0 )
 		{
@@ -181,34 +174,34 @@ function postit_render_children(valId, groupId, valData) {
 	if ( tmpIdClass.length > 0 )
 	{
 		tmpIdClass.children('textarea').val(valData);
-		console.log(tmpIdClass);
 	}
 	else {
-		var $containers = _now_tool_data.variables.tmpToolSelect.find('.container:eq('+groupId+')');
+		var $containers = _now_tool_data.variables.tmpToolSelect.find('.postit-container:eq('+groupId+')');
 		$containers.each(function(container_i) {
 			var $element = $("<div class='object task' taskid="+valId+"></div>"),
 					height = 140,
 					width = $containers.children().first().width();	
 			//$containers.children('.add_postit').before($element);		
-			$containers.append($element);		
+			$containers.append($element);
 
 			var tmpPostit = _now_tool_data.variables.tmpToolSelect.find('[taskid='+valId+']');
 			var $titleArea = $("<div class='title_area'><div class='del_button'>X</div><div>");
 			tmpPostit.append($titleArea);
-			var $inputArea = $("<textarea class='input_area'  onClick='postit_mouse_focus()' onKeyDown='postit_key_input()'>"+valData+"</textarea>"); 
+			var $inputArea = $("<textarea class='input_area fancy-scrollbar'  onClick='postit_mouse_focus()' onKeyDown='postit_key_input()'>"+valData+"</textarea>"); 
 			tmpPostit.append($inputArea);
 		});
 
 		$containers.shapeshift({
-			paddingY: 30
+			paddingY: 40
 		});
 		  
-		  // ----------------------------------------------------------------------
-		  // - Drag and Drop events for shapeshift
-		  // ----------------------------------------------------------------------
-
+		// ----------------------------------------------------------------------
+		// - Drag and Drop events for shapeshift
+		// ----------------------------------------------------------------------
+		
 		$containers.on("ss-event-dropped", function(e, selected) {
 			console.log("CALL $containers.on:ss-event-dropped");
+
 			//드롭 이벤트에 따라 위치 변경 클라이언트에 전달 - changeDepth 이용해서 구현
 			var $selected = $(selected)
 			var $selectedGroup = $selected.parent().parent();
@@ -224,17 +217,15 @@ function postit_render_children(valId, groupId, valData) {
 			else {		//그룹내 이동하는 경우
 				
 			}
-
-			/*
+			
 			// Get the index position of each object
-			$objects = $(this).children();
-			$objects.each(function(i) {
+			//$objects = $(this).children();
+			//$objects.each(function(i) {
 			//console.log("Get the index position:", i)
 			//console.log("Get the current element:", $(this))
-			});
-			*/
+			//});
 		});
-
+		
 		$containers.on("ss-event-dragged", function(e, selected) {
 			console.log("CALL $containers.on:ss-event-dragged");
 			var $selected = $(selected);
@@ -250,7 +241,7 @@ function postit_mouse_focus() {
 	var focusClass = _now_tool_data.variables.tmpToolSelect.find('textarea:focus').parent();
 	var focusClassId = focusClass.attr('taskid');
 	//console.log(focusClass.attr('taskid'));
-	var preClass = _now_tool_data.variables.tmpToolSelect.find('.container').find('.open');
+	var preClass = _now_tool_data.variables.tmpToolSelect.find('.postit-container').find('.open');
 	var preClassId = preClass.attr('taskid'); 
 	if ( focusClassId != preClassId ) {		// 다른 포스트잇 선택했을 때
 		preClass.attr('class', 'object task');
@@ -286,7 +277,7 @@ function postit_add_group(groupId) {
 	var tmpAddGroupData = "<div class='group_container' groupid="+_now_tool_data.variables.tmpItemGroup+">";
 	tmpAddGroupData += "<input type='text' class='group_title' titleid="+_now_tool_data.variables.tmpItemGroup+" onKeyDown='postit_key_input()'/>"
 	tmpAddGroupData += "<div class='add_postit'>+</div>";
-	tmpAddGroupData += "<div class='container'></div></div>";
+	tmpAddGroupData += "<div class='postit-container'></div></div>";
 	$article.append(tmpAddGroupData);
 	
 	if (groupFlag == 0) {

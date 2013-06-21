@@ -146,7 +146,7 @@
 
 		function initClickGroup()
 		{
-			$("#member-info .group-list-box .group-list").click(function(){
+			$("#member-info .group-list-box .group-list").on("click",function(){
 				var idx = $(this).attr("idx");
 				location.href="/page/meeting_list?group="+idx;
 			});
@@ -171,9 +171,10 @@
 					else if( json.result == "successful" )
 					{
 						len = $("#member-info .group-list").length + 1;
-						html = '<li><div class="group-name group-'+len+'">'+json.group_name+'</div>';
+						html = '<li class="group-list" idx="'+json.idx_group+'"><div class="group-name group-'+len+'">'+json.group_name+'</div>';
 						html += '<div class="members"><span class="team-leader">'+json.user_name+'</span></div></li>';
 						$("#member-info .group-list-box ul").append(html);
+						initClickGroup();
 						newGroupPopdown();
 					}
 				}

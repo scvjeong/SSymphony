@@ -1,0 +1,176 @@
+	<div class="meeting_evaluate_box">
+		<div class="container">
+			<form id="evaluate_form" action="/page/meeting_evaluation" method="post">
+
+			<div id="evaluate_title_box">
+				<div class="evaluate_icon">
+					
+					<img class="evaluate_icon_button" src="/images/meeting_result/exit.png" onClick="hideEvaluateWindow()"/>
+				</div>
+			</div>
+			<div id="evaluate_contents_box">
+				<div class="evaluate_contents">
+				<% if(result.meeting_evaluation.length > 0) { %>
+					<div class="evaluate_title"><%= result.meeting_evaluation[0].subject %></div>
+					<div class="evaluate_subject"><%= result.meeting_evaluation[0].goal %></div>
+					<div class="eval_result_time">
+						<img class="result_contents_button" src="/images/meeting_result/clock.png" />
+						<div id="result_time_use">01:00:00</div>
+						<%
+							var start_time = result.meeting_evaluation[0].start_time;
+							var end_time = result.meeting_evaluation[0].end_time;
+							var start_array = start_time.split(':');
+							var end_array = end_time.split(':');
+							
+							var t1 = end_array[0] - start_array[0];
+							var t2 = 0;
+							if ( end_array[1] >= start_array[1] ) {
+								t2 = end_array[1] - start_array[1];
+							}
+							else {
+								t2 = 60 - (start_array[1] - end_array[1]);
+								t1 = t1-1;
+							}
+
+							if (t1<10) {
+								t1 = "0"+t1;
+							}
+
+							if (t2<10) {
+								t2 = "0"+t2;
+							}
+							var set_time = t1+":"+t2+":"+"00";
+							
+						%>
+						<div id="result_time_set">/ <%=set_time %></div>	
+						<div id="result_time_clock">(<%= result.meeting_evaluation[0].start_time %> - <%= result.meeting_evaluation[0].end_time %>)</div>	
+						
+					</div>
+					
+					<img class="eval_result_contents_button" src="/images/meeting_result/badge.png" />
+					<div class="input_evaluate_meeting_box">
+						<div class="input_evaluate_title">
+							<div class="input_evaluate_subject">Meeting</div>
+							<input type="hidden" id="meeting_val" name="satisfaction" value="5">
+							<div class="input_evaluate_rating_box">
+								<div id="eval_input_meeting_rating"></div>
+								<div id="eval_input_meeting_rating_val"></div>
+								<div class="text_right">Today</div>
+							</div>
+						</div>
+						<!--
+						<div class="input_evaluate_contents">
+							<div class="pre_evaluate_rating_box">		
+								<div class="pre_rating_result">
+									<div class="text_right">5/24</div>
+								</div>
+								<div class="pre_rating_result">
+									<div class="text_right">5/12</div>
+								</div>
+							</div>
+						</div>
+						-->
+					</div>
+					<div class="input_evaluate_ft_box">
+						<div class="input_ft_title">
+							<div class="input_evaluate_subject">Facilitating</div>
+							<input type="hidden" id="ft_val" name="ft_appraisal" value="5">
+							<div class="input_evaluate_rating_box">
+								<div id="eval_input_ft_rating"></div>
+								<div id="eval_input_ft_rating_val"></div>
+								<div class="text_right">Today</div>
+							</div>
+						</div>
+						<!--
+						<div class="input_evaluate_contents">
+							<div class="pre_evaluate_rating_box">
+								<div class="pre_rating_result">
+									<div class="text_right">5/24</div>
+								</div>
+								<div class="pre_rating_result">
+									<div class="text_right">5/12</div>
+								</div>					
+							</div>
+						</div>
+						-->
+					</div>
+					<div class="input_evaluate_best_box">
+						<div class="input_best_title">
+							<div class="input_evaluate_subject">Best Member</div>
+
+							<input type="hidden" id="mvp_val" name="mvp" value="stargt">
+
+							<div class="input_best_rating_box">
+								<div id="eval_input_best_rating"></div>
+								<div class="text_right">Today</div>
+							</div>
+						</div>
+						<!--
+						<div class="input_best_contents">
+							<div class="pre_best_rating_box">			
+								<div class="pre_rating_result">
+									<div class="text_right">5/24</div>
+								</div>
+								<div class="pre_rating_result">
+									<div class="text_right">5/12</div>
+								</div>
+							</div>
+						</div>
+						-->
+					</div>
+					<div class="evaluate_best_box">
+						<div class="best_title">
+							<div class="evaluate_best_subject">Today's Best Member</div>
+						</div>
+						<div class="best_contents" >
+							<%	
+								var user_array = result.meeting_evaluation[0].user_list.split(",");
+								var time_array = result.meeting_evaluation[0].time_evaluation.split(",");
+								var activity_array = result.meeting_evaluation[0].activity_evaluation.split(",");
+													
+								for (var i=0; i<user_array.length; i++) { %>
+								
+								<div class="best_member_box" id="eval_member<%=i%>" onClick="clickBestMember(this)">
+									<div class="member_name"><%=user_array[i] %></div>
+									<div class="member_thumb"></div>
+									<div class="member_point_box">
+										<img id="member_point_icon" src="/images/member_point_icon.png">
+										<div class="member_point"><%=activity_array[i] %></div>
+									</div>
+									<div class="member_grade_box">
+										<img id="member_grade_icon" src="/images/member_grade_icon.png">
+										<%
+											var tmp_time = "";
+											if (time_array[i] == "1" ||  time_array[i] == 1) {
+												tmp_time = "Perfect";
+											}
+											else if (time_array[i] == "2" || time_array[i] == 2) {
+												tmp_time = "Good";
+											}
+											else if (time_array[i] == "3"  || time_array[i] == 3) {
+												tmp_time = "Ok";
+											}
+											else if (time_array[i] == "4"  || time_array[i] == 4) {
+												tmp_time = "Bad";
+											}
+										%>
+										<div class="member_grade"><%=tmp_time %></div>
+									</div>
+								</div>	
+								
+							<% } %>
+							
+						</div>
+					</div>
+				<% } %>
+				</div>
+			</div>
+
+			<div id="evaluate_footer_box">
+				<div class="prev_btn" onClick="hideEvaluateWindow()">Prev</div>
+				<div class="next_btn" onClick="evaluateComplete()">Next</div>
+			</div>
+
+			</form>
+		</div>
+	</div>

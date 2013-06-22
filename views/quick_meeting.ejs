@@ -1,0 +1,11 @@
+<div class="row-fluid">
+	<div class="span12">
+		<div class="inner-spacer quick-meeting"> 
+		<!-- content goes here -->
+			<div class="btn btn-success btn-large">도구</div>
+			<% for(var i=0; i<result.length; i++) {%>
+				<div><a class="btn btn-primary btn-large" href="/page/meeting?tool=<%= result[i].name %>"><%= result[i].name %></a></div>
+			<% } %>	
+		</div>
+	</div>
+</div>

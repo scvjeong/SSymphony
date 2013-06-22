@@ -1,0 +1,32 @@
+.chatting_tool {
+	width: 200px;
+	height: 300px;
+
+}
+
+.chatting_space {
+	overflow-y: auto;
+	word-wrap: break-word;
+	margin : 1%;
+	width: 98%;
+	height: 88%;
+	border: 1px solid #999999;
+	cursor: text;
+}
+
+.input_space {
+	margin: 1%;
+	width: 98%;
+	height: 10%;
+}
+
+.chatting_input {
+	width: 99%;
+	font: 14px verdana, sans-serif;
+	cursor: text;
+}
+
+.chatting_user_id {
+
+	font: bold 14px verdana, sans-serif;
+}

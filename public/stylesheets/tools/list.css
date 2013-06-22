@@ -1,0 +1,67 @@
+	.list_tool{
+		padding:0px;
+		margin:0px;
+		width:100%;
+		height:100%;
+	}
+	.list_tool .header{
+		width:100%;
+	}
+	.list_tool .main_section{
+		border:1px solid #CCCCCC;
+		border-radius:10px;
+		padding:20px;
+		box-shadow: 0px 0px 10px 5px #CCCCCC;
+		min-height:370px;
+	}
+	.list_tool .list_space{
+		float:left;
+		width:100%;
+	}
+	.list_tool .home_box{
+		width:100%;
+		text-align:right;
+		font-size:25px;
+		font-weight:bold;
+	}
+	.list_tool .home_box span{
+		cursor:pointer;
+	}
+	.list_tool .init_box{
+		width:100%;
+		text-align:right;
+		font-size:25px;
+		font-weight:bold;
+	}
+	.list_tool .init_box #addButton{
+		cursor:pointer;
+	}
+	.list_tool .input_task{
+		float:left;
+		width:100%;
+	}
+	.list_tool .bullet{
+		float:left;
+		font-size:24px;
+		margin:0px;
+		line-height:28px;
+		color:#5C8AB8;
+	}
+	.list_tool .list_space input[type=text]{
+		float:left;
+		border:0px none;
+		height:29px;
+		line-height:28px;
+		margin:0px;
+		margin-left: 10px;
+		width:90%;
+	}
+
+	.list_tool .list_space input[type=checkbox]{
+		display:none;
+		border:0px none;
+		height:26px;
+		line-height:28px;
+		margin:0px;
+		padding:0px;
+	}

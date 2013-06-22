@@ -1,0 +1,121 @@
+<div id="user-info" class="user-info">
+	<div class="general">
+		<div class="profile-pic"></div>
+		<div class="text">
+			<div class="id"><%=result.user_info[0].id%></div>
+			<div class="name"><%=result.user_info[0].first_name%> <%=result.user_info[0].last_name%></div>
+			<div class="position"><%=result.user_info[0].position%></div>
+		</div>
+	</div>
+	<div class="groups">
+		<div class="title">Groups</div>
+		<div class="contents">
+			<ul>
+			<% 
+				for(var i=0; i<result.group_info.length; i++) {
+			%>
+				<li><%=result.group_info[i].group_name%></li>
+			<%
+				}
+			%>
+			</ul>
+		</div>
+	</div>
+	<div class="meetings">
+		<div class="title">Meetings</div>
+		<div class="contents fancy-scrollbar">
+			<ul class="meetings-1">
+				<% 
+					for(var i=0; i<result.meeting_list.length; i+=2) {
+						var idx = result.meeting_list[i].idx_meeting;
+				%>
+					<li class="meeting-node" idx="14"> 
+						<ul> 
+							<li class="subject"><%=result.meeting_list[i].subject%> (<span class="meeting-group">Live Your Dream</span>)</li> 
+							<li class="date color-<%=i+1%>"><%= result.meeting_list[i].date.toDateString() %> <%= result.meeting_list[i].start_time %></li> 
+							<li class="time"><%=result.meeting_list[i].start_time%> ~ <%=result.meeting_list[i].end_time%></li> 
+							<li class="member"> 
+								<%
+									var len = result.meeting_user[idx].length;
+									for(var j=0; j<len; j++) {
+										var name = result.meeting_user[idx][j].first_name + result.meeting_user[idx][j].last_name;
+										if( len === (j+1) ) {
+										%>
+											<span><%= name.trim() %></span>
+										<%
+										} else {
+										%>
+											<span><%= name.trim() %>,</span>
+										<%	
+										}
+									}
+								%>
+							</li> 
+						</ul> 
+					</li>
+				<%
+					}
+				%>
+			</ul>
+			<ul class="meetings-2">
+				<% 
+					for(var i=1; i<result.meeting_list.length; i+=2) {
+						var idx = result.meeting_list[i].idx_meeting;
+				%>
+					<li class="meeting-node" idx="14"> 
+						<ul> 
+							<li class="subject"><%=result.meeting_list[i].subject%> (<span class="meeting-group">Live Your Dream</span>)</li> 
+							<li class="date color-<%=i+1%>"><%= result.meeting_list[i].date.toDateString() %> <%= result.meeting_list[i].start_time %></li> 
+							<li class="time"><%=result.meeting_list[i].start_time%> ~ <%=result.meeting_list[i].end_time%></li> 
+							<li class="member"> 
+								<%
+									var len = result.meeting_user[idx].length;
+									for(var j=0; j<len; j++) {
+										var name = result.meeting_user[idx][j].first_name + result.meeting_user[idx][j].last_name;
+										if( len === (j+1) ) {
+										%>
+											<span><%= name.trim() %></span>
+										<%
+										} else {
+										%>
+											<span><%= name.trim() %>,</span>
+										<%	
+										}
+									}
+								%>
+							</li> 
+						</ul> 
+					</li>
+				<%
+					}
+				%>
+			</ul>
+		</div>
+	</div>
+	,<!--
+	<div class="chart-div">
+		<div class="title">Meetings - Chart</div>
+		<div class="contents">
+			<div id="meeting-chart"></div>
+		</div>
+	</div>
+	<div class="chart-div">
+		<div class="title">Attendance Rate - Chart</div>
+		<div class="contents">
+			<div id="attendance-rate-chart"></div>
+		</div>
+	</div>
+	<div class="chart-div">
+		<div class="title">Participation Rate - Chart</div>
+		<div class="contents">
+			<div id="participation-rate-chart"></div>
+		</div>
+	</div>
+	<div class="chart-div">
+		<div class="title">Meeting Per Input Word - Chart</div>
+		<div class="contents">
+			<div id="meeting-per-input-word-chart"></div>
+		</div>
+	</div>
+	-->
+</div>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+<div id="fb-root"></div>
+<!-- jQuery -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="/javascripts/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script>window.jQuery.ui || document.write('<script src="/javascripts/jquery.ui.min.js"><\/script>')</script>
+<!-- 3: if jQuery was loaded in compatibility mode, where you have to use the
+		long 'jQuery(...)' instead of '$(...)' (Wordpress does this), revert
+		to to "classic" jQuery behavior -->
+<script>if ($ === undefined) $ = jQuery</script>
+<!-- /jQuery -->
+<script>
+	var action = "<%=result.type%>";
+	var url;
+	window.fbAsyncInit = function() {
+		// init the FB JS SDK
+		FB.init({
+		appId      : '538364069532216',                        // App ID from the app dashboard
+		channelUrl : 'http://orchestra.com:3000/facebook/channel', // Channel file for x-domain comms
+		status     : true,                                 // Check Facebook Login status
+		xfbml      : true                                  // Look for social plugins on the page
+	});
+
+	if( action === "login" )
+	{
+		url = "https://www.facebook.com/login.php?skip_api_login=1&api_key=538364069532216&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Foauth%3Fresponse_type%3Dcode%26client_id%3D538364069532216%26redirect_uri%3Dhttp%3A%2F%2Forchestra.com%3A3000%2Fauth%2Ffacebook%2Fcallback%2Flogin%26scope%3Demail%2Cuser_birthday";
+	}
+	else
+	{
+		url = "https://www.facebook.com/login.php?skip_api_login=1&api_key=538364069532216&signed_next=1&next=https%3A%2F%2Fwww.facebook.com%2Fdialog%2Foauth%3Fresponse_type%3Dcode%26client_id%3D538364069532216%26redirect_uri%3Dhttp%3A%2F%2Forchestra.com%3A3000%2Fauth%2Ffacebook%2Fcallback%26scope%3Demail%2Cuser_birthday";
+	}
+
+	
+	FB.getLoginStatus(function(response) {
+		if(response.status === 'connected') {
+			FB.api('/me', function(response) {
+
+				if( action === "login" )
+				{
+					var data = { id:response.email, type:"facebook" };
+					$("form[name=login-form] input[name=email]").val(response.email);
+					$("form[name=login-form]").submit();
+				}
+				else
+				{
+					var data = {
+						first_name:response.first_name,
+						last_name:response.last_name,
+						sign_up_email:response.email
+					};
+					$.ajax({
+						url: '/page/sign_up',
+						type: 'POST',
+						data: data,
+						dataType: 'json',
+						success: function(json) {
+							if( json.result == "failed" )
+								alert(json.msg);
+							location.href="/?status=auth";
+						}
+					});
+				}
+			});
+		} else if (response.status === 'not_authorized') {
+			location.href = url;
+		} else {
+			location.href = url;
+		}
+	});
+	
+	FB.Canvas.setAutoGrow();
+
+    // Additional initialization code such as adding Event Listeners goes here
+  };
+
+  // Load the SDK asynchronously
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/all.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+
+	function testAPI() {
+		console.log('Welcome!  Fetching your information.... ');
+		FB.api('/me', function(response) {
+			console.log('Good to see you, ' + response.name + '.');
+		});
+	}
+</script>
+<form name="login-form" method="post" action="/page/login">
+	<input type="hidden" name="email" value="">
+	<input type="hidden" name="fb_key" value="<%=result.fb_key%>">
+</form>
+</body>
+</html>

@@ -178,9 +178,9 @@ exports.dao_get_meeting_evaluation_info = function(evt, mysql_conn, params){
 	//sql += "INNER JOIN `meeting_appraisal` AS `E` ";
 	//sql += "ON `A`.`idx` = `E`.`idx_meeting` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_meeting']+"' ";
-	sql += "AND `A`.`idx_owner` = '"+params['idx_group']+"' ";
 	sql += "GROUP BY `B`.`idx` ";
 	sql += "ORDER BY `B`.`order` ASC";
+	console.log(sql);
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('get_meeting_evaluation_info', err, rows);		
 	});

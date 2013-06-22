@@ -63,8 +63,35 @@ exports.main = function(req, res){
 			else
 			{
 				params.idx_meeting = rows.insertId;
-				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, params);
+				params.subject = req.param("tool");
+				params.goal = "";
+				params.time = 3600;
+				params.order = 1;
+				dao_mp.dao_set_meeting_planning_agenda(evt, mysql_conn, params);
 			}
+		});
+
+		evt.on('query_unit_2', function(err, rows){
+			console.log("query_unit_2");
+			if(err) 
+				dao_c.dao_rollback(evt, mysql_conn);
+			else
+				dao_mp.dao_set_meeting_planning_users(evt, mysql_conn, params);
+		});
+		
+		evt.on('query_unit_3', function(err, rows){
+			console.log("query_unit_3");
+			if(err) 
+				dao_c.dao_rollback(evt, mysql_conn);
+			else
+				dao_mp.dao_set_meeting_planning_group(evt, mysql_conn, params);
+		});
+		evt.on('query_unit_3', function(err, rows){
+			console.log("query_unit_3");
+			if(err) 
+				dao_c.dao_rollback(evt, mysql_conn);
+			else
+				dao_mp.dao_set_meeting_planning_group(evt, mysql_conn, params);
 		});
 		evt.on('query_unit_3', function(err, rows){
 			console.log("query_unit_3");

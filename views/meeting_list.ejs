@@ -466,9 +466,6 @@
 			setup_calendar();
 			initClickMeeting();
 			initColorBar();
-			initMeetingListBtn();
-			// group-info
-			initChart();
 		})
 		
 		function initChart()
@@ -571,7 +568,7 @@
 						margin: [-5, -17]
 					}
 				});
-	
+
 				$('.group-info-chart').children('.flot-text').css("top", "-10px");
 				$('.group-info-chart').children('.flot-text').css("left", "-5px");
 			}
@@ -580,20 +577,25 @@
 		{
 			$(".page").hide();
 			$("#meeting-list-page").show();
+			initMeetingListBtn();
+			initAddMemberPopdown();
 		}
 
 		function showGroupInfo()
 		{
 			$(".page").hide();
 			$("#group-info-page").show();
-			$(".member-list").children().show();
-			$(".add-member-btn").show();
+			initChart();
+			initUserInfoBtn();
+			initAddMemberBtn();
+			initSearchMemberBtn();
 		}
 
 		function showNeedHelp()
 		{
 			$(".page").hide();
 			$("#need-help-page").show();
+			initAddMemberPopdown();
 		}
 
 		function initClickMeeting()
@@ -619,9 +621,6 @@
 		function initMeetingListBtn()
 		{
 			initStartBtn();
-			initAddMemberBtn();
-			initSearchMemberBtn();
-			initUserInfoBtn();
 		}	
 		function initStartBtn()
 		{	
@@ -690,7 +689,7 @@
 				}
 			}
 
-			$("input[name=member]").keyup(function(){
+			$("input[name=member]").on("keyup", function(){
 				var val = $(this).val();
 				_search_member_flag = true;
 				window.setTimeout(cb, 500, this, val)
@@ -745,11 +744,8 @@
 		}
 		function initAddMemberBtn()
 		{
-			$(".add-member-btn").toggle(
-			function(){
+			$(".add-member-btn").on("click", function(){
 				initAddMemberPopup();
-			},function(){
-				initAddMemberPopdown();
 			});
 		}
 		function initAddMemberPopup()
@@ -782,6 +778,7 @@
 				user_name:user_name 
 			};
 			var html;
+
 			$.ajax({
 				url: '/page/add_user',
 				type: 'POST',
@@ -795,11 +792,8 @@
 						html += '<div class="name">'+user_name+' ('+user_id+')</div>';
 						html += '</li>';
 						$("#group-info-member .member-list").append(html);
-						$("#group-info-member .member-list li[idx="+idx_user+"]").toggle(
-						function(){
+						$("#group-info-member .member-list li[idx="+idx_user+"]").on("click", function(){
 							initUserInfoPopup($(this));
-						},function(){
-							initUserInfoPopdown($(this));
 						});
 					}
 					initAddMemberPopdown();
@@ -810,12 +804,10 @@
 		function initUserInfoBtn()
 		{
 			var idx_user;
-			$("#group-info-member .member-list li").toggle(
-			function(){
-				initUserInfoPopup($(this));
-			},function(){
-				initUserInfoPopdown($(this));
+			$("#group-info-member .member-list li").on("click", function(){
+					initUserInfoPopup($(this));
 			});
+			/*
 			$("#user-info-popup .change-perm").click(function(){
 				alert("Is coming soon.");
 			});
@@ -826,6 +818,7 @@
 				var idx_user = $(this).attr("idx");
 				removeFromGroup(idx_user);
 			});
+			*/
 		}
 		function myAccount()
 		{

@@ -1935,10 +1935,11 @@ h6 small {
 	cursor:pointer;
 }
 #topbar #group-title{
-	display:inline-block;
+	float:left;
 	font-family:"Istok Web";
 	font-size:23px;
 	margin-top:19px;
+	width:800px;
 }
 
 #meeting-list-page{
@@ -2990,16 +2991,17 @@ h6 small {
 #user-info .meetings{
 	float:left;
 	width:100%;
-	height: 170px;
+	height: 270px;
 	margin-bottom:10px;
 }
 #user-info .meetings .contents{
-	height:100px;
+	height:200px;
 	overflow-y:scroll;
 }
 #user-info .meetings .meetings-1, #user-info .meetings .meetings-2{
 	float:left;
-	width:50%;
+	width:46%;
+	padding:0px 2%;
 }
 #user-info .meetings .meeting-node{
 	float:left;

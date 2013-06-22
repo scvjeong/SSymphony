@@ -348,9 +348,11 @@ function drawToolsImage(idx_process, idx_tool, tool_num, image_value)
 
 function hideMeetingResultWindow()
 {
+	var group_idx = 1;
 	var bootbox_select = $('.meeting_result_bootbox');
 	bootbox_select.modal('hide');
-}
+	location.href="/page/meeting_list?group="+group_idx;
+}	
 
 /*
 function setupUserChart()

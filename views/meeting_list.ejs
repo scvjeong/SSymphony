@@ -121,8 +121,9 @@
 					      var t4 = t3/3600000;
 					      total_time = total_time + t4;
 					    }
+						total_time = Math.round( total_time * 100 )/100;
 						if( result.meeting_list.length > 0 )
-							average_time = total_time / result.meeting_list.length;
+							average_time = Math.round( total_time / result.meeting_list.length * 100 )/100;
 					%>
 
 					<li>

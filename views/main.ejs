@@ -348,12 +348,12 @@
 		if( status === "failed" )
 		{
 			location.herf = location.origin+"#";
-			alert("이메일 또는 비밀번호가 일치하지 않습니다.");
+			alert("The email or password was incorrect.");
 		}
 		else if( status === "auth" )
 		{
 			location.herf = location.origin+"#";
-			alert("이메일 인증을 하셔야 합니다.\n이메일 주소로 메일 발송 해드렸습니다.");
+			alert("You should authentication from e-mail");
 		}
 
 		checkEmail();

@@ -77,6 +77,7 @@ app.get('/page/tool_help', meeting.tool_help); // 도구 활용법 도움말
 app.get('/page/minutes', meeting.minutes); // 회의록 페이지
 app.get('/page/need_help', meeting.need_help);
 app.get('/page/user_info', meeting_list.user_info); // 유저 정보
+app.get('/page/logout', main.logout);
 
 /* post */
 app.post('/page/set_meeting_planning', meeting_planning.set_meeting_planning);

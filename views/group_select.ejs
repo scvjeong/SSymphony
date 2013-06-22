@@ -87,6 +87,7 @@
 		</div>
 	</div>
 </div>
+<div class="modal-backdrop fade in hide"></div>
 
 <!--============================= /Page Body ================================-->
 
@@ -104,6 +105,7 @@
 	<script src="/javascripts/jquery.form.js"></script>
 	<script src="/javascripts/config.js"></script>	
 	<script type="text/javascript">
+		var _no_group = <%=result.no_group%>;
 		var date = new Date();
 		var d = date.getDate();
 		var m = date.getMonth();
@@ -144,8 +146,17 @@
 		$(document).ready(function(){
 			setup_calendar();
 			initClickGroup();
+			initGroupSelect();
 		})
 
+		function initGroupSelect()
+		{
+			if( _no_group )
+			{
+				$(".modal-backdrop").show();
+				newGroupPopup();
+			}
+		}
 		function initClickGroup()
 		{
 			$("#member-info .group-list-box .group-list").on("click",function(){
@@ -201,6 +212,7 @@
 				left:"0px"
 			});
 			$("#light-popup #group_name").val("");
+			$(".modal-backdrop").hide();
 		}
 	</script>
 <!-- /Javascript -->

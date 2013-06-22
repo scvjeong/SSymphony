@@ -39,8 +39,8 @@ exports.group_select = function(req, res){
 	dao_ui.dao_user_info(evt, mysql_conn, params);
 	evt.on('user_info', function(err, rows){
 		if(err) throw err;
-		complete_flag++;
 		result.user_info = rows;
+		complete_flag++;
 		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
 			res.render('user_info', {result:result} );
 	});
@@ -48,8 +48,8 @@ exports.group_select = function(req, res){
 	dao_gs.dao_group_select(evt, mysql_conn, params);
 	evt.on('group_select', function(err, rows){
 		if(err) throw err;
-		complete_flag++;
 		result.meeting = rows;
+		complete_flag++;
 		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
 			res.render('group_select', {result:result} );
 	});
@@ -57,8 +57,12 @@ exports.group_select = function(req, res){
 	dao_gs.dao_group_info(evt, mysql_conn, params);
 	evt.on('group_info', function(err, rows){
 		if(err) throw err;
-		complete_flag++;
 		result.group_info = rows;
+		if( rows.length < 1 )
+			result.no_group = true;
+		else 
+			result.no_group = false;
+		complete_flag++;
 		if( complete_flag === _GROUP_SELECT_COMPLETE_FLAG_CNT )
 			res.render('group_select', {result:result} );
 	});

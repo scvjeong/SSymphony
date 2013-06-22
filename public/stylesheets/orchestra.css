@@ -2458,7 +2458,7 @@ h6 small {
     overflow-y: auto;
     padding: 8px;
 	width:268px;
-	z-index: 20;
+	z-index: 9520;
 	display:none;
 }
 #light-popup .light-popup-close-btn{
@@ -2718,7 +2718,7 @@ h6 small {
 	text-align:center;
 	font-size: 19px; 
 	color: #333;
-	width: 526px; 
+	width: 390px; 
 	line-height: 41px; 
 	-webkit-border-radius: 0 526px/0 1px; 
 	-moz-border-radius: 0 526px/0 1px; 
@@ -2732,7 +2732,7 @@ h6 small {
 #meeting-template .meeting-template-body .right-body .process-arrow{
 	width:526px;
 	height:13px;
-	background: url(/images/arrow-bottom.png) no-repeat 240px 0  rgba(0, 0, 0, 0);
+	background: url(/images/arrow-bottom.png) no-repeat 165px 0  rgba(0, 0, 0, 0);
 }
 
 #meeting-template .meeting-setting {

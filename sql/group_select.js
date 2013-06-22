@@ -43,25 +43,25 @@ exports.dao_set_relation_user_group = function(evt, mysql_conn, params){
 exports.dao_group_select = function(evt, mysql_conn, params){
 	// group
 	var sql = "SELECT  ";
-	sql += "`C`.`idx`, ";
-	sql += "`C`.`subject`, ";
-	sql += "`C`.`date`, ";
-	sql += "`C`.`start_time`, ";
-	sql += "`C`.`end_time`, ";
+	sql += "`D`.`idx`, ";
+	sql += "`D`.`subject`, ";
+	sql += "`D`.`date`, ";
+	sql += "`D`.`start_time`, ";
+	sql += "`D`.`end_time`, ";
 	sql += "`E`.`name` AS `group_name` ";
 	sql += "FROM `user` AS `A` ";
-	sql += "INNER JOIN `relation_user_meeting` AS `B` ";
+	sql += "INNER JOIN `relation_user_group` AS `B` ";
 	sql += "ON `A`.`idx` = `B`.`idx_user` ";
-	sql += "INNER JOIN `meeting_planning` AS `C` ";
-	sql += "ON `B`.`idx_meeting` = `C`.`idx` ";
-	sql += "AND `C`.`idx_owner_type` = 'user' ";
-	sql += "INNER JOIN `relation_group_meeting` AS `D` ";
-	sql += "ON `C`.`idx` = `D`.`idx_meeting` ";
+	sql += "INNER JOIN `relation_group_meeting` AS `C` ";
+	sql += "ON `B`.`idx_group` = `C`.`idx_group` ";
+	sql += "INNER JOIN `meeting_planning` AS `D` ";
+	sql += "ON `C`.`idx_meeting` = `D`.`idx` ";
+	sql += "AND `D`.`idx_owner_type` = 'user' ";
 	sql += "INNER JOIN `group` AS `E` ";
-	sql += "ON `D`.`idx_group` = `E`.`idx` ";
+	sql += "ON `B`.`idx_group` = `E`.`idx` ";
 	sql += "WHERE `A`.`idx` = '"+params['idx_user']+"' ";
-	sql += "AND `C`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
-	sql += "GROUP BY `C`.`idx` ";
+	sql += "AND `D`.`date` BETWEEN '"+params['start_date']+"' AND '"+params['end_date']+"' ";
+	sql += "GROUP BY `D`.`idx` ";
 	sql += "ORDER BY `A`.`idx` ASC";
 	var query = mysql_conn.query(sql, function(err, rows, fields) {
 		evt.emit('group_select', err, rows);

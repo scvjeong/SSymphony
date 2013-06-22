@@ -136,6 +136,15 @@ exports.login = function(req, res){
 	});
 };
 
+exports.logout = function(req, res){
+	req.session.idx_user = null;
+	req.session.email = null;
+	req.session.nickname = null;
+	req.session.first_name = null
+	req.session.last_name = null;
+	res.redirect("/");
+};
+
 exports.sign_up = function(req, res){
 	var evt = new EventEmitter();
 	var dao_m = require('../sql/main');

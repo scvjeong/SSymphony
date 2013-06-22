@@ -26,7 +26,7 @@
 			<ul>
 				<li><a href="/page/group_select">GROUP</li>
 				<li><a href="javascript:myAccount();">MY ACCOUNT</a></li>
-				<li>LOG OUT</li>
+				<li><a href="/page/logout">LOG OUT</a></li>
 			</ul>
 		</div>
 	</div>
@@ -107,7 +107,7 @@
 				<div class="sub-title">Group Info</div>
 				<ul>
 					<%
-					    var total_time = 0;
+					    var total_time = 0, average_time = 0;
 					    for (var i=0; i<result.meeting_list.length; i++) {
 
 					      var start_time = result.meeting_list[i].start_time;
@@ -121,7 +121,8 @@
 					      var t4 = t3/3600000;
 					      total_time = total_time + t4;
 					    }
-					    var average_time = total_time / result.meeting_list.length;
+						if( result.meeting_list.length > 0 )
+							average_time = total_time / result.meeting_list.length;
 					%>
 
 					<li>
@@ -138,16 +139,20 @@
 					</li>
 					<li class="top-3">
 						<div class="list-title">Top3 attendance rate</div>
+						<%if( result.group_info.length > 5 ) {%>
 						<div class="list-contents"><%=result.group_info[5].user_name%></div>
 						<div class="list-contents"><%=result.group_info[2].user_name%></div>
 						<div class="list-contents"><%=result.group_info[4].user_name%></div>
+						<% } %>
 					</li>
 					<li class="top-3">
 						<div class="list-title">Top3 participation rate</div>
+						<%if( result.group_info.length > 6 ) {%>
 						<div class="list-contents"><%=result.group_info[5].user_name%></div>
 						<div class="list-contents"><%=result.group_info[6].user_name%></div>
 						<div class="list-contents"><%=result.group_info[4].user_name%></div>
-					</li>
+						<% } %>
+					</li>					
 				</ul>
 			</div>
 			<div id="group-info-member" class="fancy-scrollbar">

@@ -71,16 +71,20 @@ exports.meeting_list = function(req, res){
 					dao_ml.dao_meeting_user(evt, mysql_conn, params);
 				}
 			}
-			else if( rows.length < 1)
+			else if( rows.length < 1){
+				console.log(result);
 				res.render('meeting_list', {result:result} );
+			}
 		});
 
 		evt.on('meeting_user', function(err, rows){
 			if(err) throw err;
 			meeting_user_complete_flag++;
 			result.meeting_user[rows[0].idx_meeting] = rows;
-			if( meeting_user_complete_flag === meeting_user_complete_flag_cnt )
+			if( meeting_user_complete_flag === meeting_user_complete_flag_cnt ){
+				console.log(result);
 				res.render('meeting_list', {result:result} );
+			}
 		});
 	}
 };

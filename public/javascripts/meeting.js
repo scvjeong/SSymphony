@@ -297,9 +297,7 @@ function openSocket()
 			var tool_data = data.tool_data;
 			
 			_socket_common.emit('set_tool_list', { idx_meeting: _idx_meeting	});
-			console.log("Jeong1");
 			createToolWindow(tool_data);
-			console.log("Jeong2");
 		}
 	});
 
@@ -368,7 +366,7 @@ function refreshToolList(tool_list)
 		var tool_type = _tool_list[i].type;
 		var tool_name = _tool_list[i].name;
 		var tool_title = _tool_list[i].title;
-		var source = '<a onclick="' + tool_name + '" data-toggle="tooltip" '
+		var source = '<a onclick="openToolWindow(\'' + tool_name + '\');" data-toggle="tooltip" '
 					+ 'data-placement="bottom" '
 					+ 'title="" data-original-title="'+ tool_title +'">'
 					+ '<li class="item_'+ tool_type +'" id="btn_'+ tool_name +'"></li></a>';
